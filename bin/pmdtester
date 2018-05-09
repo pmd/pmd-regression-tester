@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+require 'pmdtester/runner'
+
+runner = PmdTester::Runner.new(ARGV)
+runner.run
+
+
