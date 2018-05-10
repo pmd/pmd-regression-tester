@@ -1,9 +1,7 @@
 = pmdtester
 
-home  :: FIX (url)
-code  :: https://github.com/pmd/pmd-regression-tester
-rdoc  :: FIX (url)
-bugs  :: https://github.com/pmd/pmd-regression-tester/issues
+code  :: https://github.com/pmd/pmd-regression-tester  
+bugs  :: https://github.com/pmd/pmd-regression-tester/issues  
 
 == DESCRIPTION:
 
@@ -28,5 +26,6 @@ on a list of standard projects(Spring Framework, Hibernate, Solr, etc.)
 
 == DEVELOPERS:
 
+You can list all tasks by running `rake -T`.
 
 

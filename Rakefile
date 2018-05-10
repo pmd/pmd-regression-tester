@@ -1,13 +1,15 @@
 # -*- ruby -*-
 
-require 'rake/testtask'
+require 'hoe'
+require './lib/pmdtester/parsers/options.rb'
 
-desc "Perform all tests"
-Rake::TestTask.new do |t|
-  t.libs << "test"
-  t.test_files = FileList['test/test*.rb']
-  t.verbose = true
+Hoe.spec 'pmdtester' do
+  self.version = PmdTester::Options::VERSION
+
+  self.author  = 'Binguo Bao'
+  self.email   = 'djydewang@gmail.com'
+
+  license "BSD-2-Clause"
 end
 
-# TODO
-# Add more rake task e.g.install gem dependencies
+
