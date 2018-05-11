@@ -1,4 +1,5 @@
-History.txt
+History.md
+LICENSE
 Manifest.txt
 README.md
 Rakefile

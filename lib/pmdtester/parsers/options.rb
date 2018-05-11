@@ -3,7 +3,7 @@ require 'slop'
 module PmdTester
   class Options
 
-    VERSION = '1.0.0'
+    VERSION = '1.0.0-SNAPSHOP'
 
     attr_reader :local_git_repo
     attr_reader :base_branch
@@ -36,7 +36,7 @@ module PmdTester
         o.string '-bc', '--base-config', 'path to the base PMD configuration file'
         o.string '-pc', '--patch-config', 'path to the patch PMD configuration file'
         o.string '-c', '--config', 'path to the base and patch PMD configuration file'
-        o.string '-l', '--list-of-projects', 'path to the file which contains the list of standard projects'
+        o.string '-l', '--list-of-project', 'path to the file which contains the list of standard projects'
         o.string '-m', '--mode', "the mode of the tool: 'local', 'online' or 'single'\n" +
             "\tsingle: Set this option to 'single' if your patch branch contains changes for any option that can't work on master/base branch\n" +
             "\tonline: Set this option to 'online' if you want to download the PMD report of master/base branch rather than generating it locally\n" +
