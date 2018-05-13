@@ -3,7 +3,7 @@ require 'slop'
 module PmdTester
   class Options
 
-    VERSION = '1.0.0-SNAPSHOP'
+    VERSION = '1.0.0-SNAPSHOT'
 
     attr_reader :local_git_repo
     attr_reader :base_branch
