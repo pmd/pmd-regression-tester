@@ -30,13 +30,13 @@ module PmdTester
 
     def parse(argv)
       Slop.parse argv do |o|
-        o.string '-r', '--local-git-repo', 'path to the local PMD repository'
+        o.string '-r', '--local-git-repo', 'path to the local PMD repository', required: true
         o.string '-b', '--base-branch', 'name of the base branch in local PMD repository'
-        o.string '-p', '--patch-branch', 'name of the patch branch in local PMD repository'
+        o.string '-p', '--patch-branch', 'name of the patch branch in local PMD repository', required: true
         o.string '-bc', '--base-config', 'path to the base PMD configuration file'
         o.string '-pc', '--patch-config', 'path to the patch PMD configuration file'
         o.string '-c', '--config', 'path to the base and patch PMD configuration file'
-        o.string '-l', '--list-of-project', 'path to the file which contains the list of standard projects'
+        o.string '-l', '--list-of-project', 'path to the file which contains the list of standard projects', required: true
         o.string '-m', '--mode', "the mode of the tool: 'local', 'online' or 'single'\n" +
             "\tsingle: Set this option to 'single' if your patch branch contains changes for any option that can't work on master/base branch\n" +
             "\tonline: Set this option to 'online' if you want to download the PMD report of master/base branch rather than generating it locally\n" +
