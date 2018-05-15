@@ -7,24 +7,18 @@ xsi:noNamespaceSchemaLocation="projectlist_1_0_0.xsd">
   <project>
     <name>checkstyle</name>
     <type>git</type>
-    <connection>https://github.com/checkstyle/checkstyle</connection>
     <tag>checkstyle-8.10</tag>
-    <exclude-pattern>**/src/test/resources-noncompilable/**/*</exclude-pattern>
-    <exclude-pattern>**/src/test/resources/**/*</exclude-pattern>
   </project>
 
   <project>
     <name>openjdk10</name>
-    <type>hg</type>
     <connection>http://hg.openjdk.java.net/jdk10/jdk10/jdk</connection>
-    <webview-url>http://hg.openjdk.java.net/jdk10/jdk10/jdk/file/777356696811</webview-url>
   </project>
 
   <project>
     <name>spring-framework</name>
     <type>git</type>
     <connection>https://github.com/spring-projects/spring-framework</connection>
-    <tag>v5.0.6.RELEASE</tag>
   </project>
 
 </projectlist>

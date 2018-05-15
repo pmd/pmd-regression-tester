@@ -1,6 +1,5 @@
-require 'rexml/document'
+require 'nokogiri'
 require_relative '../project'
-include REXML
 
 module PmdTester
 
@@ -10,15 +9,31 @@ module PmdTester
     end
 
     def parse
-      list_xml_doc = Document.new(File.new(@list_file))
-      #TODO validate the XML file against an XSD schema
+      schema = Nokogiri::XML::Schema(File.read(get_schema_file))
+      document = Nokogiri::XML(File.read(@list_file))
+
+      errors = schema.validate(document)
+      unless errors.empty?
+        raise ProjectsParserException.new(errors), "Schema validate failed: In #@list_file"
+      end
 
       projects = []
-      list_xml_doc.elements.each("projectlist/project") do |project|
+      document.xpath("//project").each do |project|
         projects.push(Project.new(project))
       end
       projects
     end
 
+    def get_schema_file
+      "config/projectlist_1_0_0.xsd"
+    end
+  end
+
+  class ProjectsParserException < Exception
+    attr_reader :errors
+
+    def initialize(errors)
+      @errors = errors
+    end
   end
 end
