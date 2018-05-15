@@ -1,0 +1,2 @@
+language: ruby
+install: gem install hoe nokogiri
