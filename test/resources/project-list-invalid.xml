@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+
+<projectlist xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:noNamespaceSchemaLocation="projectlist_1_0_0.xsd">
+  <description>Standard Projects</description>
+
+  <project>
+    <name>checkstyle</name>
+    <type>git</type>
+    <tag>checkstyle-8.10</tag>
+  </project>
+
+  <project>
+    <name>openjdk10</name>
+    <connection>http://hg.openjdk.java.net/jdk10/jdk10/jdk</connection>
+  </project>
+
+  <project>
+    <name>spring-framework</name>
+    <type>git</type>
+    <connection>https://github.com/spring-projects/spring-framework</connection>
+  </project>
+
+</projectlist>
