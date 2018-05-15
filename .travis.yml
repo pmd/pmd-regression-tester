@@ -1,2 +1,2 @@
 language: ruby
-install: gem install hoe nokogiri
+install: gem install hoe nokogiri slop
