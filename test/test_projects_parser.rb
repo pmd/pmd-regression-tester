@@ -13,7 +13,7 @@ class TestProjectsParser < Test::Unit::TestCase
     assert_equal("hg", projects[1].type)
     assert_equal("http://hg.openjdk.java.net/jdk10/jdk10/jdk", projects[1].connection)
     assert_equal("http://hg.openjdk.java.net/jdk10/jdk10/jdk/file/777356696811", projects[1].webview_url)
-    assert_nil( projects[1].tag)
+    assert_nil(projects[1].tag)
     assert_empty(projects[1].exclude_pattern)
 
     assert_equal("spring-framework", projects[2].name)
@@ -27,7 +27,7 @@ class TestProjectsParser < Test::Unit::TestCase
   def test_invalid_list
     list_file = "test/resources/project-list-invalid.xml"
     begin
-      projects = PmdTester::ProjectsParser.new(list_file).parse
+      PmdTester::ProjectsParser.new(list_file).parse
     rescue PmdTester::ProjectsParserException => e
       assert_equal("Schema validate failed: In #{list_file}", e.message)
       assert_equal("10:0: ERROR: Element 'tag': This element is not expected. " +
