@@ -1,20 +1,19 @@
 require 'fileutils'
-require '../cmd'
+require_relative '../cmd'
 include PmdTester
 module PmdTester
   class PmdReportBuilder
-    def initialize(branch_config, projects, local_git_repo, pmd_branch_name, rule_sets)
+    def initialize(branch_config, projects, local_git_repo, pmd_branch_name)
       @branch_config = branch_config
       @projects = projects
       @local_git_repo = local_git_repo
       @pmd_branch_name = pmd_branch_name
-      @rule_sets = rule_sets
       @pwd = Dir.getwd
     end
 
     def create_repositories_dir
       @repositories_dir = "#@pwd/target/repositories"
-      FileUtils.mkdir(@repositories_dir) unless File.directory?(@repositories_dir)
+      FileUtils.mkdir_p(@repositories_dir) unless File.directory?(@repositories_dir)
     end
 
     def execute_reset_cmd(type, tag)
@@ -36,12 +35,12 @@ module PmdTester
       create_repositories_dir
 
       @projects.each do |project|
-        path = @repositories_dir + project.name
+        path = "#@repositories_dir/#{project.name}"
         clone_cmd = "#{project.type} clone #{project.connection} #{path}"
 
         Cmd.execute(clone_cmd) unless File::exist?(path)
 
-        execute_reset_cmd(project.type, project.tag)
+        execute_reset_cmd(project.type, project.tag) unless project.tag.nil?
         end
     end
 
@@ -66,18 +65,18 @@ module PmdTester
 
     def generate_pmd_report(src_root_dir, report_file)
       run_path = "target/pmd-bin-#{@pmd_version}/bin/run.sh"
-      pmd_cmd = "#{run_path} pmd -d #{src_root_dir} -f xml -R #@rule_sets -r #{report_file}"
+      pmd_cmd = "#{run_path} pmd -d #{src_root_dir} -f xml -R #@branch_config -r #{report_file}"
       Cmd.execute(pmd_cmd)
     end
 
     def generate_pmd_reports
-      puts "Generating pmd Report started -- branch #{@branch_name}"
+      puts "Generating pmd Report started -- branch #{@pmd_branch_name}"
 
       get_pmd_binary_file
 
       pmd_branch_name = @pmd_branch_name.delete('/')
       branch_file = "target/reports/#{pmd_branch_name}"
-      FileUtils::mkdir(branch_file) unless File.directory?(branch_file)
+      FileUtils::mkdir_p(branch_file) unless File.directory?(branch_file)
 
       @projects.each do |project|
         project_report_file = "#{branch_file}/#{project.name}.xml"

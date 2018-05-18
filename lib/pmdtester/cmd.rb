@@ -11,6 +11,7 @@ module PmdTester
       stdin, stdout, stderr, wait_thr = Open3.popen3("#{cmd};")
 
       unless wait_thr.value.success? || wait_thr.value.exitstatus == PMD_EXIT_STATUS
+        puts stdout.gets
         puts stderr.gets
         exit(wait_thr.value.exitstatus)
       end
