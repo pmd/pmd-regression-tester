@@ -40,8 +40,12 @@ module PmdTester
 
         Cmd.execute(clone_cmd) unless File::exist?(path)
 
-        execute_reset_cmd(project.type, project.tag) unless project.tag.nil?
+        unless project.tag.nil?
+          Dir.chdir(path) do
+            execute_reset_cmd(project.type, project.tag)
+          end
         end
+      end
     end
 
     def get_pmd_binary_file
@@ -65,7 +69,7 @@ module PmdTester
 
     def generate_pmd_report(src_root_dir, report_file)
       run_path = "target/pmd-bin-#{@pmd_version}/bin/run.sh"
-      pmd_cmd = "#{run_path} pmd -d #{src_root_dir} -f xml -R #@branch_config -r #{report_file}"
+      pmd_cmd = "#{run_path} pmd -d #{src_root_dir} -f xml -R #@branch_config -r #{report_file} -failOnViolation false"
       Cmd.execute(pmd_cmd)
     end
 
