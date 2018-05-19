@@ -5,9 +5,12 @@ xsi:noNamespaceSchemaLocation="projectlist_1_0_0.xsd">
   <description>Standard Projects</description>
 
   <project>
-    <name>test_repo</name>
+    <name>checkstyle</name>
     <type>git</type>
-    <connection>test/resources/repositories/test_repo</connection>
+    <connection>https://github.com/checkstyle/checkstyle</connection>
+    <tag>checkstyle-8.0</tag>
+    <exclude-pattern>**/src/test/resources-noncompilable/**/*</exclude-pattern>
+    <exclude-pattern>**/src/test/resources/**/*</exclude-pattern>
   </project>
 
   <project>
