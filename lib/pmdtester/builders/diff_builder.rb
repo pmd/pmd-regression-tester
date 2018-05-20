@@ -8,7 +8,17 @@ module PmdTester
 
     def build(base_report, patch_report)
       base_doc = Nokogiri::XML(File.read(base_report))
+      patch_doc = Nokogiri::XML(File.read(patch_report))
 
+      violations_diffs = build_violation_diffs(base_doc, patch_doc)
+      error_diffs = build_error_diffs(base_doc, patch_doc)
+
+      [violations_diffs, error_diffs]
+    end
+
+    def build_violation_diffs(base_doc, patch_doc)
+
+      # key:String => value:Violation Array
       diffs = Hash.new
 
       base_doc.xpath('//file').each do |file|
@@ -16,7 +26,6 @@ module PmdTester
         diffs.store(filename, violations)
       end
 
-      patch_doc = Nokogiri::XML(File.read(patch_report))
       patch_doc.xpath('//file').each do|file|
         filename, violations = get_violations_in_file(file, 'patch')
 
@@ -31,10 +40,19 @@ module PmdTester
     end
 
     def get_violations_in_file(file, branch)
+
+      # The shcema of 'file' node:
+      #  <xs:complexType name="file">
+      #    <xs:sequence>
+      #      <xs:element name="violation" type="violation" minOccurs="1" maxOccurs="unbounded" />
+      #      </xs:sequence>
+      #    <xs:attribute name="name" type="xs:string" use="required"/>
+      #  </xs:complexType>
+
       filename = file['name']
       violations = []
       file.xpath('violation').each do |violation|
-        violations.push(Violation.new(violation, branch))
+        violations.push(PmdViolation.new(violation, branch))
       end
       [filename, violations]
     end
@@ -43,6 +61,9 @@ module PmdTester
       i, j = 0, 0
       diff = []
       while i < base_violations.size && j < patch_violations.size
+        # If the 'beginline' values of the violations are different,
+        # then the two violation cannot match.
+        # Add the smaller one to the diff collection.
         if base_violations[i].less?(patch_violations[j])
           diff.push base_violations[i]
           i += 1
@@ -79,12 +100,81 @@ module PmdTester
         end
       end
     end
+
+    def build_error_diffs(base_doc, patch_doc)
+      diffs = Hash.new
+      diffs.default = []
+
+      base_doc.xpath('//error').each do |error|
+        filename = error[filename]
+        value = diffs[filename].push(PmdError.new(error, 'base'))
+        diffs[filename] = value
+      end
+
+      patch_doc.xpath('//error').each do |error|
+        filename = error['filename']
+        if diffs.has_key?(error[filename])
+          diffs_copy = diffs[filename].dup
+          diffs_copy.each do |pmd_error|
+            if pmd_error.error.eql?(error)
+              diffs[filename].delete(PmdError.new(error, 'base'))
+            else
+              diffs[filename].push(PmdError.new(error, 'patch'))
+            end
+          end
+        else
+          diffs[filename] = [PmdError.new(error, 'patch')]
+        end
+      end
+      diffs
+    end
   end
 
-  class Violation
+  class PmdError
+    #The pmd branch type, 'base' or 'patch'
     attr_reader :id
 
-    # The xml violation node
+    # The schema of 'error' node:
+    #   <xs:complexType name="error">
+    #     <xs:simpleContent>
+    #       <xs:extension base="xs:string">
+    #         <xs:attribute name="filename" type="xs:string" use="required"/>
+    #         <xs:attribute name="msg" type="xs:string" use="required"/>
+    #       </xs:extension>
+    #     </xs:simpleContent>
+    #  </xs:complexType>
+    attr_reader :error
+
+    def initialize(error, id)
+      @error, @id = error, id
+    end
+
+  end
+
+  class PmdViolation
+    # The pmd branch type, 'base' or 'patch'
+    attr_reader :id
+
+    # The schema of 'violation' node:
+    # <xs:complexType name="violation">
+    #   <xs:simpleContent>
+    #     <xs:extension base="xs:string">
+    #       <xs:attribute name="beginline" type="xs:integer" use="required" />
+    #       <xs:attribute name="endline" type="xs:integer" use="required" />
+    #       <xs:attribute name="begincolumn" type="xs:integer" use="required" />
+    #       <xs:attribute name="endcolumn" type="xs:integer" use="required" />
+    #       <xs:attribute name="rule" type="xs:string" use="required" />
+    #       <xs:attribute name="ruleset" type="xs:string" use="required" />
+    #       <xs:attribute name="package" type="xs:string" use="optional" />
+    #       <xs:attribute name="class" type="xs:string" use="optional" />
+    #       <xs:attribute name="method" type="xs:string" use="optional" />
+    #       <xs:attribute name="variable" type="xs:string" use="optional" />
+    #       <xs:attribute name="externalInfoUrl" type="xs:string" use="optional" />
+    #       <xs:attribute name="priority" type="xs:string" use="required" />
+    #     </xs:extension>
+    #   </xs:simpleContent>
+    # </xs:complexType>
+
     attr_reader :violation
 
     def initialize(violation, id)
