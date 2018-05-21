@@ -37,8 +37,11 @@ module PmdTester
       @projects.each do |project|
         path = "#@repositories_dir/#{project.name}"
         clone_cmd = "#{project.type} clone #{project.connection} #{path}"
-
-        Cmd.execute(clone_cmd) unless File::exist?(path)
+        if File::exist?(path)
+          puts "Skipping clone, project path #{path} already exists"
+        else
+          Cmd.execute(clone_cmd)
+        end
 
         unless project.tag.nil?
           Dir.chdir(path) do

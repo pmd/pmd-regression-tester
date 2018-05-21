@@ -6,18 +6,17 @@ module PmdTester
     def self.execute(cmd)
       puts cmd
 
-      stdin, stdout, stderr, wait_thr = Open3.popen3("#{cmd};")
+      stdout, stderr, status = Open3.capture3("#{cmd};")
 
-      unless wait_thr.value.success?
-        puts stdout.gets
-        puts stderr.gets
-        exit(wait_thr.value.exitstatus)
+      unless status.success?
+        puts stdout
+        puts stderr
+        exit(status.exitstatus)
       end
 
-      result = stdout.gets
-      result.chomp! unless result.nil?
+      stdout.chomp! unless stdout.nil?
 
-      result
+      stdout
     end
 
   end
