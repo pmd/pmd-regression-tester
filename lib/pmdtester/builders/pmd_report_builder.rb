@@ -58,7 +58,7 @@ module PmdTester
         Cmd.execute(checkout_cmd)
 
         package_cmd = './mvnw clean package -Dpmd.skip=true -Dmaven.test.skip=true' +
-            '-Dmaven.checkstyle.skip=true -Dmaven.javadoc.skip=true'
+            ' -Dmaven.checkstyle.skip=true -Dmaven.javadoc.skip=true'
         Cmd.execute(package_cmd)
 
         version_cmd = "./mvnw -q -Dexec.executable=\"echo\" -Dexec.args='${project.version}' " +
