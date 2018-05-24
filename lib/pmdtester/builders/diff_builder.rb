@@ -7,25 +7,29 @@ module PmdTester
     # http://pmd.sourceforge.net/report_2_0_0.xsd
 
     def build(base_report, patch_report)
-      base_doc = Nokogiri::XML(File.read(base_report))
-      patch_doc = Nokogiri::XML(File.read(patch_report))
+      base_doc = Nokogiri::XML(File.read(base_report)).remove_namespaces!
+      patch_doc = Nokogiri::XML(File.read(patch_report)).remove_namespaces!
 
-      violations_diffs = build_violation_diffs(base_doc, patch_doc)
+      violation_diffs = build_violation_diffs(base_doc, patch_doc)
       error_diffs = build_error_diffs(base_doc, patch_doc)
 
-      [violations_diffs, error_diffs]
+      [violation_diffs, error_diffs]
     end
 
     def build_diffs(base_hash, patch_hash)
-      base_hash.merge(patch_hash) do |key, base_value, patch_value|
-        base_value | patch_value - base_value & patch_value
+      diffs = base_hash.merge(patch_hash) do |key, base_value, patch_value|
+        (base_value | patch_value) - (base_value & patch_value)
+      end
+
+      diffs.delete_if do |key, value|
+        value.empty?
       end
     end
 
     def build_violation_diffs(base_doc, patch_doc)
 
       base_hash = get_violations_hash(base_doc, 'base')
-      patch_hash = get_violations_in_file(patch_doc, 'patch')
+      patch_hash = get_violations_hash(patch_doc, 'patch')
 
       build_diffs(base_hash, patch_hash)
     end
@@ -69,12 +73,15 @@ module PmdTester
 
     def get_errors_hash(doc, branch)
       errors_hash = {}
-      errors_hash.default = []
 
-      doc.xpath('//errror').each do |error|
-        filename = error['filename']
-        value = errors_hash[filename].push(PmdTester.new(error, branch))
-        errors_hash[filename] = value
+      doc.xpath('//error').each do |error|
+        filename = error.at_xpath('filename').text
+        pmd_error = PmdError.new(error, branch)
+        if errors_hash.has_key?(filename)
+          errors_hash[filename].push(pmd_error)
+        else
+          errors_hash.store(filename, [pmd_error])
+        end
       end
       errors_hash
     end
@@ -99,12 +106,20 @@ module PmdTester
       @error, @branch = error, branch
     end
 
+    def get_filename
+      @error.at_xpath('filename').text
+    end
+
+    def get_msg
+      @error.at_xpath('msg').text
+    end
+
     def eql?(other)
-      @error['filename'].eql?(other.error['filename']) && @error['msg'].eql?(other.error['msg'])
+      self.get_filename.eql?(other.get_filename) && self.get_msg.eql?(other.get_msg)
     end
 
     def hash
-      [@error['filename'], @error['msg']].hash
+      [self.get_filename, self.get_msg].hash
     end
   end
 
@@ -141,7 +156,7 @@ module PmdTester
     def eql?(other)
       @violation['beginline'].eql?(other.violation['beginline']) &&
           @violation['rule'].eql?(other.violation['rule']) &&
-          @violation.content.eql?(other.violation.content)
+          @violation.text.eql?(other.violation.text)
     end
 
     def hash
