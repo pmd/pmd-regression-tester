@@ -57,7 +57,8 @@ module PmdTester
         checkout_cmd = "git checkout #@pmd_branch_name"
         Cmd.execute(checkout_cmd)
 
-        package_cmd = './mvnw clean package -Dpmd.test.skip=true -Dpmd.skip=true -Dmaven.test.skip=true'
+        package_cmd = './mvnw clean package -Dpmd.skip=true -Dmaven.test.skip=true' +
+            ' -Dmaven.checkstyle.skip=true -Dmaven.javadoc.skip=true'
         Cmd.execute(package_cmd)
 
         version_cmd = "./mvnw -q -Dexec.executable=\"echo\" -Dexec.args='${project.version}' " +
@@ -66,7 +67,7 @@ module PmdTester
 
         target_dir = "#@pwd/target"
         unzip_cmd = "unzip -qo pmd-dist/target/pmd-bin-#{@pmd_version}.zip -d #{target_dir}"
-      Cmd.execute(unzip_cmd)
+        Cmd.execute(unzip_cmd)
       end
     end
 
