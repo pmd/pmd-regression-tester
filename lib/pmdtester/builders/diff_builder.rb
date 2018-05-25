@@ -10,10 +10,11 @@ module PmdTester
       base_doc = Nokogiri::XML(File.read(base_report)).remove_namespaces!
       patch_doc = Nokogiri::XML(File.read(patch_report)).remove_namespaces!
 
-      violation_diffs = build_violation_diffs(base_doc, patch_doc)
-      error_diffs = build_error_diffs(base_doc, patch_doc)
+      report_diff = ReportDiff.new
+      build_violation_diffs(base_doc, patch_doc, report_diff)
+      build_error_diffs(base_doc, patch_doc, report_diff)
 
-      [violation_diffs, error_diffs]
+      report_diff
     end
 
     def build_diffs(base_hash, patch_hash)
@@ -26,23 +27,38 @@ module PmdTester
       end
     end
 
-    def build_violation_diffs(base_doc, patch_doc)
+    def build_violation_diffs(base_doc, patch_doc, report_diff)
 
-      base_hash = get_violations_hash(base_doc, 'base')
-      patch_hash = get_violations_hash(patch_doc, 'patch')
+      base_hash, base_violations_size = get_violations_hash(base_doc, 'base')
+      report_diff.base_violations_size = base_violations_size
+      patch_hash, patch_violations_size = get_violations_hash(patch_doc, 'patch')
+      report_diff.patch_violations_size = patch_violations_size
 
-      build_diffs(base_hash, patch_hash)
+      violation_diffs = build_diffs(base_hash, patch_hash)
+      violation_diffs_size = get_diffs_size(violation_diffs)
+      report_diff.violation_diffs = violation_diffs
+      report_diff.violation_diffs_size = violation_diffs_size
+    end
+
+    def get_diffs_size(diffs_hash)
+      size = 0
+      diffs_hash.keys.each do |key|
+        size += diffs_hash[key].size
+      end
+      size
     end
 
     def get_violations_hash(doc, branch)
       # key:string => value:PmdViolation Array
       violations_hash = {}
+      violations_size = 0
 
       doc.xpath('//file').each do |file|
         filename, violations = get_violations_in_file(file, branch)
+        violations_size += violations.size
         violations_hash.store(filename, violations)
       end
-      violations_hash
+      [violations_hash, violations_size]
     end
 
     def get_violations_in_file(file, branch)
@@ -63,27 +79,35 @@ module PmdTester
       [filename, violations]
     end
 
-    def build_error_diffs(base_doc, patch_doc)
+    def build_error_diffs(base_doc, patch_doc, report_diff)
 
-      base_hash = get_errors_hash(base_doc, 'base')
-      patch_hash = get_errors_hash(patch_doc, 'patch')
+      base_hash, base_errors_size = get_errors_hash(base_doc, 'base')
+      report_diff.base_errors_size = base_errors_size
+      patch_hash, patch_errors_size = get_errors_hash(patch_doc, 'patch')
+      report_diff.patch_errors_size = patch_errors_size
 
-      build_diffs(base_hash, patch_hash)
+      error_diffs = build_diffs(base_hash, patch_hash)
+      error_diffs_size = get_diffs_size(error_diffs)
+      report_diff.error_diffs = error_diffs
+      report_diff.error_diffs_size =error_diffs_size
     end
 
     def get_errors_hash(doc, branch)
       errors_hash = {}
+      errors_size = 0
 
       doc.xpath('//error').each do |error|
         filename = error.at_xpath('filename').text
         pmd_error = PmdError.new(error, branch)
         if errors_hash.has_key?(filename)
           errors_hash[filename].push(pmd_error)
+          errors_size += 1
         else
           errors_hash.store(filename, [pmd_error])
+          errors_size += 1
         end
       end
-      errors_hash
+      [errors_hash, errors_size]
     end
   end
 
@@ -162,5 +186,18 @@ module PmdTester
     def hash
       [@violation['beginline'], @violation['rule'], @violation.content].hash
     end
+  end
+
+  class ReportDiff
+    attr_accessor :base_violations_size
+    attr_accessor :patch_violations_size
+    attr_accessor :violation_diffs_size
+
+    attr_accessor :base_errors_size
+    attr_accessor :patch_errors_size
+    attr_accessor :error_diffs_size
+
+    attr_accessor :violation_diffs
+    attr_accessor :error_diffs
   end
 end
