@@ -2,27 +2,27 @@ require 'nokogiri'
 
 module PmdTester
   class HtmlReportBuilder
-    def build(project, diff)
+    def build(project, report_diff)
       report_dir = "target/reports/diff/#{project.name}"
       Dir.mkdir(report_dir) unless File::directory?(report_dir)
       index = File.new("#{report_dir}/index.html", "w")
 
-      html_report = generate_html_report(project, diff)
+      html_report = generate_html_report(project, report_diff)
 
       index.puts html_report
       index.close
       report_dir
     end
 
-    def generate_html_report(project, diff)
+    def generate_html_report(project, report_diff)
       html_builder = Nokogiri::HTML::Builder.new do |doc|
         doc.html {
           build_head(doc)
-          doc.body(:class => 'compsite') {
-            doc.div(:id => 'cententBox') {
-              build_summary_section
-              build_violations_section(project, diff)
-              build_errors_section
+          doc.body(:class => 'composite') {
+            doc.div(:id => 'contentBox') {
+              build_summary_section(doc, report_diff)
+              build_violations_section(doc, project, report_diff.violation_diffs)
+              build_errors_section(doc, report_diff.error_diffs)
             }
           }
         }
@@ -41,16 +41,21 @@ module PmdTester
       }
     end
 
-    def build_summary_section
-      # TODO
+    def build_summary_section(doc, report_diff)
+      doc.div(:id => 'section') {
+        doc.h2(:a => 'Summary:') {
+          doc.text 'Summary:'
+          #TODO
+        }
+      }
     end
 
-    def build_violations_section(doc, project)
+    def build_violations_section(doc, project, violation_diffs)
       doc.div(:id => 'section') {
         doc.h2(:a => 'Violations:') {
           doc.text 'Violations:'
         }
-        diff.each do |key, value|
+        violation_diffs.each do |key, value|
           doc.div(:class => 'section') {
             doc.h3 key
             build_violation_table(doc, project, value)
@@ -96,7 +101,7 @@ module PmdTester
       }
     end
 
-    def build_errors_section
+    def build_errors_section(doc, error_diffs)
       # TODO
     end
   end
