@@ -17,63 +17,87 @@ module PmdTester
     def generate_html_report(project, diff)
       html_builder = Nokogiri::HTML::Builder.new do |doc|
         doc.html {
-          doc.head {
-            doc.title {
-              doc.text "pmd xml difference report"
-            }
-            doc.style(:type => 'text/css', :media => 'all'){
-              doc.text "@import url(\"./css/maven-base.css\");@import url(\"./css/maven-theme.css\");"
-            }
-          }
-          doc.body(:class => "compsite") {
-            doc.div(:id => "cententBox") {
-              doc.div(:id => "section") {
-                doc.h2(:a => "Violations:") {
-                  doc.text "Violations:"
-                }
-                a_index = 1
-                diff.each do |key, value|
-                  doc.div(:class => "section") {
-                    doc.h3 key
-                    doc.table(:class => "bodyTable", :border => "0") {
-                      doc.tbody {
-                        doc.tr {
-                          doc.th
-                          doc.th "priority"
-                          doc.th "Rule"
-                          doc.th "Message"
-                          doc.th "Line"
-                        }
-                        generate_xref_file key, xref_dir
-                        value.each do |v|
-                          doc.tr(:class => v.get_id == "base" ? "a" : "b") {
-                            doc.td {
-                              doc.a(:name => "A#{a_index}", :href => "#A#{a_index}") {
-                                doc.text "#"
-                              }
-                            }
-                            a_index += 1
-                            violation = v.get_violation
-                            doc.td violation.attributes["priority"]
-                            doc.td violation.attributes["rule"]
-                            doc.td violation.text
-                            line = violation.attributes["beginline"]
-                            doc.td {
-                              doc.a(:href => "xref#{key}.html#L#{line}") {
-                                doc.text line
-                              }
-                            }
-                          }
-                        end
-                      }
-                    }
-                  }
-                end
-              }
+          build_head(doc)
+          doc.body(:class => 'compsite') {
+            doc.div(:id => 'cententBox') {
+              build_summary_section
+              build_violations_section(project, diff)
+              build_errors_section
             }
           }
         }
       end
+      html_builder.to_html
+    end
+
+    def build_head(doc)
+      doc.head {
+        doc.title {
+          doc.text 'pmd xml difference report'
+        }
+        doc.style(:type => 'text/css', :media => 'all'){
+          doc.text "@import url(\"./css/maven-base.css\");@import url(\"./css/maven-theme.css\");"
+        }
+      }
+    end
+
+    def build_summary_section
+      # TODO
+    end
+
+    def build_violations_section(doc, project)
+      doc.div(:id => 'section') {
+        doc.h2(:a => 'Violations:') {
+          doc.text 'Violations:'
+        }
+        diff.each do |key, value|
+          doc.div(:class => 'section') {
+            doc.h3 key
+            build_violation_table(doc, project, value)
+          }
+        end
+      }
+    end
+
+    def build_violation_table(doc, project, value)
+      doc.table(:class => 'bodyTable', :border => '0') {
+        doc.tbody {
+          doc.tr {
+            doc.th
+            doc.th 'priority'
+            doc.th 'Rule'
+            doc.th 'Message'
+            doc.th 'Line'
+          }
+          a_index = 1
+          value.each do |v|
+            doc.tr(:class => v.branch == 'base' ? 'a' : 'b') {
+              doc.td {
+                doc.a(:name => "A#{a_index}", :href => "#A#{a_index}") {
+                  doc.text '#'
+                }
+              }
+              a_index += 1
+              violation = v.violation
+              doc.td violation['priority']
+              doc.td violation['rule']
+              doc.td violation.text
+              line = violation['beginline']
+              doc.td {
+                # TODO
+                link = 'LINK_TO_SOURCE'
+                doc.a(:href => "#{link}") {
+                  doc.text line
+                }
+              }
+            }
+          end
+        }
+      }
+    end
+
+    def build_errors_section
+      # TODO
     end
   end
 end
