@@ -15,14 +15,16 @@ module PmdTester
     end
 
     def generate_html_report(project, report_diff)
+      violation_diffs = report_diff.violation_diffs
+      error_diffs = report_diff.error_diffs
       html_builder = Nokogiri::HTML::Builder.new do |doc|
         doc.html {
           build_head(doc)
           doc.body(:class => 'composite') {
             doc.div(:id => 'contentBox') {
               build_summary_section(doc, report_diff)
-              build_violations_section(doc, project, report_diff.violation_diffs)
-              build_errors_section(doc, report_diff.error_diffs)
+              build_violations_section(doc, project, violation_diffs) unless violation_diffs.empty?
+              build_errors_section(doc, error_diffs) unless error_diffs.empty
             }
           }
         }
@@ -45,7 +47,34 @@ module PmdTester
       doc.div(:id => 'section') {
         doc.h2(:a => 'Summary:') {
           doc.text 'Summary:'
-          #TODO
+          build_summary_table(doc, report_diff)
+        }
+      }
+    end
+
+    def build_summary_table(doc, report_diff)
+      doc.table(:class => 'bodyTable', :border => '0') {
+        doc.tbody {
+          doc.tr(:class => 'b') {
+            doc.th 'Report id'
+            doc.th 'Violations'
+            doc.th 'Errors'
+          }
+          doc.tr(:class => 'a') {
+            doc.td 'base'
+            doc.td report_diff.base_violations_size
+            doc.td report_diff.base_errors_size
+          }
+          doc.tr(:class => 'b') {
+            doc.td 'patch'
+            doc.td report_diff.patch_violations_size
+            doc.td report_diff.patch_errors_size
+          }
+          doc.tr(:class => 'd') {
+            doc.td 'difference'
+            doc.td report_diff.violation_diffs_size
+            doc.td report_diff.error_diffs_size
+          }
         }
       }
     end
@@ -58,13 +87,13 @@ module PmdTester
         violation_diffs.each do |key, value|
           doc.div(:class => 'section') {
             doc.h3 key
-            build_violation_table(doc, project, value)
+            build_violation_table(doc, project, key, value)
           }
         end
       }
     end
 
-    def build_violation_table(doc, project, value)
+    def build_violation_table(doc, project, key, value)
       doc.table(:class => 'bodyTable', :border => '0') {
         doc.tbody {
           doc.tr {
@@ -75,15 +104,15 @@ module PmdTester
             doc.th 'Line'
           }
           a_index = 1
-          value.each do |v|
-            doc.tr(:class => v.branch == 'base' ? 'a' : 'b') {
+          value.each do |pmd_violation|
+            doc.tr(:class => pmd_violation.branch == 'base' ? 'a' : 'b') {
               doc.td {
                 doc.a(:name => "A#{a_index}", :href => "#A#{a_index}") {
                   doc.text '#'
                 }
               }
               a_index += 1
-              violation = v.violation
+              violation = pmd_violation.violation
               doc.td violation['priority']
               doc.td violation['rule']
               doc.td violation.text
@@ -102,7 +131,28 @@ module PmdTester
     end
 
     def build_errors_section(doc, error_diffs)
-      # TODO
+      doc.div(:id => 'section') {
+        doc.h2(:a => 'Errors:') {
+          doc.text 'Errors:'
+        }
+        error_diffs.each do |key, value|
+          doc.div(:class => 'section') {
+            doc.h3 key
+            b_index = 1
+            value.each do |pmd_error|
+              doc.tr(:class => pmd_error.branch == 'base' ? 'a' : 'b') {
+                doc.td {
+                  doc.a(:name => "B#{b_index}", :href => "#B#{b_index}") {
+                    doc.text '#'
+                  }
+                }
+                b_index += 1
+                doc.td pmd_error.error.at_xpath('msg').text
+              }
+            end
+          }
+        end
+      }
     end
   end
 end
