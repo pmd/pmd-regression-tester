@@ -49,7 +49,7 @@ module PmdTester
     end
 
     def get_violations_hash(doc, branch)
-      # key:string => value:PmdViolation Array
+      # key:filename as String => value:PmdViolation Array
       violations_hash = {}
       violations_size = 0
 
@@ -93,6 +93,7 @@ module PmdTester
     end
 
     def get_errors_hash(doc, branch)
+      # key:filename as String => value:PmdError Array
       errors_hash = {}
       errors_size = 0
 
@@ -101,11 +102,10 @@ module PmdTester
         pmd_error = PmdError.new(error, branch)
         if errors_hash.has_key?(filename)
           errors_hash[filename].push(pmd_error)
-          errors_size += 1
         else
           errors_hash.store(filename, [pmd_error])
-          errors_size += 1
         end
+        errors_size += 1
       end
       [errors_hash, errors_size]
     end
