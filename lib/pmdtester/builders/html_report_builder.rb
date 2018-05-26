@@ -7,14 +7,14 @@ module PmdTester
       Dir.mkdir(report_dir) unless File::directory?(report_dir)
       index = File.new("#{report_dir}/index.html", "w")
 
-      html_report = generate_html_report(project, report_diff)
+      html_report = build_html_report(project, report_diff)
 
       index.puts html_report
       index.close
       report_dir
     end
 
-    def generate_html_report(project, report_diff)
+    def build_html_report(project, report_diff)
       violation_diffs = report_diff.violation_diffs
       error_diffs = report_diff.error_diffs
       html_builder = Nokogiri::HTML::Builder.new do |doc|
@@ -24,7 +24,7 @@ module PmdTester
             doc.div(:id => 'contentBox') {
               build_summary_section(doc, report_diff)
               build_violations_section(doc, project, violation_diffs) unless violation_diffs.empty?
-              build_errors_section(doc, error_diffs) unless error_diffs.empty
+              build_errors_section(doc, error_diffs) unless error_diffs.empty?
             }
           }
         }
@@ -118,8 +118,7 @@ module PmdTester
               doc.td violation.text
               line = violation['beginline']
               doc.td {
-                # TODO
-                link = 'LINK_TO_SOURCE'
+                link = get_link_to_source(project, violation, key)
                 doc.a(:href => "#{link}") {
                   doc.text line
                 }
@@ -128,6 +127,13 @@ module PmdTester
           end
         }
       }
+    end
+
+    def get_link_to_source(project, violation, key)
+      project_dir = "#{Dir.getwd}/#{project.name}"
+      l_str = project.type == 'git' ? 'L' : 'l'
+      line_str = "##{l_str}#{violation['beginline']}"
+      key.gsub(/#{project_dir}/, project.webview_url) + line_str
     end
 
     def build_errors_section(doc, error_diffs)
