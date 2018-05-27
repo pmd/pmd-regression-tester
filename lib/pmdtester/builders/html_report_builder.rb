@@ -4,6 +4,7 @@ module PmdTester
   class HtmlReportBuilder
 
     @NO_DIFFERENCES_MESSAGE = 'No differences found!'
+    @CSS_SRC_DIR = 'resources/css'
 
     def build(project, report_diff)
       report_dir = "target/reports/diff/#{project.name}"
@@ -11,11 +12,17 @@ module PmdTester
       index = File.new("#{report_dir}/index.html", "w")
 
       html_report = build_html_report(project, report_diff)
+      copy_css(report_dir)
 
       index.puts html_report
       index.close
 
       report_dir
+    end
+
+    def copy_css(report_dir)
+      css_dest_dir = "#{report_dir}/css"
+      FileUtils::copy_entry(@CSS_SRC_DIR, css_dest_dir)
     end
 
     def build_html_report(project, report_diff)
