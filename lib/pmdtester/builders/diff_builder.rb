@@ -3,7 +3,7 @@ require 'nokogiri'
 module PmdTester
   class DiffBuilder
 
-    # The schema of pmd xml report refer to
+    # The schema of pmd xml report refers to
     # http://pmd.sourceforge.net/report_2_0_0.xsd
 
     def build(base_report, patch_report)
