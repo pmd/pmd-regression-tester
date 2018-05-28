@@ -14,6 +14,7 @@ module PmdTester
       @connection = project.at_xpath("connection").text
 
       webview_url_element = project.at_xpath("webview-url")
+      @webview_url = @connection
       @webview_url = webview_url_element.text unless webview_url_element.nil?
 
       tag_element = project.at_xpath("tag")

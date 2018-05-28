@@ -3,6 +3,7 @@
 require 'hoe'
 require './lib/pmdtester/parsers/options.rb'
 
+
 Hoe.spec 'pmdtester' do
   self.version = PmdTester::Options::VERSION
 
@@ -11,5 +12,4 @@ Hoe.spec 'pmdtester' do
 
   license "BSD-2-Clause"
 end
-
 
