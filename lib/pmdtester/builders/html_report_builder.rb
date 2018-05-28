@@ -199,7 +199,7 @@ module PmdTester
                 doc.tr(:class => pmd_error.branch == 'base' ? 'a' : 'b') {
                   # The anchor
                   doc.td {
-                    doc.a(:name => "B#{b_index}", :href => "#B#{b_index}") {
+                    doc.a(:id => "B#{b_index}", :href => "#B#{b_index}") {
                       doc.text '#'
                     }
                   }
