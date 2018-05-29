@@ -199,5 +199,16 @@ module PmdTester
 
     attr_accessor :violation_diffs
     attr_accessor :error_diffs
+
+    def initialize
+      @base_violations_size = 0
+      @patch_violations_size = 0
+      @violation_diffs_size = 0
+      @base_errors_size = 0
+      @patch_errors_size = 0
+      @error_diffs_size = 0
+      @violation_diffs = {}
+      @error_diffs = {}
+    end
   end
 end

@@ -3,15 +3,18 @@ require 'nokogiri'
 module PmdTester
   class HtmlReportBuilder
 
-    @NO_DIFFERENCES_MESSAGE = 'No differences found!'
-    @CSS_SRC_DIR = 'resources/css'
+    NO_DIFFERENCES_MESSAGE = 'No differences found!'
+    CSS_SRC_DIR = 'resources/css'
 
     def build(project, report_diff)
       report_dir = "target/reports/diff/#{project.name}"
+      @project_dir = "#{Dir.getwd}/target/repositories/#{project.name}"
+      @project = project
+
       FileUtils.mkdir_p(report_dir) unless File::directory?(report_dir)
       index = File.new("#{report_dir}/index.html", "w")
 
-      html_report = build_html_report(project, report_diff)
+      html_report = build_html_report(report_diff)
       copy_css(report_dir)
 
       index.puts html_report
@@ -22,10 +25,10 @@ module PmdTester
 
     def copy_css(report_dir)
       css_dest_dir = "#{report_dir}/css"
-      FileUtils::copy_entry(@CSS_SRC_DIR, css_dest_dir)
+      FileUtils::copy_entry(CSS_SRC_DIR, css_dest_dir)
     end
 
-    def build_html_report(project, report_diff)
+    def build_html_report(report_diff)
       violation_diffs = report_diff.violation_diffs
       error_diffs = report_diff.error_diffs
       html_builder = Nokogiri::HTML::Builder.new do |doc|
@@ -34,7 +37,7 @@ module PmdTester
           doc.body(:class => 'composite') {
             doc.div(:id => 'contentBox') {
               build_summary_section(doc, report_diff)
-              build_violations_section(doc, project, violation_diffs)
+              build_violations_section(doc, violation_diffs)
               build_errors_section(doc, error_diffs)
             }
           }
@@ -57,10 +60,8 @@ module PmdTester
 
     def build_summary_section(doc, report_diff)
       doc.div(:class => 'section', :id => 'Summary') {
-        doc.h2 {
-          doc.text 'Summary:'
-          build_summary_table(doc, report_diff)
-        }
+        doc.h2 'Summary:'
+        build_summary_table(doc, report_diff)
       }
     end
 
@@ -96,23 +97,23 @@ module PmdTester
       }
     end
 
-    def build_violations_section(doc, project, violation_diffs)
+    def build_violations_section(doc, violation_diffs)
       doc.div(:class => 'section', :id => 'Violations') {
         doc.h2 {
           doc.text 'Violations:'
         }
 
-        doc.br @NO_DIFFERENCES_MESSAGE if violation_diffs.empty?
+        doc.h3 NO_DIFFERENCES_MESSAGE if violation_diffs.empty?
         violation_diffs.each do |key, value|
           doc.div(:class => 'section') {
-            doc.h3 key
-            build_violation_table(doc, project, key, value)
+            doc.h3 gsub_key(key)
+            build_violation_table(doc, key, value)
           }
         end
       }
     end
 
-    def build_violation_table(doc, project, key, value)
+    def build_violation_table(doc, key, value)
       doc.table(:class => 'bodyTable', :border => '0') {
 
         doc.thead {
@@ -145,8 +146,9 @@ module PmdTester
 
               # The rule that trigger the violation
               doc.td {
-                doc.a(:href => "#{violation['externalInfoUrl']}")
-                doc.text violation['rule']
+                doc.a(:href => "#{violation['externalInfoUrl']}") {
+                  doc.text violation['rule']
+                }
               }
 
               # The violation message
@@ -157,7 +159,7 @@ module PmdTester
 
               # The link to the source file
               doc.td {
-                link = get_link_to_source(project, violation, key)
+                link = get_link_to_source(violation, key)
                 doc.a(:href => "#{link}") {
                   doc.text line
                 }
@@ -168,11 +170,16 @@ module PmdTester
       }
     end
 
-    def get_link_to_source(project, violation, key)
-      project_dir = "#{Dir.getwd}/target/repositories/#{project.name}"
-      l_str = project.type == 'git' ? 'L' : 'l'
+    # Change the key from 'WORKING_DIR/SOURCE_CODE_PATH' to
+    # 'WEB_VIEW_URL/SOURCE_CODE_PATH'
+    def gsub_key(key)
+      key.gsub(/#@project_dir/, @project.webview_url)
+    end
+
+    def get_link_to_source(violation, key)
+      l_str = @project.type == 'git' ? 'L' : 'l'
       line_str = "##{l_str}#{violation['beginline']}"
-      key.gsub(/#{project_dir}/, project.webview_url) + line_str
+      gsub_key(key) + line_str
     end
 
     def build_errors_section(doc, error_diffs)
@@ -181,38 +188,43 @@ module PmdTester
           doc.text 'Errors:'
         }
 
-        doc.br @NO_DIFFERENCES_MESSAGE if error_diffs.empty?
+        doc.h3 NO_DIFFERENCES_MESSAGE if error_diffs.empty?
         error_diffs.each do |key, value|
           doc.div(:class => 'section') {
-            doc.h3 key
-
-            doc.thead {
-              doc.tr {
-                doc.th
-                doc.th 'Message'
-              }
-            }
-
-            doc.tbody {
-              b_index = 1
-              value.each do |pmd_error|
-                doc.tr(:class => pmd_error.branch == 'base' ? 'a' : 'b') {
-                  # The anchor
-                  doc.td {
-                    doc.a(:id => "B#{b_index}", :href => "#B#{b_index}") {
-                      doc.text '#'
-                    }
-                  }
-
-                  # The error message
-                  doc.td pmd_error.error.at_xpath('msg').text
-
-                  b_index += 1
-                }
-              end
-            }
+            doc.h3 gsub_key(key)
+            build_errors_table(doc, value)
           }
         end
+      }
+    end
+
+    def build_errors_table(doc, errors)
+      doc.table(:class => 'bodyTable', :border => '0') {
+        doc.thead {
+          doc.tr {
+            doc.th
+            doc.th 'Message'
+          }
+        }
+
+        doc.tbody {
+          b_index = 1
+          errors.each do |pmd_error|
+            doc.tr(:class => pmd_error.branch == 'base' ? 'a' : 'b') {
+              # The anchor
+              doc.td {
+                doc.a(:id => "B#{b_index}", :href => "#B#{b_index}") {
+                  doc.text '#'
+                }
+              }
+
+              # The error message
+              doc.td pmd_error.error.at_xpath('msg').text
+
+              b_index += 1
+            }
+          end
+        }
       }
     end
   end

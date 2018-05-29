@@ -2,8 +2,9 @@ require 'test/unit'
 require_relative '../lib/pmdtester/parsers/projects_parser'
 
 class TestProjectsParser < Test::Unit::TestCase
+
   def test_project_parser
-    projects = PmdTester::ProjectsParser.new("test/resources/project-list.xml").parse
+    projects = PmdTester::ProjectsParser.new.parse('test/resources/project-list.xml')
     assert_equal(3, projects.size)
 
     expected_exclude_pattern = %w[**/src/test/resources-noncompilable/**/* **/src/test/resources/**/*]
@@ -28,7 +29,7 @@ class TestProjectsParser < Test::Unit::TestCase
   def test_invalid_list
     list_file = "test/resources/project-list-invalid.xml"
     begin
-      PmdTester::ProjectsParser.new(list_file).parse
+      PmdTester::ProjectsParser.new.parse(list_file)
     rescue PmdTester::ProjectsParserException => e
       assert_equal("Schema validate failed: In #{list_file}", e.message)
       assert_equal("10:0: ERROR: Element 'tag': This element is not expected. " +
