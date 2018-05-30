@@ -8,7 +8,6 @@ module PmdTester
 
     def build(project, report_diff)
       report_dir = "target/reports/diff/#{project.name}"
-      @project_dir = "#{Dir.getwd}/target/repositories/#{project.name}"
       @project = project
 
       FileUtils.mkdir_p(report_dir) unless File::directory?(report_dir)
@@ -97,6 +96,14 @@ module PmdTester
       }
     end
 
+    def build_filename_h3(doc, filename)
+      doc.h3 {
+        doc.a(:href => @project.get_webview_url(filename)) {
+          doc.text @project.get_path_inside_project(filename)
+        }
+      }
+    end
+
     def build_violations_section(doc, violation_diffs)
       doc.div(:class => 'section', :id => 'Violations') {
         doc.h2 {
@@ -106,7 +113,7 @@ module PmdTester
         doc.h3 NO_DIFFERENCES_MESSAGE if violation_diffs.empty?
         violation_diffs.each do |key, value|
           doc.div(:class => 'section') {
-            doc.h3 gsub_key(key)
+            build_filename_h3(doc, key)
             build_violation_table(doc, key, value)
           }
         end
@@ -170,16 +177,10 @@ module PmdTester
       }
     end
 
-    # Change the key from 'WORKING_DIR/SOURCE_CODE_PATH' to
-    # 'WEB_VIEW_URL/SOURCE_CODE_PATH'
-    def gsub_key(key)
-      key.gsub(/#@project_dir/, @project.webview_url)
-    end
-
     def get_link_to_source(violation, key)
       l_str = @project.type == 'git' ? 'L' : 'l'
       line_str = "##{l_str}#{violation['beginline']}"
-      gsub_key(key) + line_str
+      @project.get_webview_url(key) + line_str
     end
 
     def build_errors_section(doc, error_diffs)
@@ -191,7 +192,7 @@ module PmdTester
         doc.h3 NO_DIFFERENCES_MESSAGE if error_diffs.empty?
         error_diffs.each do |key, value|
           doc.div(:class => 'section') {
-            doc.h3 gsub_key(key)
+            build_filename_h3(doc, key)
             build_errors_table(doc, value)
           }
         end

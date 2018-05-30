@@ -42,6 +42,7 @@ module PmdTester
         else
           Cmd.execute(clone_cmd)
         end
+        project.local_path = path
 
         unless project.tag.nil?
           Dir.chdir(path) do
