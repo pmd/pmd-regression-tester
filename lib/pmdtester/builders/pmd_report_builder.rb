@@ -91,6 +91,7 @@ module PmdTester
         project_report_file = "#{branch_file}/#{project.name}.xml"
         project_source_dir = "target/repositories/#{project.name}"
         generate_pmd_report(project_source_dir, project_report_file)
+        project.pmd_reports.store(@pmd_branch_name, project_report_file)
       end
     end
 

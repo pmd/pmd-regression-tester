@@ -8,6 +8,7 @@ module PmdTester
     attr_reader :tag
     attr_reader :exclude_pattern
     attr_accessor :local_path
+    attr_accessor :pmd_reports
 
     def initialize(project)
       @name = project.at_xpath("name").text
@@ -27,6 +28,8 @@ module PmdTester
       end
 
       @local_path = ''
+
+      @pmd_reports = {}
     end
 
 
