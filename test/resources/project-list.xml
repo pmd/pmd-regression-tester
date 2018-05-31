@@ -8,7 +8,6 @@ xsi:noNamespaceSchemaLocation="projectlist_1_0_0.xsd">
     <name>checkstyle</name>
     <type>git</type>
     <connection>https://github.com/checkstyle/checkstyle</connection>
-    <tag>checkstyle-8.10</tag>
     <exclude-pattern>**/src/test/resources-noncompilable/**/*</exclude-pattern>
     <exclude-pattern>**/src/test/resources/**/*</exclude-pattern>
   </project>
@@ -24,6 +23,7 @@ xsi:noNamespaceSchemaLocation="projectlist_1_0_0.xsd">
     <name>spring-framework</name>
     <type>git</type>
     <connection>https://github.com/spring-projects/spring-framework</connection>
+    <webview-url>https://github.com/spring-projects/spring-framework/tree/v5.0.6.RELEASE</webview-url>
     <tag>v5.0.6.RELEASE</tag>
   </project>
 

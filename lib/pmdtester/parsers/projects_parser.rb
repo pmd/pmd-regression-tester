@@ -4,17 +4,13 @@ require_relative '../project'
 module PmdTester
 
   class ProjectsParser
-    def initialize(list_file)
-      @list_file = list_file
-    end
-
-    def parse
+    def parse(list_file)
       schema = Nokogiri::XML::Schema(File.read(get_schema_file))
-      document = Nokogiri::XML(File.read(@list_file))
+      document = Nokogiri::XML(File.read(list_file))
 
       errors = schema.validate(document)
       unless errors.empty?
-        raise ProjectsParserException.new(errors), "Schema validate failed: In #@list_file"
+        raise ProjectsParserException.new(errors), "Schema validate failed: In #{list_file}"
       end
 
       projects = []

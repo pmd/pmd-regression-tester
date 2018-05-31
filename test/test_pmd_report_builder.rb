@@ -6,7 +6,7 @@ include PmdTester
 class TestPmdReportBuilder < Test::Unit::TestCase
   def test_build
     Process.fork do
-      projects = ProjectsParser.new("test/resources/project-test.xml").parse
+      projects = ProjectsParser.new.parse('test/resources/project-test.xml')
       builder = PmdReportBuilder.new('config/all-java.xml', projects, 'target/repositories/pmd','pmd_releases/6.2.0')
       builder.build
     end
