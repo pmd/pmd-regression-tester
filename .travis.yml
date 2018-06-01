@@ -1,5 +1,5 @@
 language: ruby
 jdk: oraclejdk9
 script:
-  -rake test
-  -rake check_style
+  - rake test
+  - rake check_style
