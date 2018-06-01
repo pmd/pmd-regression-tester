@@ -4,16 +4,19 @@ require_relative '../lib/pmdtester/builders/html_report_builder'
 require_relative '../lib/pmdtester/parsers/projects_parser'
 
 class TestHtmlReportBuilder < Test::Unit::TestCase
+  ORIGINAL_BASE_PMD_REPORT_PATH =
+    'test/resources/html_report_builder/test_html_report_builder_base.xml'.freeze
+  ORIGINAL_PATCH_PMD_REPORT_PATH =
+    'test/resources/html_report_builder/test_html_report_builder_patch.xml'.freeze
 
-  ORIGINAL_BASE_PMD_REPORT_PATH = 'test/resources/html_report_builder/test_html_report_builder_base.xml'
-  ORIGINAL_PATCH_PMD_REPORT_PATH = 'test/resources/html_report_builder/test_html_report_builder_patch.xml'
+  TARGET_TEST_RESOURCES_PATH = 'target/test/resources'.freeze
+  BASE_PMD_REPORT_PATH = "#{TARGET_TEST_RESOURCES_PATH}/test_html_report_builder_base.xml".freeze
+  PATCH_PMD_REPORT_PATH = "#{TARGET_TEST_RESOURCES_PATH}/test_html_report_builder_patch.xml".freeze
 
-  TARGET_TEST_RESOURCES_PATH = 'target/test/resources'
-  BASE_PMD_REPORT_PATH = "#{TARGET_TEST_RESOURCES_PATH}/test_html_report_builder_base.xml"
-  PATCH_PMD_REPORT_PATH = "#{TARGET_TEST_RESOURCES_PATH}/test_html_report_builder_patch.xml"
-
-  EXPECTED_REPORT_PATH = 'test/resources/html_report_builder/expected_diff_report_index.html'
-  EXPECTED_EMPTY_REPORT_PATH = 'test/resources/html_report_builder/expected_empty_diff_report.html'
+  EXPECTED_REPORT_PATH =
+    'test/resources/html_report_builder/expected_diff_report_index.html'.freeze
+  EXPECTED_EMPTY_REPORT_PATH =
+    'test/resources/html_report_builder/expected_empty_diff_report.html'.freeze
 
   def build_pmd_report(original_filename, build_filename)
     FileUtils.mkdir_p(TARGET_TEST_RESOURCES_PATH) unless File.directory?(TARGET_TEST_RESOURCES_PATH)

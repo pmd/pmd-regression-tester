@@ -1,8 +1,8 @@
 require 'open3'
 
 module PmdTester
+  # Containing the common method for executing shell command
   class Cmd
-
     def self.execute(cmd)
       puts cmd
 
@@ -18,6 +18,5 @@ module PmdTester
 
       stdout
     end
-
   end
 end

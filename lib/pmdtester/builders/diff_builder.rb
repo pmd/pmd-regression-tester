@@ -1,8 +1,8 @@
 require 'nokogiri'
 
 module PmdTester
+  # Building difference between two pmd xml files
   class DiffBuilder
-
     # The schema of pmd xml report refers to
     # http://pmd.sourceforge.net/report_2_0_0.xsd
 
@@ -18,17 +18,16 @@ module PmdTester
     end
 
     def build_diffs(base_hash, patch_hash)
-      diffs = base_hash.merge(patch_hash) do |key, base_value, patch_value|
+      diffs = base_hash.merge(patch_hash) do |_key, base_value, patch_value|
         (base_value | patch_value) - (base_value & patch_value)
       end
 
-      diffs.delete_if do |key, value|
+      diffs.delete_if do |_key, value|
         value.empty?
       end
     end
 
     def build_violation_diffs(base_doc, patch_doc, report_diff)
-
       base_hash, base_violations_size = get_violations_hash(base_doc, 'base')
       report_diff.base_violations_size = base_violations_size
       patch_hash, patch_violations_size = get_violations_hash(patch_doc, 'patch')
@@ -62,7 +61,6 @@ module PmdTester
     end
 
     def get_violations_in_file(file, branch)
-
       # The shcema of 'file' node:
       #  <xs:complexType name="file">
       #    <xs:sequence>
@@ -80,7 +78,6 @@ module PmdTester
     end
 
     def build_error_diffs(base_doc, patch_doc, report_diff)
-
       base_hash, base_errors_size = get_errors_hash(base_doc, 'base')
       report_diff.base_errors_size = base_errors_size
       patch_hash, patch_errors_size = get_errors_hash(patch_doc, 'patch')
@@ -89,7 +86,7 @@ module PmdTester
       error_diffs = build_diffs(base_hash, patch_hash)
       error_diffs_size = get_diffs_size(error_diffs)
       report_diff.error_diffs = error_diffs
-      report_diff.error_diffs_size =error_diffs_size
+      report_diff.error_diffs_size = error_diffs_size
     end
 
     def get_errors_hash(doc, branch)
@@ -100,7 +97,7 @@ module PmdTester
       doc.xpath('//error').each do |error|
         filename = error.at_xpath('filename').text
         pmd_error = PmdError.new(error, branch)
-        if errors_hash.has_key?(filename)
+        if errors_hash.key?(filename)
           errors_hash[filename].push(pmd_error)
         else
           errors_hash.store(filename, [pmd_error])
@@ -112,7 +109,7 @@ module PmdTester
   end
 
   class PmdError
-    #The pmd branch type, 'base' or 'patch'
+    # The pmd branch type, 'base' or 'patch'
     attr_reader :branch
 
     # The schema of 'error' node:
@@ -127,7 +124,8 @@ module PmdTester
     attr_reader :error
 
     def initialize(error, branch)
-      @error, @branch = error, branch
+      @error = error
+      @branch = branch
     end
 
     def get_filename
@@ -139,11 +137,11 @@ module PmdTester
     end
 
     def eql?(other)
-      self.get_filename.eql?(other.get_filename) && self.get_msg.eql?(other.get_msg)
+      get_filename.eql?(other.get_filename) && get_msg.eql?(other.get_msg)
     end
 
     def hash
-      [self.get_filename, self.get_msg].hash
+      [get_filename, get_msg].hash
     end
   end
 
@@ -174,13 +172,14 @@ module PmdTester
     attr_reader :violation
 
     def initialize(violation, branch)
-      @violation, @branch = violation, branch
+      @violation = violation
+      @branch = branch
     end
 
     def eql?(other)
       @violation['beginline'].eql?(other.violation['beginline']) &&
-          @violation['rule'].eql?(other.violation['rule']) &&
-          @violation.text.eql?(other.violation.text)
+        @violation['rule'].eql?(other.violation['rule']) &&
+        @violation.text.eql?(other.violation.text)
     end
 
     def hash
