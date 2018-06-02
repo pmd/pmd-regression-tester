@@ -13,3 +13,4 @@
 *   [#6](https://github.com/pmd/pmd-regression-tester/pull/6): Change the package command for building PMD - [BBG](https://github.com/djydewang)
 *   [#7](https://github.com/pmd/pmd-regression-tester/pull/7): Add test cases for DiffBuilder - [BBG](https://github.com/djydewang)
 *   [#8](https://github.com/pmd/pmd-regression-tester/pull/8): Add HtmlReportBuilder to PmdTester - [BBG](https://github.com/djydewang)
+*   [#10](https://github.com/pmd/pmd-regression-tester/pull/10): Add bundler to manage dependency - [BBG](https://github.com/djydewang)
