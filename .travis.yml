@@ -1,3 +1,2 @@
 language: ruby
 jdk: oraclejdk9
-install: gem install hoe nokogiri slop
