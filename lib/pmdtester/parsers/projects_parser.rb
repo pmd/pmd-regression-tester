@@ -22,7 +22,7 @@ module PmdTester
     end
 
     def get_schema_file
-      'config/projectlist_1_0_0.xsd'
+      'config/projectlist_1_0_0.xsd'.freeze
     end
   end
 

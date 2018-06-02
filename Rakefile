@@ -1,6 +1,7 @@
 # -*- ruby -*-
 
 require 'hoe'
+require 'rubocop/rake_task'
 require './lib/pmdtester/cmd.rb'
 require './lib/pmdtester/parsers/options.rb'
 
@@ -13,7 +14,6 @@ Hoe.spec 'pmdtester' do
   license 'BSD-2-Clause'
 end
 
-desc 'check ruby code style'
-task :check_style do
-  PmdTester::Cmd.execute('rubocop')
-end
+# Refers to
+# http://rubocop.readthedocs.io/en/latest/integration_with_other_tools/#rake-integration
+RuboCop::RakeTask.new
