@@ -16,4 +16,6 @@ end
 
 # Refers to
 # http://rubocop.readthedocs.io/en/latest/integration_with_other_tools/#rake-integration
-RuboCop::RakeTask.new
+RuboCop::RakeTask.new(:rubocop) do |task|
+  task.patterns = %w[lib/**/*.rb test/**/*.rb]
+end

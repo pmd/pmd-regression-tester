@@ -1,9 +1,6 @@
 inherit_from: .rubocop_todo.yml
 
 AllCops:
-  Include:
-    - 'lib/**/*.rb'
-    - 'test/**/*.rb'
   Exclude:
     - 'test/resources/**/*'
 
