@@ -2,7 +2,8 @@ require 'nokogiri'
 require_relative '../project'
 
 module PmdTester
-
+  # The ProjectsParser is a class responsible of parsing
+  # the projects XML file to get the Project object array
   class ProjectsParser
     def parse(list_file)
       schema = Nokogiri::XML::Schema(File.read(get_schema_file))
@@ -14,18 +15,18 @@ module PmdTester
       end
 
       projects = []
-      document.xpath("//project").each do |project|
+      document.xpath('//project').each do |project|
         projects.push(Project.new(project))
       end
       projects
     end
 
     def get_schema_file
-      "config/projectlist_1_0_0.xsd"
+      'config/projectlist_1_0_0.xsd'.freeze
     end
   end
 
-  class ProjectsParserException < Exception
+  class ProjectsParserException < RuntimeError
     attr_reader :errors
 
     def initialize(errors)

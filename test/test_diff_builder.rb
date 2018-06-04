@@ -2,7 +2,6 @@ require 'test/unit'
 require_relative '../lib/pmdtester/builders/diff_builder'
 
 class TestDiffBuilder < Test::Unit::TestCase
-
   def test_violation_diffs
     diff_builder = PmdTester::DiffBuilder.new
     base_report_path = 'test/resources/test_violation_diffs_base.xml'
