@@ -1,9 +1,9 @@
 require 'test/unit'
 require_relative '../lib/pmdtester/builders/pmd_report_builder'
 require_relative '../lib/pmdtester/parsers/projects_parser'
-include PmdTester
 
 class IntegrationTestPmdReportBuilder < Test::Unit::TestCase
+  include PmdTester
   def test_build
     Process.fork do
       projects = ProjectsParser.new.parse('test/resources/project-test.xml')
