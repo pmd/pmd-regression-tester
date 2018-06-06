@@ -8,6 +8,7 @@ module PmdTester
     attr_reader :tag
     attr_reader :exclude_pattern
     attr_accessor :local_path
+    # key: pmd branch name as String => value: local path of pmd report
     attr_accessor :pmd_reports
 
     def initialize(project)
