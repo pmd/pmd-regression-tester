@@ -3,3 +3,4 @@ jdk: oraclejdk9
 script:
   - bundle exec rake rubocop
   - bundle exec rake test
+  - bundle exec rake integration-test

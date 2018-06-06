@@ -16,3 +16,4 @@
 *   [#9](https://github.com/pmd/pmd-regression-tester/pull/9): Add test cases for HtmlReportBuilder - [BBG](https://github.com/djydewang)
 *   [#10](https://github.com/pmd/pmd-regression-tester/pull/10): Add bundler to manage dependency - [BBG](https://github.com/djydewang)
 *   [#11](https://github.com/pmd/pmd-regression-tester/pull/11): Using rubocop to check code style of the project - [BBG](https://github.com/djydewang)
+*   [#13](https://github.com/pmd/pmd-regression-tester/pull/13): Separate integration test cases - [BBG](https://github.com/djydewang)
