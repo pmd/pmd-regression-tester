@@ -37,6 +37,7 @@ module PmdTester
                                              project.pmd_reports[@options.patch_branch])
         HtmlReportBuilder.new.build(project, report_diffs)
       end
+      puts 'Build all difference reports successfully!'
     end
 
     def run_online_mode
