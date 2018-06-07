@@ -139,35 +139,39 @@ module PmdTester
       doc.tbody do
         a_index = 1
         value.each do |pmd_violation|
-          doc.tr(class: pmd_violation.branch == 'base' ? 'a' : 'b') do
-            # The anchor
-            doc.td do
-              doc.a(id: "A#{a_index}", href: "#A#{a_index}") { doc.text '#' }
-            end
+          build_violation_table_raw(a_index, key, pmd_violation, doc)
+          a_index += 1
+        end
+      end
+    end
 
-            a_index += 1
-            violation = pmd_violation.violation
+    def build_violation_table_raw(a_index, key, pmd_violation, doc)
+      doc.tr(class: pmd_violation.branch == 'base' ? 'a' : 'b') do
+        # The anchor
+        doc.td do
+          doc.a(id: "A#{a_index}", href: "#A#{a_index}") { doc.text '#' }
+        end
 
-            # The priority of the rule
-            doc.td violation['priority']
+        violation = pmd_violation.violation
 
-            # The rule that trigger the violation
-            doc.td do
-              doc.a(href: (violation['externalInfoUrl']).to_s) { doc.text violation['rule'] }
-            end
+        # The priority of the rule
+        doc.td violation['priority']
 
-            # The violation message
-            doc.td violation.text
+        # The rule that trigger the violation
+        doc.td do
+          doc.a(href: (violation['externalInfoUrl']).to_s) { doc.text violation['rule'] }
+        end
 
-            # The begin line of the violation
-            line = violation['beginline']
+        # The violation message
+        doc.td violation.text
 
-            # The link to the source file
-            doc.td do
-              link = get_link_to_source(violation, key)
-              doc.a(href: link.to_s) { doc.text line }
-            end
-          end
+        # The begin line of the violation
+        line = violation['beginline']
+
+        # The link to the source file
+        doc.td do
+          link = get_link_to_source(violation, key)
+          doc.a(href: link.to_s) { doc.text line }
         end
       end
     end
@@ -196,27 +200,35 @@ module PmdTester
 
     def build_errors_table(doc, errors)
       doc.table(class: 'bodyTable', border: '0') do
-        doc.thead do
-          doc.tr do
-            doc.th
-            doc.th 'Message'
-          end
+        build_errors_table_head(doc)
+        build_errors_table_body(doc, errors)
+
+      end
+    end
+
+    def build_errors_table_head(doc)
+      doc.thead do
+        doc.tr do
+          doc.th
+          doc.th 'Message'
         end
+      end
+    end
 
-        doc.tbody do
-          b_index = 1
-          errors.each do |pmd_error|
-            doc.tr(class: pmd_error.branch == 'base' ? 'a' : 'b') do
-              # The anchor
-              doc.td do
-                doc.a(id: "B#{b_index}", href: "#B#{b_index}") { doc.text '#' }
-              end
-
-              # The error message
-              doc.td pmd_error.error.at_xpath('msg').text
-
-              b_index += 1
+    def build_errors_table_body(doc, errors)
+      doc.tbody do
+        b_index = 1
+        errors.each do |pmd_error|
+          doc.tr(class: pmd_error.branch == 'base' ? 'a' : 'b') do
+            # The anchor
+            doc.td do
+              doc.a(id: "B#{b_index}", href: "#B#{b_index}") { doc.text '#' }
             end
+
+            # The error message
+            doc.td pmd_error.error.at_xpath('msg').text
+
+            b_index += 1
           end
         end
       end
