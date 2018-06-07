@@ -10,7 +10,7 @@ module PmdTester
   class Runner
     def initialize(argv)
       @options = Options.new(argv)
-      @projects = ProjectsParser.new.build(@options.project_list) unless @options.nil?
+      @projects = ProjectsParser.new.parse(@options.project_list) unless @options.nil?
     end
 
     def run
