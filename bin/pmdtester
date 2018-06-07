@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-require '../lib/pmdtester/runner'
+require_relative '../lib/pmdtester/runner'
 
 runner = PmdTester::Runner.new(ARGV)
 runner.run

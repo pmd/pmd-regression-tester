@@ -35,9 +35,10 @@ module PmdTester
       @projects.each do |project|
         report_diffs = DiffBuilder.new.build(project.pmd_reports[@options.base_branch],
                                              project.pmd_reports[@options.patch_branch])
+        puts "Preparing report for #{project.name}"
         HtmlReportBuilder.new.build(project, report_diffs)
       end
-      puts 'Build all difference reports successfully!'
+      puts 'Built all difference reports successfully!'
     end
 
     def run_online_mode

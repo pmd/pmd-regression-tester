@@ -19,7 +19,7 @@ module PmdTester
       index.puts html_report
       index.close
 
-      puts "Build difference report of #{project.name} successfully!"
+      puts "Built difference report of #{project.name} successfully!"
       report_dir
     end
 
