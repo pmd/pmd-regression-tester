@@ -95,7 +95,7 @@ module PmdTester
       errors_size = 0
 
       doc.xpath('//error').each do |error|
-        filename = error.at_xpath('filename').text
+        filename = error['filename']
         pmd_error = PmdError.new(error, branch)
         if errors_hash.key?(filename)
           errors_hash[filename].push(pmd_error)
@@ -129,15 +129,20 @@ module PmdTester
     end
 
     def get_filename
-      @error.at_xpath('filename').text
+      @error['filename']
     end
 
     def get_msg
-      @error.at_xpath('msg').text
+      @error['msg']
+    end
+
+    def get_details
+      @error.text
     end
 
     def eql?(other)
-      get_filename.eql?(other.get_filename) && get_msg.eql?(other.get_msg)
+      get_filename.eql?(other.get_filename) && get_msg.eql?(other.get_msg) &&
+        get_details.eql?(other.get_details)
     end
 
     def hash

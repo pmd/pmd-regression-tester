@@ -219,7 +219,7 @@ module PmdTester
               end
 
               # The error message
-              doc.td pmd_error.error.at_xpath('msg').text
+              doc.td pmd_error.get_msg
 
               b_index += 1
             end

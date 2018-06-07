@@ -39,8 +39,7 @@ Fields should be declared at the top of the class, before any method declaration
 Fields should be declared at the top of the class, before any method declarations, constructors, initializers or inner classes.
 </violation>
 </file>
-  <error>
-    <filename>SHOULD_BE_REPLACED/target/repositories/spring-framework/spring-aop/src/main/java/org/springframework/aop/TrueMethodMatcher.java</filename>
-    <msg>This is an artificial error message.</msg>
+  <error filename="SHOULD_BE_REPLACED/target/repositories/spring-framework/spring-aop/src/main/java/org/springframework/aop/TrueMethodMatcher.java"
+    msg="This is an artificial error message.">
   </error>
 </pmd>
