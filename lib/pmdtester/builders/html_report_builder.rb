@@ -202,7 +202,6 @@ module PmdTester
       doc.table(class: 'bodyTable', border: '0') do
         build_errors_table_head(doc)
         build_errors_table_body(doc, errors)
-
       end
     end
 
