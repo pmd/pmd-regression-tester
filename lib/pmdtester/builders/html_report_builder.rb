@@ -139,13 +139,13 @@ module PmdTester
       doc.tbody do
         a_index = 1
         value.each do |pmd_violation|
-          build_violation_table_raw(a_index, key, pmd_violation, doc)
+          build_violation_table_row(doc, key, pmd_violation, a_index)
           a_index += 1
         end
       end
     end
 
-    def build_violation_table_raw(a_index, key, pmd_violation, doc)
+    def build_violation_table_row(doc, key, pmd_violation, a_index)
       doc.tr(class: pmd_violation.branch == 'base' ? 'a' : 'b') do
         # The anchor
         doc.td do
