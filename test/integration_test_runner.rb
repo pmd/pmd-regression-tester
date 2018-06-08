@@ -11,5 +11,11 @@ class IntegrationTestRunner < Test::Unit::TestCase
     Process.wait
 
     assert_equal(0, $CHILD_STATUS.exitstatus)
+    assert_path_exist('target/reports/master/checkstyle.xml')
+    assert_path_exist('target/reports/master/pmd.xml')
+    assert_path_exist('target/reports/pmd_releases6.1.0/checkstyle.xml')
+    assert_path_exist('target/reports/pmd_releases6.1.0/pmd.xml')
+    assert_path_exist('target/reports/diff/checkstyle/index.html')
+    assert_path_exist('target/reports/diff/pmd/index.html')
   end
 end
