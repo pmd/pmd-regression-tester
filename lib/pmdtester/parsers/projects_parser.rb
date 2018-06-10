@@ -26,6 +26,8 @@ module PmdTester
     end
   end
 
+  # When this exception is raised, it means that
+  # schema validate of 'project-list' xml file failed
   class ProjectsParserException < RuntimeError
     attr_reader :errors
 

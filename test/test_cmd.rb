@@ -1,5 +1,7 @@
 require 'test/unit'
 require_relative '../lib/pmdtester/cmd'
+
+# Unit test class for PmdTester::Cmd
 class TestCmd < Test::Unit::TestCase
   def test_get_stdout
     stdout = PmdTester::Cmd.execute('echo Hello, World!')

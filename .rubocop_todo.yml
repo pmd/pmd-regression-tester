@@ -32,14 +32,6 @@ Naming/AccessorMethodName:
     - 'lib/pmdtester/builders/pmd_report_builder.rb'
     - 'lib/pmdtester/parsers/projects_parser.rb'
 
-# Offense count: 4
-Style/Documentation:
-  Exclude:
-    - 'spec/**/*'
-    - 'test/**/*'
-    - 'lib/pmdtester/builders/diff_builder.rb'
-    - 'lib/pmdtester/parsers/projects_parser.rb'
-
 # Offense count: 2
 Style/MixinUsage:
   Exclude:

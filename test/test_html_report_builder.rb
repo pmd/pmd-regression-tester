@@ -3,6 +3,7 @@ require_relative '../lib/pmdtester/builders/diff_builder'
 require_relative '../lib/pmdtester/builders/html_report_builder'
 require_relative '../lib/pmdtester/parsers/projects_parser'
 
+# Unit test class for PmdTester::HtmlReportBuilder
 class TestHtmlReportBuilder < Test::Unit::TestCase
   ORIGINAL_BASE_PMD_REPORT_PATH =
     'test/resources/html_report_builder/test_html_report_builder_base.xml'.freeze
