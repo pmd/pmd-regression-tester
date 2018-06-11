@@ -1,6 +1,7 @@
 require 'test/unit'
 require_relative '../lib/pmdtester/builders/diff_builder'
 
+# Unit test class for PmdTester::DiffBuilder
 class TestDiffBuilder < Test::Unit::TestCase
   def test_violation_diffs
     diff_builder = PmdTester::DiffBuilder.new

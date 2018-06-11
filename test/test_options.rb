@@ -1,6 +1,7 @@
 require 'test/unit'
 require_relative '../lib/pmdtester/parsers/options'
 
+# Unit test for PmdTester::Options
 class TestOptions < Test::Unit::TestCase
   def test_short_option
     command_line =

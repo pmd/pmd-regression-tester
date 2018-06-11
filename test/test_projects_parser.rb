@@ -1,6 +1,7 @@
 require 'test/unit'
 require_relative '../lib/pmdtester/parsers/projects_parser'
 
+# Unit test for PmdTester::ProjectsParser
 class TestProjectsParser < Test::Unit::TestCase
   def test_project_parser
     projects = PmdTester::ProjectsParser.new.parse('test/resources/project-list.xml')

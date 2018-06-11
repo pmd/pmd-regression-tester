@@ -108,6 +108,8 @@ module PmdTester
     end
   end
 
+  # This class represents a 'error' element of Pmd xml report
+  # and which Pmd branch the 'error' is from
   class PmdError
     # The pmd branch type, 'base' or 'patch'
     attr_reader :branch
@@ -150,6 +152,8 @@ module PmdTester
     end
   end
 
+  # This class represents a 'violation' of Pmd xml report
+  # and which pmd branch the 'violation' is from
   class PmdViolation
     # The pmd branch type, 'base' or 'patch'
     attr_reader :branch
@@ -192,6 +196,9 @@ module PmdTester
     end
   end
 
+  # This class represents all the diff report information,
+  # including the summary information of the original pmd reports,
+  # as well as the specific information of the diff report.
   class ReportDiff
     attr_accessor :base_violations_size
     attr_accessor :patch_violations_size

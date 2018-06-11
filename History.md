@@ -19,3 +19,4 @@
 *   [#12](https://github.com/pmd/pmd-regression-tester/pull/12): Fix Metrics/BlockLength offenses - [BBG](https://github.com/djydewang)
 *   [#13](https://github.com/pmd/pmd-regression-tester/pull/13): Separate integration test cases - [BBG](https://github.com/djydewang)
 *   [#14](https://github.com/pmd/pmd-regression-tester/pull/14): Add Runner to PmdTester - [BBG](https://github.com/djydewang)
+*   [#15](https://github.com/pmd/pmd-regression-tester/pull/15): Fix rubocop Style/Documentation offenses - [BBG](https://github.com/djydewang)
