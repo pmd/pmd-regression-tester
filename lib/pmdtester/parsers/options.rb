@@ -49,7 +49,7 @@ module PmdTester
         o.string '-c', '--config', 'path to the base and patch PMD configuration file'
         o.string '-l', '--list-of-project',
                  'path to the file which contains the list of standard projects', required: true
-        o.string '-m', '--mode', mode_message
+        o.string '-m', '--mode', mode_message, default: 'local'
         o.on '-v', '--version' do
           puts VERSION
           exit

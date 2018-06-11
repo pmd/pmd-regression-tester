@@ -18,3 +18,4 @@
 *   [#11](https://github.com/pmd/pmd-regression-tester/pull/11): Using rubocop to check code style of the project - [BBG](https://github.com/djydewang)
 *   [#12](https://github.com/pmd/pmd-regression-tester/pull/12): Fix Metrics/BlockLength offenses - [BBG](https://github.com/djydewang)
 *   [#13](https://github.com/pmd/pmd-regression-tester/pull/13): Separate integration test cases - [BBG](https://github.com/djydewang)
+*   [#14](https://github.com/pmd/pmd-regression-tester/pull/14): Add Runner to PmdTester - [BBG](https://github.com/djydewang)

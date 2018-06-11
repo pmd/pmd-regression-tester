@@ -3,21 +3,17 @@
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xsi:schemaLocation="http://pmd.sourceforge.net/report/2.0.0 http://pmd.sourceforge.net/report_2_0_0.xsd"
      version="6.3.0-SNAPSHOT" timestamp="2018-04-16T22:41:45.065">
-  <error>
-    <filename>Base1.java</filename>
-    <msg>Only appears in base report 1.</msg>
+  <error filename="Base1.java" msg="Only appears in base report 1.">
+    Details of base report 1.
   </error>
-  <error>
-    <filename>Base1.java</filename>
-    <msg>Only appears in base report 2.</msg>
+  <error filename="Base1.java" msg="Only appears in base report 2.">
+    Details of base report 2.
   </error>
-  <error>
-    <filename>Both1.java</filename>
-    <msg>It is the same in two reports.</msg>
+  <error filename="Both1.java" msg="It is the same in two reports.">
+    Same details in base and patch report.
   </error>
-  <error>
-    <filename>Both2.java</filename>
-    <msg>Message of Base.</msg>
+  <error filename="Both2.java" msg="Message of Base.">
+    Details of base report.
   </error>
 </pmd>
 
