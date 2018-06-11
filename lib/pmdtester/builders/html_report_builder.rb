@@ -47,9 +47,7 @@ module PmdTester
 
     def build_head(doc)
       doc.head do
-        doc.title do
-          doc.text 'pmd xml difference report'
-        end
+        doc.title 'pmd xml difference report'
 
         doc.style(type: 'text/css', media: 'all') do
           doc.text '@import url("./css/maven-base.css");@import url("./css/maven-theme.css");'
@@ -106,9 +104,7 @@ module PmdTester
 
     def build_violations_section(doc, violation_diffs)
       doc.div(class: 'section', id: 'Violations') do
-        doc.h2 do
-          doc.text 'Violations:'
-        end
+        doc.h2 'Violations:'
 
         doc.h3 NO_DIFFERENCES_MESSAGE if violation_diffs.empty?
         violation_diffs.each do |key, value|
@@ -122,55 +118,60 @@ module PmdTester
 
     def build_violation_table(doc, key, value)
       doc.table(class: 'bodyTable', border: '0') do
-        doc.thead do
-          doc.tr do
-            doc.th
-            doc.th 'priority'
-            doc.th 'Rule'
-            doc.th 'Message'
-            doc.th 'Line'
-          end
+        build_violation_table_head(doc)
+        build_violation_table_body(doc, key, value)
+      end
+    end
+
+    def build_violation_table_head(doc)
+      doc.thead do
+        doc.tr do
+          doc.th
+          doc.th 'priority'
+          doc.th 'Rule'
+          doc.th 'Message'
+          doc.th 'Line'
+        end
+      end
+    end
+
+    def build_violation_table_body(doc, key, value)
+      doc.tbody do
+        a_index = 1
+        value.each do |pmd_violation|
+          build_violation_table_row(doc, key, pmd_violation, a_index)
+          a_index += 1
+        end
+      end
+    end
+
+    def build_violation_table_row(doc, key, pmd_violation, a_index)
+      doc.tr(class: pmd_violation.branch == 'base' ? 'a' : 'b') do
+        # The anchor
+        doc.td do
+          doc.a(id: "A#{a_index}", href: "#A#{a_index}") { doc.text '#' }
         end
 
-        doc.tbody do
-          a_index = 1
-          value.each do |pmd_violation|
-            doc.tr(class: pmd_violation.branch == 'base' ? 'a' : 'b') do
-              # The anchor
-              doc.td do
-                doc.a(id: "A#{a_index}", href: "#A#{a_index}") do
-                  doc.text '#'
-                end
-              end
+        violation = pmd_violation.violation
 
-              a_index += 1
-              violation = pmd_violation.violation
+        # The priority of the rule
+        doc.td violation['priority']
 
-              # The priority of the rule
-              doc.td violation['priority']
+        # The rule that trigger the violation
+        doc.td do
+          doc.a(href: (violation['externalInfoUrl']).to_s) { doc.text violation['rule'] }
+        end
 
-              # The rule that trigger the violation
-              doc.td do
-                doc.a(href: (violation['externalInfoUrl']).to_s) do
-                  doc.text violation['rule']
-                end
-              end
+        # The violation message
+        doc.td violation.text
 
-              # The violation message
-              doc.td violation.text
+        # The begin line of the violation
+        line = violation['beginline']
 
-              # The begin line of the violation
-              line = violation['beginline']
-
-              # The link to the source file
-              doc.td do
-                link = get_link_to_source(violation, key)
-                doc.a(href: link.to_s) do
-                  doc.text line
-                end
-              end
-            end
-          end
+        # The link to the source file
+        doc.td do
+          link = get_link_to_source(violation, key)
+          doc.a(href: link.to_s) { doc.text line }
         end
       end
     end
@@ -199,29 +200,34 @@ module PmdTester
 
     def build_errors_table(doc, errors)
       doc.table(class: 'bodyTable', border: '0') do
-        doc.thead do
-          doc.tr do
-            doc.th
-            doc.th 'Message'
-          end
+        build_errors_table_head(doc)
+        build_errors_table_body(doc, errors)
+      end
+    end
+
+    def build_errors_table_head(doc)
+      doc.thead do
+        doc.tr do
+          doc.th
+          doc.th 'Message'
         end
+      end
+    end
 
-        doc.tbody do
-          b_index = 1
-          errors.each do |pmd_error|
-            doc.tr(class: pmd_error.branch == 'base' ? 'a' : 'b') do
-              # The anchor
-              doc.td do
-                doc.a(id: "B#{b_index}", href: "#B#{b_index}") do
-                  doc.text '#'
-                end
-              end
-
-              # The error message
-              doc.td pmd_error.error.at_xpath('msg').text
-
-              b_index += 1
+    def build_errors_table_body(doc, errors)
+      doc.tbody do
+        b_index = 1
+        errors.each do |pmd_error|
+          doc.tr(class: pmd_error.branch == 'base' ? 'a' : 'b') do
+            # The anchor
+            doc.td do
+              doc.a(id: "B#{b_index}", href: "#B#{b_index}") { doc.text '#' }
             end
+
+            # The error message
+            doc.td pmd_error.error.at_xpath('msg').text
+
+            b_index += 1
           end
         end
       end
