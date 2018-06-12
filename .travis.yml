@@ -2,5 +2,5 @@ language: ruby
 jdk: oraclejdk9
 script:
   - bundle exec rake rubocop
-  - bundle exec rake test
-  - bundle exec rake integration-test
+  - bundle exec rake clean test
+  - bundle exec rake clean integration-test
