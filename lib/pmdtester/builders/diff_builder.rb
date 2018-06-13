@@ -7,34 +7,20 @@ module PmdTester
     # http://pmd.sourceforge.net/report_2_0_0.xsd
 
     def build(base_report, patch_report)
-      base_doc = Nokogiri::XML(File.read(base_report)).remove_namespaces!
+      # Serving for 'single' mode,
+      # if value of `base_report` is nil then `base_doc` is empty
+      base_doc = if base_report.nil?
+                   Nokogiri::XML('')
+                 else
+                   Nokogiri::XML(File.read(base_report)).remove_namespaces!
+                 end
+
       patch_doc = Nokogiri::XML(File.read(patch_report)).remove_namespaces!
 
       report_diff = ReportDiff.new
       build_violation_diffs(base_doc, patch_doc, report_diff)
       build_error_diffs(base_doc, patch_doc, report_diff)
 
-      report_diff
-    end
-
-    # Serving single mode
-    def build_single(patch_report)
-      report_diff = ReportDiff.new
-      base_doc = Nokogiri::XML('')
-      patch_doc = Nokogiri::XML(File.read(patch_report)).remove_namespaces!
-
-      # violations_hash, violations_size = get_violations_hash(patch_doc, 'base')
-      # report_diff.patch_violations_size = violations_size
-      # report_diff.violation_diffs_size = violations_size
-      # report_diff.violation_diffs = violations_hash
-
-      # errors_hash, errors_size = get_errors_hash(patch_doc, 'base')
-      # report_diff.patch_errors_size = errors_size
-      # report_diff.error_diffs_size = errors_size
-      # report_diff.error_diffs = errors_hash
-
-      build_violation_diffs(base_doc, patch_doc, report_diff)
-      build_error_diffs(base_doc, patch_doc, report_diff)
       report_diff
     end
 

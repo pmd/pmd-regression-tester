@@ -5,6 +5,10 @@ require_relative '../lib/pmdtester/parsers/projects_parser'
 # Integration test for PmdTester::PmdReportBuilder
 class IntegrationTestPmdReportBuilder < Test::Unit::TestCase
   include PmdTester
+  def setup
+    `rake clean`
+  end
+
   def test_build
     Process.fork do
       projects = ProjectsParser.new.parse('test/resources/project-test.xml')

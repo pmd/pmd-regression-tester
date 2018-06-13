@@ -25,6 +25,10 @@ module PmdTester
       @config = options[:c]
       @project_list = options[:l]
       @mode = options[:m]
+
+      # if the 'config' option is selected then `config` overrides `base_config` and `patch_config`
+      @base_config = @config if !@config.nil? && @mode == 'local'
+      @patch_config = @config if !@config.nil? && @mode == 'local'
     end
 
     private
