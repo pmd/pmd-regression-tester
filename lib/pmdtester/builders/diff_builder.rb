@@ -7,7 +7,14 @@ module PmdTester
     # http://pmd.sourceforge.net/report_2_0_0.xsd
 
     def build(base_report, patch_report)
-      base_doc = Nokogiri::XML(File.read(base_report)).remove_namespaces!
+      # Serving for 'single' mode,
+      # if value of `base_report` is nil then `base_doc` is empty
+      base_doc = if base_report.nil?
+                   Nokogiri::XML('')
+                 else
+                   Nokogiri::XML(File.read(base_report)).remove_namespaces!
+                 end
+
       patch_doc = Nokogiri::XML(File.read(patch_report)).remove_namespaces!
 
       report_diff = ReportDiff.new

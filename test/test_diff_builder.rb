@@ -3,6 +3,10 @@ require_relative '../lib/pmdtester/builders/diff_builder'
 
 # Unit test class for PmdTester::DiffBuilder
 class TestDiffBuilder < Test::Unit::TestCase
+  def setup
+    `rake clean`
+  end
+
   def test_violation_diffs
     diff_builder = PmdTester::DiffBuilder.new
     base_report_path = 'test/resources/test_violation_diffs_base.xml'

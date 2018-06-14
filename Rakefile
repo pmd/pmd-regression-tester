@@ -11,6 +11,7 @@ Hoe.spec 'pmdtester' do
 
   self.author  = 'Binguo Bao'
   self.email   = 'djydewang@gmail.com'
+  self.clean_globs = %w[target/reports/**/* target/test**/*]
 
   license 'BSD-2-Clause'
 end

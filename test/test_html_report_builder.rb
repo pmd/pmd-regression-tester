@@ -5,6 +5,9 @@ require_relative '../lib/pmdtester/parsers/projects_parser'
 
 # Unit test class for PmdTester::HtmlReportBuilder
 class TestHtmlReportBuilder < Test::Unit::TestCase
+  def setup
+    `rake clean`
+  end
   ORIGINAL_BASE_PMD_REPORT_PATH =
     'test/resources/html_report_builder/test_html_report_builder_base.xml'.freeze
   ORIGINAL_PATCH_PMD_REPORT_PATH =
