@@ -6,13 +6,10 @@ class IntegrationTestRunner < Test::Unit::TestCase
   end
 
   def test_local_mode
-    Process.fork do
-      argv = %w[-r target/repositories/pmd -b master -bc config/design.xml
-                -p pmd_releases/6.1.0 -pc config/design.xml -l test/resources/project-test.xml]
+    argv = '-r target/repositories/pmd -b master -bc config/design.xml ' \
+            '-p pmd_releases/6.1.0 -pc config/design.xml -l test/resources/project-test.xml'
 
-      PmdTester::Runner.new(argv).run
-    end
-    Process.wait
+    `bundle exec bin/pmdtester #{argv}`
 
     assert_equal(0, $CHILD_STATUS.exitstatus)
     assert_path_exist('target/reports/master/checkstyle.xml')
@@ -24,13 +21,10 @@ class IntegrationTestRunner < Test::Unit::TestCase
   end
 
   def test_single_mode
-    Process.fork do
-      argv = %w[-r target/repositories/pmd -m single
-                -p pmd_releases/6.1.0 -pc config/design.xml -l test/resources/project-test.xml]
+    argv = '-r target/repositories/pmd -m single ' \
+           '-p pmd_releases/6.1.0 -pc config/design.xml -l test/resources/project-test.xml'
 
-      PmdTester::Runner.new(argv).run
-    end
-    Process.wait
+    `bundle exec bin/pmdtester #{argv}`
 
     assert_equal(0, $CHILD_STATUS.exitstatus)
     assert_path_exist('target/reports/pmd_releases6.1.0/checkstyle.xml')

@@ -12,7 +12,7 @@ class TestRunner < Test::Unit::TestCase
   end
 
   include PmdTester
-  def test_option_miss(argv, expects)
+  def run_and_assert_error_messages(argv, expects)
     Process.fork do
       runner = Runner.new(argv)
       ProjectsParser.any_instance.stubs(:parse).once
@@ -48,7 +48,7 @@ class TestRunner < Test::Unit::TestCase
     argv = %w[-r target/repositories/pmd -bc config/design.xml
               -p pmd_releases/6.1.0 -pc config/design.xml -l test/resources/project-test.xml]
     expects = ['Mode: local', 'In local mode, base branch name is required!']
-    test_option_miss(argv, expects)
+    run_and_assert_error_messages(argv, expects)
   end
 
   def test_local_miss_base_config
@@ -56,7 +56,7 @@ class TestRunner < Test::Unit::TestCase
               -p pmd_releases/6.1.0 -pc config/design.xml -l test/resources/project-test.xml]
     expects = ['Mode: local', 'base branch name: master',
                'In local mode, base branch config path is required!']
-    test_option_miss(argv, expects)
+    run_and_assert_error_messages(argv, expects)
   end
 
   def test_local_miss_patch_config
@@ -65,7 +65,7 @@ class TestRunner < Test::Unit::TestCase
     expects = ['Mode: local', 'base branch name: master',
                'base branch config path: config/design.xml',
                'In local mode, base branch name is required!']
-    test_option_miss(argv, expects)
+    run_and_assert_error_messages(argv, expects)
   end
 
   def test_single_mode
@@ -84,6 +84,6 @@ class TestRunner < Test::Unit::TestCase
               -p pmd_releases/6.1.0 -l test/resources/project-test.xml]
     expects = ['Mode: single', 'patch branch name: pmd_releases/6.1.0',
                'In single mode, patch branch config path is required!']
-    test_option_miss(argv, expects)
+    run_and_assert_error_messages(argv, expects)
   end
 end
