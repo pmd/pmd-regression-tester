@@ -96,7 +96,7 @@ module PmdTester
       start_time = Time.now
       Cmd.execute(pmd_cmd)
       end_time = Time.now
-      end_time - start_time
+      [end_time - start_time, end_time]
     end
 
     def generate_pmd_reports
@@ -112,8 +112,8 @@ module PmdTester
       @projects.each do |project|
         project_report_file = "#{branch_file}/#{project.name}.xml"
         project_source_dir = "target/repositories/#{project.name}"
-        execution_time = generate_pmd_report(project_source_dir, project_report_file)
-        pmd_report_details = PmdReportDetail.new(project_report_file, execution_time)
+        execution_time, end_time = generate_pmd_report(project_source_dir, project_report_file)
+        pmd_report_details = PmdReportDetail.new(project_report_file, execution_time, end_time)
         project.pmd_reports.store(@pmd_branch_name, pmd_report_details)
         sum_time += execution_time
       end
@@ -142,9 +142,10 @@ module PmdTester
     attr_reader :file_path
     attr_reader :execution_time
 
-    def initialize(file_path, execution_time)
+    def initialize(file_path, execution_time, time_stamp)
       @file_path = file_path
       @execution_time = execution_time
+      @time_stamp = time_stamp
     end
   end
 end
