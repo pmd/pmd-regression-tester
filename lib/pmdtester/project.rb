@@ -44,5 +44,13 @@ module PmdTester
     def get_path_inside_project(file_path)
       file_path.gsub(/#{@local_path}/, @name)
     end
+
+    def get_pmd_report_path(branch_name)
+      if @pmd_reports[branch_name].nil?
+        nil
+      else
+        @pmd_reports[branch_name].file_path
+      end
+    end
   end
 end

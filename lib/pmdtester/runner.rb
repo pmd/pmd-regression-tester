@@ -65,8 +65,8 @@ module PmdTester
 
     def build_diff_html_reports
       @projects.each do |project|
-        report_diffs = DiffBuilder.new.build(project.pmd_reports[@options.base_branch].file_path,
-                                             project.pmd_reports[@options.patch_branch].file_path)
+        report_diffs = DiffBuilder.new.build(project.get_pmd_report_path(@options.base_branch),
+                                             project.get_pmd_report_path(@options.patch_branch))
         puts "Preparing report for #{project.name}"
         HtmlReportBuilder.new.build(project, report_diffs)
       end
