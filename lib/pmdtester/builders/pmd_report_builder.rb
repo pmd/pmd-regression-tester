@@ -1,6 +1,9 @@
 require 'fileutils'
 require_relative '../cmd'
 require_relative '../project'
+require_relative '../pmd_branch_detail'
+require_relative '../pmd_report_detail'
+
 include PmdTester
 module PmdTester
   # Building pmd xml reports according to a list of standard
@@ -15,7 +18,6 @@ module PmdTester
 
       @pmd_branch_details = PmdBranchDetail.new
       @pmd_branch_details.branch_name = pmd_branch_name
-      @pmd_branch_details.branch_config = branch_config
     end
 
     def execute_reset_cmd(type, tag)
@@ -95,35 +97,24 @@ module PmdTester
       puts "Generating pmd Report started -- branch #{@pmd_branch_name}"
       get_pmd_binary_file
 
+      sum_time = 0
       @projects.each do |project|
-        generate_pmd_report(project.local_source_path,
-                            project.get_pmd_report_path(@pmd_branch_name))
+        execution_time, end_time =
+          generate_pmd_report(project.local_source_path,
+                              project.get_pmd_report_path(@pmd_branch_name))
+        sum_time += execution_time
+        PmdReportDetail.save(project.get_report_info_path(@pmd_branch_name),
+                             execution_time,
+                             end_time)
       end
+
+      @pmd_branch_details.execution_time = sum_time
+      @pmd_branch_details.save
     end
 
     def build
       get_projects
       generate_pmd_reports
-    end
-  end
-
-  # This class represents all details about branch of pmd
-  class PmdBranchDetail
-    attr_accessor :branch_config
-    attr_accessor :branch_last_sha
-    attr_accessor :branch_last_message
-    attr_accessor :branch_name
-    attr_accessor :execution_time
-  end
-
-  # This class represents all details about report of pmd
-  class PmdReportDetail
-    attr_reader :execution_time
-    attr_reader :time_stamp
-
-    def initialize(execution_time, time_stamp)
-      @execution_time = execution_time
-      @time_stamp = time_stamp
     end
   end
 end

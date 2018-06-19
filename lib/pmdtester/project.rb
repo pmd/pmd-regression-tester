@@ -47,7 +47,7 @@ module PmdTester
     end
 
     def get_report_info_path(branch_name)
-      "#{get_project_target_dir(branch_name)}/report_info.xml"
+      "#{get_project_target_dir(branch_name)}/report_info.json"
     end
 
     def get_project_target_dir(branch_name)
