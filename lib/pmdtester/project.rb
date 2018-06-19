@@ -1,6 +1,8 @@
 module PmdTester
   # This class represents all the information about the project
   class Project
+    REPOSITORIES_PATH = 'target/repositories'.freeze
+
     attr_reader :name
     attr_reader :type
     attr_reader :connection
@@ -9,7 +11,6 @@ module PmdTester
     attr_reader :exclude_pattern
     attr_accessor :local_path
     # key: pmd branch name as String => value: local path of pmd report
-    attr_accessor :pmd_reports
 
     def initialize(project)
       @name = project.at_xpath('name').text
@@ -27,30 +28,36 @@ module PmdTester
       project.xpath('exclude-pattern').each do |ep|
         @exclude_pattern.push(ep.text)
       end
-
-      @local_path = ''
-
-      @pmd_reports = {}
     end
 
     # Change the file path from 'LOCAL_DIR/SOURCE_CODE_PATH' to
     # 'WEB_VIEW_URL/SOURCE_CODE_PATH'
     def get_webview_url(file_path)
-      file_path.gsub(/#{@local_path}/, @webview_url)
+      file_path.gsub(/#{local_source_path}/, @webview_url)
     end
 
     # Change the file path from 'LOCAL_DIR/SOURCE_CODE_PATH' to
     # 'PROJECT_NAME/SOURCE_CODE_PATH'
     def get_path_inside_project(file_path)
-      file_path.gsub(/#{@local_path}/, @name)
+      file_path.gsub(/#{local_source_path}/, @name)
     end
 
     def get_pmd_report_path(branch_name)
-      if @pmd_reports[branch_name].nil?
-        nil
-      else
-        @pmd_reports[branch_name].file_path
-      end
+      "#{get_project_target_dir(branch_name)}/pmd_report.xml"
+    end
+
+    def get_report_info_path(branch_name)
+      "#{get_project_target_dir(branch_name)}/report_info.xml"
+    end
+
+    def get_project_target_dir(branch_name)
+      dir = "target/reports/#{branch_name}/#{@name}"
+      FileUtils.mkdir_p(dir) unless File.directory?(dir)
+      dir
+    end
+
+    def local_source_path
+      "#{Dir.getwd}/#{REPOSITORIES_PATH}/#{@name}"
     end
   end
 end

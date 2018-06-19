@@ -1,5 +1,6 @@
 require 'fileutils'
 require_relative '../cmd'
+require_relative '../project'
 include PmdTester
 module PmdTester
   # Building pmd xml reports according to a list of standard
@@ -15,11 +16,6 @@ module PmdTester
       @pmd_branch_details = PmdBranchDetail.new
       @pmd_branch_details.branch_name = pmd_branch_name
       @pmd_branch_details.branch_config = branch_config
-    end
-
-    def create_repositories_dir
-      @repositories_dir = "#{@pwd}/target/repositories"
-      FileUtils.mkdir_p(@repositories_dir) unless File.directory?(@repositories_dir)
     end
 
     def execute_reset_cmd(type, tag)
@@ -38,17 +34,14 @@ module PmdTester
     def get_projects
       puts 'Cloning projects started'
 
-      create_repositories_dir
-
       @projects.each do |project|
-        path = "#{@repositories_dir}/#{project.name}"
+        path = project.local_source_path
         clone_cmd = "#{project.type} clone #{project.connection} #{path}"
         if File.exist?(path)
           puts "Skipping clone, project path #{path} already exists"
         else
           Cmd.execute(clone_cmd)
         end
-        project.local_path = path
 
         next if project.tag.nil?
         Dir.chdir(path) do
@@ -73,8 +66,7 @@ module PmdTester
                       '--non-recursive org.codehaus.mojo:exec-maven-plugin:1.5.0:exec'
         @pmd_version = Cmd.execute(version_cmd)
 
-        target_dir = "#{@pwd}/target"
-        unzip_cmd = "unzip -qo pmd-dist/target/pmd-bin-#{@pmd_version}.zip -d #{target_dir}"
+        unzip_cmd = "unzip -qo pmd-dist/target/pmd-bin-#{@pmd_version}.zip -d #{@pwd}/target"
         Cmd.execute(unzip_cmd)
       end
     end
@@ -101,25 +93,12 @@ module PmdTester
 
     def generate_pmd_reports
       puts "Generating pmd Report started -- branch #{@pmd_branch_name}"
-
       get_pmd_binary_file
 
-      pmd_branch_name = @pmd_branch_name.delete('/')
-      branch_file = "target/reports/#{pmd_branch_name}"
-      FileUtils.mkdir_p(branch_file) unless File.directory?(branch_file)
-
-      sum_time = 0
       @projects.each do |project|
-        project_report_file = "#{branch_file}/#{project.name}.xml"
-        project_source_dir = "target/repositories/#{project.name}"
-        execution_time, end_time = generate_pmd_report(project_source_dir, project_report_file)
-        pmd_report_details = PmdReportDetail.new(project_report_file, execution_time, end_time)
-        project.pmd_reports.store(@pmd_branch_name, pmd_report_details)
-        sum_time += execution_time
+        generate_pmd_report(project.local_source_path,
+                            project.get_pmd_report_path(@pmd_branch_name))
       end
-      @pmd_branch_details.execution_time = sum_time
-
-      @pmd_branch_details
     end
 
     def build
@@ -139,11 +118,10 @@ module PmdTester
 
   # This class represents all details about report of pmd
   class PmdReportDetail
-    attr_reader :file_path
     attr_reader :execution_time
+    attr_reader :time_stamp
 
-    def initialize(file_path, execution_time, time_stamp)
-      @file_path = file_path
+    def initialize(execution_time, time_stamp)
       @execution_time = execution_time
       @time_stamp = time_stamp
     end

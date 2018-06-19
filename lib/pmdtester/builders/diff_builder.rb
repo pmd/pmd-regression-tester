@@ -9,10 +9,10 @@ module PmdTester
     def build(base_report, patch_report)
       # Serving for 'single' mode,
       # if value of `base_report` is nil then `base_doc` is empty
-      base_doc = if base_report.nil?
-                   Nokogiri::XML('')
-                 else
+      base_doc = if File.exist?(base_report)
                    Nokogiri::XML(File.read(base_report)).remove_namespaces!
+                 else
+                   Nokogiri::XML('')
                  end
 
       patch_doc = Nokogiri::XML(File.read(patch_report)).remove_namespaces!
