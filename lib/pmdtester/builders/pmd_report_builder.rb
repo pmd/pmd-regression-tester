@@ -106,7 +106,7 @@ module PmdTester
 
         report_details = PmdReportDetail.new
         report_details.execution_time = execution_time
-        report_details.time_stamp = end_time
+        report_details.timestamp = end_time
         report_details.save(project.get_report_info_path(@pmd_branch_name))
       end
 

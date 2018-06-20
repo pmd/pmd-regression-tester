@@ -4,20 +4,39 @@ module PmdTester
   # This class represents all details about report of pmd
   class PmdReportDetail
     attr_accessor :execution_time
-    attr_accessor :time_stamp
+    attr_accessor :timestamp
+
+    def initialize
+      @execution_time = 0
+      @timestamp = ''
+    end
 
     def save(report_info_path)
-      hash = { execution_time: @execution_time, time_stamp: @time_stamp }
+      hash = { execution_time: @execution_time, timestamp: @timestamp }
       file = File.new(report_info_path, 'w')
       file.puts JSON.generate(hash)
       file.close
     end
 
     def load(report_info_path)
-      hash = JSON.parse(File.read(report_info_path))
-      @execution_time = hash[:execution_time]
-      @time_stamp = hash[:time_stamp]
-      hash
+      if File.exist?(report_info_path)
+        hash = JSON.parse(File.read(report_info_path))
+        @execution_time = hash['execution_time']
+        @timestamp = hash['timestamp']
+        hash
+      else
+        puts "#{report_info_path} doesn't exist"
+        {}
+      end
+    end
+
+    def format_execution_time
+      self.class.convert_seconds(@execution_time)
+    end
+
+    # convert seconds into HH::MM::SS
+    def self.convert_seconds(seconds)
+      Time.at(seconds.abs).utc.strftime('%H:%M:%S')
     end
   end
 end

@@ -1,4 +1,5 @@
 require 'nokogiri'
+require_relative '../pmd_report_detail'
 
 module PmdTester
   # Building difference between two pmd xml files
@@ -6,7 +7,7 @@ module PmdTester
     # The schema of pmd xml report refers to
     # http://pmd.sourceforge.net/report_2_0_0.xsd
 
-    def build(base_report, patch_report)
+    def build(base_report, patch_report, base_info, patch_info)
       # Serving for 'single' mode,
       # if value of `base_report` is nil then `base_doc` is empty
       base_doc = if File.exist?(base_report)
@@ -20,8 +21,25 @@ module PmdTester
       report_diff = ReportDiff.new
       build_violation_diffs(base_doc, patch_doc, report_diff)
       build_error_diffs(base_doc, patch_doc, report_diff)
+      build_detail_diffs(base_info, patch_info, report_diff)
 
       report_diff
+    end
+
+    def build_detail_diffs(base_info, patch_info, report_diff)
+      base_details = PmdReportDetail.new
+      base_details.load(base_info)
+      patch_details = PmdReportDetail.new
+      patch_details.load(patch_info)
+
+      report_diff.base_execution_time = base_details.format_execution_time
+      report_diff.patch_execution_time = patch_details.format_execution_time
+      report_diff.diff_execution_time =
+        PmdReportDetail.convert_seconds(base_details.execution_time -
+                                          patch_details.execution_time)
+
+      report_diff.base_timestamp = base_details.timestamp
+      report_diff.patch_timestamp = patch_details.timestamp
     end
 
     def build_diffs(base_hash, patch_hash)
@@ -215,6 +233,13 @@ module PmdTester
     attr_accessor :patch_errors_size
     attr_accessor :error_diffs_size
 
+    attr_accessor :base_execution_time
+    attr_accessor :patch_execution_time
+    attr_accessor :diff_execution_time
+
+    attr_accessor :base_timestamp
+    attr_accessor :patch_timestamp
+
     attr_accessor :violation_diffs
     attr_accessor :error_diffs
 
@@ -222,9 +247,18 @@ module PmdTester
       @base_violations_size = 0
       @patch_violations_size = 0
       @violation_diffs_size = 0
+
       @base_errors_size = 0
       @patch_errors_size = 0
       @error_diffs_size = 0
+
+      @base_execution_time = 0
+      @patch_execution_time = 0
+      @diff_execution_time = 0
+
+      @base_timestamp = ''
+      @patch_timestamp = ''
+
       @violation_diffs = {}
       @error_diffs = {}
     end

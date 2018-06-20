@@ -5,9 +5,6 @@ require_relative '../lib/pmdtester/parsers/projects_parser'
 
 # Unit test class for PmdTester::HtmlReportBuilder
 class TestHtmlReportBuilder < Test::Unit::TestCase
-  def setup
-    `rake clean`
-  end
   ORIGINAL_BASE_PMD_REPORT_PATH =
     'test/resources/html_report_builder/test_html_report_builder_base.xml'.freeze
   ORIGINAL_PATCH_PMD_REPORT_PATH =
@@ -17,10 +14,16 @@ class TestHtmlReportBuilder < Test::Unit::TestCase
   BASE_PMD_REPORT_PATH = "#{TARGET_TEST_RESOURCES_PATH}/test_html_report_builder_base.xml".freeze
   PATCH_PMD_REPORT_PATH = "#{TARGET_TEST_RESOURCES_PATH}/test_html_report_builder_patch.xml".freeze
 
+  BASE_REPORT_INFO_PATH = 'test/resources/html_report_builder/base_report_info.json'.freeze
+  PATCH_REPORT_INFO_PATH = 'test/resources/html_report_builder/patch_report_info.json'.freeze
+
   EXPECTED_REPORT_PATH =
     'test/resources/html_report_builder/expected_diff_report_index.html'.freeze
   EXPECTED_EMPTY_REPORT_PATH =
     'test/resources/html_report_builder/expected_empty_diff_report.html'.freeze
+  def setup
+    `rake clean`
+  end
 
   def build_pmd_report(original_filename, build_filename)
     FileUtils.mkdir_p(TARGET_TEST_RESOURCES_PATH) unless File.directory?(TARGET_TEST_RESOURCES_PATH)
@@ -43,7 +46,8 @@ class TestHtmlReportBuilder < Test::Unit::TestCase
     build_pmd_report(ORIGINAL_PATCH_PMD_REPORT_PATH, PATCH_PMD_REPORT_PATH)
 
     diff_builder = PmdTester::DiffBuilder.new
-    report_diffs = diff_builder.build(BASE_PMD_REPORT_PATH, PATCH_PMD_REPORT_PATH)
+    report_diffs = diff_builder.build(BASE_PMD_REPORT_PATH, PATCH_PMD_REPORT_PATH,
+                                      BASE_REPORT_INFO_PATH, PATCH_REPORT_INFO_PATH)
 
     PmdTester::HtmlReportBuilder.new.build(project, report_diffs)
 
