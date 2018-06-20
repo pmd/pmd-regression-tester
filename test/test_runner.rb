@@ -28,22 +28,6 @@ class TestRunner < Test::Unit::TestCase
     assert_equal(1, $CHILD_STATUS.exitstatus)
   end
 
-  def test_local_mode
-    report_diff = ReportDiff.new
-    PmdReportBuilder.any_instance.stubs(:build).returns(nil).twice
-    DiffBuilder.any_instance.stubs(:build).returns(report_diff).twice
-
-    argv = %w[-r target/repositories/pmd -b master -bc config/design.xml
-              -p pmd_releases/6.1.0 -pc config/design.xml -l test/resources/project-test.xml]
-    Runner.new(argv).run
-
-    actual_file_content = File.open('target/reports/diff/checkstyle/index.html').read
-    expected_file_content =
-      File.open('test/resources/html_report_builder/expected_empty_diff_report.html').read
-
-    assert_equal(expected_file_content, actual_file_content)
-  end
-
   def test_local_miss_base_name
     argv = %w[-r target/repositories/pmd -bc config/design.xml
               -p pmd_releases/6.1.0 -pc config/design.xml -l test/resources/project-test.xml]
@@ -68,10 +52,17 @@ class TestRunner < Test::Unit::TestCase
     run_and_assert_error_messages(argv, expects)
   end
 
+  def test_single_miss_patch_config
+    argv = %w[-r target/repositories/pmd -m single
+              -p pmd_releases/6.1.0 -l test/resources/project-test.xml]
+    expects = ['Mode: single', 'patch branch name: pmd_releases/6.1.0',
+               'In single mode, patch branch config path is required!']
+    run_and_assert_error_messages(argv, expects)
+  end
+
   def test_single_mode
-    report_diff = ReportDiff.new
     PmdReportBuilder.any_instance.stubs(:build).once
-    DiffBuilder.any_instance.stubs(:build).returns(report_diff).twice
+    DiffBuilder.any_instance.stubs(:build).twice
     HtmlReportBuilder.any_instance.stubs(:build).twice
 
     argv = %w[-r target/repositories/pmd -p pmd_releases/6.1.0
@@ -79,11 +70,13 @@ class TestRunner < Test::Unit::TestCase
     Runner.new(argv).run
   end
 
-  def test_single_miss_patch_config
-    argv = %w[-r target/repositories/pmd -m single
-              -p pmd_releases/6.1.0 -l test/resources/project-test.xml]
-    expects = ['Mode: single', 'patch branch name: pmd_releases/6.1.0',
-               'In single mode, patch branch config path is required!']
-    run_and_assert_error_messages(argv, expects)
+  def test_local_mode
+    PmdReportBuilder.any_instance.stubs(:build).twice
+    DiffBuilder.any_instance.stubs(:build).twice
+    HtmlReportBuilder.any_instance.stubs(:build).twice
+
+    argv = %w[-r target/repositories/pmd -b master -bc config/design.xml -p pmd_releases/6.1.0
+              -pc config/design.xml -l test/resources/project-test.xml]
+    Runner.new(argv).run
   end
 end

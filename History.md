@@ -21,3 +21,4 @@
 *   [#14](https://github.com/pmd/pmd-regression-tester/pull/14): Add Runner to PmdTester - [BBG](https://github.com/djydewang)
 *   [#15](https://github.com/pmd/pmd-regression-tester/pull/15): Fix rubocop Style/Documentation offenses - [BBG](https://github.com/djydewang)
 *   [#16](https://github.com/pmd/pmd-regression-tester/pull/16): Add single mode, add mocha library for unit test - [BBG](https://github.com/djydewang)
+*   [#17](https://github.com/pmd/pmd-regression-tester/pull/17): Add more details about pmd branchs and pmd reports - [BBG](https://github.com/djydewang)

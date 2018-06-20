@@ -3,6 +3,8 @@ require 'nokogiri'
 module PmdTester
   # Building html report according to the output of DiffBuilder
   class HtmlReportBuilder
+    include PmdTester
+
     NO_DIFFERENCES_MESSAGE = 'No differences found!'.freeze
     CSS_SRC_DIR = 'resources/css'.freeze
 
@@ -67,31 +69,36 @@ module PmdTester
       doc.table(class: 'bodyTable', border: '0') do
         doc.thead do
           doc.tr do
-            doc.th 'Report id'
-            doc.th 'Violations'
-            doc.th 'Errors'
+            doc.th 'Item'
+            doc.th 'Base'
+            doc.th 'Patch'
+            doc.th 'Difference'
           end
         end
 
-        doc.tbody do
-          doc.tr(class: 'a') do
-            doc.td 'base'
-            doc.td report_diff.base_violations_size
-            doc.td report_diff.base_errors_size
-          end
+        build_summary_body(doc, report_diff)
+      end
+    end
 
-          doc.tr(class: 'b') do
-            doc.td 'patch'
-            doc.td report_diff.patch_violations_size
-            doc.td report_diff.patch_errors_size
-          end
+    def build_summary_body(doc, report_diff)
+      doc.tbody do
+        build_summary_row(doc, 'number of errors', report_diff.base_errors_size,
+                          report_diff.patch_errors_size, report_diff.error_diffs_size)
+        build_summary_row(doc, 'number of violations', report_diff.base_violations_size,
+                          report_diff.patch_violations_size, report_diff.violation_diffs_size)
+        build_summary_row(doc, 'execution time', report_diff.base_execution_time,
+                          report_diff.patch_execution_time, report_diff.diff_execution_time)
+        build_summary_row(doc, 'timestamp', report_diff.base_timestamp,
+                          report_diff.patch_timestamp, '')
+      end
+    end
 
-          doc.tr(class: 'd') do
-            doc.td 'difference'
-            doc.td report_diff.violation_diffs_size
-            doc.td report_diff.error_diffs_size
-          end
-        end
+    def build_summary_row(doc, item, base, patch, diff)
+      doc.tr do
+        doc.td(class: 'c') { doc.text item }
+        doc.td(class: 'a') { doc.text base }
+        doc.td(class: 'b') { doc.text patch }
+        doc.td(class: 'c') { doc.text diff }
       end
     end
 
