@@ -1,7 +1,7 @@
 require 'test/unit'
 require_relative '../lib/pmdtester/pmd_branch_detail'
 
-# Unit test class for PmdTester::Cmd
+# Unit test class for PmdTester::PmdBranchDetail
 class TestPmdBranchDetail < Test::Unit::TestCase
   def test_save_and_load
     details = PmdTester::PmdBranchDetail.new

@@ -103,9 +103,11 @@ module PmdTester
           generate_pmd_report(project.local_source_path,
                               project.get_pmd_report_path(@pmd_branch_name))
         sum_time += execution_time
-        PmdReportDetail.save(project.get_report_info_path(@pmd_branch_name),
-                             execution_time,
-                             end_time)
+
+        report_details = PmdReportDetail.new
+        report_details.execution_time = execution_time
+        report_details.time_stamp = end_time
+        report_details.save(project.get_report_info_path(@pmd_branch_name))
       end
 
       @pmd_branch_details.execution_time = sum_time
