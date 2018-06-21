@@ -9,6 +9,7 @@ module PmdTester
     attr_reader :webview_url
     attr_reader :tag
     attr_reader :exclude_pattern
+    attr_accessor :diffs_exist
     # key: pmd branch name as String => value: local path of pmd report
 
     def initialize(project)
@@ -57,6 +58,16 @@ module PmdTester
 
     def local_source_path
       "#{Dir.getwd}/#{REPOSITORIES_PATH}/#{@name}"
+    end
+
+    def target_diff_report_path
+      dir = "target/reports/diff/#{@name}"
+      FileUtils.mkdir_p(dir) unless File.directory?(dir)
+      dir
+    end
+
+    def diff_report_index_path
+      "#{target_diff_report_path}/index.html"
     end
   end
 end

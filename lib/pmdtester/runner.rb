@@ -1,5 +1,6 @@
 require_relative './builders/diff_builder.rb'
-require_relative './builders/html_report_builder.rb'
+require_relative './builders/diff_report_builder.rb'
+require_relative './builders/summary_report_builder.rb'
 require_relative './builders/pmd_report_builder.rb'
 require_relative './parsers/options'
 require_relative './parsers/projects_parser'
@@ -44,7 +45,7 @@ module PmdTester
         .new(@options.patch_config, @projects, @options.local_git_repo, @options.patch_branch)
         .build
 
-      build_diff_html_reports
+      build_html_reports
     end
 
     def run_online_mode
@@ -60,7 +61,12 @@ module PmdTester
         .new(@options.patch_config, @projects, @options.local_git_repo, @options.patch_branch)
         .build
 
+      build_html_reports
+    end
+
+    def build_html_reports
       build_diff_html_reports
+      SummaryReportBuilder.new.build(@projects, @options.base_branch, @options.patch_branch)
     end
 
     def build_diff_html_reports
@@ -69,8 +75,10 @@ module PmdTester
                                              project.get_pmd_report_path(@options.patch_branch),
                                              project.get_report_info_path(@options.base_branch),
                                              project.get_report_info_path(@options.patch_branch))
+        # project.diffs_exist = report_diffs.diffs_exist?
+
         puts "Preparing report for #{project.name}"
-        HtmlReportBuilder.new.build(project, report_diffs)
+        DiffReportBuilder.new.build(project, report_diffs)
       end
       puts 'Built all difference reports successfully!'
       puts ''

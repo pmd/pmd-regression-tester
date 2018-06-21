@@ -4,8 +4,7 @@ require_relative '../lib/pmdtester/pmd_branch_detail'
 # Unit test class for PmdTester::PmdBranchDetail
 class TestPmdBranchDetail < Test::Unit::TestCase
   def test_save_and_load
-    details = PmdTester::PmdBranchDetail.new
-    details.branch_name = 'test_branch'
+    details = PmdTester::PmdBranchDetail.new('test_branch')
     details.branch_last_message = 'test message'
     details.branch_last_sha = 'test sha'
     details.execution_time = 'test time'

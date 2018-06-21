@@ -1,10 +1,10 @@
 require 'test/unit'
 require_relative '../lib/pmdtester/builders/diff_builder'
-require_relative '../lib/pmdtester/builders/html_report_builder'
+require_relative '../lib/pmdtester/builders/diff_report_builder'
 require_relative '../lib/pmdtester/parsers/projects_parser'
 
-# Unit test class for PmdTester::HtmlReportBuilder
-class TestHtmlReportBuilder < Test::Unit::TestCase
+# Unit test class for PmdTester::DiffReportBuilder
+class TestDiffReportBuilder < Test::Unit::TestCase
   ORIGINAL_BASE_PMD_REPORT_PATH =
     'test/resources/html_report_builder/test_html_report_builder_base.xml'.freeze
   ORIGINAL_PATCH_PMD_REPORT_PATH =
@@ -34,7 +34,7 @@ class TestHtmlReportBuilder < Test::Unit::TestCase
     end
   end
 
-  def test_html_report_builder
+  def test_diff_report_builder
     # Project name: spring-framework
     project = PmdTester::ProjectsParser.new.parse('test/resources/project-list.xml')[2]
 
@@ -48,7 +48,7 @@ class TestHtmlReportBuilder < Test::Unit::TestCase
     report_diffs = diff_builder.build(BASE_PMD_REPORT_PATH, PATCH_PMD_REPORT_PATH,
                                       BASE_REPORT_INFO_PATH, PATCH_REPORT_INFO_PATH)
 
-    PmdTester::HtmlReportBuilder.new.build(project, report_diffs)
+    PmdTester::DiffReportBuilder.new.build(project, report_diffs)
 
     # Checking  css resources are copied into the diff report directory.
     assert_equal(true, File.exist?("#{css_path}/maven-base.css"))
@@ -65,7 +65,7 @@ class TestHtmlReportBuilder < Test::Unit::TestCase
     actual_report_path = "target/reports/diff/#{project.name}"
 
     report_diffs = PmdTester::ReportDiff.new
-    PmdTester::HtmlReportBuilder.new.build(project, report_diffs)
+    PmdTester::DiffReportBuilder.new.build(project, report_diffs)
 
     # Checking the content of diff report is expected.
     expected_file = File.open(EXPECTED_EMPTY_REPORT_PATH).read

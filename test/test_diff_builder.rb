@@ -1,6 +1,6 @@
 require 'test/unit'
 require_relative '../lib/pmdtester/builders/diff_builder'
-require_relative '../lib/pmdtester/builders/html_report_builder'
+require_relative '../lib/pmdtester/builders/diff_report_builder'
 
 # Unit test class for PmdTester::DiffBuilder
 class TestDiffBuilder < Test::Unit::TestCase

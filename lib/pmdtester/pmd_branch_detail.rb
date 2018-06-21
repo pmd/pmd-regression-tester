@@ -9,10 +9,10 @@ module PmdTester
     # The branch's execution time on all standard projects
     attr_accessor :execution_time
 
-    def initialize
+    def initialize(branch_name)
       @branch_last_sha = ''
       @branch_last_message = ''
-      @branch_name = ''
+      @branch_name = branch_name
       @execution_time = 0
     end
 
@@ -40,7 +40,11 @@ module PmdTester
     end
 
     def branch_details_path
-      "target/reports/#{branch_name}/branch_info.json"
+      "target/reports/#{@branch_name}/branch_info.json"
+    end
+
+    def branch_config_target_path
+      "target/reports/#{@branch_name}/config.xml"
     end
   end
 end

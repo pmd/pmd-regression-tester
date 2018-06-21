@@ -16,8 +16,7 @@ module PmdTester
       @pmd_branch_name = pmd_branch_name
       @pwd = Dir.getwd
 
-      @pmd_branch_details = PmdBranchDetail.new
-      @pmd_branch_details.branch_name = pmd_branch_name
+      @pmd_branch_details = PmdBranchDetail.new(pmd_branch_name)
     end
 
     def execute_reset_cmd(type, tag)
@@ -112,6 +111,7 @@ module PmdTester
 
       @pmd_branch_details.execution_time = sum_time
       @pmd_branch_details.save
+      FileUtils.cp(@branch_config, @pmd_branch_details.branch_config_target_path)
     end
 
     def build
