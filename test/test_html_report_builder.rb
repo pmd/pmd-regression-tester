@@ -37,7 +37,6 @@ class TestHtmlReportBuilder < Test::Unit::TestCase
   def test_html_report_builder
     # Project name: spring-framework
     project = PmdTester::ProjectsParser.new.parse('test/resources/project-list.xml')[2]
-    project.local_path = "#{Dir.getwd}/target/repositories/#{project.name}"
 
     actual_report_path = "target/reports/diff/#{project.name}"
     css_path = "#{actual_report_path}/css"

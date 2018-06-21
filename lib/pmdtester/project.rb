@@ -9,7 +9,6 @@ module PmdTester
     attr_reader :webview_url
     attr_reader :tag
     attr_reader :exclude_pattern
-    attr_accessor :local_path
     # key: pmd branch name as String => value: local path of pmd report
 
     def initialize(project)
