@@ -43,7 +43,7 @@ module PmdTester
       "target/reports/#{@branch_name}/branch_info.json"
     end
 
-    def branch_config_target_path
+    def target_branch_config_path
       "target/reports/#{@branch_name}/config.xml"
     end
   end

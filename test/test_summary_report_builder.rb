@@ -8,7 +8,9 @@ class TestSummaryReportBuilder < Test::Unit::TestCase
     projects = PmdTester::ProjectsParser.new.parse('test/resources/project-list.xml')
     branch_path = 'target/reports/test_branch'
     FileUtils.mkdir_p(branch_path)
-    FileUtils.cp('test/resources/summary_report_builder/branch_info.json', branch_path)
+    test_resources_path = 'test/resources/summary_report_builder'
+    FileUtils.cp("#{test_resources_path}/branch_info.json", branch_path)
+    FileUtils.cp("#{test_resources_path}/empty_config.xml", "#{branch_path}/config.xml")
     PmdTester::SummaryReportBuilder.new.build(projects, 'test_branch', 'test_branch')
 
     actual_file_path = 'target/reports/diff/index.html'

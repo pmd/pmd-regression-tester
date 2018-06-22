@@ -111,7 +111,7 @@ module PmdTester
 
       @pmd_branch_details.execution_time = sum_time
       @pmd_branch_details.save
-      FileUtils.cp(@branch_config, @pmd_branch_details.branch_config_target_path)
+      FileUtils.cp(@branch_config, @pmd_branch_details.target_branch_config_path)
     end
 
     def build

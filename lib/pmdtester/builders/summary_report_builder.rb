@@ -69,6 +69,17 @@ module PmdTester
                                @patch_details.branch_last_message)
         build_branch_table_row(doc, 'total execution time', @base_details.execution_time,
                                @patch_details.execution_time)
+        doc.tr do
+          doc.td(class: 'c') { doc.text 'branch configuration' }
+          FileUtils.cp(@base_details.target_branch_config_path, "#{REPORT_DIR}/base_config.xml")
+          doc.td(class: 'a') do
+            doc.a(href: './base_config.xml') { doc.text 'base config' }
+          end
+          FileUtils.cp(@patch_details.target_branch_config_path, "#{REPORT_DIR}/patch_config.xml")
+          doc.td(class: 'b') do
+            doc.a(href: './patch_config.xml') { doc.text 'patch config' }
+          end
+        end
       end
     end
 
