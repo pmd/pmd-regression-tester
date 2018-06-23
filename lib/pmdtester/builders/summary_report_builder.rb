@@ -5,6 +5,8 @@ module PmdTester
   # Building summary report to show the details about projects and pmd branchs
   class SummaryReportBuilder < HtmlReportBuilder
     REPORT_DIR = 'target/reports/diff'.freeze
+    BASE_CONFIG_PATH = 'target/reports/diff/base_config.xml'.freeze
+    PATCH_CONFIG_PATH = 'target/reports/diff/patch_config.xml'.freeze
     INDEX_PATH = 'target/reports/diff/index.html'.freeze
 
     def build(projects, base_name, patch_name)
@@ -69,18 +71,28 @@ module PmdTester
                                @patch_details.branch_last_message)
         build_branch_table_row(doc, 'total execution time', @base_details.execution_time,
                                @patch_details.execution_time)
-        doc.tr do
-          doc.td(class: 'c') { doc.text 'branch configuration' }
-          FileUtils.cp(@base_details.target_branch_config_path, "#{REPORT_DIR}/base_config.xml")
-          doc.td(class: 'a') do
-            doc.a(href: './base_config.xml') { doc.text 'base config' }
-          end
-          FileUtils.cp(@patch_details.target_branch_config_path, "#{REPORT_DIR}/patch_config.xml")
-          doc.td(class: 'b') do
-            doc.a(href: './patch_config.xml') { doc.text 'patch config' }
-          end
+        build_branch_config_table_row(doc)
+      end
+    end
+
+    def build_branch_config_table_row(doc)
+      doc.tr do
+        doc.td(class: 'c') { doc.text 'branch configuration' }
+        base_config_src_path = @base_details.target_branch_config_path
+        copy_branch_config_file(base_config_src_path, BASE_CONFIG_PATH)
+        doc.td(class: 'a') do
+          doc.a(href: './base_config.xml') { doc.text 'base config' }
+        end
+        patch_config_stc_path = @patch_details.target_branch_config_path
+        FileUtils.cp(patch_config_stc_path, PATCH_CONFIG_PATH)
+        doc.td(class: 'b') do
+          doc.a(href: './patch_config.xml') { doc.text 'patch config' }
         end
       end
+    end
+
+    def copy_branch_config_file(src, dest)
+      FileUtils.cp(src, dest) if File.exist?(src)
     end
 
     def build_branch_table_row(doc, item, base, patch)
@@ -121,7 +133,7 @@ module PmdTester
         @projects.each do |project|
           doc.tr do
             doc.td do
-              doc.a(href: project.diff_report_index_path) { doc.text '#' }
+              doc.a(href: project.diff_report_index_ref_path) { doc.text '#' }
             end
             doc.td project.name
             doc.td project.tag.nil? ? 'master' : project.tag

@@ -69,5 +69,9 @@ module PmdTester
     def diff_report_index_path
       "#{target_diff_report_path}/index.html"
     end
+
+    def diff_report_index_ref_path
+      "./#{name}/index.html"
+    end
   end
 end

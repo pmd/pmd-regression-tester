@@ -75,7 +75,6 @@ module PmdTester
                                              project.get_pmd_report_path(@options.patch_branch),
                                              project.get_report_info_path(@options.base_branch),
                                              project.get_report_info_path(@options.patch_branch))
-        # project.diffs_exist = report_diffs.diffs_exist?
 
         puts "Preparing report for #{project.name}"
         DiffReportBuilder.new.build(project, report_diffs)

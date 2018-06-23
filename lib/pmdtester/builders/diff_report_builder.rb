@@ -7,6 +7,7 @@ module PmdTester
     NO_DIFFERENCES_MESSAGE = 'No differences found!'.freeze
 
     def build(project, report_diff)
+      project.diffs_exist = report_diff.diffs_exist?
       @project = project
       @report_diff = report_diff
 
