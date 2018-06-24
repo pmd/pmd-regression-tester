@@ -263,7 +263,7 @@ module PmdTester
     end
 
     def diffs_exist?
-      error_diffs_size.zero? && violation_diffs_size.zero?
+      !error_diffs_size.zero? || !violation_diffs_size.zero?
     end
   end
 end

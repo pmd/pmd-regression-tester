@@ -38,7 +38,7 @@ module PmdTester
     end
 
     def build_branch_details_section(doc)
-      doc.div(class: 'section', name: 'Branch details') do
+      doc.div(class: 'section', id: 'branchdetails') do
         doc.h2 'Branch details:'
         build_branch_details_table(doc)
       end
@@ -66,11 +66,11 @@ module PmdTester
         build_branch_table_row(doc, 'branch name', @base_details.branch_name,
                                @patch_details.branch_name)
         build_branch_table_row(doc, 'branch last commit sha', @base_details.branch_last_sha,
-                               @patch_details.branch_last_message)
+                               @patch_details.branch_last_sha)
         build_branch_table_row(doc, 'branch last commit message', @base_details.branch_last_message,
                                @patch_details.branch_last_message)
-        build_branch_table_row(doc, 'total execution time', @base_details.execution_time,
-                               @patch_details.execution_time)
+        build_branch_table_row(doc, 'total execution time', @base_details.format_execution_time,
+                               @patch_details.format_execution_time)
         build_branch_config_table_row(doc)
       end
     end
@@ -104,7 +104,7 @@ module PmdTester
     end
 
     def build_projects_section(doc)
-      doc.div(class: 'section', name: 'Projects') do
+      doc.div(class: 'section', id: 'projects') do
         doc.h2 'Projects:'
         build_projects_table(doc)
       end
@@ -120,7 +120,6 @@ module PmdTester
     def build_projects_table_head(doc)
       doc.thead do
         doc.tr do
-          doc.th 'project diff report link'
           doc.th 'project name'
           doc.th 'project branch/tag'
           doc.th 'diff exist?'
@@ -133,9 +132,8 @@ module PmdTester
         @projects.each do |project|
           doc.tr do
             doc.td do
-              doc.a(href: project.diff_report_index_ref_path) { doc.text '#' }
+              doc.a(href: project.diff_report_index_ref_path) { doc.text project.name }
             end
-            doc.td project.name
             doc.td project.tag.nil? ? 'master' : project.tag
             doc.td project.diffs_exist ? 'Yes' : 'No'
           end

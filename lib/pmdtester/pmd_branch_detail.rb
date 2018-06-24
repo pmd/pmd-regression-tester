@@ -1,4 +1,5 @@
 require 'json'
+require_relative './pmd_report_detail'
 
 module PmdTester
   # This class represents all details about branch of pmd
@@ -45,6 +46,10 @@ module PmdTester
 
     def target_branch_config_path
       "target/reports/#{@branch_name}/config.xml"
+    end
+
+    def format_execution_time
+      PmdReportDetail.convert_seconds(@execution_time)
     end
   end
 end

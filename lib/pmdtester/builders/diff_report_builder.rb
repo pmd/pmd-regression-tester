@@ -2,7 +2,7 @@ require 'nokogiri'
 require_relative './html_report_builder'
 
 module PmdTester
-  # Building diff report according to the output of DiffBuilder
+  # Building diff report for a single project
   class DiffReportBuilder < HtmlReportBuilder
     NO_DIFFERENCES_MESSAGE = 'No differences found!'.freeze
 
