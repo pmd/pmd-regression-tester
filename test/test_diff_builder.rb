@@ -57,4 +57,15 @@ class TestDiffBuilder < Test::Unit::TestCase
     assert_equal(2, error_diffs['Both2.java'].size)
     assert_equal('Patch1.java', keys[2])
   end
+
+  def test_diff_exist
+    report_diffs = ReportDiff.new
+    assert_equal(false, report_diffs.diffs_exist?)
+    report_diffs.violation_diffs_size = 1
+    assert_equal(true, report_diffs.diffs_exist?)
+    report_diffs.error_diffs_size = 1
+    assert_equal(true, report_diffs.diffs_exist?)
+    report_diffs.violation_diffs_size = 0
+    assert_equal(true, report_diffs.diffs_exist?)
+  end
 end
