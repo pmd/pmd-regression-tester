@@ -1,6 +1,6 @@
 require 'test/unit'
 require_relative '../lib/pmdtester/builders/diff_builder'
-require_relative '../lib/pmdtester/builders/html_report_builder'
+require_relative '../lib/pmdtester/builders/diff_report_builder'
 
 # Unit test class for PmdTester::DiffBuilder
 class TestDiffBuilder < Test::Unit::TestCase
@@ -56,5 +56,16 @@ class TestDiffBuilder < Test::Unit::TestCase
     assert_equal('Both2.java', keys[1])
     assert_equal(2, error_diffs['Both2.java'].size)
     assert_equal('Patch1.java', keys[2])
+  end
+
+  def test_diff_exist
+    report_diffs = ReportDiff.new
+    assert_equal(false, report_diffs.diffs_exist?)
+    report_diffs.violation_diffs_size = 1
+    assert_equal(true, report_diffs.diffs_exist?)
+    report_diffs.error_diffs_size = 1
+    assert_equal(true, report_diffs.diffs_exist?)
+    report_diffs.violation_diffs_size = 0
+    assert_equal(true, report_diffs.diffs_exist?)
   end
 end

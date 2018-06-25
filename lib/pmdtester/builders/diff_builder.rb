@@ -6,7 +6,6 @@ module PmdTester
   class DiffBuilder
     # The schema of pmd xml report refers to
     # http://pmd.sourceforge.net/report_2_0_0.xsd
-
     def build(base_report, patch_report, base_info, patch_info)
       # Serving for 'single' mode,
       # if value of `base_report` is nil then `base_doc` is empty
@@ -261,6 +260,10 @@ module PmdTester
 
       @violation_diffs = {}
       @error_diffs = {}
+    end
+
+    def diffs_exist?
+      !error_diffs_size.zero? || !violation_diffs_size.zero?
     end
   end
 end

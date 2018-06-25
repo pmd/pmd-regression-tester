@@ -1,4 +1,5 @@
 require 'json'
+require_relative './pmd_report_detail'
 
 module PmdTester
   # This class represents all details about branch of pmd
@@ -9,10 +10,10 @@ module PmdTester
     # The branch's execution time on all standard projects
     attr_accessor :execution_time
 
-    def initialize
+    def initialize(branch_name)
       @branch_last_sha = ''
       @branch_last_message = ''
-      @branch_name = ''
+      @branch_name = branch_name
       @execution_time = 0
     end
 
@@ -40,7 +41,15 @@ module PmdTester
     end
 
     def branch_details_path
-      "target/reports/#{branch_name}/branch_info.json"
+      "target/reports/#{@branch_name}/branch_info.json"
+    end
+
+    def target_branch_config_path
+      "target/reports/#{@branch_name}/config.xml"
+    end
+
+    def format_execution_time
+      PmdReportDetail.convert_seconds(@execution_time)
     end
   end
 end
