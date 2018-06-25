@@ -1,4 +1,5 @@
 require 'test/unit'
+require 'mocha/test_unit'
 require_relative '../lib/pmdtester/builders/summary_report_builder'
 require_relative '../lib/pmdtester/parsers/projects_parser'
 
@@ -10,7 +11,13 @@ class TestSummaryReportBuilder < Test::Unit::TestCase
 
   def test_summary_report_builder
     projects = PmdTester::ProjectsParser.new.parse('test/resources/project-list.xml')
-    projects[0].diffs_exist = true
+    report_diff = mock
+    report_diff.expects(:diffs_exist?).returns(false).twice
+    report_diff.expects(:diffs_exist?).returns(true).once
+    projects[0].report_diff = report_diff
+    projects[1].report_diff = report_diff
+    projects[2].report_diff = report_diff
+
     branch_path = 'target/reports/test_branch'
     FileUtils.mkdir_p(branch_path)
     test_resources_path = 'test/resources/summary_report_builder'

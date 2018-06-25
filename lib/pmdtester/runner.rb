@@ -77,7 +77,8 @@ module PmdTester
                                              project.get_report_info_path(@options.patch_branch))
 
         puts "Preparing report for #{project.name}"
-        DiffReportBuilder.new.build(project, report_diffs)
+        project.report_diff = report_diffs
+        DiffReportBuilder.new.build(project)
       end
       puts 'Built all difference reports successfully!'
       puts ''

@@ -10,14 +10,14 @@ class TestProjectsParser < Test::Unit::TestCase
     expected_exclude_pattern =
       %w[**/src/test/resources-noncompilable/**/* **/src/test/resources/**/*]
     assert_equal(expected_exclude_pattern, projects[0].exclude_pattern)
-    assert_equal('https://github.com/checkstyle/checkstyle', projects[0].webview_url)
+    assert_equal('https://github.com/checkstyle/checkstyle/tree/master', projects[0].webview_url)
 
     assert_equal('openjdk10', projects[1].name)
     assert_equal('hg', projects[1].type)
     assert_equal('http://hg.openjdk.java.net/jdk10/jdk10/jdk', projects[1].connection)
     assert_equal('http://hg.openjdk.java.net/jdk10/jdk10/jdk/file/777356696811',
                  projects[1].webview_url)
-    assert_nil(projects[1].tag)
+    assert_equal('master', projects[1].tag)
     assert_empty(projects[1].exclude_pattern)
 
     assert_equal('spring-framework', projects[2].name)

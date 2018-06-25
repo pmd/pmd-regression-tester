@@ -44,7 +44,7 @@ module PmdTester
           Cmd.execute(clone_cmd)
         end
 
-        next if project.tag.nil?
+        next if project.tag.eql?('master')
         Dir.chdir(path) do
           execute_reset_cmd(project.type, project.tag)
         end

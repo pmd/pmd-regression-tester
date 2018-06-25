@@ -9,7 +9,7 @@ module PmdTester
     attr_reader :webview_url
     attr_reader :tag
     attr_reader :exclude_pattern
-    attr_accessor :diffs_exist
+    attr_accessor :report_diff
     # key: pmd branch name as String => value: local path of pmd report
 
     def initialize(project)
@@ -17,16 +17,28 @@ module PmdTester
       @type = project.at_xpath('type').text
       @connection = project.at_xpath('connection').text
 
-      webview_url_element = project.at_xpath('webview-url')
-      @webview_url = @connection
-      @webview_url = webview_url_element.text unless webview_url_element.nil?
-
+      @tag = 'master'
       tag_element = project.at_xpath('tag')
       @tag = tag_element.text unless tag_element.nil?
+
+      webview_url_element = project.at_xpath('webview-url')
+      @webview_url = default_webview_url
+      @webview_url = webview_url_element.text unless webview_url_element.nil?
 
       @exclude_pattern = []
       project.xpath('exclude-pattern').each do |ep|
         @exclude_pattern.push(ep.text)
+      end
+    end
+
+    # Generate the default webview url for the projects
+    # stored on github.
+    # For other projects return value is `connection`.
+    def default_webview_url
+      if @type.eql?('git') && @connection.include?('github.com')
+        "#{@connection}/tree/#{@tag}"
+      else
+        @connection
       end
     end
 
