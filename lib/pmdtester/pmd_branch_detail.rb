@@ -14,6 +14,7 @@ module PmdTester
       @branch_last_sha = ''
       @branch_last_message = ''
       @branch_name = branch_name
+      @base_branch_dir = "target/reports/#{branch_name.delete('/')}"
       @execution_time = 0
     end
 
@@ -41,11 +42,15 @@ module PmdTester
     end
 
     def branch_details_path
-      "target/reports/#{@branch_name}/branch_info.json"
+      "#{@base_branch_dir}/branch_info.json"
     end
 
     def target_branch_config_path
-      "target/reports/#{@branch_name}/config.xml"
+      "#{@base_branch_dir}/config.xml"
+    end
+
+    def target_branch_project_list_path
+      "#{@base_branch_dir}/project-list.xml"
     end
 
     def format_execution_time

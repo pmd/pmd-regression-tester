@@ -27,4 +27,11 @@ class TestOptions < Test::Unit::TestCase
     assert_equal('config/all-java.xml', opts.config)
     assert_equal('config/project_list.txt', opts.project_list)
   end
+
+  def test_single_mode
+    command_line =
+      %w[-r /path/to/repo -p master -pc config.xml -l list.xml -f]
+    opts = PmdTester::Options.new(command_line)
+    assert_equal(true, opts.html_flag)
+  end
 end

@@ -14,6 +14,7 @@ module PmdTester
     attr_reader :config
     attr_reader :project_list
     attr_reader :mode
+    attr_reader :html_flag
 
     def initialize(argv)
       options = parse(argv)
@@ -25,6 +26,7 @@ module PmdTester
       @config = options[:c]
       @project_list = options[:l]
       @mode = options[:m]
+      @html_flag = options[:f]
 
       # if the 'config' option is selected then `config` overrides `base_config` and `patch_config`
       @base_config = @config if !@config.nil? && @mode == 'local'
@@ -52,8 +54,10 @@ module PmdTester
         o.string '-pc', '--patch-config', 'path to the patch PMD configuration file'
         o.string '-c', '--config', 'path to the base and patch PMD configuration file'
         o.string '-l', '--list-of-project',
-                 'path to the file which contains the list of standard projects', required: true
+                 'path to the file which contains the list of standard projects'
         o.string '-m', '--mode', mode_message, default: 'local'
+        o.bool '-f', '--html-flag',
+               'whether to not generate the html diff report in single mode'
         o.on '-v', '--version' do
           puts VERSION
           exit

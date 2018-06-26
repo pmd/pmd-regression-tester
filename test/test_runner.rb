@@ -4,6 +4,7 @@ require_relative '../lib/pmdtester/builders/diff_builder'
 require_relative '../lib/pmdtester/builders/diff_report_builder'
 require_relative '../lib/pmdtester/builders/summary_report_builder'
 require_relative '../lib/pmdtester/builders/pmd_report_builder'
+require_relative '../lib/pmdtester/pmd_branch_detail'
 require_relative '../lib/pmdtester/runner'
 
 # Unit test class for PmdTester::Runner
@@ -61,8 +62,16 @@ class TestRunner < Test::Unit::TestCase
     run_and_assert_error_messages(argv, expects)
   end
 
+  def test_online_miss_base_name
+    argv = %w[-r target/repositories/pmd -p pmd_releases/6.1.0 -m online]
+    expects = ['Mode: online', 'In online mode, base branch name is required!']
+    run_and_assert_error_messages(argv, expects)
+  end
+
   def test_single_mode
-    PmdReportBuilder.any_instance.stubs(:build).once
+    PmdReportBuilder.any_instance.stubs(:build)
+                    .returns(PmdBranchDetail.new('test_branch')).once
+    FileUtils.mkdir_p('target/reports/test_branch')
     DiffBuilder.any_instance.stubs(:build).twice
     DiffReportBuilder.any_instance.stubs(:build).twice
     SummaryReportBuilder.any_instance.stubs(:build).once
