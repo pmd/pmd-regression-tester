@@ -14,7 +14,7 @@ module PmdTester
       @branch_last_sha = ''
       @branch_last_message = ''
       @branch_name = branch_name
-      @base_branch_dir = "target/reports/#{branch_name.delete('/')}"
+      @base_branch_dir = "target/reports/#{branch_name.delete('/')}" unless @branch_name.nil?
       @execution_time = 0
     end
 

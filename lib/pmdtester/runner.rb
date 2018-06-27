@@ -74,7 +74,7 @@ module PmdTester
     def download_baseline(branch_name)
       branch_name = branch_name.delete('/')
       zip_filename = "#{branch_name}-baseline.zip"
-      target_path = 'target/reports/'
+      target_path = 'target/reports'
       FileUtils.mkdir_p(target_path) unless File.directory?(target_path)
 
       url = get_baseline_url(zip_filename)
@@ -117,12 +117,11 @@ module PmdTester
 
     def build_diff_html_reports
       @projects.each do |project|
+        puts "Preparing report for #{project.name}"
         report_diffs = DiffBuilder.new.build(project.get_pmd_report_path(@options.base_branch),
                                              project.get_pmd_report_path(@options.patch_branch),
                                              project.get_report_info_path(@options.base_branch),
                                              project.get_report_info_path(@options.patch_branch))
-
-        puts "Preparing report for #{project.name}"
         project.report_diff = report_diffs
         DiffReportBuilder.new.build(project)
       end

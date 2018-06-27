@@ -1,5 +1,6 @@
 require 'test/unit'
 require_relative '../lib/pmdtester/runner'
+require_relative '../lib/pmdtester/cmd'
 class IntegrationTestRunner < Test::Unit::TestCase
   def setup
     `rake clean`
@@ -9,7 +10,7 @@ class IntegrationTestRunner < Test::Unit::TestCase
     argv = '-r target/repositories/pmd -b master -bc config/design.xml ' \
             '-p pmd_releases/6.1.0 -pc config/design.xml -l test/resources/project-test.xml'
 
-    `bundle exec bin/pmdtester #{argv}`
+    Cmd.execute("bundle exec bin/pmdtester #{argv}")
 
     assert_equal(0, $CHILD_STATUS.exitstatus)
     assert_path_exist('target/reports/master/checkstyle/pmd_report.xml')
@@ -25,7 +26,7 @@ class IntegrationTestRunner < Test::Unit::TestCase
     argv = '-r target/repositories/pmd -m single ' \
            '-p pmd_releases/6.1.0 -pc config/design.xml -l test/resources/project-test.xml'
 
-    `bundle exec bin/pmdtester #{argv}`
+    Cmd.execute("bundle exec bin/pmdtester #{argv}")
 
     assert_equal(0, $CHILD_STATUS.exitstatus)
     assert_path_exist('target/reports/pmd_releases6.1.0/checkstyle/pmd_report.xml')
@@ -38,7 +39,7 @@ class IntegrationTestRunner < Test::Unit::TestCase
   def test_online_mode
     argv = '-r target/repositories/pmd -m online -b test_branch -p pmd_releases/6.3.0'
 
-    `bundle exec bin/pmdtester #{argv}`
+    Cmd.execute("bundle exec bin/pmdtester #{argv}")
 
     assert_path_exist('target/reports/test_branch/checkstyle/pmd_report.xml')
     assert_path_exist('target/reports/test_branch/spring-framework/pmd_report.xml')
