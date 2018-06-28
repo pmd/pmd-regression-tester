@@ -22,9 +22,9 @@ class TestPmdBranchDetail < Test::Unit::TestCase
 
   def test_get_path
     details = PmdTester::PmdBranchDetail.new('test/branch')
-    expected_path = 'target/reports/testbranch/branch_info.json'
+    expected_path = 'target/reports/test_branch/branch_info.json'
     assert_equal(expected_path, details.branch_details_path)
-    expected_path = 'target/reports/testbranch/config.xml'
+    expected_path = 'target/reports/test_branch/config.xml'
     assert_equal(expected_path, details.target_branch_config_path)
   end
 end

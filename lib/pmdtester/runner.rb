@@ -5,6 +5,7 @@ require_relative './builders/pmd_report_builder.rb'
 require_relative './parsers/options'
 require_relative './parsers/projects_parser'
 require_relative './cmd'
+require_relative './pmd_branch_detail'
 
 module PmdTester
   # The Runner is a class responsible of organizing all PmdTester modules
@@ -72,8 +73,8 @@ module PmdTester
     end
 
     def download_baseline(branch_name)
-      branch_name = branch_name.delete('/')
-      zip_filename = "#{branch_name}-baseline.zip"
+      branch_filename = PmdBranchDetail.branch_filename(branch_name)
+      zip_filename = "#{branch_filename}-baseline.zip"
       target_path = 'target/reports'
       FileUtils.mkdir_p(target_path) unless File.directory?(target_path)
 

@@ -10,11 +10,16 @@ module PmdTester
     # The branch's execution time on all standard projects
     attr_accessor :execution_time
 
+    def self.branch_filename(branch_name)
+      branch_name.tr('/', '_') unless branch_name.nil?
+    end
+
     def initialize(branch_name)
       @branch_last_sha = ''
       @branch_last_message = ''
       @branch_name = branch_name
-      @base_branch_dir = "target/reports/#{branch_name.delete('/')}" unless @branch_name.nil?
+      branch_filename = PmdBranchDetail.branch_filename(branch_name)
+      @base_branch_dir = "target/reports/#{branch_filename}" unless @branch_name.nil?
       @execution_time = 0
     end
 

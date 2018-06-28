@@ -1,3 +1,5 @@
+require_relative './pmd_branch_detail'
+
 module PmdTester
   # This class represents all the information about the project
   class Project
@@ -71,7 +73,8 @@ module PmdTester
     end
 
     def get_project_target_dir(branch_name)
-      dir = "target/reports/#{branch_name.delete('/')}/#{@name}"
+      branch_filename = PmdBranchDetail.branch_filename(branch_name)
+      dir = "target/reports/#{branch_filename}/#{@name}"
       FileUtils.mkdir_p(dir) unless File.directory?(dir)
       dir
     end
