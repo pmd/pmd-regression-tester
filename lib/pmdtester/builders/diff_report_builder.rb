@@ -6,10 +6,9 @@ module PmdTester
   class DiffReportBuilder < HtmlReportBuilder
     NO_DIFFERENCES_MESSAGE = 'No differences found!'.freeze
 
-    def build(project, report_diff)
-      project.diffs_exist = report_diff.diffs_exist?
+    def build(project)
       @project = project
-      @report_diff = report_diff
+      @report_diff = project.report_diff
 
       index = File.new(project.diff_report_index_path, 'w')
 

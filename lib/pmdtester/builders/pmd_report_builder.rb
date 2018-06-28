@@ -44,7 +44,6 @@ module PmdTester
           Cmd.execute(clone_cmd)
         end
 
-        next if project.tag.nil?
         Dir.chdir(path) do
           execute_reset_cmd(project.type, project.tag)
         end
@@ -112,6 +111,7 @@ module PmdTester
       @pmd_branch_details.execution_time = sum_time
       @pmd_branch_details.save
       FileUtils.cp(@branch_config, @pmd_branch_details.target_branch_config_path)
+      @pmd_branch_details
     end
 
     def build

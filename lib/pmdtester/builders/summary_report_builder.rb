@@ -135,7 +135,7 @@ module PmdTester
               doc.a(href: project.diff_report_index_ref_path) { doc.text project.name }
             end
             doc.td project.tag.nil? ? 'master' : project.tag
-            doc.td project.diffs_exist ? 'Yes' : 'No'
+            doc.td project.report_diff.diffs_exist? ? 'Yes' : 'No'
           end
         end
       end

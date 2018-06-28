@@ -9,7 +9,7 @@ module PmdTester
     def build(base_report, patch_report, base_info, patch_info)
       # Serving for 'single' mode,
       # if value of `base_report` is nil then `base_doc` is empty
-      base_doc = if File.exist?(base_report)
+      base_doc = if !base_report.nil?
                    Nokogiri::XML(File.read(base_report)).remove_namespaces!
                  else
                    Nokogiri::XML('')
@@ -27,9 +27,9 @@ module PmdTester
 
     def build_detail_diffs(base_info, patch_info, report_diff)
       base_details = PmdReportDetail.new
-      base_details.load(base_info)
+      base_details.load(base_info) unless base_info.nil?
       patch_details = PmdReportDetail.new
-      patch_details.load(patch_info)
+      patch_details.load(patch_info) unless patch_info.nil?
 
       report_diff.base_execution_time = base_details.format_execution_time
       report_diff.patch_execution_time = patch_details.format_execution_time

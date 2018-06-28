@@ -23,3 +23,4 @@
 *   [#16](https://github.com/pmd/pmd-regression-tester/pull/16): Add single mode, add mocha library for unit test - [BBG](https://github.com/djydewang)
 *   [#17](https://github.com/pmd/pmd-regression-tester/pull/17): Add more details about pmd branchs and pmd reports - [BBG](https://github.com/djydewang)
 *   [#18](https://github.com/pmd/pmd-regression-tester/pull/18): Add SummaryReportBuilder to PmdTester - [BBG](https://github.com/djydewang)
+*   [#19](https://github.com/pmd/pmd-regression-tester/pull/19): Add online mode for PmdTester - [BBG](https://github.com/djydewang)
