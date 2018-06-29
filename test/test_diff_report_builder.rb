@@ -22,7 +22,7 @@ class TestDiffReportBuilder < Test::Unit::TestCase
   EXPECTED_EMPTY_REPORT_PATH =
     'test/resources/html_report_builder/expected_empty_diff_report.html'.freeze
   def setup
-    `rake clean`
+    # `rake clean`
   end
 
   def build_pmd_report(original_filename, build_filename)

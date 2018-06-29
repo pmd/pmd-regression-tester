@@ -135,7 +135,7 @@ module PmdTester
           doc.a(id: "A#{a_index}", href: "#A#{a_index}") { doc.text '#' }
         end
 
-        violation = pmd_violation.violation
+        violation = pmd_violation.attrs
 
         # The priority of the rule
         doc.td violation['priority']
@@ -146,7 +146,7 @@ module PmdTester
         end
 
         # The violation message
-        doc.td violation.text
+        doc.td pmd_violation.text
 
         # The begin line of the violation
         line = violation['beginline']
@@ -208,7 +208,7 @@ module PmdTester
             end
 
             # The error message
-            doc.td pmd_error.get_msg
+            doc.td pmd_error.msg
 
             b_index += 1
           end
