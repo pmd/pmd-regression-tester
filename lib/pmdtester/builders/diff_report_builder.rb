@@ -193,6 +193,7 @@ module PmdTester
         doc.tr do
           doc.th
           doc.th 'Message'
+          doc.th 'Details'
         end
       end
     end
@@ -209,6 +210,9 @@ module PmdTester
 
             # The error message
             doc.td pmd_error.msg
+
+            # Details of error
+            doc.td pmd_error.text
 
             b_index += 1
           end
