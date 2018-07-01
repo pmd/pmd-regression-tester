@@ -7,10 +7,10 @@ class IntegrationTestRunner < Test::Unit::TestCase
   end
 
   def test_local_mode
-    argv = '-r target/repositories/pmd -b master -bc config/design.xml ' \
-            '-p pmd_releases/6.1.0 -pc config/design.xml -l test/resources/project-test.xml'
+    argv = %w[-r target/repositories/pmd -b master -bc config/design.xml
+              -p pmd_releases/6.1.0 -pc config/design.xml -l test/resources/project-test.xml]
 
-    Cmd.execute("bundle exec bin/pmdtester #{argv}")
+    Runner.new(argv).run
 
     assert_equal(0, $CHILD_STATUS.exitstatus)
     assert_path_exist('target/reports/master/checkstyle/pmd_report.xml')
@@ -23,10 +23,10 @@ class IntegrationTestRunner < Test::Unit::TestCase
   end
 
   def test_single_mode
-    argv = '-r target/repositories/pmd -m single ' \
-           '-p pmd_releases/6.1.0 -pc config/design.xml -l test/resources/project-test.xml'
+    argv = %w[-r target/repositories/pmd -m single
+              -p pmd_releases/6.1.0 -pc config/design.xml -l test/resources/project-test.xml]
 
-    Cmd.execute("bundle exec bin/pmdtester #{argv}")
+    Runner.new(argv).run
 
     assert_equal(0, $CHILD_STATUS.exitstatus)
     assert_path_exist('target/reports/pmd_releases_6.1.0/checkstyle/pmd_report.xml')
@@ -37,10 +37,10 @@ class IntegrationTestRunner < Test::Unit::TestCase
   end
 
   def test_online_mode
-    argv = '-r target/repositories/pmd -m online -b test_branch -p pmd_releases/6.3.0'
+    argv = %w[-r target/repositories/pmd -m online -b test_branch -p pmd_releases/6.3.0]
     # This test depends on the file test_branch-baseline.zip being available on sourceforge.
 
-    Cmd.execute("bundle exec bin/pmdtester #{argv}")
+    Runner.new(argv).run
 
     assert_path_exist('target/reports/test_branch-baseline.zip')
     assert_path_exist('target/reports/test_branch/checkstyle/pmd_report.xml')
