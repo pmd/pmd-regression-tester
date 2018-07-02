@@ -1,13 +1,22 @@
 module PmdTester
   # This class is used to store pmd errors and its size.
   class PmdErrors
-    attr_accessor :errors
-    attr_accessor :errors_size
+    attr_reader :errors
+    attr_reader :errors_size
 
     def initialize
       # key:filename as String => value:PmdError Array
       @errors = {}
       @errors_size = 0
+    end
+
+    def add_error_by_filename(filename, error)
+      if @errors.key?(filename)
+        @errors[filename].push(error)
+      else
+        @errors.store(filename, [error])
+      end
+      @errors_size += 1
     end
   end
 
@@ -30,7 +39,7 @@ module PmdTester
     attr_accessor :text
 
     def initialize(attrs, branch)
-      @attrs = attrs.to_h
+      @attrs = attrs
 
       @branch = branch
       @text = ''

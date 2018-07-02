@@ -1,13 +1,18 @@
 module PmdTester
   # This class is used to store pmd violations and its size.
   class PmdViolations
-    attr_accessor :violations
-    attr_accessor :violations_size
+    attr_reader :violations
+    attr_reader :violations_size
 
     def initialize
       # key:filename as String => value:PmdViolation Array
       @violations = {}
       @violations_size = 0
+    end
+
+    def add_violations_by_filename(filename, violations)
+      @violations.store(filename, violations)
+      @violations_size += violations.size
     end
   end
 
@@ -41,14 +46,7 @@ module PmdTester
     attr_accessor :text
 
     def initialize(attrs, branch)
-      # the example of attrs:
-      # attrs:[["beginline", "51"], ["endline", "51"], ["begincolumn", "9"],
-      # ["endcolumn", "46"], ["rule", "FieldDeclarationsShouldBeAtStartOfClass"],
-      # ["ruleset", "Code Style"], ["package", "org.springframework.aop"], ["class", "Pointcut"],
-      # ["variable", "TRUE"], ["externalInfoUrl", "http://pmd.sourceforge.net/snapshot/
-      # pmd_rules_java_codestyle.html#fielddeclarationsshouldbeatstartofclass"], ["priority", "3"]]
-
-      @attrs = attrs.to_h
+      @attrs = attrs
       @branch = branch
       @text = ''
     end
