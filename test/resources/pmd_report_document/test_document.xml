@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd xmlns="http://pmd.sourceforge.net/report/2.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://pmd.sourceforge.net/report/2.0.0 http://pmd.sourceforge.net/report_2_0_0.xsd"
+    version="6.3.0-SNAPSHOT" timestamp="2018-04-16T22:41:45.065">
+<file name="SHOULD_BE_REPLACED/target/repositories/spring-framework/gradle/jdiff/Null.java">
+<violation beginline="7" endline="8" begincolumn="12" endcolumn="5" rule="UncommentedEmptyConstructor" ruleset="Documentation" class="Null" method="Null" externalInfoUrl="http://pmd.sourceforge.net/snapshot/pmd_rules_java_documentation.html#uncommentedemptyconstructor" priority="3">
+Document empty constructor
+</violation>
+</file>
+<file name="SHOULD_BE_REPLACED/target/repositories/spring-framework/spring-aop/src/main/java/org/springframework/aop/ClassFilter.java">
+<violation beginline="44" endline="44" begincolumn="9" endcolumn="52" rule="FieldDeclarationsShouldBeAtStartOfClass" ruleset="Code Style" package="org.springframework.aop" class="ClassFilter" variable="TRUE" externalInfoUrl="http://pmd.sourceforge.net/snapshot/pmd_rules_java_codestyle.html#fielddeclarationsshouldbeatstartofclass" priority="3">
+Fields should be declared at the top of the class, before any method declarations, constructors, initializers or inner classes.
+</violation>
+</file>
+<file name="SHOULD_BE_REPLACED/target/repositories/spring-framework/spring-aop/src/main/java/org/springframework/aop/MethodMatcher.java">
+<violation beginline="97" endline="97" begincolumn="9" endcolumn="56" rule="FieldDeclarationsShouldBeAtStartOfClass" ruleset="Code Style" package="org.springframework.aop" class="MethodMatcher" variable="TRUE" externalInfoUrl="http://pmd.sourceforge.net/snapshot/pmd_rules_java_codestyle.html#fielddeclarationsshouldbeatstartofclass" priority="3">
+Fields should be declared at the top of the class, before any method declarations, constructors, initializers or inner classes.
+</violation>
+</file>
+<file name="SHOULD_BE_REPLACED/target/repositories/spring-framework/spring-aop/src/main/java/org/springframework/aop/TrueClassFilter.java">
+<violation beginline="27" endline="56" begincolumn="1" endcolumn="1" rule="ClassWithOnlyPrivateConstructorsShouldBeFinal" ruleset="Design" package="org.springframework.aop" externalInfoUrl="http://pmd.sourceforge.net/snapshot/pmd_rules_java_design.html#classwithonlyprivateconstructorsshouldbefinal" priority="1">
+A class which only has private constructors should be final
+</violation>
+</file>
+<file name="SHOULD_BE_REPLACED/target/repositories/spring-framework/spring-aop/src/main/java/org/springframework/aop/TrueMethodMatcher.java">
+<violation beginline="30" endline="73" begincolumn="1" endcolumn="1" rule="ClassWithOnlyPrivateConstructorsShouldBeFinal" ruleset="Design" package="org.springframework.aop" externalInfoUrl="http://pmd.sourceforge.net/snapshot/pmd_rules_java_design.html#classwithonlyprivateconstructorsshouldbefinal" priority="1">
+A class which only has private constructors should be final
+</violation>
+</file>
+<file name="SHOULD_BE_REPLACED/target/repositories/spring-framework/spring-aop/src/main/java/org/springframework/aop/aspectj/AbstractAspectJAdvice.java">
+<violation beginline="63" endline="742" begincolumn="17" endcolumn="1" rule="GodClass" ruleset="Design" package="org.springframework.aop.aspectj" class="AbstractAspectJAdvice" externalInfoUrl="http://pmd.sourceforge.net/snapshot/pmd_rules_java_design.html#godclass" priority="3">
+Possible God Class (WMC=101, ATFD=29, TCC=4.000%)
+</violation>
+<violation beginline="94" endline="94" begincolumn="23" endcolumn="46" rule="FieldDeclarationsShouldBeAtStartOfClass" ruleset="Code Style" package="org.springframework.aop.aspectj" class="AbstractAspectJAdvice" variable="declaringClass" externalInfoUrl="http://pmd.sourceforge.net/snapshot/pmd_rules_java_codestyle.html#fielddeclarationsshouldbeatstartofclass" priority="3">
+Fields should be declared at the top of the class, before any method declarations, constructors, initializers or inner classes.
+</violation>
+<violation beginline="96" endline="96" begincolumn="23" endcolumn="40" rule="FieldDeclarationsShouldBeAtStartOfClass" ruleset="Code Style" package="org.springframework.aop.aspectj" class="AbstractAspectJAdvice" variable="methodName" externalInfoUrl="http://pmd.sourceforge.net/snapshot/pmd_rules_java_codestyle.html#fielddeclarationsshouldbeatstartofclass" priority="3">
+Fields should be declared at the top of the class, before any method declarations, constructors, initializers or inner classes.
+</violation>
+</file>
+  <error filename="SHOULD_BE_REPLACED/target/repositories/spring-framework/spring-aop/src/main/java/org/springframework/aop/TrueMethodMatcher.java"
+    msg="This is an artificial error message.">
+  </error>
+  <error filename="SHOULD_BE_REPLACED/target/repositories/spring-framework/spring-aop/src/main/java/org/springframework/aop/TrueMethodMatcher.java"
+         msg="This is another artificial error message.">
+  </error>
+</pmd>

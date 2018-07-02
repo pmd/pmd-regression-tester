@@ -24,3 +24,4 @@
 *   [#17](https://github.com/pmd/pmd-regression-tester/pull/17): Add more details about pmd branchs and pmd reports - [BBG](https://github.com/djydewang)
 *   [#18](https://github.com/pmd/pmd-regression-tester/pull/18): Add SummaryReportBuilder to PmdTester - [BBG](https://github.com/djydewang)
 *   [#19](https://github.com/pmd/pmd-regression-tester/pull/19): Add online mode for PmdTester - [BBG](https://github.com/djydewang)
+*   [#20](https://github.com/pmd/pmd-regression-tester/pull/20): Change the way of parsing xml file from DOM to SAX - [BBG](https://github.com/djydewang)
