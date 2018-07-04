@@ -1,13 +1,15 @@
+# frozen_string_literal: true
+
 require_relative './html_report_builder'
 require_relative '../pmd_branch_detail'
 
 module PmdTester
   # Building summary report to show the details about projects and pmd branchs
   class SummaryReportBuilder < HtmlReportBuilder
-    REPORT_DIR = 'target/reports/diff'.freeze
-    BASE_CONFIG_PATH = 'target/reports/diff/base_config.xml'.freeze
-    PATCH_CONFIG_PATH = 'target/reports/diff/patch_config.xml'.freeze
-    INDEX_PATH = 'target/reports/diff/index.html'.freeze
+    REPORT_DIR = 'target/reports/diff'
+    BASE_CONFIG_PATH = 'target/reports/diff/base_config.xml'
+    PATCH_CONFIG_PATH = 'target/reports/diff/patch_config.xml'
+    INDEX_PATH = 'target/reports/diff/index.html'
 
     def build(projects, base_name, patch_name)
       @projects = projects

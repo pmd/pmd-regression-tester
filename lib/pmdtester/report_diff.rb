@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PmdTester
   # This class represents all the diff report information,
   # including the summary information of the original pmd reports,

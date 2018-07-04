@@ -1,5 +1,8 @@
+# frozen_string_literal: true
+
 require_relative './builders/diff_builder.rb'
 require_relative './builders/diff_report_builder.rb'
+require_relative './builders/rule_set_builder'
 require_relative './builders/summary_report_builder.rb'
 require_relative './builders/pmd_report_builder.rb'
 require_relative './parsers/options'
@@ -11,9 +14,9 @@ module PmdTester
   # The Runner is a class responsible of organizing all PmdTester modules
   # and running the PmdTester
   class Runner
-    LOCAL = 'local'.freeze
-    ONLINE = 'online'.freeze
-    SINGLE = 'single'.freeze
+    LOCAL = 'local'
+    ONLINE = 'online'
+    SINGLE = 'single'
     def initialize(argv)
       @options = Options.new(argv)
     end
@@ -58,15 +61,19 @@ module PmdTester
 
       baseline_path = download_baseline(@options.base_branch)
 
-      # patch branch build pmd reports with same configuration as base branch
-      config_path = "#{baseline_path}/config.xml"
+      if @options.auto_config_flag
+        RuleSetBuilder.new(@options).build
+      else
+        # patch branch build pmd reports with same configuration as base branch
+        @options.patch_config = "#{baseline_path}/config.xml"
+      end
 
       # patch branch build pmd report with same list of projects as base branch
       project_list = "#{baseline_path}/project-list.xml"
       get_projects(project_list)
 
       PmdReportBuilder
-        .new(config_path, @projects, @options.local_git_repo, @options.patch_branch)
+        .new(@options.patch_config, @projects, @options.local_git_repo, @options.patch_branch)
         .build
 
       build_html_reports
@@ -87,7 +94,7 @@ module PmdTester
         Cmd.execute(unzip_cmd)
       end
 
-      "#{target_path}/#{branch_name}"
+      "#{target_path}/#{branch_filename}"
     end
 
     def get_baseline_url(zip_filename)
@@ -122,7 +129,8 @@ module PmdTester
         report_diffs = DiffBuilder.new.build(project.get_pmd_report_path(@options.base_branch),
                                              project.get_pmd_report_path(@options.patch_branch),
                                              project.get_report_info_path(@options.base_branch),
-                                             project.get_report_info_path(@options.patch_branch))
+                                             project.get_report_info_path(@options.patch_branch),
+                                             @options.filter_set)
         project.report_diff = report_diffs
         DiffReportBuilder.new.build(project)
       end

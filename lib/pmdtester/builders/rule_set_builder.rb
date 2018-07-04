@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 require 'nokogiri'
+require 'set'
 require_relative '../cmd'
 module PmdTester
   # This class is responsible for generation dynamic configuration
@@ -7,11 +10,11 @@ module PmdTester
     ALL_RULE_SETS = Set['bestpractices', 'codestyle', 'design', 'documentation', 'errorprone',
                         'migrating', 'multithreading', 'performance', 'regex', 'security'].freeze
     PATH_TO_PMD_JAVA_BASED_RULES =
-      'pmd-java/src/main/java/net/sourceforge/pmd/lang/java/rule/'.freeze
-    PATH_TO_PMD_XPATH_BASED_RULES = 'pmd-java/src/main/resources/category/java/'.freeze
-    PATH_TO_ALL_JAVA_RULES = 'config/all-java.xml'.freeze
-    PATH_TO_DYNAMIC_CONFIG = 'target/dynamic-config.xml'.freeze
-    NO_JAVA_RULES_CHANGED_MESSAGE = 'No java rules have been changed!'.freeze
+      'pmd-java/src/main/java/net/sourceforge/pmd/lang/java/rule/'
+    PATH_TO_PMD_XPATH_BASED_RULES = 'pmd-java/src/main/resources/category/java/'
+    PATH_TO_ALL_JAVA_RULES = 'config/all-java.xml'
+    PATH_TO_DYNAMIC_CONFIG = 'target/dynamic-config.xml'
+    NO_JAVA_RULES_CHANGED_MESSAGE = 'No java rules have been changed!'
 
     def initialize(options)
       @options = options
@@ -21,12 +24,14 @@ module PmdTester
       filenames = diff_filenames
       rule_sets = get_rule_sets(filenames)
       build_config_file(rule_sets)
+    end
 
-      # return filter set
+    def filter_set(rule_sets)
       if rule_sets.size.eql?(ALL_RULE_SETS.size)
-        nil # if `rule_sets` contains all rule sets, than no need to filter the baseline
+        # if `rule_sets` contains all rule sets, than no need to filter the baseline
+        @options.filter_set = nil
       else
-        rule_sets
+        @options = rule_sets
       end
     end
 

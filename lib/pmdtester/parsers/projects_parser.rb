@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'nokogiri'
 require_relative '../project'
 
@@ -22,7 +24,7 @@ module PmdTester
     end
 
     def get_schema_file
-      'config/projectlist_1_0_0.xsd'.freeze
+      'config/projectlist_1_0_0.xsd'
     end
   end
 

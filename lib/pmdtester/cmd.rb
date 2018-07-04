@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'open3'
 
 module PmdTester
@@ -14,7 +16,7 @@ module PmdTester
         exit(status.exitstatus)
       end
 
-      stdout.chomp! unless stdout.nil?
+      stdout&.chomp!
 
       stdout
     end

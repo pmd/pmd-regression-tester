@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 require 'slop'
 
 module PmdTester
   # The Options is a class responsible of parsing all the
   # command line options
   class Options
-    VERSION = '1.0.0-SNAPSHOT'.freeze
+    VERSION = '1.0.0-SNAPSHOT'
 
     attr_reader :local_git_repo
     attr_reader :base_branch
@@ -15,6 +17,8 @@ module PmdTester
     attr_reader :project_list
     attr_reader :mode
     attr_reader :html_flag
+    attr_reader :auto_config_flag
+    attr_accessor :filter_set
 
     def initialize(argv)
       options = parse(argv)
@@ -27,6 +31,8 @@ module PmdTester
       @project_list = options[:l]
       @mode = options[:m]
       @html_flag = options[:f]
+      @auto_config_flag = options[:a]
+      @filter_set = nil
 
       # if the 'config' option is selected then `config` overrides `base_config` and `patch_config`
       @base_config = @config if !@config.nil? && @mode == 'local'
@@ -58,6 +64,8 @@ module PmdTester
         o.string '-m', '--mode', mode_message, default: 'local'
         o.bool '-f', '--html-flag',
                'whether to not generate the html diff report in single mode'
+        o.bool '-a', '--auto-generate-config',
+               'whether to generate configurations automatically based on branch differences'
         o.on '-v', '--version' do
           puts VERSION
           exit

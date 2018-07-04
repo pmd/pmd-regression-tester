@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'json'
 require_relative './pmd_report_detail'
 
@@ -11,7 +13,7 @@ module PmdTester
     attr_accessor :execution_time
 
     def self.branch_filename(branch_name)
-      branch_name.tr('/', '_') unless branch_name.nil?
+      branch_name&.tr('/', '_')
     end
 
     def initialize(branch_name)

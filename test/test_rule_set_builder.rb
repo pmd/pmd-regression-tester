@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 require 'test/unit'
 require 'mocha/test_unit'
 require_relative '../lib/pmdtester/cmd'
 require_relative '../lib/pmdtester/builders/rule_set_builder'
 # The unit test class for RuleSetBuilder
-class TestRuleSetsBuilder < Test::Unit::TestCase
+class TestRuleSetBuilder < Test::Unit::TestCase
   PATH_TO_TEST_RESOURCES = 'test/resources/rule_set_builder'
   include PmdTester
   def mock_build(diff_filenames)

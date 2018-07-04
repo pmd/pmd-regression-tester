@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test/unit'
 require_relative '../lib/pmdtester/builders/diff_builder'
 require_relative '../lib/pmdtester/builders/diff_report_builder'
@@ -6,21 +8,21 @@ require_relative '../lib/pmdtester/parsers/projects_parser'
 # Unit test class for PmdTester::DiffReportBuilder
 class TestDiffReportBuilder < Test::Unit::TestCase
   ORIGINAL_BASE_PMD_REPORT_PATH =
-    'test/resources/html_report_builder/test_html_report_builder_base.xml'.freeze
+    'test/resources/html_report_builder/test_html_report_builder_base.xml'
   ORIGINAL_PATCH_PMD_REPORT_PATH =
-    'test/resources/html_report_builder/test_html_report_builder_patch.xml'.freeze
+    'test/resources/html_report_builder/test_html_report_builder_patch.xml'
 
-  TARGET_TEST_RESOURCES_PATH = 'target/test/resources'.freeze
-  BASE_PMD_REPORT_PATH = "#{TARGET_TEST_RESOURCES_PATH}/test_html_report_builder_base.xml".freeze
-  PATCH_PMD_REPORT_PATH = "#{TARGET_TEST_RESOURCES_PATH}/test_html_report_builder_patch.xml".freeze
+  TARGET_TEST_RESOURCES_PATH = 'target/test/resources'
+  BASE_PMD_REPORT_PATH = "#{TARGET_TEST_RESOURCES_PATH}/test_html_report_builder_base.xml"
+  PATCH_PMD_REPORT_PATH = "#{TARGET_TEST_RESOURCES_PATH}/test_html_report_builder_patch.xml"
 
-  BASE_REPORT_INFO_PATH = 'test/resources/html_report_builder/base_report_info.json'.freeze
-  PATCH_REPORT_INFO_PATH = 'test/resources/html_report_builder/patch_report_info.json'.freeze
+  BASE_REPORT_INFO_PATH = 'test/resources/html_report_builder/base_report_info.json'
+  PATCH_REPORT_INFO_PATH = 'test/resources/html_report_builder/patch_report_info.json'
 
   EXPECTED_REPORT_PATH =
-    'test/resources/html_report_builder/expected_diff_report_index.html'.freeze
+    'test/resources/html_report_builder/expected_diff_report_index.html'
   EXPECTED_EMPTY_REPORT_PATH =
-    'test/resources/html_report_builder/expected_empty_diff_report.html'.freeze
+    'test/resources/html_report_builder/expected_empty_diff_report.html'
   def setup
     # `rake clean`
   end
