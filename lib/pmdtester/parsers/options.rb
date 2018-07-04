@@ -9,8 +9,8 @@ module PmdTester
     attr_reader :local_git_repo
     attr_reader :base_branch
     attr_reader :patch_branch
-    attr_reader :base_config
-    attr_reader :patch_config
+    attr_accessor :base_config
+    attr_accessor :patch_config
     attr_reader :config
     attr_reader :project_list
     attr_reader :mode
