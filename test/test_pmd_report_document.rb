@@ -13,6 +13,8 @@ class TestPmdReportDocument < Test::Unit::TestCase
     parser.parse(File.open('test/resources/pmd_report_document/test_document.xml'))
     assert_equal(8, doc.violations.violations_size)
     assert_equal(2, doc.errors.errors_size)
+    pmd_errors = doc.errors.errors.values
+    assert_not_nil(pmd_errors[0])
   end
 
   def test_filter_set

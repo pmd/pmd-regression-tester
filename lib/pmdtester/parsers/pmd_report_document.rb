@@ -39,7 +39,6 @@ module PmdTester
 
     def characters(string)
       @current_violation.text = string unless @current_violation.nil?
-      @current_error.text = string unless @current_error.nil?
     end
 
     def end_element(name)
@@ -57,6 +56,10 @@ module PmdTester
         @current_filename = nil
         @current_error = nil
       end
+    end
+
+    def cdata_block(string)
+      @current_error.text = string unless @current_error.nil?
     end
 
     def match_filter_set?(violation)
