@@ -6,12 +6,13 @@ require_relative '../cmd'
 module PmdTester
   # This class is responsible for generation dynamic configuration
   # according to the difference between base and patch branch of Pmd.
+  # Attention: we only consider java rulesets now.
   class RuleSetBuilder
-    ALL_RULE_SETS = Set['bestpractices', 'codestyle', 'design', 'documentation', 'errorprone',
-                        'migrating', 'multithreading', 'performance', 'regex', 'security'].freeze
+    ALL_RULE_SETS = Set['bestpractices', 'codestyle', 'design', 'documentation',
+                        'errorprone', 'multithreading', 'performance', 'security'].freeze
     PATH_TO_PMD_JAVA_BASED_RULES =
-      'pmd-java/src/main/java/net/sourceforge/pmd/lang/java/rule/'
-    PATH_TO_PMD_XPATH_BASED_RULES = 'pmd-java/src/main/resources/category/java/'
+      'pmd-java/src/main/java/net/sourceforge/pmd/lang/java/rule'
+    PATH_TO_PMD_XPATH_BASED_RULES = 'pmd-java/src/main/resources/category/java'
     PATH_TO_ALL_JAVA_RULES = 'config/all-java.xml'
     PATH_TO_DYNAMIC_CONFIG = 'target/dynamic-config.xml'
     NO_JAVA_RULES_CHANGED_MESSAGE = 'No java rules have been changed!'
@@ -23,24 +24,27 @@ module PmdTester
     def build
       filenames = diff_filenames
       rule_sets = get_rule_sets(filenames)
+      output_filter_set(rule_sets)
       build_config_file(rule_sets)
     end
 
-    def filter_set(rule_sets)
-      if rule_sets.size.eql?(ALL_RULE_SETS.size)
+    def output_filter_set(rule_sets)
+      if rule_sets == ALL_RULE_SETS
         # if `rule_sets` contains all rule sets, than no need to filter the baseline
         @options.filter_set = nil
       else
-        @options = rule_sets
+        @options.filter_set = rule_sets
       end
     end
 
     def diff_filenames
       filenames = nil
       Dir.chdir(@options.local_git_repo) do
-        diff_cmd = "git diff --name-only #{@options.base_branch}..#{@options.patch_branch}"
-        grep_cmd = "grep -E '^pmd-(core|java)/'" # OPTIMIZE: extend other languages
-        filenames = Cmd.execute("#{diff_cmd} | #{grep_cmd}")
+        base = @options.base_branch
+        patch = @options.patch_branch
+        # We only need to support git here, since PMD's repo is using git.
+        diff_cmd = "git diff --name-only #{base}..#{patch} -- pmd/core pmd/java"
+        filenames = Cmd.execute(diff_cmd)
       end
       filenames.split("\n")
     end
@@ -48,23 +52,25 @@ module PmdTester
     def get_rule_sets(filenames)
       rule_sets = Set[]
       filenames.each do |filename|
-        if filename.start_with?(PATH_TO_PMD_JAVA_BASED_RULES, PATH_TO_PMD_XPATH_BASED_RULES)
-          add_rule_set(rule_sets, filename)
-        else
+        match_data = %r{#{PATH_TO_PMD_JAVA_BASED_RULES}/([^/]+)/[^/]+Rule.java}.match(filename)
+        if match_data.nil?
+          match_data = %r{#{PATH_TO_PMD_XPATH_BASED_RULES}/([^/]+).xml}.match(filename)
+        end
+
+        category = if match_data.nil?
+                     nil
+                   else
+                     match_data[1]
+                   end
+
+        if category.nil?
           rule_sets = ALL_RULE_SETS
           break
+        else
+          rule_sets.add(category)
         end
       end
       rule_sets
-    end
-
-    def add_rule_set(rule_sets, filename)
-      ALL_RULE_SETS.each do |rule_set|
-        unless filename.index(rule_set).nil?
-          rule_sets.add(rule_set)
-          break
-        end
-      end
     end
 
     def build_config_file(rule_sets)
@@ -98,10 +104,6 @@ module PmdTester
       end
       @options.base_config = PATH_TO_DYNAMIC_CONFIG
       @options.patch_config = PATH_TO_DYNAMIC_CONFIG
-    end
-
-    def remove_empty_lines(doc)
-      doc.css('')
     end
   end
 end
