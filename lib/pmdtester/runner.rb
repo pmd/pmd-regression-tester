@@ -37,6 +37,8 @@ module PmdTester
 
     def run_local_mode
       puts "Mode: #{@options.mode}"
+      RuleSetBuilder.new(@options).build if @options.auto_config_flag
+
       check_option(LOCAL, 'base branch name', @options.base_branch)
       check_option(LOCAL, 'base branch config path', @options.base_config)
       check_option(LOCAL, 'patch branch name', @options.patch_branch)

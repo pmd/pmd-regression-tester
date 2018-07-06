@@ -64,7 +64,7 @@ module PmdTester
         o.string '-m', '--mode', mode_message, default: 'local'
         o.bool '-f', '--html-flag',
                'whether to not generate the html diff report in single mode'
-        o.bool '-a', '--auto-generate-config',
+        o.bool '-a', '--auto-gen-config',
                'whether to generate configurations automatically based on branch differences'
         o.on '-v', '--version' do
           puts VERSION
