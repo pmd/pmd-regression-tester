@@ -25,3 +25,4 @@
 *   [#18](https://github.com/pmd/pmd-regression-tester/pull/18): Add SummaryReportBuilder to PmdTester - [BBG](https://github.com/djydewang)
 *   [#19](https://github.com/pmd/pmd-regression-tester/pull/19): Add online mode for PmdTester - [BBG](https://github.com/djydewang)
 *   [#20](https://github.com/pmd/pmd-regression-tester/pull/20): Change the way of parsing xml file from DOM to SAX - [BBG](https://github.com/djydewang)
+*   [#21](https://github.com/pmd/pmd-regression-tester/pull/21): Add auto-gen-config option for PmdTester - [BBG](https://github.com/djydewang)
