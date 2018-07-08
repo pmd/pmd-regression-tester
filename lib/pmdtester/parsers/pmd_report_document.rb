@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'nokogiri'
 require_relative '../pmd_violation'
 require_relative '../pmd_error'
@@ -7,7 +9,7 @@ module PmdTester
   class PmdReportDocument < Nokogiri::XML::SAX::Document
     attr_reader :violations
     attr_reader :errors
-    def initialize(branch_name)
+    def initialize(branch_name, filter_set = nil)
       @violations = PmdViolations.new
       @errors = PmdErrors.new
       @current_violations = []
@@ -15,6 +17,7 @@ module PmdTester
       @current_error = nil
       @current_element = ''
       @filename = ''
+      @filter_set = filter_set
       @branch_name = branch_name
     end
 
@@ -36,22 +39,37 @@ module PmdTester
 
     def characters(string)
       @current_violation.text = string unless @current_violation.nil?
-      @current_error.text = string unless @current_error.nil?
     end
 
     def end_element(name)
       case name
       when 'file'
-        @violations.add_violations_by_filename(@current_filename, @current_violations)
+        unless @current_violations.empty?
+          @violations.add_violations_by_filename(@current_filename, @current_violations)
+        end
         @current_filename = nil
       when 'violation'
-        @current_violations.push(@current_violation)
+        @current_violations.push(@current_violation) if match_filter_set?(@current_violation)
         @current_violation = nil
       when 'error'
         @errors.add_error_by_filename(@current_filename, @current_error)
         @current_filename = nil
         @current_error = nil
       end
+    end
+
+    def cdata_block(string)
+      @current_error.text = string unless @current_error.nil?
+    end
+
+    def match_filter_set?(violation)
+      return true if @filter_set.nil?
+
+      @filter_set.each do |ruleset|
+        return true if ruleset.eql?(violation.attrs['ruleset'].delete(' ').downcase)
+      end
+
+      false
     end
   end
 end

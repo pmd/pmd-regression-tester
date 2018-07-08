@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 require_relative './pmd_branch_detail'
 
 module PmdTester
   # This class represents all the information about the project
   class Project
-    REPOSITORIES_PATH = 'target/repositories'.freeze
+    REPOSITORIES_PATH = 'target/repositories'
 
     attr_reader :name
     attr_reader :type

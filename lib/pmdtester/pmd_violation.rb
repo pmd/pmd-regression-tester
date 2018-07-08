@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PmdTester
   # This class is used to store pmd violations and its size.
   class PmdViolations

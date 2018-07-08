@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test/unit'
 require_relative '../lib/pmdtester/builders/pmd_report_builder'
 require_relative '../lib/pmdtester/parsers/projects_parser'
