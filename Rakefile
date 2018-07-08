@@ -12,7 +12,7 @@ Hoe.spec 'pmdtester' do
   self.author  = 'Binguo Bao'
   self.email   = 'djydewang@gmail.com'
   self.clean_globs = %w[target/reports/**/* target/test**/*]
-  self.extra_deps = [['nokogiri', '1.8.2'], ['slop', '4.6.2']]
+  self.extra_deps = [['nokogiri', '1.8.2'], ['slop', '4.6.2'], ['rdoc']]
   self.extra_dev_deps = [['hoe', '3.17.0'],
                          ['minitest', '5.10.1'],
                          ['mocha', '1.5.0'],

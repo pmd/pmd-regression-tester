@@ -1,7 +1,9 @@
 # pmdtester
 
-code  :: https://github.com/pmd/pmd-regression-tester  
-bugs  :: https://github.com/pmd/pmd-regression-tester/issues  
+code  :: https://github.com/pmd/pmd-regression-tester
+
+bugs  :: https://github.com/pmd/pmd-regression-tester/issues
+
 
 ## DESCRIPTION:
 
