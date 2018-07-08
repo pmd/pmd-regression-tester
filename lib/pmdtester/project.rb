@@ -33,6 +33,8 @@ module PmdTester
       project.xpath('exclude-pattern').each do |ep|
         @exclude_pattern.push(ep.text)
       end
+
+      @report_diff = nil
     end
 
     # Generate the default webview url for the projects
@@ -97,6 +99,14 @@ module PmdTester
 
     def diff_report_index_ref_path
       "./#{name}/index.html"
+    end
+
+    def diffs_exist?
+      @report_diff.diffs_exist?
+    end
+
+    def introduce_new_errors?
+      @report_diff.introduce_new_errors?
     end
   end
 end
