@@ -2,13 +2,14 @@
 
 require 'nokogiri'
 require_relative '../project'
+require_relative '../resource_locator'
 
 module PmdTester
   # The ProjectsParser is a class responsible of parsing
   # the projects XML file to get the Project object array
   class ProjectsParser
     def parse(list_file)
-      schema = Nokogiri::XML::Schema(File.read(get_schema_file))
+      schema = Nokogiri::XML::Schema(File.read(schema_file_path))
       document = Nokogiri::XML(File.read(list_file))
 
       errors = schema.validate(document)
@@ -23,8 +24,8 @@ module PmdTester
       projects
     end
 
-    def get_schema_file
-      'config/projectlist_1_0_0.xsd'
+    def schema_file_path
+      ResourceLocator.locate('config/projectlist_1_0_0.xsd')
     end
   end
 

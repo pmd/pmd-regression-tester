@@ -5,14 +5,15 @@ README.md
 Rakefile
 bin/pmdtester
 config/all-java.xml
-config/project-list.xml
 config/projectlist_1_0_0.xsd
 lib/pmdtester/builders/diff_builder.rb
 lib/pmdtester/builders/diff_report_builder.rb
 lib/pmdtester/builders/html_report_builder.rb
 lib/pmdtester/builders/pmd_report_builder.rb
+lib/pmdtester/builders/rule_set_builder.rb
 lib/pmdtester/builders/summary_report_builder.rb
 lib/pmdtester/cmd.rb
+lib/pmdtester/resource_locator.rb
 lib/pmdtester/parsers/options.rb
 lib/pmdtester/parsers/pmd_report_document.rb
 lib/pmdtester/parsers/projects_parser.rb

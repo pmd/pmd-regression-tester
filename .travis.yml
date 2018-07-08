@@ -4,3 +4,5 @@ script:
   - bundle exec rake rubocop
   - bundle exec rake clean test
   - bundle exec rake clean integration-test
+  - bundle exec rake install_gem
+  - pmdtester -h

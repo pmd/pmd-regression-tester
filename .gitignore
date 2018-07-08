@@ -1,3 +1,5 @@
+pkg/
+doc/
 .project
 .idea
 target/
