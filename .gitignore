@@ -1,5 +1,8 @@
 pkg/
 doc/
+Gemfile.lock
 .project
 .idea
+.bundle
 target/
+vendor/
