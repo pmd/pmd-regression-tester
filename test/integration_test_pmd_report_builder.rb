@@ -13,6 +13,7 @@ class IntegrationTestPmdReportBuilder < Test::Unit::TestCase
 
   def test_build
     Process.fork do
+      logger.level = Logger::INFO
       projects = ProjectsParser.new.parse('test/resources/project-test.xml')
       builder = PmdReportBuilder.new('config/all-java.xml', projects,
                                      'target/repositories/pmd', 'pmd_releases/6.2.0')
