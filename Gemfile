@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 source 'https://rubygems.org'
 gem 'hoe', '3.17.0'
 gem 'minitest', '5.10.1'

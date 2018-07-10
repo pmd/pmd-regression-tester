@@ -6,11 +6,11 @@ require_relative '../project'
 require_relative '../pmd_branch_detail'
 require_relative '../pmd_report_detail'
 
-include PmdTester
 module PmdTester
   # Building pmd xml reports according to a list of standard
   # projects and branch of pmd source code
   class PmdReportBuilder
+    include PmdTester
     def initialize(branch_config, projects, local_git_repo, pmd_branch_name)
       @branch_config = branch_config
       @projects = projects
@@ -28,20 +28,21 @@ module PmdTester
       when 'hg'
         reset_cmd = "hg up #{tag}"
       else
-        raise Exception, "Unknown #{type} repository"
+        logger.error "Unknown #{type} repository"
+        exit 1 # FIXME: maybe we should throw an exception here
       end
 
       Cmd.execute(reset_cmd)
     end
 
     def get_projects
-      puts 'Cloning projects started'
+      logger.info 'Cloning projects started'
 
       @projects.each do |project|
         path = project.local_source_path
         clone_cmd = "#{project.type} clone #{project.connection} #{path}"
         if File.exist?(path)
-          puts "Skipping clone, project path #{path} already exists"
+          logger.warn "Skipping clone, project path #{path} already exists"
         else
           Cmd.execute(clone_cmd)
         end
@@ -94,7 +95,7 @@ module PmdTester
     end
 
     def generate_pmd_reports
-      puts "Generating pmd Report started -- branch #{@pmd_branch_name}"
+      logger.info "Generating pmd Report started -- branch #{@pmd_branch_name}"
       get_pmd_binary_file
 
       sum_time = 0

@@ -2,11 +2,6 @@
 
 require 'test/unit'
 require 'mocha/test_unit'
-require_relative '../lib/pmdtester/builders/diff_builder'
-require_relative '../lib/pmdtester/builders/diff_report_builder'
-require_relative '../lib/pmdtester/builders/summary_report_builder'
-require_relative '../lib/pmdtester/builders/pmd_report_builder'
-require_relative '../lib/pmdtester/pmd_branch_detail'
 require_relative '../lib/pmdtester/runner'
 
 # Unit test class for PmdTester::Runner

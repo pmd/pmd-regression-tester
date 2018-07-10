@@ -5,14 +5,15 @@ require 'open3'
 module PmdTester
   # Containing the common method for executing shell command
   class Cmd
+    extend PmdTester
     def self.execute(cmd)
-      puts cmd
+      logger.info "execute command #{cmd}"
 
       stdout, stderr, status = Open3.capture3("#{cmd};")
 
+      logger.debug stdout
       unless status.success?
-        puts stdout
-        puts stderr
+        logger.error stderr
         exit(status.exitstatus)
       end
 

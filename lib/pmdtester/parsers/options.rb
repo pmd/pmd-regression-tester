@@ -18,6 +18,7 @@ module PmdTester
     attr_reader :mode
     attr_reader :html_flag
     attr_reader :auto_config_flag
+    attr_reader :debug_flag
     attr_accessor :filter_set
 
     def initialize(argv)
@@ -32,6 +33,7 @@ module PmdTester
       @mode = options[:m]
       @html_flag = options[:f]
       @auto_config_flag = options[:a]
+      @debug_flag = options[:d]
       @filter_set = nil
 
       # if the 'config' option is selected then `config` overrides `base_config` and `patch_config`
@@ -66,6 +68,8 @@ module PmdTester
                'whether to not generate the html diff report in single mode'
         o.bool '-a', '--auto-gen-config',
                'whether to generate configurations automatically based on branch differences'
+        o.bool '-d', '--debug',
+               'whether change log level to DEBUG to see more information'
         o.on '-v', '--version' do
           puts VERSION
           exit
