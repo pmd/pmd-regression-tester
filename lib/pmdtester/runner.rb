@@ -10,6 +10,7 @@ module PmdTester
     end
 
     def run
+      clean
       case @options.mode
       when Options::LOCAL
         run_local_mode
@@ -19,6 +20,11 @@ module PmdTester
         run_single_mode
       end
       introduce_new_pmd_error?
+    end
+
+    def clean
+      clean_target = 'target/reports'
+      FileUtils.remove_dir(clean_target) if Dir.exist?(clean_target)
     end
 
     def run_local_mode
