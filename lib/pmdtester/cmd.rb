@@ -23,6 +23,7 @@ module PmdTester
     end
   end
 
+  # The exception should be raised when the shell command failed.
   class CmdException < StandardError
     attr_reader :cmd
     attr_reader :error
