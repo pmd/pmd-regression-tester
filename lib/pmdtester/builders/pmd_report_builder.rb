@@ -43,6 +43,16 @@ module PmdTester
         clone_cmd = "#{project.type} clone #{project.connection} #{path}"
         if File.exist?(path)
           logger.warn "Skipping clone, project path #{path} already exists"
+          update_cmd = "#{project.type} pull #{project.connection}"
+
+          begin
+            Cmd.execute(update_cmd)
+          rescue CmdException
+            logger.warn "updating repository #{path} failed, remove the repository"
+            FileUtils.remove_dir(path)
+            logger.info "re-clone #{project.name} repository"
+            Cmd.execute(clone_cmd)
+          end
         else
           Cmd.execute(clone_cmd)
         end

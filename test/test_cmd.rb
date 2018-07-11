@@ -1,28 +1,35 @@
 # frozen_string_literal: true
 
 require 'test/unit'
+require_relative '../lib/pmdtester/runner'
+require_relative '../lib/pmdtester/cmd'
 
 # Unit test class for PmdTester::Cmd
 class TestCmd < Test::Unit::TestCase
+  include PmdTester
+
   def test_get_stdout
-    stdout = PmdTester::Cmd.execute('echo Hello, World!')
+    stdout = Cmd.execute('echo Hello, World!')
     assert_equal('Hello, World!', stdout)
   end
 
-  def test_invalid_cmd(cmd, expected_status)
-    Process.fork do
-      PmdTester::Cmd.execute(cmd)
+  def test_invalid_cmd(cmd)
+    expected_msg = "#{CmdException::COMMON_MSG} '#{cmd}'"
+    begin
+      Cmd.execute(cmd)
+    rescue CmdException => e
+      assert_equal(cmd, e.cmd)
+      assert_equal(expected_msg, e.message)
     end
-    Process.wait
-
-    assert_equal(expected_status, $CHILD_STATUS.exitstatus)
   end
 
   def test_invalid_cmd_1
-    test_invalid_cmd('cd DIR_NO_EXIST', 2)
+    cmd = 'cd DIR_NO_EXIST'
+    test_invalid_cmd(cmd)
   end
 
   def test_invalid_cmd_2
-    test_invalid_cmd('false', 1)
+    cmd = 'false'
+    test_invalid_cmd(cmd)
   end
 end
