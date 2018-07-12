@@ -25,3 +25,4 @@
 *   [#18](https://github.com/pmd/pmd-regression-tester/pull/18): Add SummaryReportBuilder to PmdTester - [BBG](https://github.com/djydewang)
 *   [#19](https://github.com/pmd/pmd-regression-tester/pull/19): Add online mode for PmdTester - [BBG](https://github.com/djydewang)
 *   [#20](https://github.com/pmd/pmd-regression-tester/pull/20): Change the way of parsing xml file from DOM to SAX - [BBG](https://github.com/djydewang)
+*   [#22](https://github.com/pmd/pmd-regression-tester/pull/22): Add 'introduce new errors' table head for html summary report - [BBG](https://github.com/djydewang)
