@@ -7,6 +7,7 @@ gem 'hoe'
 require 'hoe'
 Hoe.plugin :bundler
 Hoe.plugin :gemspec
+Hoe.plugin :git
 
 Hoe.spec 'pmdtester' do
   self.version = PmdTester::Options::VERSION
@@ -18,6 +19,7 @@ Hoe.spec 'pmdtester' do
   self.extra_dev_deps  += [
     ['hoe-bundler',   '~> 1.2'],
     ['hoe-gemspec',   '~> 1.0'],
+    ['hoe-git',       '~> 1.6'],
     ['minitest',      '~> 5.10.1'],
     ['mocha',         '~> 1.5.0'],
     ['rubocop',       '~> 0.56.0'],
