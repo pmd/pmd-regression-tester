@@ -27,9 +27,6 @@ module PmdTester
         reset_cmd = "git reset --hard #{tag}"
       when 'hg'
         reset_cmd = "hg up #{tag}"
-      else
-        logger.error "Unknown #{type} repository"
-        exit 1 # FIXME: maybe we should throw an exception here
       end
 
       Cmd.execute(reset_cmd)

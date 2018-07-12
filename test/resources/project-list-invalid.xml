@@ -17,7 +17,7 @@ xsi:noNamespaceSchemaLocation="projectlist_1_0_0.xsd">
 
   <project>
     <name>spring-framework</name>
-    <type>git</type>
+    <type>invalid type</type>
     <connection>https://github.com/spring-projects/spring-framework</connection>
   </project>
 

@@ -41,6 +41,9 @@ class TestProjectsParser < Test::Unit::TestCase
                        'Expected is ( connection ).', e.errors[0].to_s)
       assert_equal("15:0: ERROR: Element 'connection': This element is not expected. " \
                        'Expected is ( type ).', e.errors[1].to_s)
+      assert_equal("20:0: ERROR: Element 'type': [facet 'enumeration'] " \
+                       "The value 'invalid type' is not an element of the set {'git', 'hg'}.",
+                   e.errors[2].to_s)
     end
   end
 end
