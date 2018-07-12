@@ -7,14 +7,16 @@ module PmdTester
   class PmdReportDetail
     attr_accessor :execution_time
     attr_accessor :timestamp
+    attr_reader :working_dir
 
     def initialize
       @execution_time = 0
       @timestamp = ''
+      @working_dir = Dir.getwd
     end
 
     def save(report_info_path)
-      hash = { execution_time: @execution_time, timestamp: @timestamp }
+      hash = { execution_time: @execution_time, timestamp: @timestamp, working_dir: @working_dir }
       file = File.new(report_info_path, 'w')
       file.puts JSON.generate(hash)
       file.close
@@ -25,6 +27,7 @@ module PmdTester
         hash = JSON.parse(File.read(report_info_path))
         @execution_time = hash['execution_time']
         @timestamp = hash['timestamp']
+        @working_dir = hash['working_dir']
         hash
       else
         puts "#{report_info_path} doesn't exist"

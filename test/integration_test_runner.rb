@@ -39,14 +39,15 @@ class IntegrationTestRunner < Test::Unit::TestCase
   end
 
   def test_online_mode
-    argv = '-r target/repositories/pmd -m online -b test_branch -p pmd_releases/6.3.0'
+    base_branch = 'test_branch_2'
+    argv = "-r target/repositories/pmd -m online -b #{base_branch} -p pmd_releases/6.3.0"
     # This test depends on the file test_branch-baseline.zip being available on sourceforge.
 
     system("bundle exec bin/pmdtester #{argv}")
 
-    assert_path_exist('target/reports/test_branch-baseline.zip')
-    assert_path_exist('target/reports/test_branch/checkstyle/pmd_report.xml')
-    assert_path_exist('target/reports/test_branch/spring-framework/pmd_report.xml')
+    assert_path_exist("target/reports/#{base_branch}-baseline.zip")
+    assert_path_exist("target/reports/#{base_branch}/checkstyle/pmd_report.xml")
+    assert_path_exist("target/reports/#{base_branch}/spring-framework/pmd_report.xml")
     assert_path_exist('target/reports/pmd_releases_6.3.0/checkstyle/pmd_report.xml')
     assert_path_exist('target/reports/pmd_releases_6.3.0/spring-framework/pmd_report.xml')
     assert_path_exist('target/reports/diff/checkstyle/index.html')

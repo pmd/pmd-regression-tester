@@ -7,8 +7,8 @@ require_relative '../lib/pmdtester/builders/diff_report_builder'
 # Unit test class for PmdTester::DiffBuilder
 class TestDiffBuilder < Test::Unit::TestCase
   include PmdTester
-  BASE_REPORT_INFO_PATH = 'test/resources/html_report_builder/base_report_info.json'
-  PATCH_REPORT_INFO_PATH = 'test/resources/html_report_builder/patch_report_info.json'
+  BASE_REPORT_INFO_PATH = 'test/resources/diff_builder/base_report_info.json'
+  PATCH_REPORT_INFO_PATH = 'test/resources/diff_builder/patch_report_info.json'
 
   def setup
     `rake clean`
