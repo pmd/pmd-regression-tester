@@ -125,6 +125,7 @@ module PmdTester
           doc.th 'project name'
           doc.th 'project branch/tag'
           doc.th 'diff exist?'
+          doc.th 'introduce new errors?'
         end
       end
     end
@@ -136,8 +137,9 @@ module PmdTester
             doc.td do
               doc.a(href: project.diff_report_index_ref_path) { doc.text project.name }
             end
-            doc.td project.tag.nil? ? 'master' : project.tag
-            doc.td project.report_diff.diffs_exist? ? 'Yes' : 'No'
+            doc.td project.tag
+            doc.td project.diffs_exist? ? 'Yes' : 'No'
+            doc.td project.introduce_new_errors? ? 'Yes' : 'No'
           end
         end
       end

@@ -15,7 +15,9 @@ class TestSummaryReportBuilder < Test::Unit::TestCase
     projects = PmdTester::ProjectsParser.new.parse('test/resources/project-list.xml')
     report_diff = mock
     report_diff.expects(:diffs_exist?).returns(false).twice
+    report_diff.expects(:introduce_new_errors?).returns(false).twice
     report_diff.expects(:diffs_exist?).returns(true).once
+    report_diff.expects(:introduce_new_errors?).returns(true).once
     projects[0].report_diff = report_diff
     projects[1].report_diff = report_diff
     projects[2].report_diff = report_diff
