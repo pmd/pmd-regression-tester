@@ -29,13 +29,18 @@ module PmdTester
       case name
       when 'file'
         @current_violations = []
-        @current_filename = attrs['name'].sub(/^#{@working_dir}/, '')
+        @current_filename = remove_work_dir!(attrs['name'])
       when 'violation'
         @current_violation = PmdViolation.new(attrs, @branch_name)
       when 'error'
-        @current_filename = attrs['filename'].sub(/^#{@working_dir}/, '')
+        @current_filename = remove_work_dir!(attrs['filename'])
+        remove_work_dir!(attrs['msg'])
         @current_error = PmdError.new(attrs, @branch_name)
       end
+    end
+
+    def remove_work_dir!(str)
+      str.sub!(/^#{@working_dir}/, '')
     end
 
     def characters(string)
