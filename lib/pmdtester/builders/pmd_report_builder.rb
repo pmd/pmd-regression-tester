@@ -36,20 +36,11 @@ module PmdTester
       logger.info 'Cloning projects started'
 
       @projects.each do |project|
+        logger.info "Start cloning #{project.name} repository"
         path = project.local_source_path
         clone_cmd = "#{project.type} clone #{project.connection} #{path}"
         if File.exist?(path)
           logger.warn "Skipping clone, project path #{path} already exists"
-          update_cmd = "#{project.type} pull #{project.connection}"
-
-          begin
-            Cmd.execute(update_cmd)
-          rescue CmdException
-            logger.warn "updating repository #{path} failed, remove the repository"
-            FileUtils.remove_dir(path)
-            logger.info "re-clone #{project.name} repository"
-            Cmd.execute(clone_cmd)
-          end
         else
           Cmd.execute(clone_cmd)
         end
@@ -57,10 +48,12 @@ module PmdTester
         Dir.chdir(path) do
           execute_reset_cmd(project.type, project.tag)
         end
+        logger.info "Cloning #{project.name} completed"
       end
     end
 
     def get_pmd_binary_file
+      logger.info 'Start packaging PMD'
       Dir.chdir(@local_git_repo) do
         checkout_cmd = "git checkout #{@pmd_branch_name}"
         Cmd.execute(checkout_cmd)
@@ -79,6 +72,7 @@ module PmdTester
         unzip_cmd = "unzip -qo pmd-dist/target/pmd-bin-#{@pmd_version}.zip -d #{@pwd}/target"
         Cmd.execute(unzip_cmd)
       end
+      logger.info 'Packaging PMD completed'
     end
 
     def get_last_commit_sha
@@ -102,11 +96,12 @@ module PmdTester
     end
 
     def generate_pmd_reports
-      logger.info "Generating pmd Report started -- branch #{@pmd_branch_name}"
+      logger.info "Generating PMD report started -- branch #{@pmd_branch_name}"
       get_pmd_binary_file
 
       sum_time = 0
       @projects.each do |project|
+        logger.info "Generating #{project.name}'s PMD report'"
         execution_time, end_time =
           generate_pmd_report(project.local_source_path,
                               project.get_pmd_report_path(@pmd_branch_name))
@@ -116,6 +111,7 @@ module PmdTester
         report_details.execution_time = execution_time
         report_details.timestamp = end_time
         report_details.save(project.get_report_info_path(@pmd_branch_name))
+        logger.info "#{project.name}'s PMD report was generated successfully"
       end
 
       @pmd_branch_details.execution_time = sum_time

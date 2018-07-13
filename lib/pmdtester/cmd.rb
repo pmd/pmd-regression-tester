@@ -7,7 +7,7 @@ module PmdTester
   class Cmd
     extend PmdTester
     def self.execute(cmd)
-      logger.info "execute command '#{cmd}'"
+      logger.debug "execute command '#{cmd}'"
 
       stdout, stderr, status = Open3.capture3("#{cmd};")
 
