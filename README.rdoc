@@ -1,32 +1,32 @@
-# pmdtester
+= pmdtester
 
 code  :: https://github.com/pmd/pmd-regression-tester
-
 bugs  :: https://github.com/pmd/pmd-regression-tester/issues
 
+build-status :: {<img src="https://travis-ci.com/pmd/pmd-regression-tester.svg?branch=master" alt="Build Status" />}[https://travis-ci.com/pmd/pmd-regression-tester]
 
-## DESCRIPTION:
+== DESCRIPTION:
 
 A regression testing tool ensure that new problems and unexpected behaviors will not be introduced to PMD project after fixing an issue , and new rules can work as expected.
 
-## FEATURES/PROBLEMS:
+== FEATURES/PROBLEMS:
 
 The diff report can be generated according to the base and patch branch of PMD
 on a list of standard projects(Spring Framework, Hibernate, Solr, etc.)
 
-## SYNOPSIS:
+== SYNOPSIS:
 
-  FIX (code sample of usage)
+* FIX (code sample of usage)
 
-## REQUIREMENTS:
+== REQUIREMENTS:
 
 * FIX (list of requirements)
 
-## INSTALL:
+== INSTALL:
 
 * FIX (sudo gem install, anything else)
 
-## DEVELOPERS:
+== DEVELOPERS:
 
 You can list all tasks by running `rake -T`.
 
