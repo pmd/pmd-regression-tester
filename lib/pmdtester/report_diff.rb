@@ -96,5 +96,15 @@ module PmdTester
       end
       size
     end
+
+    def introduce_new_errors?
+      @error_diffs.values.each do |pmd_errors|
+        pmd_errors.each do |pmd_error|
+          return true if pmd_error.branch.eql?('patch')
+        end
+      end
+
+      false
+    end
   end
 end

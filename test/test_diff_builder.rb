@@ -36,6 +36,7 @@ class TestDiffBuilder < Test::Unit::TestCase
     assert_equal('Patch3.java', keys[4])
 
     assert_equal('00:00:56', diffs_report.diff_execution_time)
+    assert_equal(false, diffs_report.introduce_new_errors?)
   end
 
   def test_error_diffs
@@ -58,6 +59,7 @@ class TestDiffBuilder < Test::Unit::TestCase
     assert_equal('Both2.java', keys[1])
     assert_equal(2, error_diffs['Both2.java'].size)
     assert_equal('Patch1.java', keys[2])
+    assert_equal(true, diffs_report.introduce_new_errors?)
   end
 
   def test_diff_exist
