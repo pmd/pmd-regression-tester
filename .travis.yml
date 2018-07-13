@@ -1,6 +1,8 @@
 language: ruby
 jdk: oraclejdk9
 script:
-  - bundle exec rake rubocop
-  - bundle exec rake clean test
-  - bundle exec rake clean integration-test
+  - rake rubocop
+  - rake clean test
+  - rake clean integration-test
+  - rake install_gem
+  - pmdtester -h

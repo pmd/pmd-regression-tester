@@ -3,6 +3,7 @@
 require 'nokogiri'
 require 'set'
 require_relative '../cmd'
+require_relative '../resource_locator'
 module PmdTester
   # This class is responsible for generation dynamic configuration
   # according to the difference between base and patch branch of Pmd.
@@ -13,7 +14,8 @@ module PmdTester
     PATH_TO_PMD_JAVA_BASED_RULES =
       'pmd-java/src/main/java/net/sourceforge/pmd/lang/java/rule'
     PATH_TO_PMD_XPATH_BASED_RULES = 'pmd-java/src/main/resources/category/java'
-    PATH_TO_ALL_JAVA_RULES = 'config/all-java.xml'
+    PATH_TO_ALL_JAVA_RULES =
+      ResourceLocator.locate('config/all-java.xml')
     PATH_TO_DYNAMIC_CONFIG = 'target/dynamic-config.xml'
     NO_JAVA_RULES_CHANGED_MESSAGE = 'No java rules have been changed!'
 

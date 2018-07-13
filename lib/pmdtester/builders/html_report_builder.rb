@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
+require_relative '../resource_locator'
 module PmdTester
   # This class is the parent of all classes which is used to build html report
   class HtmlReportBuilder
-    CSS_SRC_DIR = 'resources/css'
+    CSS_SRC_DIR = ResourceLocator.locate('resources/css')
 
     def build_html_report(title_name)
       html_builder = Nokogiri::HTML::Builder.new do |doc|
