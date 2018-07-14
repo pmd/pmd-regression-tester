@@ -40,7 +40,7 @@ module PmdTester
     end
 
     def remove_work_dir!(str)
-      str.sub!(/^#{@working_dir}/, '')
+      str.sub!(/#{@working_dir}/, '')
     end
 
     def characters(string)
@@ -65,6 +65,7 @@ module PmdTester
     end
 
     def cdata_block(string)
+      remove_work_dir!(string)
       @current_error.text = string unless @current_error.nil?
     end
 
