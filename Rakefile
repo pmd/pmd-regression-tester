@@ -11,10 +11,11 @@ Hoe.plugin :bundler
 Hoe.plugin :gemspec
 Hoe.plugin :git
 
-Hoe.spec 'pmdtester' do
+hoe = Hoe.spec 'pmdtester' do
   self.version = PmdTester::Options::VERSION
 
-  self.author  = 'Binguo Bao'
+  developer 'Andreas Dangel', 'andreas.dangel@adangel.org'
+  developer 'Binguo Bao', 'djydewang@gmail.com'
   self.email   = 'djydewang@gmail.com'
   self.clean_globs = %w[target/reports/**/* target/test/**/*]
   self.extra_deps += [['nokogiri', '~> 1.8.2'], ['slop', '~> 4.6.2']]
@@ -43,6 +44,11 @@ Rake::TestTask.new('integration-test') do |task|
   task.libs = ['test']
   task.pattern = 'test/**/integration_test_*.rb'
   task.verbose = true
+end
+
+desc 'generate the pmdtester.gemspec file'
+task 'hoe:spec' do
+  File.open("#{hoe.name}.gemspec", "w") { |f| f.write hoe.spec.to_ruby}
 end
 
 # vim: syntax=ruby
