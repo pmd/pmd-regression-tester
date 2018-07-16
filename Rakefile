@@ -14,7 +14,8 @@ Hoe.plugin :git
 hoe = Hoe.spec 'pmdtester' do
   self.version = PmdTester::Options::VERSION
 
-  self.author  = 'Binguo Bao'
+  developer 'Andreas Dangel', 'andreas.dangel@adangel.org'
+  developer 'Binguo Bao', 'djydewang@gmail.com'
   self.email   = 'djydewang@gmail.com'
   self.clean_globs = %w[target/reports/**/* target/test/**/*]
   self.extra_deps += [['nokogiri', '~> 1.8.2'], ['slop', '~> 4.6.2']]
