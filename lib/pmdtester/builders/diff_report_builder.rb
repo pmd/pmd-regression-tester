@@ -6,6 +6,7 @@ require_relative './html_report_builder'
 module PmdTester
   # Building diff report for a single project
   class DiffReportBuilder < HtmlReportBuilder
+    include PmdTester
     NO_DIFFERENCES_MESSAGE = 'No differences found!'
 
     def build(project)
@@ -20,7 +21,7 @@ module PmdTester
       index.puts html_report
       index.close
 
-      puts "Built difference report of #{project.name} successfully!"
+      logger.info "Built difference report of #{project.name} successfully!"
     end
 
     def build_body(doc)

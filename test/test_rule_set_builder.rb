@@ -3,7 +3,6 @@
 require 'test/unit'
 require 'mocha/test_unit'
 require 'set'
-require_relative '../lib/pmdtester/cmd'
 require_relative '../lib/pmdtester/builders/rule_set_builder'
 # The unit test class for RuleSetBuilder
 class TestRuleSetBuilder < Test::Unit::TestCase

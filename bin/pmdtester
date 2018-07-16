@@ -1,4 +1,6 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
+
 require_relative '../lib/pmdtester/runner'
 
 runner = PmdTester::Runner.new(ARGV)

@@ -4,11 +4,13 @@ require 'nokogiri'
 require 'set'
 require_relative '../cmd'
 require_relative '../resource_locator'
+
 module PmdTester
   # This class is responsible for generation dynamic configuration
   # according to the difference between base and patch branch of Pmd.
   # Attention: we only consider java rulesets now.
   class RuleSetBuilder
+    include PmdTester
     ALL_RULE_SETS = Set['bestpractices', 'codestyle', 'design', 'documentation',
                         'errorprone', 'multithreading', 'performance', 'security'].freeze
     PATH_TO_PMD_JAVA_BASED_RULES =
@@ -28,6 +30,7 @@ module PmdTester
       rule_sets = get_rule_sets(filenames)
       output_filter_set(rule_sets)
       build_config_file(rule_sets)
+      logger.debug "Dynamic configuration: #{[rule_sets]}"
     end
 
     def output_filter_set(rule_sets)

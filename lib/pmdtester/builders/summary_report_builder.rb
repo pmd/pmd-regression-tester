@@ -6,6 +6,7 @@ require_relative '../pmd_branch_detail'
 module PmdTester
   # Building summary report to show the details about projects and pmd branchs
   class SummaryReportBuilder < HtmlReportBuilder
+    include PmdTester
     REPORT_DIR = 'target/reports/diff'
     BASE_CONFIG_PATH = 'target/reports/diff/base_config.xml'
     PATCH_CONFIG_PATH = 'target/reports/diff/patch_config.xml'
@@ -25,7 +26,7 @@ module PmdTester
       index.puts html_report
       index.close
 
-      puts 'Built summary report successfully!'
+      logger.info 'Built summary report successfully!'
     end
 
     def get_branch_details(branch_name)
