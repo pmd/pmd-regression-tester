@@ -4,7 +4,6 @@
 Gemfile
 History.md
 LICENSE
-Manifest.txt
 README.rdoc
 Rakefile
 bin/pmdtester

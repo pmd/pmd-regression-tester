@@ -1,5 +1,0 @@
-# The standard projects list
-# Format:
-# REPOSITORY_NAME|[git|hg]|REPOSITORY_URI|[COMMIT_ID]|[EXCLUDE PATTERN]
-
-spring-framework|git|https://github.com/spring-projects/spring-framework|||
