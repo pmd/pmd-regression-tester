@@ -1,3 +1,6 @@
+# 1.0.0-SNAPSHOT / 2018-??-??
+
+
 # 1.0.0.beta1 / 2018-07-16
 
 *   First release of pmdtester
