@@ -77,6 +77,7 @@ module PmdTester
 
       @base_timestamp = base_details.timestamp
       @patch_timestamp = patch_details.timestamp
+      [base_details, patch_details]
     end
 
     def build_diffs(base_hash, patch_hash)

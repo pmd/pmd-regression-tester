@@ -9,7 +9,7 @@ module PmdTester
   class PmdReportDocument < Nokogiri::XML::SAX::Document
     attr_reader :violations
     attr_reader :errors
-    def initialize(branch_name, filter_set = nil)
+    def initialize(branch_name, working_dir, filter_set = nil)
       @violations = PmdViolations.new
       @errors = PmdErrors.new
       @current_violations = []
@@ -18,6 +18,7 @@ module PmdTester
       @current_element = ''
       @filename = ''
       @filter_set = filter_set
+      @working_dir = working_dir
       @branch_name = branch_name
     end
 
@@ -28,13 +29,18 @@ module PmdTester
       case name
       when 'file'
         @current_violations = []
-        @current_filename = attrs['name']
+        @current_filename = remove_work_dir!(attrs['name'])
       when 'violation'
         @current_violation = PmdViolation.new(attrs, @branch_name)
       when 'error'
-        @current_filename = attrs['filename']
+        @current_filename = remove_work_dir!(attrs['filename'])
+        remove_work_dir!(attrs['msg'])
         @current_error = PmdError.new(attrs, @branch_name)
       end
+    end
+
+    def remove_work_dir!(str)
+      str.sub!(/#{@working_dir}/, '')
     end
 
     def characters(string)
@@ -59,6 +65,7 @@ module PmdTester
     end
 
     def cdata_block(string)
+      remove_work_dir!(string)
       @current_error.text = string unless @current_error.nil?
     end
 

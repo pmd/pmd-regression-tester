@@ -29,3 +29,4 @@
 *   [#22](https://github.com/pmd/pmd-regression-tester/pull/22): Add 'introduce new errors' table head for html summary report - [BBG](https://github.com/djydewang)
 *   [#23](https://github.com/pmd/pmd-regression-tester/pull/23): Preparing for the release of PmdTester - [BBG](https://github.com/djydewang)
 *   [#24](https://github.com/pmd/pmd-regression-tester/pull/24): Adding a logging framework for PmdTester - [BBG](https://github.com/djydewang)
+*   [#25](https://github.com/pmd/pmd-regression-tester/pull/25): Remove working directory substring from filename of pmd violation - [BBG](https://github.com/djydewang)
