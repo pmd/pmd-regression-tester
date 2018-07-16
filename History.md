@@ -28,3 +28,4 @@
 *   [#21](https://github.com/pmd/pmd-regression-tester/pull/21): Add auto-gen-config option for PmdTester - [BBG](https://github.com/djydewang)
 *   [#22](https://github.com/pmd/pmd-regression-tester/pull/22): Add 'introduce new errors' table head for html summary report - [BBG](https://github.com/djydewang)
 *   [#23](https://github.com/pmd/pmd-regression-tester/pull/23): Preparing for the release of PmdTester - [BBG](https://github.com/djydewang)
+*   [#24](https://github.com/pmd/pmd-regression-tester/pull/24): Adding a logging framework for PmdTester - [BBG](https://github.com/djydewang)
