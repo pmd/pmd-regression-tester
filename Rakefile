@@ -14,7 +14,7 @@ Hoe.plugin :git
 hoe = Hoe.spec 'pmdtester' do
   self.version = PmdTester::Options::VERSION
 
-  developer 'Andreas Dangle', 'andreas.dangel@adangel.org'
+  developer 'Andreas Dangel', 'andreas.dangel@adangel.org'
   developer 'Binguo Bao', 'djydewang@gmail.com'
 
   self.clean_globs = %w[target/reports/**/* target/test/**/*]

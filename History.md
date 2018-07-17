@@ -1,7 +1,4 @@
-# 1.0.0-SNAPSHOT / 2018-??-??
-
-
-# 1.0.0.beta1 / 2018-07-16
+# 1.0.0.beta2 / 2018-07-17
 
 *   First release of pmdtester
 
@@ -36,3 +33,4 @@ but might contains bugs.
 *   [#24](https://github.com/pmd/pmd-regression-tester/pull/24): Adding a logging framework for PmdTester - [BBG](https://github.com/djydewang)
 *   [#25](https://github.com/pmd/pmd-regression-tester/pull/25): Remove working directory substring from filename of pmd violation - [BBG](https://github.com/djydewang)
 *   [#26](https://github.com/pmd/pmd-regression-tester/pull/26): Release pmdtester 1.0.0.beta1 - [BBG](https://github.com/djydewang)
+*   [#27](https://github.com/pmd/pmd-regression-tester/pull/27): Release pmdtester 1.0.0.beta2 - [BBG](https://github.com/djydewang)
