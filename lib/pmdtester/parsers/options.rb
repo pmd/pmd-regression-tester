@@ -15,7 +15,7 @@ module PmdTester
     LOCAL = 'local'
     ONLINE = 'online'
     SINGLE = 'single'
-    VERSION = '1.0.0-beta2'
+    VERSION = '1.0.0-SNAPSHOT'
 
     attr_reader :local_git_repo
     attr_reader :base_branch
