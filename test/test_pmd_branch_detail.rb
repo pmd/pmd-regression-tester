@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-require 'test/unit'
-require_relative '../lib/pmdtester/pmd_branch_detail'
+require 'test_helper'
 
 # Unit test class for PmdTester::PmdBranchDetail
 class TestPmdBranchDetail < Test::Unit::TestCase

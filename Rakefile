@@ -3,7 +3,7 @@
 # -*- ruby -*-
 require 'rake/testtask'
 require 'rubocop/rake_task'
-require_relative './lib/pmdtester/parsers/options.rb'
+require_relative 'lib/pmdtester'
 
 gem 'hoe'
 require 'hoe'
@@ -12,7 +12,7 @@ Hoe.plugin :gemspec
 Hoe.plugin :git
 
 hoe = Hoe.spec 'pmdtester' do
-  self.version = PmdTester::Options::VERSION
+  self.version = PmdTester::VERSION
 
   developer 'Andreas Dangel', 'andreas.dangel@adangel.org'
   developer 'Binguo Bao', 'djydewang@gmail.com'

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'json'
-require_relative './pmd_report_detail'
 
 module PmdTester
   # This class represents all details about branch of pmd

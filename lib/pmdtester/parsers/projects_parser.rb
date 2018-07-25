@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 require 'nokogiri'
-require_relative '../project'
-require_relative '../resource_locator'
 
 module PmdTester
   # The ProjectsParser is a class responsible of parsing

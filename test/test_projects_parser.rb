@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-require 'test/unit'
-require_relative '../lib/pmdtester/parsers/projects_parser'
+require 'test_helper'
 
 # Unit test for PmdTester::ProjectsParser
 class TestProjectsParser < Test::Unit::TestCase
