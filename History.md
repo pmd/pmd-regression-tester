@@ -1,5 +1,9 @@
 # 1.0.0-SNAPSHOT / 2018-??-??
 
+## External Contributions
+
+*   [#28](https://github.com/pmd/pmd-regression-tester/pull/28): Refactor require statements - [BBG](https://github.com/djydewang)
+
 # 1.0.0.beta2 / 2018-07-17
 
 *   First release of pmdtester
