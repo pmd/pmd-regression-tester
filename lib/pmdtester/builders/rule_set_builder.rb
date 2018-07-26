@@ -2,8 +2,6 @@
 
 require 'nokogiri'
 require 'set'
-require_relative '../cmd'
-require_relative '../resource_locator'
 
 module PmdTester
   # This class is responsible for generation dynamic configuration

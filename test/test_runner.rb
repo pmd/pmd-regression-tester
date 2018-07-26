@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-require 'test/unit'
-require 'mocha/test_unit'
-require_relative '../lib/pmdtester/runner'
+require 'test_helper'
 
 # Unit test class for PmdTester::Runner
 class TestRunner < Test::Unit::TestCase

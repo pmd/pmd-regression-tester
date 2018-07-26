@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'nokogiri'
-require_relative './html_report_builder'
 
 module PmdTester
   # Building diff report for a single project

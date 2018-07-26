@@ -1,11 +1,6 @@
 # frozen_string_literal: true
 
 require 'nokogiri'
-require_relative '../pmd_error'
-require_relative '../pmd_violation'
-require_relative '../pmd_report_detail'
-require_relative '../parsers/pmd_report_document'
-require_relative '../report_diff'
 
 module PmdTester
   # Building difference between two pmd xml files

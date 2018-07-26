@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
-require 'test/unit'
-require_relative '../lib/pmdtester/pmd_violation'
-require_relative '../lib/pmdtester/pmd_error'
-require_relative '../lib/pmdtester/parsers/pmd_report_document'
+require 'test_helper'
 
 class TestPmdReportDocument < Test::Unit::TestCase
   include PmdTester

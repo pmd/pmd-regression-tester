@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-require 'test/unit'
-require_relative '../lib/pmdtester/builders/diff_builder'
-require_relative '../lib/pmdtester/builders/diff_report_builder'
+require 'test_helper'
 
 # Unit test class for PmdTester::DiffBuilder
 class TestDiffBuilder < Test::Unit::TestCase

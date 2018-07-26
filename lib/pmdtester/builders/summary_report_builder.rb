@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-require_relative './html_report_builder'
-require_relative '../pmd_branch_detail'
-
 module PmdTester
   # Building summary report to show the details about projects and pmd branchs
   class SummaryReportBuilder < HtmlReportBuilder

@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-require 'test/unit'
-require_relative '../lib/pmdtester/runner'
-require_relative '../lib/pmdtester/cmd'
+require 'test_helper'
 
 # Unit test class for PmdTester::Cmd
 class TestCmd < Test::Unit::TestCase
