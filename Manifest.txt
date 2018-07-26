@@ -1,9 +1,11 @@
+.hoerc
 .rubocop.yml
 .rubocop_todo.yml
 .travis.yml
 Gemfile
 History.md
 LICENSE
+Manifest.txt
 README.rdoc
 Rakefile
 bin/pmdtester
@@ -11,7 +13,6 @@ config/all-java.xml
 config/design.xml
 config/project-list.xml
 config/projectlist_1_0_0.xsd
-lib/pmdtester/pmdtester.rb
 lib/pmdtester/builders/diff_builder.rb
 lib/pmdtester/builders/diff_report_builder.rb
 lib/pmdtester/builders/html_report_builder.rb
@@ -26,6 +27,7 @@ lib/pmdtester/pmd_branch_detail.rb
 lib/pmdtester/pmd_error.rb
 lib/pmdtester/pmd_report_detail.rb
 lib/pmdtester/pmd_violation.rb
+lib/pmdtester/pmdtester.rb
 lib/pmdtester/project.rb
 lib/pmdtester/report_diff.rb
 lib/pmdtester/resource_locator.rb

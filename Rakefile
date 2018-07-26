@@ -7,8 +7,8 @@ require_relative './lib/pmdtester/parsers/options.rb'
 
 gem 'hoe'
 require 'hoe'
+
 Hoe.plugin :bundler
-Hoe.plugin :gemspec
 Hoe.plugin :git
 
 hoe = Hoe.spec 'pmdtester' do
@@ -17,17 +17,17 @@ hoe = Hoe.spec 'pmdtester' do
   developer 'Andreas Dangel', 'andreas.dangel@adangel.org'
   developer 'Binguo Bao', 'djydewang@gmail.com'
 
-  self.clean_globs = %w[target/reports/**/* target/test/**/*]
+  self.clean_globs = %w[target/reports/**/* target/test/**/* Gemfile.lock]
   self.extra_deps += [['nokogiri', '~> 1.8.2'], ['slop', '~> 4.6.2']]
   self.extra_dev_deps  += [
     ['hoe-bundler',   '~> 1.2'],
-    ['hoe-gemspec',   '~> 1.0'],
     ['hoe-git',       '~> 1.6'],
     ['minitest',      '~> 5.10.1'],
     ['mocha',         '~> 1.5.0'],
     ['rubocop',       '~> 0.56.0'],
     ['test-unit',     '~> 3.2.3']
   ]
+  self.spec_extras[:required_rubygems_version] = '>= 2.4.1'
 
   license 'BSD-2-Clause'
 end
@@ -51,4 +51,6 @@ task 'hoe:spec' do
   File.open("#{hoe.name}.gemspec", "w") { |f| f.write hoe.spec.to_ruby}
 end
 
+desc 'verify code quality before committing changes'
+task 'verify' => ['clean', 'test', 'rubocop', 'bundler:gemfile', 'git:manifest']
 # vim: syntax=ruby

@@ -8,7 +8,6 @@ gem "nokogiri", "~>1.8.2"
 gem "slop", "~>4.6.2"
 
 gem "hoe-bundler", "~>1.2", :group => [:development, :test]
-gem "hoe-gemspec", "~>1.0", :group => [:development, :test]
 gem "hoe-git", "~>1.6", :group => [:development, :test]
 gem "minitest", "~>5.10.1", :group => [:development, :test]
 gem "mocha", "~>1.5.0", :group => [:development, :test]
