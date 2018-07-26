@@ -1,5 +1,9 @@
 # 1.0.0-SNAPSHOT / 2018-??-??
 
+## External Contributions
+
+*   [#30](https://github.com/pmd/pmd-regression-tester/pull/30): Fix diff_cmd in RuleSetBuilder - [BBG](https://github.com/djydewang)
+
 # 1.0.0.beta2 / 2018-07-17
 
 *   First release of pmdtester
