@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'slop'
-require_relative '../pmdtester'
 
 module PmdTester
   class MissRequiredOptionError < StandardError; end
@@ -15,7 +14,6 @@ module PmdTester
     LOCAL = 'local'
     ONLINE = 'online'
     SINGLE = 'single'
-    VERSION = '1.0.0-SNAPSHOT'
 
     attr_reader :local_git_repo
     attr_reader :base_branch

@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require_relative '../resource_locator'
 module PmdTester
   # This class is the parent of all classes which is used to build html report
   class HtmlReportBuilder

@@ -13,6 +13,7 @@ config/all-java.xml
 config/design.xml
 config/project-list.xml
 config/projectlist_1_0_0.xsd
+lib/pmdtester.rb
 lib/pmdtester/builders/diff_builder.rb
 lib/pmdtester/builders/diff_report_builder.rb
 lib/pmdtester/builders/html_report_builder.rb

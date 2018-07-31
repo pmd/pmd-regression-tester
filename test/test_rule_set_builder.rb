@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
-require 'test/unit'
-require 'mocha/test_unit'
-require 'set'
-require_relative '../lib/pmdtester/builders/rule_set_builder'
+require 'test_helper'
+
 # The unit test class for RuleSetBuilder
 class TestRuleSetBuilder < Test::Unit::TestCase
   PATH_TO_TEST_RESOURCES = 'test/resources/rule_set_builder'

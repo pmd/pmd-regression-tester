@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
-require 'test/unit'
-require_relative '../lib/pmdtester/runner'
-require_relative '../lib/pmdtester/cmd'
+require 'test_helper'
+
 class IntegrationTestRunner < Test::Unit::TestCase
   def setup
     `rake clean`

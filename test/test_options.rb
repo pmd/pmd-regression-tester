@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-require 'test/unit'
-require_relative '../lib/pmdtester/parsers/options'
+require 'test_helper'
 
 # Unit test for PmdTester::Options
 class TestOptions < Test::Unit::TestCase

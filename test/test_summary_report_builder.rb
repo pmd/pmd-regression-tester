@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
-require 'test/unit'
-require 'mocha/test_unit'
-require_relative '../lib/pmdtester/builders/summary_report_builder'
-require_relative '../lib/pmdtester/parsers/projects_parser'
+require 'test_helper'
 
 # Unit test class for PmdTester::SummaryReportBuilder
 class TestSummaryReportBuilder < Test::Unit::TestCase

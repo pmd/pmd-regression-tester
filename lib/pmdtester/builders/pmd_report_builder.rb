@@ -1,10 +1,6 @@
 # frozen_string_literal: true
 
 require 'fileutils'
-require_relative '../cmd'
-require_relative '../project'
-require_relative '../pmd_branch_detail'
-require_relative '../pmd_report_detail'
 
 module PmdTester
   # Building pmd xml reports according to a list of standard

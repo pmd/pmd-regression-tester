@@ -1,15 +1,5 @@
 # frozen_string_literal: true
 
-require_relative './builders/diff_builder.rb'
-require_relative './builders/diff_report_builder.rb'
-require_relative './builders/rule_set_builder'
-require_relative './builders/summary_report_builder.rb'
-require_relative './builders/pmd_report_builder.rb'
-require_relative './parsers/options'
-require_relative './parsers/projects_parser'
-require_relative './pmdtester'
-require_relative './pmd_branch_detail'
-
 module PmdTester
   # The Runner is a class responsible of organizing all PmdTester modules
   # and running the PmdTester

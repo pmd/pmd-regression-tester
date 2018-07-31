@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 require 'nokogiri'
-require_relative '../pmd_violation'
-require_relative '../pmd_error'
 module PmdTester
   # This class is used for registering types of events you are interested in handling.
   # Also see: https://www.rubydoc.info/github/sparklemotion/nokogiri/Nokogiri/XML/SAX/Document

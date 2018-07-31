@@ -2,8 +2,6 @@
 
 require 'nokogiri'
 require 'set'
-require_relative '../cmd'
-require_relative '../resource_locator'
 
 module PmdTester
   # This class is responsible for generation dynamic configuration
@@ -48,7 +46,7 @@ module PmdTester
         base = @options.base_branch
         patch = @options.patch_branch
         # We only need to support git here, since PMD's repo is using git.
-        diff_cmd = "git diff --name-only #{base}..#{patch} -- pmd/core pmd/java"
+        diff_cmd = "git diff --name-only #{base}..#{patch} -- pmd-core pmd-java"
         filenames = Cmd.execute(diff_cmd)
       end
       filenames.split("\n")
@@ -80,7 +78,7 @@ module PmdTester
 
     def build_config_file(rule_sets)
       if rule_sets.empty?
-        puts NO_JAVA_RULES_CHANGED_MESSAGE
+        logger.info NO_JAVA_RULES_CHANGED_MESSAGE
         exit 0
       end
 
