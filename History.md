@@ -5,6 +5,7 @@
 *   [#28](https://github.com/pmd/pmd-regression-tester/pull/28): Refactor require statements - [BBG](https://github.com/djydewang)
 *   [#29](https://github.com/pmd/pmd-regression-tester/pull/29): Add 'verify' rake task to verify code quality before committing changes - [BBG](https://github.com/djydewang)
 *   [#30](https://github.com/pmd/pmd-regression-tester/pull/30): Fix diff_cmd in RuleSetBuilder - [BBG](https://github.com/djydewang)
+*   [#31](https://github.com/pmd/pmd-regression-tester/pull/31): Fix color scheme for diff report, add default values for various options - [BBG](https://github.com/djydewang)
 
 # 1.0.0.beta2 / 2018-07-17
 
