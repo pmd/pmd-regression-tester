@@ -8,3 +8,11 @@ AllCops:
 
 Metrics/LineLength:
   Max: 100
+
+Metrics/MethodLength:
+  Exclude:
+    - 'lib/pmdtester/parsers/options.rb'
+
+Metrics/BlockLength:
+  Exclude:
+    - 'lib/pmdtester/parsers/options.rb'

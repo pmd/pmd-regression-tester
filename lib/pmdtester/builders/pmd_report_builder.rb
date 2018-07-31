@@ -97,7 +97,7 @@ module PmdTester
 
       sum_time = 0
       @projects.each do |project|
-        logger.info "Generating #{project.name}'s PMD report'"
+        logger.info "Generating #{project.name}'s PMD report"
         execution_time, end_time =
           generate_pmd_report(project.local_source_path,
                               project.get_pmd_report_path(@pmd_branch_name))

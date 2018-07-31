@@ -14,6 +14,8 @@ module PmdTester
     LOCAL = 'local'
     ONLINE = 'online'
     SINGLE = 'single'
+    DEFAULT_CONFIG_PATH = ResourceLocator.locate('config/all-java.xml')
+    DEFAULT_LIST_PATH = ResourceLocator.locate('config/project-list.xml')
 
     attr_reader :local_git_repo
     attr_reader :base_branch
@@ -68,11 +70,14 @@ module PmdTester
         o.string '-b', '--base-branch', 'name of the base branch in local PMD repository'
         o.string '-p', '--patch-branch',
                  'name of the patch branch in local PMD repository'
-        o.string '-bc', '--base-config', 'path to the base PMD configuration file'
-        o.string '-pc', '--patch-config', 'path to the patch PMD configuration file'
+        o.string '-bc', '--base-config', 'path to the base PMD configuration file',
+                 default: DEFAULT_CONFIG_PATH
+        o.string '-pc', '--patch-config', 'path to the patch PMD configuration file',
+                 default: DEFAULT_CONFIG_PATH
         o.string '-c', '--config', 'path to the base and patch PMD configuration file'
         o.string '-l', '--list-of-project',
-                 'path to the file which contains the list of standard projects'
+                 'path to the file which contains the list of standard projects',
+                 default: DEFAULT_LIST_PATH
         o.string '-m', '--mode', mode_message, default: 'local'
         o.bool '-f', '--html-flag',
                'whether to not generate the html diff report in single mode'
@@ -111,20 +116,17 @@ module PmdTester
     def check_local_options
       check_option(LOCAL, 'base branch name', @base_branch)
       check_option(LOCAL, 'base branch config path', @base_config) unless @auto_config_flag
-      check_option(LOCAL, 'patch branch name', @patch_branch)
       check_option(LOCAL, 'patch branch config path', @patch_config) unless @auto_config_flag
       check_option(LOCAL, 'list of projects file path', @project_list)
     end
 
     def check_single_options
-      check_option(SINGLE, 'patch branch name', @patch_branch)
       check_option(SINGLE, 'patch branch config path', @patch_config)
       check_option(SINGLE, 'list of projects file path', @project_list)
     end
 
     def check_online_options
       check_option(ONLINE, 'base branch name', @base_branch)
-      check_option(ONLINE, 'patch branch name', @patch_branch)
     end
 
     def check_common_options

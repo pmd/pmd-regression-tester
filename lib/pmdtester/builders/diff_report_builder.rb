@@ -73,8 +73,8 @@ module PmdTester
     def build_summary_row(doc, item, base, patch, diff)
       doc.tr do
         doc.td(class: 'c') { doc.text item }
-        doc.td(class: 'a') { doc.text base }
-        doc.td(class: 'b') { doc.text patch }
+        doc.td(class: 'b') { doc.text base }
+        doc.td(class: 'a') { doc.text patch }
         doc.td(class: 'c') { doc.text diff }
       end
     end
@@ -131,7 +131,7 @@ module PmdTester
     end
 
     def build_violation_table_row(doc, key, pmd_violation, a_index)
-      doc.tr(class: pmd_violation.branch == 'base' ? 'a' : 'b') do
+      doc.tr(class: pmd_violation.branch == 'base' ? 'b' : 'a') do
         # The anchor
         doc.td do
           doc.a(id: "A#{a_index}", href: "#A#{a_index}") { doc.text '#' }
@@ -204,7 +204,7 @@ module PmdTester
       doc.tbody do
         b_index = 1
         errors.each do |pmd_error|
-          doc.tr(class: pmd_error.branch == 'base' ? 'a' : 'b') do
+          doc.tr(class: pmd_error.branch == 'base' ? 'b' : 'a') do
             # The anchor
             doc.td do
               doc.a(id: "B#{b_index}", href: "#B#{b_index}") { doc.text '#' }
