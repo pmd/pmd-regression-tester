@@ -10,6 +10,12 @@ class TestRunner < Test::Unit::TestCase
 
   include PmdTester
 
+  def run_runner(argv)
+    runner = Runner.new(argv)
+    runner.expects(:introduce_new_pmd_error?).returns(true)
+    runner.run
+  end
+
   def test_single_mode
     PmdReportBuilder.any_instance.stubs(:build)
                     .returns(PmdBranchDetail.new('test_branch')).once
@@ -20,7 +26,7 @@ class TestRunner < Test::Unit::TestCase
 
     argv = %w[-r target/repositories/pmd -p pmd_releases/6.1.0
               -pc config/design.xml -l test/resources/project-test.xml -m single]
-    Runner.new(argv).run
+    run_runner(argv)
   end
 
   def test_local_mode
@@ -31,6 +37,6 @@ class TestRunner < Test::Unit::TestCase
 
     argv = %w[-r target/repositories/pmd -b master -bc config/design.xml -p pmd_releases/6.1.0
               -pc config/design.xml -l test/resources/project-test.xml]
-    Runner.new(argv).run
+    run_runner(argv)
   end
 end
