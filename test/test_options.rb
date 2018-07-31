@@ -30,6 +30,14 @@ class TestOptions < Test::Unit::TestCase
     assert_equal('config/project_list.txt', opts.project_list)
   end
 
+  def test_default_value
+    command_line = %w[-r /path/to/repo -b pmd_releases/6.2.0 -p master]
+    opts = Options.new(command_line)
+    assert_equal(Options::DEFAULT_CONFIG_PATH, opts.base_config)
+    assert_equal(Options::DEFAULT_CONFIG_PATH, opts.patch_config)
+    assert_equal(Options::DEFAULT_LIST_PATH, opts.project_list)
+  end
+
   def test_single_mode
     command_line =
       %w[-r /path/to/repo -p master -pc config.xml -l list.xml -f -m single]
@@ -59,27 +67,6 @@ class TestOptions < Test::Unit::TestCase
     argv = %w[-r target/repositories/pmd -bc config/design.xml
               -p pmd_releases/6.1.0 -pc config/design.xml -l test/resources/project-test.xml]
     expect = 'base branch name is required in local mode.'
-    parse_and_assert_error_messages(argv, expect)
-  end
-
-  def test_local_miss_base_config
-    argv = %w[-r target/repositories/pmd -b master
-              -p pmd_releases/6.1.0 -pc config/design.xml -l test/resources/project-test.xml]
-    expect = 'base branch config path is required in local mode.'
-    parse_and_assert_error_messages(argv, expect)
-  end
-
-  def test_local_miss_patch_config
-    argv = %w[-r target/repositories/pmd -bc config/design.xml
-              -p pmd_releases/6.1.0 -l test/resources/project-test.xml]
-    expect = 'base branch name is required in local mode.'
-    parse_and_assert_error_messages(argv, expect)
-  end
-
-  def test_single_miss_patch_config
-    argv = %w[-r target/repositories/pmd -m single
-              -p pmd_releases/6.1.0 -l test/resources/project-test.xml]
-    expect = 'patch branch config path is required in single mode.'
     parse_and_assert_error_messages(argv, expect)
   end
 

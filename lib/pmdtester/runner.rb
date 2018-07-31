@@ -18,6 +18,7 @@ module PmdTester
       when Options::SINGLE
         run_single_mode
       end
+      introduce_new_pmd_error?
     end
 
     def run_local_mode
@@ -115,6 +116,13 @@ module PmdTester
 
     def get_projects(file_path)
       @projects = ProjectsParser.new.parse(file_path)
+    end
+
+    def introduce_new_pmd_error?
+      @projects.each do |project|
+        return true if project.introduce_new_errors?
+      end
+      false
     end
   end
 end

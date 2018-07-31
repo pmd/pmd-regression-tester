@@ -28,6 +28,7 @@ hoe = Hoe.spec 'pmdtester' do
     ['rubocop',       '~> 0.56.0'],
     ['test-unit',     '~> 3.2.3']
   ]
+  self.spec_extras[:required_rubygems_version] = '>= 2.4.1'
 
   license 'BSD-2-Clause'
 end
