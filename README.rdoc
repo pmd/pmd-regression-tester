@@ -15,19 +15,92 @@ The diff report can be generated according to the base and patch branch of PMD
 on a list of standard projects(Spring Framework, Hibernate, Solr, etc.)
 
 == SYNOPSIS:
+===Options:
+    -r, --local-git-repo   path to the local PMD repository
+    -b, --base-branch      name of the base branch in local PMD repository
+    -p, --patch-branch     name of the patch branch in local PMD repository
+    -bc, --base-config     path to the base PMD configuration file default:PMDTESTER_INSTALLED_DIR/config/all-java.xml
+    -pc, --patch-config    path to the patch PMD configuration file default:PMDTESTER_INSTALLED_DIR/config/all-java.xml
+    -c, --config           path to the base and patch PMD configuration file
+    -l, --list-of-project  path to the file which contains the list of standard projects default:PMDTESTER_INSTALLED_DIR/config/project-list.xml
+    -m, --mode             the mode of the tool: 'local', 'online' or 'single'
+          single: Set this option to 'single' if your patch branch contains changes
+            for any option that can't work on master/base branch
+          online: Set this option to 'online' if you want to download
+            the PMD report of master/base branch rather than generating it locally
+          local: Default option is 'local', PMD reports for the base and patch branches are generated locally.
 
-* FIX (code sample of usage)
+    -f, --html-flag        whether to not generate the html diff report in single mode
+    -a, --auto-gen-config  whether to generate configurations automatically based on branch differences,this option only works in online and local mode
+    -d, --debug            whether change log level to DEBUG to see more information
+    -v, --version          
+    -h, --help 
+=== Quick start
+==== Run local mode
+  pmdtester -b master -p YOUR_DEVELOPMENT_BRANCH
+==== Run single mode
+  pmdtester -p YOUR_DEVELOPMENT_BRANCH -pc CONFIG_ONLY_CONTAINS_NEW_PMD_JAVA_RULE -m single
+==== Run online mode
+  pmdtester -b master -p YOUR_DEVELOPMENT_BRANCH -m online
+=== Output
+The tool creates the following folders:
+  target  
+  ├── repositories         <- the analyzed projects are cloned here  
+  │   ├── PROJECT_NAME_1  
+  │   ├── ......  
+  │   └── PROJECT_NAME_n  
+  └── reports  
+      ├── BASE_BRANCH_NAME      <- the base baseline is placed here  
+      ├── PATCH_BRANCH_NAME      <- the patch baseline is placed here  
+      └── diff  
+          ├── index.xml <- the summary report of diff reports  
+          ├── base_config.xml  <- the resources of the summary report
+          ├── patch_config.xml  <- the resources fo the summary report
+          ├── css  <- css reources are placed here  
+          ├── PROJECT_NAME_1  
+              └── index.xml   <- the diff report of PROJECT_1  
+          ├── .......  
+          └── PROJECT_NAME_n  
+              └── index.xml   <- the diff report of PROJECT_N  
+====The baseline format
+  branch_name  
+  ├── branch_info.json  
+  ├── config.xml  
+  ├── STANDARD_PROJECT_NAME_1  
+  │   ├── report_info.json  
+  │   └── pmd_report.xml    
+  ├── ......................  
+  │   ├── report_info.json  
+  │   └── pmd_report.xml    
+  └── STANDARD_PROJECT_NAME_n  
+      ├── report_info.info
+      └── pmd_report.xml  
 
 == REQUIREMENTS:
-
-* FIX (list of requirements)
-
+* Ruby 2.4.1 or higher
+=== Runtime dependency
+  nokogiri ~> 1.8.2
+  slop ~> 4.6.2
+=== Development dependency
+  hoe ~> 3.17
+  hoe-bundler ~> 1.2
+  hoe-git ~> 1.6
+  minitest ~> 5.10.1
+  mocha ~> 1.5.0
+  rdoc < 6, >= 4.0
+  rubocop ~> 0.56.0
+  test-unit ~> 3.2.3
+  
 == INSTALL:
 
-* FIX (sudo gem install, anything else)
+  gem install pmdtester --pre
 
 == DEVELOPERS:
-
-You can list all tasks by running `rake -T`.
+  git clone https://github.com/pmd/pmd-regression-tester.git
+  cd pmd-regression-tester
+  gem install bundler
+  bundle install
+  rake verify # run this command before commit your changes
+  
 
 
