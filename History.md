@@ -1,3 +1,12 @@
+# 1.0.0-SNAPSHOT / 2018-08-??
+
+## New and Noteworthy
+
+## Fixed Issues
+
+## External Contributions
+
+
 # 1.0.0.beta3 / 2018-08-01
 
 Note: This is a beta release. The pmdtester is feature complete,
@@ -10,6 +19,7 @@ but might contain bugs.
 *   [#30](https://github.com/pmd/pmd-regression-tester/pull/30): Fix diff_cmd in RuleSetBuilder - [BBG](https://github.com/djydewang)
 *   [#31](https://github.com/pmd/pmd-regression-tester/pull/31): Fix color scheme for diff report, add default values for various options - [BBG](https://github.com/djydewang)
 *   [#32](https://github.com/pmd/pmd-regression-tester/pull/32): Update Readme.rdoc - [BBG](https://github.com/djydewang)
+
 
 # 1.0.0.beta2 / 2018-07-17
 
