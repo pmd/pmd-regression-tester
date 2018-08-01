@@ -1,4 +1,7 @@
-# 1.0.0-SNAPSHOT / 2018-??-??
+# 1.0.0.beta3 / 2018-08-01
+
+Note: This is a beta release. The pmdtester is feature complete,
+but might contain bugs.
 
 ## External Contributions
 
