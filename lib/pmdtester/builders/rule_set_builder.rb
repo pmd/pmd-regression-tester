@@ -46,7 +46,7 @@ module PmdTester
         base = @options.base_branch
         patch = @options.patch_branch
         # We only need to support git here, since PMD's repo is using git.
-        diff_cmd = "git diff --name-only #{base}..#{patch} -- pmd-core pmd-java"
+        diff_cmd = "git diff --name-only #{base}..#{patch} -- pmd-core/src/main pmd-java/src/main"
         filenames = Cmd.execute(diff_cmd)
       end
       filenames.split("\n")
