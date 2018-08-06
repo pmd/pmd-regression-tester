@@ -13,6 +13,7 @@ module PmdTester
 
       logger.debug stdout
       unless status.success?
+        logger.error stdout
         logger.error stderr
         raise CmdException.new(cmd, stderr)
       end
