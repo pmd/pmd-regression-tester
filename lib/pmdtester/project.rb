@@ -74,6 +74,14 @@ module PmdTester
       end
     end
 
+    def get_config_path(branch_name)
+      if branch_name.nil?
+        nil
+      else
+        "#{get_project_target_dir(branch_name)}/config.xml"
+      end
+    end
+
     def get_project_target_dir(branch_name)
       branch_filename = PmdBranchDetail.branch_filename(branch_name)
       dir = "target/reports/#{branch_filename}/#{@name}"

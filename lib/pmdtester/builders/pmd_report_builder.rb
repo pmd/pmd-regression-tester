@@ -28,7 +28,7 @@ module PmdTester
       Cmd.execute(reset_cmd)
     end
 
-    def get_projects
+    def clone_projects
       logger.info 'Cloning projects started'
 
       @projects.each do |project|
@@ -81,9 +81,9 @@ module PmdTester
       Cmd.execute(get_last_commit_message_cmd)
     end
 
-    def generate_pmd_report(src_root_dir, report_file)
+    def generate_pmd_report(src_root_dir, report_file, config_path)
       run_path = "target/pmd-bin-#{@pmd_version}/bin/run.sh"
-      pmd_cmd = "#{run_path} pmd -d #{src_root_dir} -f xml -R #{@branch_config} " \
+      pmd_cmd = "#{run_path} pmd -d #{src_root_dir} -f xml -R #{config_path} " \
                 "-r #{report_file} -failOnViolation false"
       start_time = Time.now
       Cmd.execute(pmd_cmd)
@@ -91,16 +91,29 @@ module PmdTester
       [end_time - start_time, end_time]
     end
 
+    def generate_config_for(project)
+      doc = Nokogiri::XML(File.read(@branch_config))
+      ruleset = doc.at_css('ruleset')
+      project.exclude_pattern.each do |exclude_pattern|
+        ruleset.add_child("<exclude_pattern>#{exclude_pattern}</exclude_pattern>")
+      end
+
+      File.open(project.get_config_path(@pmd_branch_name), 'w') do |x|
+        x << doc.to_s
+      end
+    end
+
     def generate_pmd_reports
       logger.info "Generating PMD report started -- branch #{@pmd_branch_name}"
-      get_pmd_binary_file
 
       sum_time = 0
       @projects.each do |project|
         logger.info "Generating #{project.name}'s PMD report"
+        generate_config_for(project)
         execution_time, end_time =
           generate_pmd_report(project.local_source_path,
-                              project.get_pmd_report_path(@pmd_branch_name))
+                              project.get_pmd_report_path(@pmd_branch_name),
+                              project.get_config_path(@pmd_branch_name))
         sum_time += execution_time
 
         report_details = PmdReportDetail.new
@@ -117,7 +130,8 @@ module PmdTester
     end
 
     def build
-      get_projects
+      clone_projects
+      get_pmd_binary_file
       generate_pmd_reports
     end
   end
