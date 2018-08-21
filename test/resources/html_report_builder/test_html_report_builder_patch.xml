@@ -41,5 +41,32 @@ Fields should be declared at the top of the class, before any method declaration
 </file>
   <error filename="SHOULD_BE_REPLACED/target/repositories/spring-framework/spring-aop/src/main/java/org/springframework/aop/TrueMethodMatcher.java"
     msg="This is an artificial error message.">
+<![CDATA[net.sourceforge.pmd.PMDException: Error while parsing /home/bbg/projects/pmdtester/pmdtester/target/repositories/checkstyle/src/test/resources-noncompilable/com/puppycrawl/tools/checkstyle/asttreestringprinter/InputAstTreeStringPrinter.java
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:99)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:51)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:78)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:24)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:514)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1135)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:844)
+Caused by: net.sourceforge.pmd.lang.java.ast.ParseException: Encountered " <IDENTIFIER> "classD "" at line 1, column 1.
+Was expecting one of:
+    <EOF>
+    "import" ...
+    "\u001a" ...
+    "~[]" ...
+
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.generateParseException(JavaParser.java:11697)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.jj_consume_token(JavaParser.java:11581)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.CompilationUnit(JavaParser.java:323)
+	at net.sourceforge.pmd.lang.java.AbstractJavaParser.parse(AbstractJavaParser.java:57)
+	at net.sourceforge.pmd.SourceCodeProcessor.parse(SourceCodeProcessor.java:111)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSource(SourceCodeProcessor.java:175)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:96)
+	... 9 more
+]]>
   </error>
 </pmd>
