@@ -108,11 +108,11 @@ module PmdTester
     end
 
     def diffs_exist?
-      @report_diff.diffs_exist?
+      @report_diff.nil? ? false : @report_diff.diffs_exist?
     end
 
     def introduce_new_errors?
-      @report_diff.introduce_new_errors?
+      @report_diff.nil? ? false : @report_diff.introduce_new_errors?
     end
   end
 end
