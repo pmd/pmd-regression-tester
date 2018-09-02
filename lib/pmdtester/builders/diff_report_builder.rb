@@ -214,7 +214,7 @@ module PmdTester
             doc.td pmd_error.msg
 
             # Details of error
-            doc.td pmd_error.text
+            doc.td { doc.pre pmd_error.text }
 
             b_index += 1
           end
