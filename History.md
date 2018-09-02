@@ -4,9 +4,12 @@
 
 ## Fixed Issues
 
+*   [#37](https://github.com/pmd/pmd-regression-tester/issues/37): Render stack traces properly
+
 ## External Contributions
 
 *   [#33](https://github.com/pmd/pmd-regression-tester/pull/33): Ignore changes to test code of PMD when generating dynamic rule sets - [BBG](https://github.com/djydewang)
+*   [#39](https://github.com/pmd/pmd-regression-tester/pull/39): Render stacktraces properly - [BBG](https://github.com/djydewang)
 
 # 1.0.0.beta3 / 2018-08-01
 
