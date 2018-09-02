@@ -1,5 +1,7 @@
 language: ruby
-jdk: oraclejdk9
+before_install:
+- wget https://github.com/sormuras/bach/raw/master/install-jdk.sh
+- source ./install-jdk.sh -F 11 -L GPL -W $HOME/jdk
 script:
 - rake rubocop
 - rake clean test
@@ -20,3 +22,9 @@ deploy:
   skip_cleanup: true
   gem: pmdtester
   gemspec: pmdtester.gemspec
+
+cache:
+  directories:
+  - vendor/bundle
+  - "$HOME/jdk"
+  - "$HOME/.rvm/"
