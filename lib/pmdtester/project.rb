@@ -32,7 +32,7 @@ module PmdTester
         @exclude_pattern.push(ep.text)
       end
 
-      @report_diff = nil
+      @report_diff = ReportDiff.new
     end
 
     # Generate the default webview url for the projects
@@ -113,6 +113,22 @@ module PmdTester
 
     def introduce_new_errors?
       @report_diff.introduce_new_errors?
+    end
+
+    def removed_errors_size
+      @report_diff.removed_errors_size
+    end
+
+    def new_errors_size
+      @report_diff.new_errors_size
+    end
+
+    def removed_violations_size
+      @report_diff.removed_violations_size
+    end
+
+    def new_violations_size
+      @report_diff.new_violations_size
     end
   end
 end

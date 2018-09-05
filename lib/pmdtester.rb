@@ -28,6 +28,8 @@ require_relative 'pmdtester/parsers/projects_parser'
 # after fixing an issue and new rules can work as expected.
 module PmdTester
   VERSION = '1.0.0-SNAPSHOT'
+  BASE = 'base'
+  PATCH = 'patch'
 
   def logger
     PmdTester.logger

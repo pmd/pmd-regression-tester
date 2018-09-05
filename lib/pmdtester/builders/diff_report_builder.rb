@@ -60,9 +60,11 @@ module PmdTester
     def build_summary_table_body(doc)
       doc.tbody do
         build_summary_row(doc, 'number of errors', @report_diff.base_errors_size,
-                          @report_diff.patch_errors_size, @report_diff.error_diffs_size)
+                          @report_diff.patch_errors_size, @report_diff.removed_errors_size,
+                          @report_diff.new_errors_size)
         build_summary_row(doc, 'number of violations', @report_diff.base_violations_size,
-                          @report_diff.patch_violations_size, @report_diff.violation_diffs_size)
+                          @report_diff.patch_violations_size, @report_diff.removed_violations_size,
+                          @report_diff.new_violations_size)
         build_summary_row(doc, 'execution time', @report_diff.base_execution_time,
                           @report_diff.patch_execution_time, @report_diff.diff_execution_time)
         build_summary_row(doc, 'timestamp', @report_diff.base_timestamp,
@@ -70,12 +72,18 @@ module PmdTester
       end
     end
 
-    def build_summary_row(doc, item, base, patch, diff)
+    def build_summary_row(doc, item, base, patch, *diff)
       doc.tr do
         doc.td(class: 'c') { doc.text item }
         doc.td(class: 'b') { doc.text base }
         doc.td(class: 'a') { doc.text patch }
-        doc.td(class: 'c') { doc.text diff }
+        doc.td(class: 'c') do
+          if diff.size == 1
+            doc.text diff[0]
+          else
+            build_table_content_for(doc, diff[0], diff[1])
+          end
+        end
       end
     end
 
@@ -131,7 +139,7 @@ module PmdTester
     end
 
     def build_violation_table_row(doc, key, pmd_violation, a_index)
-      doc.tr(class: pmd_violation.branch == 'base' ? 'b' : 'a') do
+      doc.tr(class: pmd_violation.branch == BASE ? 'b' : 'a') do
         # The anchor
         doc.td do
           doc.a(id: "A#{a_index}", href: "#A#{a_index}") { doc.text '#' }

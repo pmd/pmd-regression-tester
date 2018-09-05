@@ -5,12 +5,18 @@ module PmdTester
   # including the summary information of the original pmd reports,
   # as well as the specific information of the diff report.
   class ReportDiff
+    include PmdTester
+
     attr_accessor :base_violations_size
     attr_accessor :patch_violations_size
+    attr_accessor :new_violations_size
+    attr_accessor :removed_violations_size
     attr_accessor :violation_diffs_size
 
     attr_accessor :base_errors_size
     attr_accessor :patch_errors_size
+    attr_accessor :new_errors_size
+    attr_accessor :removed_errors_size
     attr_accessor :error_diffs_size
 
     attr_accessor :base_execution_time
@@ -26,10 +32,14 @@ module PmdTester
     def initialize
       @base_violations_size = 0
       @patch_violations_size = 0
+      @new_violations_size = 0
+      @removed_violations_size = 0
       @violation_diffs_size = 0
 
       @base_errors_size = 0
       @patch_errors_size = 0
+      @new_errors_size = 0
+      @removed_errors_size = 0
       @error_diffs_size = 0
 
       @base_execution_time = 0
@@ -52,7 +62,8 @@ module PmdTester
       @patch_violations_size = patch_violations.violations_size
       violation_diffs = build_diffs(base_violations.violations, patch_violations.violations)
       @violation_diffs = violation_diffs
-      @violation_diffs_size = get_diffs_size(violation_diffs)
+      @new_violations_size, @removed_violations_size = get_diffs_size(violation_diffs)
+      @violation_diffs_size = @new_violations_size + @removed_violations_size
     end
 
     def calculate_errors(base_errors, patch_errors)
@@ -60,7 +71,8 @@ module PmdTester
       @patch_errors_size = patch_errors.errors_size
       error_diffs = build_diffs(base_errors.errors, patch_errors.errors)
       @error_diffs = error_diffs
-      @error_diffs_size = get_diffs_size(error_diffs)
+      @new_errors_size, @removed_errors_size = get_diffs_size(error_diffs)
+      @error_diffs_size = @new_errors_size + @removed_errors_size
     end
 
     def calculate_details(base_info, patch_info)
@@ -91,21 +103,18 @@ module PmdTester
     end
 
     def get_diffs_size(diffs_hash)
-      size = 0
-      diffs_hash.keys.each do |key|
-        size += diffs_hash[key].size
+      new_size = 0
+      removed_size = 0
+      diffs_hash.values.each do |value|
+        value.each do |item|
+          item.branch.eql?(BASE) ? removed_size += 1 : new_size += 1
+        end
       end
-      size
+      [new_size, removed_size]
     end
 
     def introduce_new_errors?
-      @error_diffs.values.each do |pmd_errors|
-        pmd_errors.each do |pmd_error|
-          return true if pmd_error.branch.eql?('patch')
-        end
-      end
-
-      false
+      !@new_errors_size.zero?
     end
   end
 end

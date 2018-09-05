@@ -29,5 +29,11 @@ module PmdTester
       css_dest_dir = "#{report_dir}/css"
       FileUtils.copy_entry(CSS_SRC_DIR, css_dest_dir)
     end
+
+    def build_table_content_for(doc, removed_size, new_size)
+      doc.font(color: 'red') { doc.text "-#{removed_size}" }
+      doc.text ' | '
+      doc.font(color: 'green') { doc.text "+#{new_size}" }
+    end
   end
 end
