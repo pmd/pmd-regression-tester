@@ -42,7 +42,7 @@ module PmdTester
     end
 
     def characters(string)
-      @current_violation.text = string unless @current_violation.nil?
+      @current_violation&.text = string
     end
 
     def end_element(name)
@@ -64,7 +64,7 @@ module PmdTester
 
     def cdata_block(string)
       remove_work_dir!(string)
-      @current_error.text = string unless @current_error.nil?
+      @current_error&.text = string
     end
 
     def match_filter_set?(violation)

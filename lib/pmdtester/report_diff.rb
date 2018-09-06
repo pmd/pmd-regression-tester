@@ -105,7 +105,7 @@ module PmdTester
     def get_diffs_size(diffs_hash)
       new_size = 0
       removed_size = 0
-      diffs_hash.values.each do |value|
+      diffs_hash.each_value do |value|
         value.each do |item|
           item.branch.eql?(BASE) ? removed_size += 1 : new_size += 1
         end
