@@ -51,7 +51,7 @@ class IntegrationTestRunner < Test::Unit::TestCase
     assert_path_exist('target/reports/pmd_releases_6.7.0/pmd/pmd_report.xml')
     assert_path_not_exist('target/reports/diff/checkstyle/index.html')
     assert_path_not_exist('target/reports/diff/pmd/index.html')
-    assert_path_exist('target/reports/diff/index.html')
+    assert_path_not_exist('target/reports/diff/index.html')
   end
 
   def test_online_mode
