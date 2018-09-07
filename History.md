@@ -10,6 +10,7 @@
 ## External Contributions
 
 *   [#33](https://github.com/pmd/pmd-regression-tester/pull/33): Ignore changes to test code of PMD when generating dynamic rule sets - [BBG](https://github.com/djydewang)
+*   [#34](https://github.com/pmd/pmd-regression-tester/pull/34): Clear old reports before generating new differences regression reports - [BBG](https://github.com/djydewang)
 *   [#36](https://github.com/pmd/pmd-regression-tester/pull/36): Implements exclude-pattern - [BBG](https://github.com/djydewang)
 *   [#39](https://github.com/pmd/pmd-regression-tester/pull/39): Render stacktraces properly - [BBG](https://github.com/djydewang)
 
