@@ -40,6 +40,20 @@ class IntegrationTestRunner < Test::Unit::TestCase
     assert_path_exist('target/reports/diff/index.html')
   end
 
+  def test_single_mode_with_html_flag_option
+    argv = '-r target/repositories/pmd -m single' \
+              ' -p pmd_releases/6.7.0 -pc config/design.xml -l test/resources/project-test.xml -f'
+
+    system("bundle exec bin/pmdtester #{argv}")
+
+    assert_equal(0, $CHILD_STATUS.exitstatus)
+    assert_path_exist('target/reports/pmd_releases_6.7.0/checkstyle/pmd_report.xml')
+    assert_path_exist('target/reports/pmd_releases_6.7.0/pmd/pmd_report.xml')
+    assert_path_not_exist('target/reports/diff/checkstyle/index.html')
+    assert_path_not_exist('target/reports/diff/pmd/index.html')
+    assert_path_not_exist('target/reports/diff/index.html')
+  end
+
   def test_online_mode
     base_branch = 'test_branch_2'
     argv = "-r target/repositories/pmd -m online -b #{base_branch} -p pmd_releases/6.7.0"
