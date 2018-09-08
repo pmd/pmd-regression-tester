@@ -6,12 +6,14 @@
 
 *   [#35](https://github.com/pmd/pmd-regression-tester/issues/35): exclude-pattern hasn't been implemented
 *   [#37](https://github.com/pmd/pmd-regression-tester/issues/37): Render stack traces properly
+*   [#38](https://github.com/pmd/pmd-regression-tester/issues/38): Improve Danger messages
 
 ## External Contributions
 
 *   [#33](https://github.com/pmd/pmd-regression-tester/pull/33): Ignore changes to test code of PMD when generating dynamic rule sets - [BBG](https://github.com/djydewang)
 *   [#36](https://github.com/pmd/pmd-regression-tester/pull/36): Implements exclude-pattern - [BBG](https://github.com/djydewang)
 *   [#39](https://github.com/pmd/pmd-regression-tester/pull/39): Render stacktraces properly - [BBG](https://github.com/djydewang)
+*   [#44](https://github.com/pmd/pmd-regression-tester/pull/44): Improve Danger messages & Increase the readability of the summary report - [BBG](https://github.com/djydewang)
 
 # 1.0.0.beta3 / 2018-08-01
 
