@@ -19,7 +19,8 @@ module PmdTester
       when Options::SINGLE
         run_single_mode
       end
-      introduce_new_pmd_error?
+
+      summarize_diffs
     end
 
     def clean
@@ -124,11 +125,19 @@ module PmdTester
       @projects = ProjectsParser.new.parse(file_path)
     end
 
-    def introduce_new_pmd_error?
+    def summarize_diffs
+      new_errors_size = 0
+      removed_errors_size = 0
+      new_violations_size = 0
+      removed_violations_size = 0
       @projects.each do |project|
-        return true if project.introduce_new_errors?
+        new_errors_size += project.new_errors_size
+        removed_errors_size += project.removed_errors_size
+        new_violations_size += project.new_violations_size
+        removed_violations_size += project.removed_violations_size
       end
-      false
+
+      [new_errors_size, removed_errors_size, new_violations_size, removed_violations_size]
     end
   end
 end

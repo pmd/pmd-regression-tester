@@ -11,9 +11,9 @@ gem "hoe-bundler", "~>1.2", :group => [:development, :test]
 gem "hoe-git", "~>1.6", :group => [:development, :test]
 gem "minitest", "~>5.10.1", :group => [:development, :test]
 gem "mocha", "~>1.5.0", :group => [:development, :test]
-gem "rubocop", "~>0.56.0", :group => [:development, :test]
+gem "rubocop", "~>0.51.0", :group => [:development, :test]
 gem "test-unit", "~>3.2.3", :group => [:development, :test]
-gem "rdoc", ">=4.0", "<6", :group => [:development, :test]
+gem "rdoc", ">=4.0", "<7", :group => [:development, :test]
 gem "hoe", "~>3.17", :group => [:development, :test]
 
 # vim: syntax=ruby

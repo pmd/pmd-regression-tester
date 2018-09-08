@@ -12,7 +12,7 @@ class TestRunner < Test::Unit::TestCase
 
   def run_runner(argv)
     runner = Runner.new(argv)
-    runner.expects(:introduce_new_pmd_error?).returns(true)
+    runner.expects(:summarize_diffs).once
     runner.run
   end
 

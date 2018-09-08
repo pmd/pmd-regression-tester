@@ -122,8 +122,8 @@ module PmdTester
         doc.tr do
           doc.th 'project name'
           doc.th 'project branch/tag'
-          doc.th 'diff exist?'
-          doc.th 'introduce new errors?'
+          doc.th 'removed|new errors size'
+          doc.th 'removed|new violations size'
         end
       end
     end
@@ -136,8 +136,14 @@ module PmdTester
               doc.a(href: project.diff_report_index_ref_path) { doc.text project.name }
             end
             doc.td project.tag
-            doc.td project.diffs_exist? ? 'Yes' : 'No'
-            doc.td project.introduce_new_errors? ? 'Yes' : 'No'
+            doc.td do
+              build_table_content_for(doc, project.removed_errors_size,
+                                      project.new_errors_size)
+            end
+            doc.td do
+              build_table_content_for(doc, project.removed_violations_size,
+                                      project.new_violations_size)
+            end
           end
         end
       end
