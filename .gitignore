@@ -4,6 +4,5 @@ Gemfile.lock
 .project
 .idea
 .bundle
-pmdtester.gemspec
 target/
 vendor/

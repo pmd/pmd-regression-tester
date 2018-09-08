@@ -7,6 +7,7 @@
 *   [#35](https://github.com/pmd/pmd-regression-tester/issues/35): exclude-pattern hasn't been implemented
 *   [#37](https://github.com/pmd/pmd-regression-tester/issues/37): Render stack traces properly
 *   [#40](https://github.com/pmd/pmd-regression-tester/issues/40): NoMethodError on beta3
+*   [#42](https://github.com/pmd/pmd-regression-tester/issues/42): Installing the snapshot version of pmdtester locally from github
 
 ## External Contributions
 
@@ -15,6 +16,7 @@
 *   [#36](https://github.com/pmd/pmd-regression-tester/pull/36): Implements exclude-pattern - [BBG](https://github.com/djydewang)
 *   [#39](https://github.com/pmd/pmd-regression-tester/pull/39): Render stacktraces properly - [BBG](https://github.com/djydewang)
 *   [#41](https://github.com/pmd/pmd-regression-tester/pull/41): Fixes NoMethodError in Project class - [BBG](https://github.com/djydewang)
+*   [#43](https://github.com/pmd/pmd-regression-tester/pull/43): Adds pmdtester.gemspec file - [BBG](https://github.com/djydewang)
 
 # 1.0.0.beta3 / 2018-08-01
 

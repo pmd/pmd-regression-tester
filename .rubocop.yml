@@ -2,8 +2,10 @@ inherit_from: .rubocop_todo.yml
 
 AllCops:
   TargetRubyVersion: 2.4
+  Include:
+    - 'lib/**/*'
+    - 'test/**/*'
   Exclude:
-    - 'target/**/*'
     - 'test/resources/**/*'
 
 Metrics/LineLength:

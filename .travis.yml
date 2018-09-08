@@ -3,6 +3,7 @@ before_install:
 - wget https://github.com/sormuras/bach/raw/master/install-jdk.sh
 - source ./install-jdk.sh -F 11 -L GPL -W $HOME/jdk
 script:
+- rake check_manifest
 - rake rubocop
 - rake clean test
 - rake clean integration-test

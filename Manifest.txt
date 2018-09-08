@@ -32,5 +32,6 @@ lib/pmdtester/project.rb
 lib/pmdtester/report_diff.rb
 lib/pmdtester/resource_locator.rb
 lib/pmdtester/runner.rb
+pmdtester.gemspec
 resources/css/maven-base.css
 resources/css/maven-theme.css
