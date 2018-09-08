@@ -19,7 +19,7 @@ hoe = Hoe.spec 'pmdtester' do
 
   self.clean_globs = %w[target/reports/**/* target/test/**/* Gemfile.lock]
   self.extra_deps += [['nokogiri', '~> 1.8.2'], ['slop', '~> 4.6.2']]
-  self.extra_dev_deps  += [
+  self.extra_dev_deps += [
     ['hoe-bundler',   '~> 1.2'],
     ['hoe-git',       '~> 1.6'],
     ['minitest',      '~> 5.10.1'],
@@ -28,7 +28,7 @@ hoe = Hoe.spec 'pmdtester' do
     ['rubocop',       '~> 0.51.0'],
     ['test-unit',     '~> 3.2.3']
   ]
-  self.spec_extras[:required_rubygems_version] = '>= 2.4.1'
+  spec_extras[:required_rubygems_version] = '>= 2.4.1'
 
   license 'BSD-2-Clause'
 end

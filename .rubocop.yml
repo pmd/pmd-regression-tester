@@ -6,6 +6,10 @@ AllCops:
     - 'lib/**/*'
     - 'test/**/*'
   Exclude:
+    # pmdtester.gemspec and Gemfile are generated
+    - 'pmdtester.gemspec'
+    - 'Gemfile'
+    - 'target/**/*'
     - 'test/resources/**/*'
 
 Metrics/LineLength:
