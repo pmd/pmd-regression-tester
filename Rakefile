@@ -24,7 +24,8 @@ hoe = Hoe.spec 'pmdtester' do
     ['hoe-git',       '~> 1.6'],
     ['minitest',      '~> 5.10.1'],
     ['mocha',         '~> 1.5.0'],
-    ['rubocop',       '~> 0.56.0'],
+    # use the same version of rubocop as codacy
+    ['rubocop',       '~> 0.51.0'],
     ['test-unit',     '~> 3.2.3']
   ]
   self.spec_extras[:required_rubygems_version] = '>= 2.4.1'
