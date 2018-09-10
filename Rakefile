@@ -26,9 +26,10 @@ hoe = Hoe.spec 'pmdtester' do
     ['mocha',         '~> 1.5.0'],
     # use the same version of rubocop as codacy
     ['rubocop',       '~> 0.51.0'],
-    ['test-unit',     '~> 3.2.3']
+    ['test-unit',     '~> 3.2.3'],
+    ['rdoc',          ['>= 4.0', '< 7']]
   ]
-  spec_extras[:required_rubygems_version] = '>= 2.4.1'
+  spec_extras[:required_rubygems_version] = '>= 2.7.6'
 
   license 'BSD-2-Clause'
 end

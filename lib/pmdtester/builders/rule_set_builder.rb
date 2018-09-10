@@ -29,6 +29,7 @@ module PmdTester
       output_filter_set(rule_sets)
       build_config_file(rule_sets)
       logger.debug "Dynamic configuration: #{[rule_sets]}"
+      rule_sets
     end
 
     def output_filter_set(rule_sets)
@@ -79,7 +80,7 @@ module PmdTester
     def build_config_file(rule_sets)
       if rule_sets.empty?
         logger.info NO_JAVA_RULES_CHANGED_MESSAGE
-        exit 0
+        return
       end
 
       doc = Nokogiri::XML(File.read(PATH_TO_ALL_JAVA_RULES))
