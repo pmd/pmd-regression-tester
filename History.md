@@ -19,6 +19,7 @@
 *   [#41](https://github.com/pmd/pmd-regression-tester/pull/41): Fixes NoMethodError in Project class - [BBG](https://github.com/djydewang)
 *   [#43](https://github.com/pmd/pmd-regression-tester/pull/43): Adds pmdtester.gemspec file - [BBG](https://github.com/djydewang)
 *   [#44](https://github.com/pmd/pmd-regression-tester/pull/44): Improve Danger messages & Increase the readability of the summary report - [BBG](https://github.com/djydewang)
+*   [#45](https://github.com/pmd/pmd-regression-tester/pull/45): Removes the exit statement in RuleSetBuilder Class - [BBG](https://github.com/djydewang)
 
 # 1.0.0.beta3 / 2018-08-01
 
