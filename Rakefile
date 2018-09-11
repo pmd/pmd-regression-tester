@@ -29,7 +29,7 @@ hoe = Hoe.spec 'pmdtester' do
     ['test-unit',     '~> 3.2.3'],
     ['rdoc',          ['>= 4.0', '< 7']]
   ]
-  spec_extras[:required_rubygems_version] = '>= 2.7.6'
+  spec_extras[:required_ruby_version] = '>= 2.2.0'
 
   license 'BSD-2-Clause'
 end
