@@ -30,9 +30,10 @@ module PmdTester
 
     def run_local_mode
       logger.info "Mode: #{@options.mode}"
-      RuleSetBuilder.new(@options).build if @options.auto_config_flag
-
       get_projects(@options.project_list) unless @options.nil?
+      rule_sets = RuleSetBuilder.new(@options).build if @options.auto_config_flag
+      return if rule_sets&.empty?
+
       PmdReportBuilder
         .new(@options.base_config, @projects, @options.local_git_repo, @options.base_branch)
         .build
@@ -48,16 +49,16 @@ module PmdTester
 
       baseline_path = download_baseline(@options.base_branch)
 
+      # patch branch build pmd report with same list of projects as base branch
+      project_list = "#{baseline_path}/project-list.xml"
+      get_projects(project_list)
+
       if @options.auto_config_flag
-        RuleSetBuilder.new(@options).build
+        return if RuleSetBuilder.new(@options).build.empty?
       else
         # patch branch build pmd reports with same configuration as base branch
         @options.patch_config = "#{baseline_path}/config.xml"
       end
-
-      # patch branch build pmd report with same list of projects as base branch
-      project_list = "#{baseline_path}/project-list.xml"
-      get_projects(project_list)
 
       PmdReportBuilder
         .new(@options.patch_config, @projects, @options.local_git_repo, @options.patch_branch)
