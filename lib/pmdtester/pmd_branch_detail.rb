@@ -5,6 +5,8 @@ require 'json'
 module PmdTester
   # This class represents all details about branch of pmd
   class PmdBranchDetail
+    include PmdTester
+
     attr_accessor :branch_last_sha
     attr_accessor :branch_last_message
     attr_accessor :branch_name
