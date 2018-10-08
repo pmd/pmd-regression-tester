@@ -10,6 +10,8 @@ module PmdTester
     attr_accessor :branch_name
     # The branch's execution time on all standard projects
     attr_accessor :execution_time
+    attr_reader :jdk_version
+    attr_reader :language
 
     def self.branch_filename(branch_name)
       branch_name&.tr('/', '_')
@@ -22,6 +24,8 @@ module PmdTester
       branch_filename = PmdBranchDetail.branch_filename(branch_name)
       @base_branch_dir = "target/reports/#{branch_filename}" unless @branch_name.nil?
       @execution_time = 0
+      @jdk_version = Cmd.execute('java -version')
+      @language = Cmd.execute('echo $LANG')
     end
 
     def load
@@ -31,20 +35,27 @@ module PmdTester
         @branch_last_message = hash['branch_last_message']
         @branch_name = hash['branch_name']
         @execution_time = hash['execution_time']
-        hash
+        @jdk_version = hash['jdk_version']
+        @language = hash['language']
       else
-        {}
+        @jdk_version = ''
+        @language = ''
+        logger.warn "#{branch_details_path} doesn't exist!"
       end
+      self
     end
 
     def save
       hash = { branch_last_sha: @branch_last_sha,
                branch_last_message: @branch_last_message,
                branch_name: @branch_name,
-               execution_time: @execution_time }
+               execution_time: @execution_time,
+               jdk_version: @jdk_version,
+               language: @language }
       file = File.new(branch_details_path, 'w')
       file.puts JSON.generate(hash)
       file.close
+      self
     end
 
     def branch_details_path
