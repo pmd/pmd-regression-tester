@@ -29,7 +29,6 @@ module PmdTester
     def get_branch_details(branch_name)
       details = PmdBranchDetail.new(branch_name)
       details.load
-      details
     end
 
     def build_body(doc)
@@ -71,6 +70,10 @@ module PmdTester
                                @patch_details.branch_last_message)
         build_branch_table_row(doc, 'total execution time', @base_details.format_execution_time,
                                @patch_details.format_execution_time)
+        build_branch_table_row(doc, 'jdk version', @base_details.jdk_version,
+                               @patch_details.jdk_version)
+        build_branch_table_row(doc, 'language', @base_details.language,
+                               @patch_details.language)
         build_branch_config_table_row(doc)
       end
     end

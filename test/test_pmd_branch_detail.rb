@@ -13,12 +13,14 @@ class TestPmdBranchDetail < Test::Unit::TestCase
     dir = 'target/reports/test_branch'
     FileUtils.mkdir(dir) unless File.directory?(dir)
     details.save
-    hash = details.load
+    details.load
 
-    assert_equal('test_branch', hash['branch_name'])
-    assert_equal('test message', hash['branch_last_message'])
-    assert_equal('test sha', hash['branch_last_sha'])
-    assert_equal('test time', hash['execution_time'])
+    assert_equal('test_branch', details.branch_name)
+    assert_equal('test message', details.branch_last_message)
+    assert_equal('test sha', details.branch_last_sha)
+    assert_equal('test time', details.execution_time)
+    assert_equal(PmdTester::Cmd.execute('java -version'), details.jdk_version)
+    assert_equal(PmdTester::Cmd.execute('echo $LANG'), details.language)
   end
 
   def test_get_path

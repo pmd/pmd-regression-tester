@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = Gem::Requirement.new("> 1.3.1".freeze) if s.respond_to? :required_rubygems_version=
   s.require_paths = ["lib".freeze]
   s.authors = ["Andreas Dangel".freeze, "Binguo Bao".freeze]
-  s.date = "2018-09-12"
+  s.date = "2018-10-08"
   s.description = "A regression testing tool ensure that new problems and unexpected behaviors will not be introduced to PMD project after fixing an issue , and new rules can work as expected.".freeze
   s.email = ["andreas.dangel@adangel.org".freeze, "djydewang@gmail.com".freeze]
   s.executables = ["pmdtester".freeze]
@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
   s.licenses = ["BSD-2-Clause".freeze]
   s.rdoc_options = ["--main".freeze, "README.rdoc".freeze]
   s.required_ruby_version = Gem::Requirement.new(">= 2.2.0".freeze)
-  s.rubygems_version = "2.6.14".freeze
+  s.rubygems_version = "2.7.7".freeze
   s.summary = "A regression testing tool ensure that new problems and unexpected behaviors will not be introduced to PMD project after fixing an issue , and new rules can work as expected.".freeze
 
   if s.respond_to? :specification_version then
