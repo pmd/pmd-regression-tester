@@ -6,6 +6,17 @@ module PmdTester
   # Containing the common method for executing shell command
   class Cmd
     extend PmdTester
+    def self.stdout_of(cmd)
+      stdout, _stderr, _status = execute(cmd)
+      stdout&.chomp!
+      stdout
+    end
+
+    def self.stderr_of(cmd)
+      _stdout, stderr, _status = execute(cmd)
+      stderr
+    end
+
     def self.execute(cmd)
       logger.debug "execute command '#{cmd}'"
 
@@ -20,7 +31,7 @@ module PmdTester
 
       stdout&.chomp!
 
-      stdout
+      [stdout, stderr, status]
     end
   end
 

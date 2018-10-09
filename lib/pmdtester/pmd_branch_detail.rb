@@ -26,8 +26,9 @@ module PmdTester
       branch_filename = PmdBranchDetail.branch_filename(branch_name)
       @base_branch_dir = "target/reports/#{branch_filename}" unless @branch_name.nil?
       @execution_time = 0
-      @jdk_version = Cmd.execute('java -version')
-      @language = Cmd.execute('echo $LANG')
+      # the result of command 'java -version' is going to stderr
+      @jdk_version = Cmd.stderr_of('java -version')
+      @language = Cmd.stdout_of('echo $LANG')
     end
 
     def load
