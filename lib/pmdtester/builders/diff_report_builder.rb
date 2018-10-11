@@ -227,15 +227,22 @@ module PmdTester
         # The error message
         doc.td pmd_error.msg
 
-        # Details of error
         if ReportDiff.comparable?(errors)
-          doc.td do
-            doc.pre do
-              doc << Differ.diff_by_line(errors[i].text, errors[1 - i].text).format_as(:html)
-            end
-          end
+          build_error_details_diff(doc, errors, i)
         else
-          doc.td { doc.pre pmd_error.text }
+          build_error_details(doc, pmd_error)
+        end
+      end
+    end
+
+    def build_error_details(doc, pmd_error)
+      doc.td { doc.pre pmd_error.text }
+    end
+
+    def build_error_details_diff(doc, errors, i)
+      doc.td do
+        doc.pre do
+          doc << Differ.diff_by_line(errors[i].text, errors[1 - i].text).format_as(:html)
         end
       end
     end
