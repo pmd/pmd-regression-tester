@@ -61,7 +61,8 @@ module PmdTester
       end
 
       PmdReportBuilder
-        .new(@options.patch_config, @projects, @options.local_git_repo, @options.patch_branch)
+        .new(@options.patch_config, @projects,
+             @options.local_git_repo, @options.patch_branch, @options.threads)
         .build
 
       build_html_reports
