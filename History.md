@@ -22,6 +22,7 @@
 *   [#44](https://github.com/pmd/pmd-regression-tester/pull/44): Improve Danger messages & Increase the readability of the summary report - [BBG](https://github.com/djydewang)
 *   [#45](https://github.com/pmd/pmd-regression-tester/pull/45): Removes the exit statement in RuleSetBuilder Class - [BBG](https://github.com/djydewang)
 *   [#51](https://github.com/pmd/pmd-regression-tester/pull/51): Add the JDK version and locale info to the summary table of the diff report - [BBG](https://github.com/djydewang)
+*   [#52](https://github.com/pmd/pmd-regression-tester/pull/52): Get the result of command 'java -version' from stderr rather than stdout - [BBG](https://github.com/djydewang)
 
 # 1.0.0.beta3 / 2018-08-01
 
