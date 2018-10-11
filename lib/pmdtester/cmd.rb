@@ -6,18 +6,18 @@ module PmdTester
   # Containing the common method for executing shell command
   class Cmd
     extend PmdTester
-    def self.stdout_of(cmd)
-      stdout, _stderr, _status = execute(cmd)
+    def self.execute(cmd)
+      stdout, _stderr, _status = internal_execute(cmd)
       stdout&.chomp!
       stdout
     end
 
     def self.stderr_of(cmd)
-      _stdout, stderr, _status = execute(cmd)
+      _stdout, stderr, _status = internal_execute(cmd)
       stderr
     end
 
-    def self.execute(cmd)
+    def self.internal_execute(cmd)
       logger.debug "execute command '#{cmd}'"
 
       stdout, stderr, status = Open3.capture3("#{cmd};")
@@ -33,6 +33,8 @@ module PmdTester
 
       [stdout, stderr, status]
     end
+
+    private_class_method :internal_execute
   end
 
   # The exception should be raised when the shell command failed.

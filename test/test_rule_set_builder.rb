@@ -15,7 +15,7 @@ class TestRuleSetBuilder < Test::Unit::TestCase
     options.expects(:base_config=).returns('')
     options.expects(:patch_config=).returns('')
     builder = RuleSetBuilder.new(options)
-    Cmd.expects(:stdout_of).returns(diff_filenames)
+    Cmd.expects(:execute).returns(diff_filenames)
     builder.build
   end
 

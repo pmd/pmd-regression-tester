@@ -28,7 +28,7 @@ module PmdTester
       @execution_time = 0
       # the result of command 'java -version' is going to stderr
       @jdk_version = Cmd.stderr_of('java -version')
-      @language = Cmd.stdout_of('echo $LANG')
+      @language = ENV['LANG']
     end
 
     def load

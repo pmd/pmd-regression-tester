@@ -25,7 +25,7 @@ module PmdTester
         reset_cmd = "hg up #{tag}"
       end
 
-      Cmd.stdout_of(reset_cmd)
+      Cmd.execute(reset_cmd)
     end
 
     def clone_projects
@@ -38,7 +38,7 @@ module PmdTester
         if File.exist?(path)
           logger.warn "Skipping clone, project path #{path} already exists"
         else
-          Cmd.stdout_of(clone_cmd)
+          Cmd.execute(clone_cmd)
         end
 
         Dir.chdir(path) do
@@ -52,33 +52,33 @@ module PmdTester
       logger.info 'Start packaging PMD'
       Dir.chdir(@local_git_repo) do
         checkout_cmd = "git checkout #{@pmd_branch_name}"
-        Cmd.stdout_of(checkout_cmd)
+        Cmd.execute(checkout_cmd)
 
         @pmd_branch_details.branch_last_sha = get_last_commit_sha
         @pmd_branch_details.branch_last_message = get_last_commit_message
 
         package_cmd = './mvnw clean package -Dpmd.skip=true -Dmaven.test.skip=true' \
                       ' -Dmaven.checkstyle.skip=true -Dmaven.javadoc.skip=true'
-        Cmd.stdout_of(package_cmd)
+        Cmd.execute(package_cmd)
 
         version_cmd = "./mvnw -q -Dexec.executable=\"echo\" -Dexec.args='${project.version}' " \
                       '--non-recursive org.codehaus.mojo:exec-maven-plugin:1.5.0:exec'
-        @pmd_version = Cmd.stdout_of(version_cmd)
+        @pmd_version = Cmd.execute(version_cmd)
 
         unzip_cmd = "unzip -qo pmd-dist/target/pmd-bin-#{@pmd_version}.zip -d #{@pwd}/target"
-        Cmd.stdout_of(unzip_cmd)
+        Cmd.execute(unzip_cmd)
       end
       logger.info 'Packaging PMD completed'
     end
 
     def get_last_commit_sha
       get_last_commit_sha_cmd = 'git rev-parse HEAD'
-      Cmd.stdout_of(get_last_commit_sha_cmd)
+      Cmd.execute(get_last_commit_sha_cmd)
     end
 
     def get_last_commit_message
       get_last_commit_message_cmd = 'git log -1 --pretty=%B'
-      Cmd.stdout_of(get_last_commit_message_cmd)
+      Cmd.execute(get_last_commit_message_cmd)
     end
 
     def generate_pmd_report(src_root_dir, report_file, config_path)
@@ -86,7 +86,7 @@ module PmdTester
       pmd_cmd = "#{run_path} pmd -d #{src_root_dir} -f xml -R #{config_path} " \
                 "-r #{report_file} -failOnViolation false"
       start_time = Time.now
-      Cmd.stdout_of(pmd_cmd)
+      Cmd.execute(pmd_cmd)
       end_time = Time.now
       [end_time - start_time, end_time]
     end

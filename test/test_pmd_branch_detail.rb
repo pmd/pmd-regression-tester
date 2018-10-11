@@ -20,7 +20,7 @@ class TestPmdBranchDetail < Test::Unit::TestCase
     assert_equal('test sha', details.branch_last_sha)
     assert_equal('test time', details.execution_time)
     assert_equal(PmdTester::Cmd.stderr_of('java -version'), details.jdk_version)
-    assert_equal(PmdTester::Cmd.stdout_of('echo $LANG'), details.language)
+    assert_equal(PmdTester::Cmd.execute('echo $LANG'), details.language)
   end
 
   def test_get_path

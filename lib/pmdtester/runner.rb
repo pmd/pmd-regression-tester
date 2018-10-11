@@ -78,8 +78,8 @@ module PmdTester
       unzip_cmd = "unzip -qo #{zip_filename}"
 
       Dir.chdir(target_path) do
-        Cmd.stdout_of(wget_cmd) unless File.exist?(zip_filename)
-        Cmd.stdout_of(unzip_cmd)
+        Cmd.execute(wget_cmd) unless File.exist?(zip_filename)
+        Cmd.execute(unzip_cmd)
       end
 
       "#{target_path}/#{branch_filename}"
