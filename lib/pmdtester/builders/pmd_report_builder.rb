@@ -7,11 +7,12 @@ module PmdTester
   # projects and branch of pmd source code
   class PmdReportBuilder
     include PmdTester
-    def initialize(branch_config, projects, local_git_repo, pmd_branch_name)
+    def initialize(branch_config, projects, local_git_repo, pmd_branch_name, threads = 1)
       @branch_config = branch_config
       @projects = projects
       @local_git_repo = local_git_repo
       @pmd_branch_name = pmd_branch_name
+      @threads = threads
       @pwd = Dir.getwd
 
       @pmd_branch_details = PmdBranchDetail.new(pmd_branch_name)
@@ -84,7 +85,7 @@ module PmdTester
     def generate_pmd_report(src_root_dir, report_file, config_path)
       run_path = "target/pmd-bin-#{@pmd_version}/bin/run.sh"
       pmd_cmd = "#{run_path} pmd -d #{src_root_dir} -f xml -R #{config_path} " \
-                "-r #{report_file} -failOnViolation false"
+                "-r #{report_file} -failOnViolation false -t #{@threads}"
       start_time = Time.now
       Cmd.execute(pmd_cmd)
       end_time = Time.now

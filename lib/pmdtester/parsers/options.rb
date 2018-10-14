@@ -25,6 +25,7 @@ module PmdTester
     attr_reader :config
     attr_reader :project_list
     attr_reader :mode
+    attr_reader :threads
     attr_reader :html_flag
     attr_reader :auto_config_flag
     attr_reader :debug_flag
@@ -40,6 +41,7 @@ module PmdTester
       @config = options[:c]
       @project_list = options[:l]
       @mode = options[:m]
+      @threads = options[:t]
       @html_flag = options[:f]
       @auto_config_flag = options[:a]
       @debug_flag = options[:d]
@@ -79,6 +81,8 @@ module PmdTester
                  'path to the file which contains the list of standard projects',
                  default: DEFAULT_LIST_PATH
         o.string '-m', '--mode', mode_message, default: 'local'
+        o.integer '-t', '--threads', 'Sets the number of threads used by PMD.' \
+              ' Set threads to 0 to disable multi-threading processing.', default: 1
         o.bool '-f', '--html-flag',
                'whether to not generate the html diff report in single mode'
         o.bool '-a', '--auto-gen-config',

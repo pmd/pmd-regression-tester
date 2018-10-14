@@ -9,6 +9,7 @@
 *   [#38](https://github.com/pmd/pmd-regression-tester/issues/38): Improve Danger messages
 *   [#40](https://github.com/pmd/pmd-regression-tester/issues/40): NoMethodError on beta3
 *   [#42](https://github.com/pmd/pmd-regression-tester/issues/42): Installing the snapshot version of pmdtester locally from github
+*   [#46](https://github.com/pmd/pmd-regression-tester/issues/46): Support multithreaded execution of PMD
 *   [#49](https://github.com/pmd/pmd-regression-tester/issues/49): Support comparing two error stacktraces
 *   [#50](https://github.com/pmd/pmd-regression-tester/issues/50): Differences due to different locale settings
 
@@ -25,6 +26,7 @@
 *   [#51](https://github.com/pmd/pmd-regression-tester/pull/51): Add the JDK version and locale info to the summary table of the diff report - [BBG](https://github.com/djydewang)
 *   [#52](https://github.com/pmd/pmd-regression-tester/pull/52): Get the result of command 'java -version' from stderr rather than stdout - [BBG](https://github.com/djydewang)
 *   [#53](https://github.com/pmd/pmd-regression-tester/pull/53): Support comparing the two error stacktraces - [BBG](https://github.com/djydewang)
+*   [#54](https://github.com/pmd/pmd-regression-tester/pull/54): Support multithreaded execution of PMD - [BBG](https://github.com/djydewang)
 
 # 1.0.0.beta3 / 2018-08-01
 
