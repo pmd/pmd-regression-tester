@@ -17,10 +17,10 @@
 <tbody>
 <tr>
 <td class="c">number of errors</td>
-<td class="b">0</td>
+<td class="b">1</td>
 <td class="a">1</td>
 <td class="c">
-<font color="red">-0</font> | <font color="green">+1</font>
+<font color="red">-1</font> | <font color="green">+1</font>
 </td>
 </tr>
 <tr>
@@ -81,7 +81,7 @@ Fields should be declared at the top of the class, before any method declaration
 </tr></thead>
 <tbody>
 <tr class="b">
-<td><a id="A1" href="#A1">#</a></td>
+<td><a id="A2" href="#A2">#</a></td>
 <td>3</td>
 <td><a href="http://pmd.sourceforge.net/snapshot/pmd_rules_java_design.html#godclass">GodClass</a></td>
 <td>
@@ -90,7 +90,7 @@ Possible God Class (WMC=101, ATFD=29, TCC=3.374%)
 <td><a href="https://github.com/spring-projects/spring-framework/tree/v5.0.6.RELEASE/spring-aop/src/main/java/org/springframework/aop/aspectj/AbstractAspectJAdvice.java#L63">63</a></td>
 </tr>
 <tr class="a">
-<td><a id="A2" href="#A2">#</a></td>
+<td><a id="A3" href="#A3">#</a></td>
 <td>3</td>
 <td><a href="http://pmd.sourceforge.net/snapshot/pmd_rules_java_design.html#godclass">GodClass</a></td>
 <td>
@@ -99,7 +99,7 @@ Possible God Class (WMC=101, ATFD=29, TCC=4.000%)
 <td><a href="https://github.com/spring-projects/spring-framework/tree/v5.0.6.RELEASE/spring-aop/src/main/java/org/springframework/aop/aspectj/AbstractAspectJAdvice.java#L63">63</a></td>
 </tr>
 <tr class="a">
-<td><a id="A3" href="#A3">#</a></td>
+<td><a id="A4" href="#A4">#</a></td>
 <td>3</td>
 <td><a href="http://pmd.sourceforge.net/snapshot/pmd_rules_java_codestyle.html#fielddeclarationsshouldbeatstartofclass">FieldDeclarationsShouldBeAtStartOfClass</a></td>
 <td>
@@ -121,7 +121,7 @@ Fields should be declared at the top of the class, before any method declaration
 <th>Line</th>
 </tr></thead>
 <tbody><tr class="a">
-<td><a id="A1" href="#A1">#</a></td>
+<td><a id="A5" href="#A5">#</a></td>
 <td>3</td>
 <td><a href="http://pmd.sourceforge.net/snapshot/pmd_rules_java_codestyle.html#fielddeclarationsshouldbeatstartofclass">FieldDeclarationsShouldBeAtStartOfClass</a></td>
 <td>
@@ -142,7 +142,7 @@ Fields should be declared at the top of the class, before any method declaration
 <th>Line</th>
 </tr></thead>
 <tbody><tr class="a">
-<td><a id="A1" href="#A1">#</a></td>
+<td><a id="A6" href="#A6">#</a></td>
 <td>3</td>
 <td><a href="http://pmd.sourceforge.net/snapshot/pmd_rules_java_codestyle.html#fielddeclarationsshouldbeatstartofclass">FieldDeclarationsShouldBeAtStartOfClass</a></td>
 <td>
@@ -163,7 +163,7 @@ Fields should be declared at the top of the class, before any method declaration
 <th>Line</th>
 </tr></thead>
 <tbody><tr class="a">
-<td><a id="A1" href="#A1">#</a></td>
+<td><a id="A7" href="#A7">#</a></td>
 <td>1</td>
 <td><a href="http://pmd.sourceforge.net/snapshot/pmd_rules_java_design.html#classwithonlyprivateconstructorsshouldbefinal">ClassWithOnlyPrivateConstructorsShouldBeFinal</a></td>
 <td>
@@ -184,7 +184,8 @@ A class which only has private constructors should be final
 <th>Message</th>
 <th>Details</th>
 </tr></thead>
-<tbody><tr class="a">
+<tbody>
+<tr class="b">
 <td><a id="B1" href="#B1">#</a></td>
 <td>This is an artificial error message.</td>
 <td><pre>net.sourceforge.pmd.PMDException: Error while parsing /home/bbg/projects/pmdtester/pmdtester/target/repositories/checkstyle/src/test/resources-noncompilable/com/puppycrawl/tools/checkstyle/asttreestringprinter/InputAstTreeStringPrinter.java
@@ -198,9 +199,9 @@ A class which only has private constructors should be final
 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1135)
 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
 	at java.base/java.lang.Thread.run(Thread.java:844)
-Caused by: net.sourceforge.pmd.lang.java.ast.ParseException: Encountered " &lt;IDENTIFIER&gt; "classD "" at line 1, column 1.
+Caused by: net.sourceforge.pmd.lang.java.ast.ParseException: Encountered " <identifier> "classD "" at line 1, column 1.
 Was expecting one of:
-    &lt;EOF&gt;
+    <eof>
     "import" ...
     "\u001a" ...
     "~[]" ...
@@ -208,13 +209,43 @@ Was expecting one of:
 	at net.sourceforge.pmd.lang.java.ast.JavaParser.generateParseException(JavaParser.java:11697)
 	at net.sourceforge.pmd.lang.java.ast.JavaParser.jj_consume_token(JavaParser.java:11581)
 	at net.sourceforge.pmd.lang.java.ast.JavaParser.CompilationUnit(JavaParser.java:323)
-	at net.sourceforge.pmd.lang.java.AbstractJavaParser.parse(AbstractJavaParser.java:57)
+<del class="differ">	at net.sourceforge.pmd.lang.java.AbstractJavaParser.parse(AbstractJavaParser.java:57)</del><ins class="differ">	at net.sourceforge.pmd.lang.java.AbstractJavaParser.parse(AbstractJavaParser.java:58)</ins>
 	at net.sourceforge.pmd.SourceCodeProcessor.parse(SourceCodeProcessor.java:111)
 	at net.sourceforge.pmd.SourceCodeProcessor.processSource(SourceCodeProcessor.java:175)
 	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:96)
-	... 9 more
-</pre></td>
-</tr></tbody>
+	... 9 more</eof></identifier></pre></td>
+</tr>
+<tr class="a">
+<td><a id="B2" href="#B2">#</a></td>
+<td>This is an artificial error message.</td>
+<td><pre>net.sourceforge.pmd.PMDException: Error while parsing /home/bbg/projects/pmdtester/pmdtester/target/repositories/checkstyle/src/test/resources-noncompilable/com/puppycrawl/tools/checkstyle/asttreestringprinter/InputAstTreeStringPrinter.java
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:99)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:51)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:78)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:24)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:514)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1135)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:844)
+Caused by: net.sourceforge.pmd.lang.java.ast.ParseException: Encountered " <identifier> "classD "" at line 1, column 1.
+Was expecting one of:
+    <eof>
+    "import" ...
+    "\u001a" ...
+    "~[]" ...
+
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.generateParseException(JavaParser.java:11697)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.jj_consume_token(JavaParser.java:11581)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.CompilationUnit(JavaParser.java:323)
+<del class="differ">	at net.sourceforge.pmd.lang.java.AbstractJavaParser.parse(AbstractJavaParser.java:58)</del><ins class="differ">	at net.sourceforge.pmd.lang.java.AbstractJavaParser.parse(AbstractJavaParser.java:57)</ins>
+	at net.sourceforge.pmd.SourceCodeProcessor.parse(SourceCodeProcessor.java:111)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSource(SourceCodeProcessor.java:175)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:96)
+	... 9 more</eof></identifier></pre></td>
+</tr>
+</tbody>
 </table>
 </div>
 </div>

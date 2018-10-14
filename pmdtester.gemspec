@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = Gem::Requirement.new("> 1.3.1".freeze) if s.respond_to? :required_rubygems_version=
   s.require_paths = ["lib".freeze]
   s.authors = ["Andreas Dangel".freeze, "Binguo Bao".freeze]
-  s.date = "2018-10-09"
+  s.date = "2018-10-14"
   s.description = "A regression testing tool ensure that new problems and unexpected behaviors will not be introduced to PMD project after fixing an issue , and new rules can work as expected.".freeze
   s.email = ["andreas.dangel@adangel.org".freeze, "djydewang@gmail.com".freeze]
   s.executables = ["pmdtester".freeze]
@@ -29,6 +29,7 @@ Gem::Specification.new do |s|
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<nokogiri>.freeze, ["~> 1.8.2"])
       s.add_runtime_dependency(%q<slop>.freeze, ["~> 4.6.2"])
+      s.add_runtime_dependency(%q<differ>.freeze, [">= 0"])
       s.add_development_dependency(%q<hoe-bundler>.freeze, ["~> 1.2"])
       s.add_development_dependency(%q<hoe-git>.freeze, ["~> 1.6"])
       s.add_development_dependency(%q<minitest>.freeze, ["~> 5.10.1"])
@@ -40,6 +41,7 @@ Gem::Specification.new do |s|
     else
       s.add_dependency(%q<nokogiri>.freeze, ["~> 1.8.2"])
       s.add_dependency(%q<slop>.freeze, ["~> 4.6.2"])
+      s.add_dependency(%q<differ>.freeze, [">= 0"])
       s.add_dependency(%q<hoe-bundler>.freeze, ["~> 1.2"])
       s.add_dependency(%q<hoe-git>.freeze, ["~> 1.6"])
       s.add_dependency(%q<minitest>.freeze, ["~> 5.10.1"])
@@ -52,6 +54,7 @@ Gem::Specification.new do |s|
   else
     s.add_dependency(%q<nokogiri>.freeze, ["~> 1.8.2"])
     s.add_dependency(%q<slop>.freeze, ["~> 4.6.2"])
+    s.add_dependency(%q<differ>.freeze, [">= 0"])
     s.add_dependency(%q<hoe-bundler>.freeze, ["~> 1.2"])
     s.add_dependency(%q<hoe-git>.freeze, ["~> 1.6"])
     s.add_dependency(%q<minitest>.freeze, ["~> 5.10.1"])

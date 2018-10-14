@@ -1,12 +1,18 @@
 # frozen_string_literal: true
 
 require 'nokogiri'
+require 'differ'
 
 module PmdTester
   # Building diff report for a single project
   class DiffReportBuilder < HtmlReportBuilder
     include PmdTester
     NO_DIFFERENCES_MESSAGE = 'No differences found!'
+
+    def initialize
+      @a_index = 1
+      @b_index = 1
+    end
 
     def build(project)
       @project = project
@@ -130,19 +136,18 @@ module PmdTester
 
     def build_violation_table_body(doc, key, value)
       doc.tbody do
-        a_index = 1
         value.each do |pmd_violation|
-          build_violation_table_row(doc, key, pmd_violation, a_index)
-          a_index += 1
+          build_violation_table_row(doc, key, pmd_violation)
         end
       end
     end
 
-    def build_violation_table_row(doc, key, pmd_violation, a_index)
+    def build_violation_table_row(doc, key, pmd_violation)
       doc.tr(class: pmd_violation.branch == BASE ? 'b' : 'a') do
         # The anchor
         doc.td do
-          doc.a(id: "A#{a_index}", href: "#A#{a_index}") { doc.text '#' }
+          doc.a(id: "A#{@a_index}", href: "#A#{@a_index}") { doc.text '#' }
+          @a_index += 1
         end
 
         violation = pmd_violation.attrs
@@ -177,9 +182,7 @@ module PmdTester
 
     def build_errors_section(doc, error_diffs)
       doc.div(class: 'section', id: 'Errors') do
-        doc.h2 do
-          doc.text 'Errors:'
-        end
+        doc.h2 'Errors:'
 
         doc.h3 NO_DIFFERENCES_MESSAGE if error_diffs.empty?
         error_diffs.each do |key, value|
@@ -209,24 +212,45 @@ module PmdTester
     end
 
     def build_errors_table_body(doc, errors)
-      doc.tbody do
-        b_index = 1
-        errors.each do |pmd_error|
-          doc.tr(class: pmd_error.branch == 'base' ? 'b' : 'a') do
-            # The anchor
-            doc.td do
-              doc.a(id: "B#{b_index}", href: "#B#{b_index}") { doc.text '#' }
-            end
+      if ReportDiff.comparable?(errors)
+        # we have only two errors and those are from base and patch, so we
+        # can compare them and display a nice diff
+        pmd_error_a = errors[0]
+        pmd_error_b = errors[1]
+        diff_a = Differ.diff_by_line(pmd_error_a.text, pmd_error_b.text).format_as(:html)
+        diff_b = Differ.diff_by_line(pmd_error_b.text, pmd_error_a.text).format_as(:html)
+        doc.tbody do
+          build_errors_table_row(doc, pmd_error_a, diff_a)
+          build_errors_table_row(doc, pmd_error_b, diff_b)
+        end
+      else
+        # many errors, just report them one by one
+        doc.tbody do
+          errors.each { |pmd_error| build_errors_table_row(doc, pmd_error) }
+        end
+      end
+    end
 
-            # The error message
-            doc.td pmd_error.msg
+    def build_errors_table_row(doc, pmd_error, text = nil)
+      doc.tr(class: pmd_error.branch == 'base' ? 'b' : 'a') do
+        build_errors_table_anchor(doc)
 
-            # Details of error
-            doc.td { doc.pre pmd_error.text }
+        text = pmd_error.text if text.nil?
 
-            b_index += 1
+        # The error message
+        doc.td pmd_error.msg
+        doc.td do
+          doc.pre do
+            doc << text
           end
         end
+      end
+    end
+
+    def build_errors_table_anchor(doc)
+      doc.td do
+        doc.a(id: "B#{@b_index}", href: "#B#{@b_index}") { doc.text '#' }
+        @b_index += 1
       end
     end
   end

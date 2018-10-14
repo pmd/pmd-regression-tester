@@ -6,6 +6,7 @@ source "https://rubygems.org/"
 
 gem "nokogiri", "~>1.8.2"
 gem "slop", "~>4.6.2"
+gem "differ", ">=0"
 
 gem "hoe-bundler", "~>1.2", :group => [:development, :test]
 gem "hoe-git", "~>1.6", :group => [:development, :test]

@@ -53,6 +53,10 @@ module PmdTester
       @error_diffs = {}
     end
 
+    def self.comparable?(errors)
+      errors.size == 2 && errors[0].branch != errors[1].branch
+    end
+
     def diffs_exist?
       !error_diffs_size.zero? || !violation_diffs_size.zero?
     end
