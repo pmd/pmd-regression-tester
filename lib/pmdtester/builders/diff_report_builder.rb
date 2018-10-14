@@ -212,37 +212,37 @@ module PmdTester
     end
 
     def build_errors_table_body(doc, errors)
-      doc.tbody do
-        Array(0..(errors.size - 1)).each do |i|
-          build_errors_table_row(doc, i, errors)
+      if ReportDiff.comparable?(errors)
+        # we have only two errors and those are from base and patch, so we
+        # can compare them and display a nice diff
+        pmd_error_a = errors[0]
+        pmd_error_b = errors[1]
+        diff_a = Differ.diff_by_line(pmd_error_a.text, pmd_error_b.text).format_as(:html)
+        diff_b = Differ.diff_by_line(pmd_error_b.text, pmd_error_a.text).format_as(:html)
+        doc.tbody do
+          build_errors_table_row(doc, pmd_error_a, diff_a)
+          build_errors_table_row(doc, pmd_error_b, diff_b)
+        end
+      else
+        # many errors, just report them one by one
+        doc.tbody do
+          errors.each { |pmd_error| build_errors_table_row(doc, pmd_error) }
         end
       end
     end
 
-    def build_errors_table_row(doc, i, errors)
-      pmd_error = errors[i]
+    def build_errors_table_row(doc, pmd_error, text = nil)
       doc.tr(class: pmd_error.branch == 'base' ? 'b' : 'a') do
         build_errors_table_anchor(doc)
 
+        text = pmd_error.text if text.nil?
+
         # The error message
         doc.td pmd_error.msg
-
-        if ReportDiff.comparable?(errors)
-          build_error_details_diff(doc, errors, i)
-        else
-          build_error_details(doc, pmd_error)
-        end
-      end
-    end
-
-    def build_error_details(doc, pmd_error)
-      doc.td { doc.pre pmd_error.text }
-    end
-
-    def build_error_details_diff(doc, errors, i)
-      doc.td do
-        doc.pre do
-          doc << Differ.diff_by_line(errors[i].text, errors[1 - i].text).format_as(:html)
+        doc.td do
+          doc.pre do
+            doc << text
+          end
         end
       end
     end
