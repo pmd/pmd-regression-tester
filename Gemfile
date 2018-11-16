@@ -4,6 +4,8 @@
 
 source "https://rubygems.org/"
 
+gemspec
+
 gem "nokogiri", "~>1.8.2"
 gem "slop", "~>4.6.2"
 gem "differ", ">=0"
