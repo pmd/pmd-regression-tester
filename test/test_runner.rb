@@ -41,4 +41,20 @@ class TestRunner < Test::Unit::TestCase
               -pc config/design.xml -l test/resources/project-test.xml]
     run_runner(argv)
   end
+
+  def test_local_mode_multithreading
+    report_builder_mock = mock
+    PmdReportBuilder.stubs(:new)
+                    .with(anything, anything, anything, anything, 4)
+                    .returns(report_builder_mock)
+                    .twice
+    report_builder_mock.stubs(:build).twice
+    DiffBuilder.any_instance.stubs(:build).twice
+    DiffReportBuilder.any_instance.stubs(:build).twice
+    SummaryReportBuilder.any_instance.stubs(:build).once
+
+    argv = %w[-r target/repositories/pmd -b master -bc config/design.xml -p pmd_releases/6.1.0
+              -pc config/design.xml -l test/resources/project-test.xml -t 4]
+    run_runner(argv)
+  end
 end
