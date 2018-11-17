@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = Gem::Requirement.new("> 1.3.1".freeze) if s.respond_to? :required_rubygems_version=
   s.require_paths = ["lib".freeze]
   s.authors = ["Andreas Dangel".freeze, "Binguo Bao".freeze]
-  s.date = "2018-10-14"
+  s.date = "2018-11-17"
   s.description = "A regression testing tool ensure that new problems and unexpected behaviors will not be introduced to PMD project after fixing an issue , and new rules can work as expected.".freeze
   s.email = ["andreas.dangel@adangel.org".freeze, "djydewang@gmail.com".freeze]
   s.executables = ["pmdtester".freeze]
@@ -34,7 +34,7 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<hoe-git>.freeze, ["~> 1.6"])
       s.add_development_dependency(%q<minitest>.freeze, ["~> 5.10.1"])
       s.add_development_dependency(%q<mocha>.freeze, ["~> 1.5.0"])
-      s.add_development_dependency(%q<rubocop>.freeze, ["~> 0.51.0"])
+      s.add_development_dependency(%q<rubocop>.freeze, ["~> 0.60.0"])
       s.add_development_dependency(%q<test-unit>.freeze, ["~> 3.2.3"])
       s.add_development_dependency(%q<rdoc>.freeze, ["< 7", ">= 4.0"])
       s.add_development_dependency(%q<hoe>.freeze, ["~> 3.17"])
@@ -46,7 +46,7 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<hoe-git>.freeze, ["~> 1.6"])
       s.add_dependency(%q<minitest>.freeze, ["~> 5.10.1"])
       s.add_dependency(%q<mocha>.freeze, ["~> 1.5.0"])
-      s.add_dependency(%q<rubocop>.freeze, ["~> 0.51.0"])
+      s.add_dependency(%q<rubocop>.freeze, ["~> 0.60.0"])
       s.add_dependency(%q<test-unit>.freeze, ["~> 3.2.3"])
       s.add_dependency(%q<rdoc>.freeze, ["< 7", ">= 4.0"])
       s.add_dependency(%q<hoe>.freeze, ["~> 3.17"])
@@ -59,7 +59,7 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<hoe-git>.freeze, ["~> 1.6"])
     s.add_dependency(%q<minitest>.freeze, ["~> 5.10.1"])
     s.add_dependency(%q<mocha>.freeze, ["~> 1.5.0"])
-    s.add_dependency(%q<rubocop>.freeze, ["~> 0.51.0"])
+    s.add_dependency(%q<rubocop>.freeze, ["~> 0.60.0"])
     s.add_dependency(%q<test-unit>.freeze, ["~> 3.2.3"])
     s.add_dependency(%q<rdoc>.freeze, ["< 7", ">= 4.0"])
     s.add_dependency(%q<hoe>.freeze, ["~> 3.17"])

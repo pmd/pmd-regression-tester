@@ -25,7 +25,7 @@ hoe = Hoe.spec 'pmdtester' do
     ['minitest',      '~> 5.10.1'],
     ['mocha',         '~> 1.5.0'],
     # use the same version of rubocop as codacy
-    ['rubocop',       '~> 0.51.0'],
+    ['rubocop',       '~> 0.60.0'],
     ['test-unit',     '~> 3.2.3'],
     ['rdoc',          ['>= 4.0', '< 7']]
   ]
