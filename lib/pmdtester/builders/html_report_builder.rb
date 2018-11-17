@@ -4,6 +4,7 @@ module PmdTester
   # This class is the parent of all classes which is used to build html report
   class HtmlReportBuilder
     CSS_SRC_DIR = ResourceLocator.locate('resources/css')
+    NO_DIFFERENCES_MESSAGE = 'No differences found!'
 
     def build_html_report(title_name)
       html_builder = Nokogiri::HTML::Builder.new do |doc|

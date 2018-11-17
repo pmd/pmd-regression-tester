@@ -130,5 +130,13 @@ module PmdTester
     def new_violations_size
       @report_diff.new_violations_size
     end
+
+    def removed_configerrors_size
+      @report_diff.removed_configerrors_size
+    end
+
+    def new_configerrors_size
+      @report_diff.new_configerrors_size
+    end
   end
 end

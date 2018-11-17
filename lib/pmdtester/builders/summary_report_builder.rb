@@ -127,6 +127,7 @@ module PmdTester
           doc.th 'project branch/tag'
           doc.th 'removed|new errors size'
           doc.th 'removed|new violations size'
+          doc.th 'removed|new configerrors size'
         end
       end
     end
@@ -146,6 +147,10 @@ module PmdTester
             doc.td do
               build_table_content_for(doc, project.removed_violations_size,
                                       project.new_violations_size)
+            end
+            doc.td do
+              build_table_content_for(doc, project.removed_configerrors_size,
+                                      project.new_configerrors_size)
             end
           end
         end

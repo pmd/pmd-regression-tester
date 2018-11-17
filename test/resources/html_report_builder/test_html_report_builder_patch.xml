@@ -69,4 +69,6 @@ Was expecting one of:
 	... 9 more
 ]]>
   </error>
+  <configerror rule="LoosePackageCoupling" msg="No packages or classes specified"/>
+  <configerror rule="NewRule" msg="Property method_name not defined"/>
 </pmd>

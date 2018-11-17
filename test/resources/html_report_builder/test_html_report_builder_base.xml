@@ -56,4 +56,5 @@ Was expecting one of:
 	... 9 more
 ]]>
   </error>
+  <configerror rule="LoosePackageCoupling" msg="No packages or classes specified"/>
 </pmd>

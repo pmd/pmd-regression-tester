@@ -19,6 +19,12 @@ module PmdTester
     attr_accessor :removed_errors_size
     attr_accessor :error_diffs_size
 
+    attr_accessor :base_configerrors_size
+    attr_accessor :patch_configerrors_size
+    attr_accessor :new_configerrors_size
+    attr_accessor :removed_configerrors_size
+    attr_accessor :configerrors_diffs_size
+
     attr_accessor :base_execution_time
     attr_accessor :patch_execution_time
     attr_accessor :diff_execution_time
@@ -28,19 +34,12 @@ module PmdTester
 
     attr_accessor :violation_diffs
     attr_accessor :error_diffs
+    attr_accessor :configerrors_diffs
 
     def initialize
-      @base_violations_size = 0
-      @patch_violations_size = 0
-      @new_violations_size = 0
-      @removed_violations_size = 0
-      @violation_diffs_size = 0
-
-      @base_errors_size = 0
-      @patch_errors_size = 0
-      @new_errors_size = 0
-      @removed_errors_size = 0
-      @error_diffs_size = 0
+      init_violations
+      init_errors
+      init_configerrors
 
       @base_execution_time = 0
       @patch_execution_time = 0
@@ -51,6 +50,31 @@ module PmdTester
 
       @violation_diffs = {}
       @error_diffs = {}
+      @configerrors_diffs = {}
+    end
+
+    def init_violations
+      @base_violations_size = 0
+      @patch_violations_size = 0
+      @new_violations_size = 0
+      @removed_violations_size = 0
+      @violation_diffs_size = 0
+    end
+
+    def init_errors
+      @base_errors_size = 0
+      @patch_errors_size = 0
+      @new_errors_size = 0
+      @removed_errors_size = 0
+      @error_diffs_size = 0
+    end
+
+    def init_configerrors
+      @base_configerrors_size = 0
+      @patch_configerrors_size = 0
+      @new_configerrors_size = 0
+      @removed_configerrors_size = 0
+      @configerrors_diffs_size = 0
     end
 
     def self.comparable?(errors)
@@ -58,7 +82,7 @@ module PmdTester
     end
 
     def diffs_exist?
-      !error_diffs_size.zero? || !violation_diffs_size.zero?
+      !error_diffs_size.zero? || !violation_diffs_size.zero? || !configerrors_diffs_size.zero?
     end
 
     def calculate_violations(base_violations, patch_violations)
@@ -77,6 +101,15 @@ module PmdTester
       @error_diffs = error_diffs
       @new_errors_size, @removed_errors_size = get_diffs_size(error_diffs)
       @error_diffs_size = @new_errors_size + @removed_errors_size
+    end
+
+    def calculate_configerrors(base_configerrors, patch_configerrors)
+      @base_configerrors_size = base_configerrors.size
+      @patch_configerrors_size = patch_configerrors.size
+      configerrors_diffs = build_diffs(base_configerrors.errors, patch_configerrors.errors)
+      @configerrors_diffs = configerrors_diffs
+      @new_configerrors_size, @removed_configerrors_size = get_diffs_size(configerrors_diffs)
+      @configerrors_diffs_size = @new_configerrors_size + @removed_configerrors_size
     end
 
     def calculate_details(base_info, patch_info)
@@ -118,7 +151,7 @@ module PmdTester
     end
 
     def introduce_new_errors?
-      !@new_errors_size.zero?
+      !@new_errors_size.zero? || !@new_configerrors_size.zero?
     end
   end
 end

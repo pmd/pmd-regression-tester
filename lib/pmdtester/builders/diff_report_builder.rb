@@ -7,11 +7,13 @@ module PmdTester
   # Building diff report for a single project
   class DiffReportBuilder < HtmlReportBuilder
     include PmdTester
-    NO_DIFFERENCES_MESSAGE = 'No differences found!'
+    include DiffReportBuilderConfigErrors
+    include DiffReportBuilderErrors
 
     def initialize
       @a_index = 1
       @b_index = 1
+      @c_index = 1
     end
 
     def build(project)
@@ -32,11 +34,13 @@ module PmdTester
     def build_body(doc)
       violation_diffs = @report_diff.violation_diffs
       error_diffs = @report_diff.error_diffs
+      configerrors_diffs = @report_diff.configerrors_diffs
       doc.body(class: 'composite') do
         doc.div(id: 'contentBox') do
           build_summary_section(doc)
           build_violations_section(doc, violation_diffs)
           build_errors_section(doc, error_diffs)
+          build_configerrors_section(doc, configerrors_diffs)
         end
       end
     end
@@ -71,6 +75,10 @@ module PmdTester
         build_summary_row(doc, 'number of violations', @report_diff.base_violations_size,
                           @report_diff.patch_violations_size, @report_diff.removed_violations_size,
                           @report_diff.new_violations_size)
+        build_summary_row(doc, 'number of config errors', @report_diff.base_configerrors_size,
+                          @report_diff.patch_configerrors_size,
+                          @report_diff.removed_configerrors_size,
+                          @report_diff.new_configerrors_size)
         build_summary_row(doc, 'execution time', @report_diff.base_execution_time,
                           @report_diff.patch_execution_time, @report_diff.diff_execution_time)
         build_summary_row(doc, 'timestamp', @report_diff.base_timestamp,
@@ -105,7 +113,7 @@ module PmdTester
       doc.div(class: 'section', id: 'Violations') do
         doc.h2 'Violations:'
 
-        doc.h3 NO_DIFFERENCES_MESSAGE if violation_diffs.empty?
+        doc.h3 HtmlReportBuilder::NO_DIFFERENCES_MESSAGE if violation_diffs.empty?
         violation_diffs.each do |key, value|
           doc.div(class: 'section') do
             build_filename_h3(doc, key)
@@ -178,80 +186,6 @@ module PmdTester
       l_str = @project.type == 'git' ? 'L' : 'l'
       line_str = "##{l_str}#{violation['beginline']}"
       @project.get_webview_url(key) + line_str
-    end
-
-    def build_errors_section(doc, error_diffs)
-      doc.div(class: 'section', id: 'Errors') do
-        doc.h2 'Errors:'
-
-        doc.h3 NO_DIFFERENCES_MESSAGE if error_diffs.empty?
-        error_diffs.each do |key, value|
-          doc.div(class: 'section') do
-            build_filename_h3(doc, key)
-            build_errors_table(doc, value)
-          end
-        end
-      end
-    end
-
-    def build_errors_table(doc, errors)
-      doc.table(class: 'bodyTable', border: '0') do
-        build_errors_table_head(doc)
-        build_errors_table_body(doc, errors)
-      end
-    end
-
-    def build_errors_table_head(doc)
-      doc.thead do
-        doc.tr do
-          doc.th
-          doc.th 'Message'
-          doc.th 'Details'
-        end
-      end
-    end
-
-    def build_errors_table_body(doc, errors)
-      if ReportDiff.comparable?(errors)
-        # we have only two errors and those are from base and patch, so we
-        # can compare them and display a nice diff
-        pmd_error_a = errors[0]
-        pmd_error_b = errors[1]
-        diff_a = Differ.diff_by_line(pmd_error_a.text, pmd_error_b.text).format_as(:html)
-        diff_b = Differ.diff_by_line(pmd_error_b.text, pmd_error_a.text).format_as(:html)
-        doc.tbody do
-          build_errors_table_row(doc, pmd_error_a, diff_a)
-          build_errors_table_row(doc, pmd_error_b, diff_b)
-        end
-      else
-        # many errors, just report them one by one
-        doc.tbody do
-          errors.each { |pmd_error| build_errors_table_row(doc, pmd_error) }
-        end
-      end
-    end
-
-    def build_errors_table_row(doc, pmd_error, text = nil)
-      doc.tr(class: pmd_error.branch == 'base' ? 'b' : 'a') do
-        build_errors_table_anchor(doc)
-
-        text = pmd_error.text if text.nil?
-
-        # The error message
-        doc.td pmd_error.msg
-        doc.td do
-          doc.pre do
-            doc << text
-          end
-        end
-      end
-    end
-
-    def build_errors_table_anchor(doc)
-      doc.td do
-        doc.a(id: "B#{@b_index}", href: "#B#{@b_index}") { doc.text '#' }
-        @b_index += 1
-      end
     end
   end
 end
