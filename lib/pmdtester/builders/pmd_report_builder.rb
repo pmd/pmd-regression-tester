@@ -47,6 +47,8 @@ module PmdTester
         end
         logger.info "Cloning #{project.name} completed"
       end
+
+      logger.info 'Cloning projects completed'
     end
 
     def get_pmd_binary_file
@@ -61,7 +63,8 @@ module PmdTester
         # and a binary zip already exists...
         if current_head_sha == current_branch_sha &&
            File.exist?("pmd-dist/target/pmd-bin-#{@pmd_version}.zip")
-          logger.warn "#{@pmd_branch_name}: Skipping packaging - zip already exists"
+          logger.warn "#{@pmd_branch_name}: Skipping packaging - zip for " \
+                      "#{@pmd_version} already exists"
         else
           build_pmd
         end
@@ -84,7 +87,7 @@ module PmdTester
       # determine the version again - it might be different in the other branch
       @pmd_version = determine_pmd_version
 
-      logger.info "#{@pmd_branch_name}: Building PMD..."
+      logger.info "#{@pmd_branch_name}: Building PMD #{@pmd_version}..."
       package_cmd = './mvnw clean package' \
                     ' -Dmaven.test.skip=true' \
                     ' -Dmaven.javadoc.skip=true' \
