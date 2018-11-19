@@ -98,7 +98,8 @@ module PmdTester
       get_projects(@options.project_list) unless @options.nil?
       branch_details = PmdReportBuilder
                        .new(@options.patch_config, @projects,
-                            @options.local_git_repo, @options.patch_branch)
+                            @options.local_git_repo, @options.patch_branch,
+                            @options.threads)
                        .build
       # copy list of projects file to the patch baseline
       FileUtils.cp(@options.project_list, branch_details.target_branch_project_list_path)
