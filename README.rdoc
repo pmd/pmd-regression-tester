@@ -37,11 +37,11 @@ on a list of standard projects(Spring Framework, Hibernate, Solr, etc.)
     -h, --help 
 === Quick start
 ==== Run local mode
-  pmdtester -b master -p YOUR_DEVELOPMENT_BRANCH
+  pmdtester -b master -p YOUR_DEVELOPMENT_BRANCH -r PATH_TO_LOCAL_PMD_REPO -a
 ==== Run single mode
   pmdtester -p YOUR_DEVELOPMENT_BRANCH -pc CONFIG_ONLY_CONTAINS_NEW_PMD_JAVA_RULE -m single
 ==== Run online mode
-  pmdtester -b master -p YOUR_DEVELOPMENT_BRANCH -m online
+  pmdtester -b master -p YOUR_DEVELOPMENT_BRANCH -r PATH_TO_LOCAL_PMD_REPO -m online -a
 === Output
 The tool creates the following folders:
   target  
