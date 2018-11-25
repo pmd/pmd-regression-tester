@@ -25,13 +25,7 @@ module DiffReportBuilderErrors
   end
 
   def build_errors_table_head(doc)
-    doc.thead do
-      doc.tr do
-        doc.th
-        doc.th 'Message'
-        doc.th 'Details'
-      end
-    end
+    build_table_head(doc, '', 'Message', 'Details')
   end
 
   def build_errors_table_body(doc, errors)
@@ -55,8 +49,8 @@ module DiffReportBuilderErrors
   end
 
   def build_errors_table_row(doc, pmd_error, text = nil)
-    doc.tr(class: pmd_error.branch == 'base' ? 'b' : 'a') do
-      build_errors_table_anchor(doc)
+    doc.tr(class: pmd_error.branch == PmdTester::BASE ? 'b' : 'a') do
+      build_table_anchor_column(doc, 'B', increment_error_index)
 
       text = pmd_error.text if text.nil?
 
@@ -70,10 +64,8 @@ module DiffReportBuilderErrors
     end
   end
 
-  def build_errors_table_anchor(doc)
-    doc.td do
-      doc.a(id: "B#{@b_index}", href: "#B#{@b_index}") { doc.text '#' }
-      @b_index += 1
-    end
+  def increment_error_index
+    @error_index ||= 0 # init with 0
+    @error_index += 1
   end
 end

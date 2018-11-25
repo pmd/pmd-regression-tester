@@ -17,6 +17,7 @@ lib/pmdtester.rb
 lib/pmdtester/builders/diff_builder.rb
 lib/pmdtester/builders/diff_report/configerrors.rb
 lib/pmdtester/builders/diff_report/errors.rb
+lib/pmdtester/builders/diff_report/violations.rb
 lib/pmdtester/builders/diff_report_builder.rb
 lib/pmdtester/builders/html_report_builder.rb
 lib/pmdtester/builders/pmd_report_builder.rb

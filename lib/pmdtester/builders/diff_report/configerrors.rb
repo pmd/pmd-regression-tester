@@ -25,13 +25,7 @@ module DiffReportBuilderConfigErrors
   end
 
   def build_configerrors_table_head(doc)
-    doc.thead do
-      doc.tr do
-        doc.th
-        doc.th 'Rule'
-        doc.th 'Message'
-      end
-    end
+    build_table_head(doc, '', 'Rule', 'Message')
   end
 
   def build_configerrors_table_body(doc, errors)
@@ -41,18 +35,16 @@ module DiffReportBuilderConfigErrors
   end
 
   def build_configerrors_table_row(doc, pmd_configerror)
-    doc.tr(class: pmd_configerror.branch == 'base' ? 'b' : 'a') do
-      build_configerrors_table_anchor(doc)
+    doc.tr(class: pmd_configerror.branch == PmdTester::BASE ? 'b' : 'a') do
+      build_table_anchor_column(doc, 'C', increment_configerror_index)
 
       doc.td pmd_configerror.rulename
       doc.td pmd_configerror.msg
     end
   end
 
-  def build_configerrors_table_anchor(doc)
-    doc.td do
-      doc.a(id: "C#{@c_index}", href: "#C#{@c_index}") { doc.text '#' }
-      @c_index += 1
-    end
+  def increment_configerror_index
+    @configerror_index ||= 0 # init with 0
+    @configerror_index += 1
   end
 end

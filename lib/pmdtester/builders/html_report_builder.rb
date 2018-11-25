@@ -26,6 +26,22 @@ module PmdTester
       end
     end
 
+    def build_table_head(doc, *columns)
+      doc.thead do
+        doc.tr do
+          columns.each do |column|
+            doc.th column
+          end
+        end
+      end
+    end
+
+    def build_table_anchor_column(doc, prefix, index)
+      doc.td do
+        doc.a(id: "#{prefix}#{index}", href: "##{prefix}#{index}") { doc.text '#' }
+      end
+    end
+
     def copy_css(report_dir)
       css_dest_dir = "#{report_dir}/css"
       FileUtils.copy_entry(CSS_SRC_DIR, css_dest_dir)

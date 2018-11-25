@@ -15,6 +15,7 @@ require_relative 'pmdtester/runner'
 
 require_relative 'pmdtester/builders/html_report_builder'
 require_relative 'pmdtester/builders/diff_builder'
+require_relative 'pmdtester/builders/diff_report/violations'
 require_relative 'pmdtester/builders/diff_report/configerrors'
 require_relative 'pmdtester/builders/diff_report/errors'
 require_relative 'pmdtester/builders/diff_report_builder'
