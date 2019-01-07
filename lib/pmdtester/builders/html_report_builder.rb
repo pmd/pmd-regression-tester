@@ -4,6 +4,7 @@ module PmdTester
   # This class is the parent of all classes which is used to build html report
   class HtmlReportBuilder
     CSS_SRC_DIR = ResourceLocator.locate('resources/css')
+    NO_DIFFERENCES_MESSAGE = 'No differences found!'
 
     def build_html_report(title_name)
       html_builder = Nokogiri::HTML::Builder.new do |doc|
@@ -22,6 +23,22 @@ module PmdTester
         doc.style(type: 'text/css', media: 'all') do
           doc.text '@import url("./css/maven-base.css");@import url("./css/maven-theme.css");'
         end
+      end
+    end
+
+    def build_table_head(doc, *columns)
+      doc.thead do
+        doc.tr do
+          columns.each do |column|
+            doc.th column
+          end
+        end
+      end
+    end
+
+    def build_table_anchor_column(doc, prefix, index)
+      doc.td do
+        doc.a(id: "#{prefix}#{index}", href: "##{prefix}#{index}") { doc.text '#' }
       end
     end
 

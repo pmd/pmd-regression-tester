@@ -13,6 +13,8 @@ module PmdTester
     end
 
     def add_violations_by_filename(filename, violations)
+      return if violations.empty?
+
       @violations.store(filename, violations)
       @violations_size += violations.size
     end

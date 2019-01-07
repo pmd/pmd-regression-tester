@@ -15,6 +15,9 @@ config/project-list.xml
 config/projectlist_1_0_0.xsd
 lib/pmdtester.rb
 lib/pmdtester/builders/diff_builder.rb
+lib/pmdtester/builders/diff_report/configerrors.rb
+lib/pmdtester/builders/diff_report/errors.rb
+lib/pmdtester/builders/diff_report/violations.rb
 lib/pmdtester/builders/diff_report_builder.rb
 lib/pmdtester/builders/html_report_builder.rb
 lib/pmdtester/builders/pmd_report_builder.rb
@@ -25,6 +28,7 @@ lib/pmdtester/parsers/options.rb
 lib/pmdtester/parsers/pmd_report_document.rb
 lib/pmdtester/parsers/projects_parser.rb
 lib/pmdtester/pmd_branch_detail.rb
+lib/pmdtester/pmd_configerror.rb
 lib/pmdtester/pmd_error.rb
 lib/pmdtester/pmd_report_detail.rb
 lib/pmdtester/pmd_violation.rb

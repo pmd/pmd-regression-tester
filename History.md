@@ -13,6 +13,7 @@
 *   [#47](https://github.com/pmd/pmd-regression-tester/issues/47): Reuse the already built PMD binary for PR checks
 *   [#49](https://github.com/pmd/pmd-regression-tester/issues/49): Support comparing two error stacktraces
 *   [#50](https://github.com/pmd/pmd-regression-tester/issues/50): Differences due to different locale settings
+*   [#57](https://github.com/pmd/pmd-regression-tester/issues/57): Support configuration errors in the report
 
 ## External Contributions
 

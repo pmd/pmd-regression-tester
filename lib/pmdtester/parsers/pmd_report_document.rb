@@ -7,12 +7,15 @@ module PmdTester
   class PmdReportDocument < Nokogiri::XML::SAX::Document
     attr_reader :violations
     attr_reader :errors
+    attr_reader :configerrors
     def initialize(branch_name, working_dir, filter_set = nil)
       @violations = PmdViolations.new
       @errors = PmdErrors.new
+      @configerrors = PmdConfigErrors.new
       @current_violations = []
       @current_violation = nil
       @current_error = nil
+      @current_configerror = nil
       @current_element = ''
       @filename = ''
       @filter_set = filter_set
@@ -34,6 +37,8 @@ module PmdTester
         @current_filename = remove_work_dir!(attrs['filename'])
         remove_work_dir!(attrs['msg'])
         @current_error = PmdError.new(attrs, @branch_name)
+      when 'configerror'
+        @current_configerror = PmdConfigError.new(attrs, @branch_name)
       end
     end
 
@@ -48,9 +53,7 @@ module PmdTester
     def end_element(name)
       case name
       when 'file'
-        unless @current_violations.empty?
-          @violations.add_violations_by_filename(@current_filename, @current_violations)
-        end
+        @violations.add_violations_by_filename(@current_filename, @current_violations)
         @current_filename = nil
       when 'violation'
         @current_violations.push(@current_violation) if match_filter_set?(@current_violation)
@@ -59,6 +62,9 @@ module PmdTester
         @errors.add_error_by_filename(@current_filename, @current_error)
         @current_filename = nil
         @current_error = nil
+      when 'configerror'
+        @configerrors.add_error(@current_configerror)
+        @current_configerror = nil
       end
     end
 

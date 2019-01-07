@@ -135,14 +135,19 @@ module PmdTester
       removed_errors_size = 0
       new_violations_size = 0
       removed_violations_size = 0
+      new_configerrors_size = 0
+      removed_configerrors_size = 0
       @projects.each do |project|
         new_errors_size += project.new_errors_size
         removed_errors_size += project.removed_errors_size
         new_violations_size += project.new_violations_size
         removed_violations_size += project.removed_violations_size
+        new_configerrors_size += project.new_configerrors_size
+        removed_configerrors_size += project.removed_configerrors_size
       end
 
-      [new_errors_size, removed_errors_size, new_violations_size, removed_violations_size]
+      [new_errors_size, removed_errors_size, new_violations_size, removed_violations_size,
+       new_configerrors_size, removed_configerrors_size]
     end
   end
 end
