@@ -15,6 +15,7 @@ The diff report can be generated according to the base and patch branch of PMD
 on a list of standard projects(Spring Framework, Hibernate, Solr, etc.)
 
 == SYNOPSIS:
+
 ===Options:
     -r, --local-git-repo   path to the local PMD repository
     -b, --base-branch      name of the base branch in local PMD repository
@@ -33,8 +34,9 @@ on a list of standard projects(Spring Framework, Hibernate, Solr, etc.)
     -f, --html-flag        whether to not generate the html diff report in single mode
     -a, --auto-gen-config  whether to generate configurations automatically based on branch differences,this option only works in online and local mode
     -d, --debug            whether change log level to DEBUG to see more information
-    -v, --version          
-    -h, --help 
+    -v, --version
+    -h, --help
+
 === Quick start
 ==== Run local mode
   pmdtester -b master -p YOUR_DEVELOPMENT_BRANCH -r PATH_TO_LOCAL_PMD_REPO -a
@@ -42,55 +44,58 @@ on a list of standard projects(Spring Framework, Hibernate, Solr, etc.)
   pmdtester -p YOUR_DEVELOPMENT_BRANCH -pc CONFIG_ONLY_CONTAINS_NEW_PMD_JAVA_RULE -m single
 ==== Run online mode
   pmdtester -b master -p YOUR_DEVELOPMENT_BRANCH -r PATH_TO_LOCAL_PMD_REPO -m online -a
+
 === Output
 The tool creates the following folders:
-  target  
-  ├── repositories         <- the analyzed projects are cloned here  
-  │   ├── PROJECT_NAME_1  
-  │   ├── ......  
-  │   └── PROJECT_NAME_n  
-  └── reports  
-      ├── BASE_BRANCH_NAME      <- the base baseline is placed here  
-      ├── PATCH_BRANCH_NAME      <- the patch baseline is placed here  
-      └── diff  
-          ├── index.xml <- the summary report of diff reports  
+  target
+  ├── repositories         <- the analyzed projects are cloned here
+  │   ├── PROJECT_NAME_1
+  │   ├── ......
+  │   └── PROJECT_NAME_n
+  └── reports
+      ├── BASE_BRANCH_NAME      <- the base baseline is placed here
+      ├── PATCH_BRANCH_NAME      <- the patch baseline is placed here
+      └── diff
+          ├── index.xml <- the summary report of diff reports
           ├── base_config.xml  <- the resources of the summary report
           ├── patch_config.xml  <- the resources fo the summary report
-          ├── css  <- css reources are placed here  
-          ├── PROJECT_NAME_1  
-              └── index.xml   <- the diff report of PROJECT_1  
-          ├── .......  
-          └── PROJECT_NAME_n  
-              └── index.xml   <- the diff report of PROJECT_N  
-====The baseline format
-  branch_name  
-  ├── branch_info.json  
-  ├── config.xml  
-  ├── STANDARD_PROJECT_NAME_1  
-  │   ├── report_info.json  
-  │   └── pmd_report.xml    
-  ├── ......................  
-  │   ├── report_info.json  
-  │   └── pmd_report.xml    
-  └── STANDARD_PROJECT_NAME_n  
+          ├── css  <- css reources are placed here
+          ├── PROJECT_NAME_1
+              └── index.xml   <- the diff report of PROJECT_1
+          ├── .......
+          └── PROJECT_NAME_n
+              └── index.xml   <- the diff report of PROJECT_N
+
+==== The baseline format
+  branch_name
+  ├── branch_info.json
+  ├── config.xml
+  ├── STANDARD_PROJECT_NAME_1
+  │   ├── report_info.json
+  │   └── pmd_report.xml
+  ├── ......................
+  │   ├── report_info.json
+  │   └── pmd_report.xml
+  └── STANDARD_PROJECT_NAME_n
       ├── report_info.info
-      └── pmd_report.xml  
+      └── pmd_report.xml
 
 == REQUIREMENTS:
 * Ruby 2.4.1 or higher
 === Runtime dependency
   nokogiri ~> 1.8.2
   slop ~> 4.6.2
+  differ => 0
 === Development dependency
   hoe ~> 3.17
   hoe-bundler ~> 1.2
   hoe-git ~> 1.6
   minitest ~> 5.10.1
   mocha ~> 1.5.0
-  rdoc < 6, >= 4.0
-  rubocop ~> 0.56.0
+  rdoc < 7, >= 4.0
+  rubocop ~> 0.51.0
   test-unit ~> 3.2.3
-  
+
 == INSTALL:
 
   gem install pmdtester --pre
@@ -99,8 +104,6 @@ The tool creates the following folders:
   git clone https://github.com/pmd/pmd-regression-tester.git
   cd pmd-regression-tester
   gem install bundler
-  bundle install
-  rake verify # run this command before commit your changes
-  
-
-
+  bundle install --path=vendor/cache
+  bundle exec rake verify # run this command before commit your changes
+  bundle exec pmdtester ... # run this to directly execute pmdtester from source

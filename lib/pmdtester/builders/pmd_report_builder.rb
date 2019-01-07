@@ -47,29 +47,58 @@ module PmdTester
         end
         logger.info "Cloning #{project.name} completed"
       end
+
+      logger.info 'Cloning projects completed'
     end
 
     def get_pmd_binary_file
-      logger.info 'Start packaging PMD'
+      logger.info "#{@pmd_branch_name}: Start packaging PMD"
       Dir.chdir(@local_git_repo) do
-        checkout_cmd = "git checkout #{@pmd_branch_name}"
-        Cmd.execute(checkout_cmd)
+        current_head_sha = Cmd.execute('git rev-parse HEAD')
+        current_branch_sha = Cmd.execute("git rev-parse #{@pmd_branch_name}")
+
+        @pmd_version = determine_pmd_version
+
+        # in case we are already on the correct branch
+        # and a binary zip already exists...
+        if current_head_sha == current_branch_sha &&
+           File.exist?("pmd-dist/target/pmd-bin-#{@pmd_version}.zip")
+          logger.warn "#{@pmd_branch_name}: Skipping packaging - zip for " \
+                      "#{@pmd_version} already exists"
+        else
+          build_pmd
+        end
 
         @pmd_branch_details.branch_last_sha = get_last_commit_sha
         @pmd_branch_details.branch_last_message = get_last_commit_message
 
-        package_cmd = './mvnw clean package -Dpmd.skip=true -Dmaven.test.skip=true' \
-                      ' -Dmaven.checkstyle.skip=true -Dmaven.javadoc.skip=true'
-        Cmd.execute(package_cmd)
-
-        version_cmd = "./mvnw -q -Dexec.executable=\"echo\" -Dexec.args='${project.version}' " \
-                      '--non-recursive org.codehaus.mojo:exec-maven-plugin:1.5.0:exec'
-        @pmd_version = Cmd.execute(version_cmd)
-
+        logger.info "#{@pmd_branch_name}: Extracting the zip"
         unzip_cmd = "unzip -qo pmd-dist/target/pmd-bin-#{@pmd_version}.zip -d #{@pwd}/target"
         Cmd.execute(unzip_cmd)
       end
-      logger.info 'Packaging PMD completed'
+      logger.info "#{@pmd_branch_name}: Packaging PMD completed"
+    end
+
+    def build_pmd
+      logger.info "#{@pmd_branch_name}: Checking out the branch"
+      checkout_cmd = "git checkout #{@pmd_branch_name}"
+      Cmd.execute(checkout_cmd)
+
+      # determine the version again - it might be different in the other branch
+      @pmd_version = determine_pmd_version
+
+      logger.info "#{@pmd_branch_name}: Building PMD #{@pmd_version}..."
+      package_cmd = './mvnw clean package' \
+                    ' -Dmaven.test.skip=true' \
+                    ' -Dmaven.javadoc.skip=true' \
+                    ' -Dmaven.source.skip=true'
+      Cmd.execute(package_cmd)
+    end
+
+    def determine_pmd_version
+      version_cmd = "./mvnw -q -Dexec.executable=\"echo\" -Dexec.args='${project.version}' " \
+                    '--non-recursive org.codehaus.mojo:exec-maven-plugin:1.5.0:exec'
+      Cmd.execute(version_cmd)
     end
 
     def get_last_commit_sha
