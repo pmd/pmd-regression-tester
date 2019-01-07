@@ -20,7 +20,7 @@ hoe = Hoe.spec 'pmdtester' do
   self.clean_globs = %w[target/reports/**/* target/test/**/* Gemfile.lock]
   self.extra_deps += [['nokogiri', '~> 1.8.2'], ['slop', '~> 4.6.2'], ['differ']]
   self.extra_dev_deps += [
-    ['hoe-bundler',   '~> 1.2'],
+    ['hoe-bundler',   '~> 1.5'],
     ['hoe-git',       '~> 1.6'],
     ['minitest',      '~> 5.10.1'],
     ['mocha',         '~> 1.5.0'],
@@ -59,5 +59,7 @@ task 'hoe:spec' do
 end
 
 desc 'verify code quality before committing changes'
-task 'verify' => ['clean', 'test', 'rubocop', 'bundler:gemfile', 'git:manifest', 'hoe:spec']
+task 'verify' => ['clean', 'test', 'rubocop', 'git:manifest', 'hoe:spec'] do
+  Rake.application.invoke_task('bundler:gemfile[,true]')
+end
 # vim: syntax=ruby
