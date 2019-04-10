@@ -1,4 +1,4 @@
-# 1.0.0-SNAPSHOT / 2018-08-??
+# 1.0.0-SNAPSHOT / 2019-??-??
 
 ## New and Noteworthy
 
@@ -14,6 +14,7 @@
 *   [#49](https://github.com/pmd/pmd-regression-tester/issues/49): Support comparing two error stacktraces
 *   [#50](https://github.com/pmd/pmd-regression-tester/issues/50): Differences due to different locale settings
 *   [#57](https://github.com/pmd/pmd-regression-tester/issues/57): Support configuration errors in the report
+*   [#60](https://github.com/pmd/pmd-regression-tester/issues/60): Display a simple progress report
 
 ## External Contributions
 
@@ -29,6 +30,7 @@
 *   [#52](https://github.com/pmd/pmd-regression-tester/pull/52): Get the result of command 'java -version' from stderr rather than stdout - [BBG](https://github.com/djydewang)
 *   [#53](https://github.com/pmd/pmd-regression-tester/pull/53): Support comparing the two error stacktraces - [BBG](https://github.com/djydewang)
 *   [#54](https://github.com/pmd/pmd-regression-tester/pull/54): Support multithreaded execution of PMD - [BBG](https://github.com/djydewang)
+*   [#61](https://github.com/pmd/pmd-regression-tester/pull/61): Display a simple progress report every 2 minutes - [BBG](https://github.com/djydewang)
 
 # 1.0.0.beta3 / 2018-08-01
 

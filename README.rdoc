@@ -85,15 +85,16 @@ The tool creates the following folders:
 === Runtime dependency
   nokogiri ~> 1.8.2
   slop ~> 4.6.2
-  differ => 0
+  differ >= 0
+  rufus-scheduler >= 3.5, ~> 3.5
 === Development dependency
   hoe ~> 3.17
-  hoe-bundler ~> 1.2
+  hoe-bundler ~> 1.5
   hoe-git ~> 1.6
   minitest ~> 5.10.1
   mocha ~> 1.5.0
   rdoc < 7, >= 4.0
-  rubocop ~> 0.51.0
+  rubocop ~> 0.60.0
   test-unit ~> 3.2.3
 
 == INSTALL:
