@@ -18,7 +18,8 @@ hoe = Hoe.spec 'pmdtester' do
   developer 'Binguo Bao', 'djydewang@gmail.com'
 
   self.clean_globs = %w[target/reports/**/* target/test/**/* Gemfile.lock]
-  self.extra_deps += [['nokogiri', '~> 1.8.2'], ['slop', '~> 4.6.2'], ['differ']]
+  self.extra_deps += [['nokogiri', '~> 1.8.2'], ['slop', '~> 4.6.2'], ['differ'],
+                      ['rufus-scheduler', '~> 3.5', '>= 3.5']]
   self.extra_dev_deps += [
     ['hoe-bundler',   '~> 1.5'],
     ['hoe-git',       '~> 1.6'],

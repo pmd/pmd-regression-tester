@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'fileutils'
+require 'rufus-scheduler'
 
 module PmdTester
   # Building pmd xml reports according to a list of standard
@@ -111,10 +112,12 @@ module PmdTester
       Cmd.execute(get_last_commit_message_cmd)
     end
 
-    def generate_pmd_report(src_root_dir, report_file, config_path)
+    def generate_pmd_report(project)
       run_path = "target/pmd-bin-#{@pmd_version}/bin/run.sh"
-      pmd_cmd = "#{run_path} pmd -d #{src_root_dir} -f xml -R #{config_path} " \
-                "-r #{report_file} -failOnViolation false -t #{@threads}"
+      pmd_cmd = "#{run_path} pmd -d #{project.local_source_path} -f xml " \
+                "-R #{project.get_config_path(@pmd_branch_name)} " \
+                "-r #{project.get_pmd_report_path(@pmd_branch_name)} " \
+                "-failOnViolation false -t #{@threads}"
       start_time = Time.now
       Cmd.execute(pmd_cmd)
       end_time = Time.now
@@ -138,12 +141,13 @@ module PmdTester
 
       sum_time = 0
       @projects.each do |project|
-        logger.info "Generating #{project.name}'s PMD report"
+        scheduler = Rufus::Scheduler.new
+        scheduler.every '2m' do
+          logger.info "Generating #{project.name}'s PMD report"
+        end
         generate_config_for(project)
-        execution_time, end_time =
-          generate_pmd_report(project.local_source_path,
-                              project.get_pmd_report_path(@pmd_branch_name),
-                              project.get_config_path(@pmd_branch_name))
+        execution_time, end_time = generate_pmd_report(project)
+        scheduler.shutdown
         sum_time += execution_time
 
         report_details = PmdReportDetail.new
