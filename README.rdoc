@@ -115,5 +115,5 @@ The tool creates the following folders:
   gem install bundler
   bundle config set path "vendor/cache"
   bundle install # once
-  bundle exec rake check_manifest verify # run this command before commit your changes
+  bundle exec rake verify # run this command before commit your changes
   bundle exec pmdtester ... # run this to directly execute pmdtester from source

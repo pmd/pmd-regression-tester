@@ -18,19 +18,19 @@ hoe = Hoe.spec 'pmdtester' do
   developer 'Binguo Bao', 'djydewang@gmail.com'
 
   self.clean_globs = %w[target/reports/**/* target/test/**/* Gemfile.lock]
-  self.extra_deps += [['nokogiri', '~> 1.8.2'], ['slop', '~> 4.6.2'], ['differ'],
-                      ['rufus-scheduler', '~> 3.5', '>= 3.5']]
+  self.extra_deps += [['nokogiri', '~> 1.8'], ['slop', '~> 4.6'], ['differ', '~> 0.1'],
+                      ['rufus-scheduler', '~> 3.5']]
   self.extra_dev_deps += [
     ['hoe-bundler',   '~> 1.5'],
     ['hoe-git',       '~> 1.6'],
-    ['minitest',      '~> 5.10.1'],
-    ['mocha',         '~> 1.5.0'],
+    ['minitest',      '~> 5.10'],
+    ['mocha',         '~> 1.5'],
     # use the same version of rubocop as codacy
-    ['rubocop',       '~> 0.81.0'],
-    ['test-unit',     '~> 3.2.3'],
+    ['rubocop',       '~> 0.81'],
+    ['test-unit',     '~> 3.2'],
     ['rdoc',          ['>= 4.0', '< 7']]
   ]
-  spec_extras[:required_ruby_version] = '>= 2.2.0'
+  spec_extras[:required_ruby_version] = '>= 2.2'
 
   license 'BSD-2-Clause'
 end
@@ -60,7 +60,7 @@ task 'hoe:spec' do
 end
 
 desc 'verify code quality before committing changes'
-task 'verify' => ['clean', 'test', 'rubocop', 'git:manifest', 'hoe:spec'] do
+task 'verify' => ['clean', 'test', 'rubocop', 'git:manifest', 'hoe:spec', 'check_manifest'] do
   Rake.application.invoke_task('bundler:gemfile[,true]')
 end
 # vim: syntax=ruby

@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
   s.homepage = "https://pmd.github.io".freeze
   s.licenses = ["BSD-2-Clause".freeze]
   s.rdoc_options = ["--main".freeze, "README.rdoc".freeze]
-  s.required_ruby_version = Gem::Requirement.new(">= 2.2.0".freeze)
+  s.required_ruby_version = Gem::Requirement.new(">= 2.2".freeze)
   s.rubygems_version = "3.1.2".freeze
   s.summary = "A regression testing tool ensure that new problems and unexpected behaviors will not be introduced to PMD project after fixing an issue , and new rules can work as expected.".freeze
 
@@ -29,29 +29,29 @@ Gem::Specification.new do |s|
   end
 
   if s.respond_to? :add_runtime_dependency then
-    s.add_runtime_dependency(%q<nokogiri>.freeze, ["~> 1.8.2"])
-    s.add_runtime_dependency(%q<slop>.freeze, ["~> 4.6.2"])
-    s.add_runtime_dependency(%q<differ>.freeze, [">= 0"])
-    s.add_runtime_dependency(%q<rufus-scheduler>.freeze, ["~> 3.5", ">= 3.5"])
+    s.add_runtime_dependency(%q<nokogiri>.freeze, ["~> 1.8"])
+    s.add_runtime_dependency(%q<slop>.freeze, ["~> 4.6"])
+    s.add_runtime_dependency(%q<differ>.freeze, ["~> 0.1"])
+    s.add_runtime_dependency(%q<rufus-scheduler>.freeze, ["~> 3.5"])
     s.add_development_dependency(%q<hoe-bundler>.freeze, ["~> 1.5"])
     s.add_development_dependency(%q<hoe-git>.freeze, ["~> 1.6"])
-    s.add_development_dependency(%q<minitest>.freeze, ["~> 5.10.1"])
-    s.add_development_dependency(%q<mocha>.freeze, ["~> 1.5.0"])
-    s.add_development_dependency(%q<rubocop>.freeze, ["~> 0.81.0"])
-    s.add_development_dependency(%q<test-unit>.freeze, ["~> 3.2.3"])
+    s.add_development_dependency(%q<minitest>.freeze, ["~> 5.10"])
+    s.add_development_dependency(%q<mocha>.freeze, ["~> 1.5"])
+    s.add_development_dependency(%q<rubocop>.freeze, ["~> 0.81"])
+    s.add_development_dependency(%q<test-unit>.freeze, ["~> 3.2"])
     s.add_development_dependency(%q<rdoc>.freeze, [">= 4.0", "< 7"])
     s.add_development_dependency(%q<hoe>.freeze, ["~> 3.22"])
   else
-    s.add_dependency(%q<nokogiri>.freeze, ["~> 1.8.2"])
-    s.add_dependency(%q<slop>.freeze, ["~> 4.6.2"])
-    s.add_dependency(%q<differ>.freeze, [">= 0"])
-    s.add_dependency(%q<rufus-scheduler>.freeze, ["~> 3.5", ">= 3.5"])
+    s.add_dependency(%q<nokogiri>.freeze, ["~> 1.8"])
+    s.add_dependency(%q<slop>.freeze, ["~> 4.6"])
+    s.add_dependency(%q<differ>.freeze, ["~> 0.1"])
+    s.add_dependency(%q<rufus-scheduler>.freeze, ["~> 3.5"])
     s.add_dependency(%q<hoe-bundler>.freeze, ["~> 1.5"])
     s.add_dependency(%q<hoe-git>.freeze, ["~> 1.6"])
-    s.add_dependency(%q<minitest>.freeze, ["~> 5.10.1"])
-    s.add_dependency(%q<mocha>.freeze, ["~> 1.5.0"])
-    s.add_dependency(%q<rubocop>.freeze, ["~> 0.81.0"])
-    s.add_dependency(%q<test-unit>.freeze, ["~> 3.2.3"])
+    s.add_dependency(%q<minitest>.freeze, ["~> 5.10"])
+    s.add_dependency(%q<mocha>.freeze, ["~> 1.5"])
+    s.add_dependency(%q<rubocop>.freeze, ["~> 0.81"])
+    s.add_dependency(%q<test-unit>.freeze, ["~> 3.2"])
     s.add_dependency(%q<rdoc>.freeze, [">= 4.0", "< 7"])
     s.add_dependency(%q<hoe>.freeze, ["~> 3.22"])
   end
