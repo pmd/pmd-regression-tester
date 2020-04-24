@@ -31,6 +31,7 @@ on a list of standard projects(Spring Framework, Hibernate, Solr, etc.)
             the PMD report of master/base branch rather than generating it locally
           local: Default option is 'local', PMD reports for the base and patch branches are generated locally.
 
+    -t, --threads          Sets the number of threads used by PMD. Set threads to 0 to disable multi-threading processing. default:1
     -f, --html-flag        whether to not generate the html diff report in single mode
     -a, --auto-gen-config  whether to generate configurations automatically based on branch differences,this option only works in online and local mode
     -d, --debug            whether change log level to DEBUG to see more information

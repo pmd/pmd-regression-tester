@@ -63,8 +63,8 @@ module PmdTester
           single: Set this option to 'single' if your patch branch contains changes
             for any option that can't work on master/base branch
           online: Set this option to 'online' if you want to download
-            'the PMD report of master/base branch rather than generating it locally
-          local: Default option is 'local'
+            the PMD report of master/base branch rather than generating it locally
+          local: Default option is 'local', PMD reports for the base and patch branches are generated locally.
       DOC
 
       Slop.parse argv do |o|
