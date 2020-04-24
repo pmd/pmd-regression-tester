@@ -13,6 +13,7 @@ require_relative 'pmdtester/report_diff'
 require_relative 'pmdtester/resource_locator'
 require_relative 'pmdtester/runner'
 
+require_relative 'pmdtester/builders/simple_progress_logger'
 require_relative 'pmdtester/builders/html_report_builder'
 require_relative 'pmdtester/builders/diff_builder'
 require_relative 'pmdtester/builders/diff_report/violations'

@@ -141,16 +141,11 @@ module PmdTester
 
       sum_time = 0
       @projects.each do |project|
-        logger.info "Starting to generate #{project.name}'s PMD report"
-        message_counter = 1
-        scheduler = Rufus::Scheduler.new
-        scheduler.every '2m' do
-          logger.info "Still generating #{project.name}'s PMD report (#{message_counter})..."
-          message_counter += 1
-        end
+        progress_logger = SimpleProgressLogger.new(project.name)
+        progress_logger.start
         generate_config_for(project)
         execution_time, end_time = generate_pmd_report(project)
-        scheduler.shutdown
+        progress_logger.stop
         sum_time += execution_time
 
         report_details = PmdReportDetail.new
