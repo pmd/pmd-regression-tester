@@ -1,5 +1,6 @@
 = pmdtester
 
+home  :: https://pmd.github.io
 code  :: https://github.com/pmd/pmd-regression-tester
 bugs  :: https://github.com/pmd/pmd-regression-tester/issues
 
@@ -16,7 +17,7 @@ on a list of standard projects(Spring Framework, Hibernate, Solr, etc.)
 
 == SYNOPSIS:
 
-===Options:
+=== Options:
     -r, --local-git-repo   path to the local PMD repository
     -b, --base-branch      name of the base branch in local PMD repository
     -p, --patch-branch     name of the patch branch in local PMD repository
@@ -39,11 +40,17 @@ on a list of standard projects(Spring Framework, Hibernate, Solr, etc.)
     -h, --help
 
 === Quick start
+
 ==== Run local mode
+
   pmdtester -b master -p YOUR_DEVELOPMENT_BRANCH -r PATH_TO_LOCAL_PMD_REPO -a
+
 ==== Run single mode
+
   pmdtester -p YOUR_DEVELOPMENT_BRANCH -pc CONFIG_ONLY_CONTAINS_NEW_PMD_JAVA_RULE -m single
+
 ==== Run online mode
+
   pmdtester -b master -p YOUR_DEVELOPMENT_BRANCH -r PATH_TO_LOCAL_PMD_REPO -m online -a
 
 === Output
