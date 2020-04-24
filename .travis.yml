@@ -3,6 +3,7 @@ before_install:
 - LOCAL_DIR=${HOME}/.cache/openjdk
 - TARGET_DIR=${HOME}/openjdk11
 - mkdir -p ${LOCAL_DIR}
+- mkdir -p ${TARGET_DIR}
 - DOWNLOAD_URL="https://pmd-code.org/openjdk/jdk-11.0.7%2B10/OpenJDK11U-jdk_x64_linux_hotspot_11.0.7_10.tar.gz"
 - OPENJDK_ARCHIVE=$(basename $DOWNLOAD_URL)
 - if [ ! -e ${LOCAL_DIR}/${OPENJDK_ARCHIVE} ]; then wget --directory-prefix ${LOCAL_DIR} --timestamping --continue ${DOWNLOAD_URL}; fi
