@@ -1,6 +1,8 @@
-# 1.0.0-SNAPSHOT / 2019-??-??
+# 1.0.0 / 2020-04-25
 
 ## New and Noteworthy
+
+First stable release.
 
 ## Fixed Issues
 
