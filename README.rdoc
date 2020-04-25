@@ -89,21 +89,26 @@ The tool creates the following folders:
       └── pmd_report.xml
 
 == REQUIREMENTS:
+
 * Ruby 2.4.1 or higher
+
 === Runtime dependency
-  nokogiri ~> 1.8.2
-  slop ~> 4.6.2
-  differ >= 0
-  rufus-scheduler >= 3.5, ~> 3.5
+
+  nokogiri ~> 1.8
+  slop ~> 4.6
+  differ ~> 0.1
+  rufus-scheduler ~> 3.5
+
 === Development dependency
-  hoe ~> 3.17
+
+  hoe ~> 3.22
   hoe-bundler ~> 1.5
   hoe-git ~> 1.6
-  minitest ~> 5.10.1
-  mocha ~> 1.5.0
+  minitest ~> 5.10
+  mocha ~> 1.5
   rdoc < 7, >= 4.0
-  rubocop ~> 0.60.0
-  test-unit ~> 3.2.3
+  rubocop ~> 0.81
+  test-unit ~> 3.2
 
 == INSTALL:
 
@@ -117,3 +122,11 @@ The tool creates the following folders:
   bundle install # once
   bundle exec rake verify # run this command before commit your changes
   bundle exec pmdtester ... # run this to directly execute pmdtester from source
+
+=== Releasing
+
+* Update +History.md+ (version and date)
+* Update +lib/pmdtester.rb+ (version)
+* Commit ("Prepare release x.y.z"), tag, push. Travis will build and publish the new gem.
+* Update History.md and lib/pmdtester.rb for the next development version
+  ("Prepare next development version x.y.z-SNAPSHOT").
