@@ -9,6 +9,7 @@ class TestPmdReportDocument < Test::Unit::TestCase
     parser = Nokogiri::XML::SAX::Parser.new(doc)
     parser.parse(File.open('test/resources/pmd_report_document/test_document.xml'))
     assert_equal(8, doc.violations.violations_size)
+    assert_equal('Document \'empty\' constructor', doc.violations.violations['/target/repositories/spring-framework/gradle/jdiff/Null.java'][0].text)
     assert_equal(2, doc.errors.errors_size)
     pmd_errors = doc.errors.errors.values
     assert_not_nil(pmd_errors[0])
