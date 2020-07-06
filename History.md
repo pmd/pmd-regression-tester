@@ -4,6 +4,8 @@
 
 ## Fixed Issues
 
+*   [#62](https://github.com/pmd/pmd-regression-tester/pull/62): Violation descriptions parsed incompletely
+
 ## External Contributions
 
 # 1.0.0 / 2020-04-25

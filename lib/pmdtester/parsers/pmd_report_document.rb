@@ -47,7 +47,7 @@ module PmdTester
     end
 
     def characters(string)
-      @current_violation&.text = string
+      @current_violation&.text += string
     end
 
     def end_element(name)
@@ -56,6 +56,7 @@ module PmdTester
         @violations.add_violations_by_filename(@current_filename, @current_violations)
         @current_filename = nil
       when 'violation'
+        @current_violation.text.strip!
         @current_violations.push(@current_violation) if match_filter_set?(@current_violation)
         @current_violation = nil
       when 'error'

@@ -51,7 +51,7 @@ module DiffReportBuilderViolations
       end
 
       # The violation message
-      doc.td pmd_violation.text
+      doc.td "\n" + pmd_violation.text + "\n"
 
       # The begin line of the violation
       line = violation['beginline']
