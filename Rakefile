@@ -14,7 +14,7 @@ Hoe.plugin :git
 hoe = Hoe.spec 'pmdtester' do
   self.version = PmdTester::VERSION
 
-  developer 'Andreas Dangel', 'andreas.dangel@adangel.org'
+  developer 'Andreas Dangel', 'andreas.dangel@pmd-code.org'
   developer 'Binguo Bao', 'djydewang@gmail.com'
 
   self.clean_globs = %w[target/reports/**/* target/test/**/* Gemfile.lock]
