@@ -122,6 +122,12 @@ The tool creates the following folders:
   bundle install # once
   bundle exec rake verify # run this command before commit your changes
   bundle exec pmdtester ... # run this to directly execute pmdtester from source
+  
+  Run a single test class, e.g.:
+  bundle exec ruby -I test test/test_diff_report_builder.rb
+  
+  Run a single test, e.g.:
+  bundle exec ruby -I test test/test_diff_report_builder.rb -n test_diff_report_builder
 
 === Releasing
 
