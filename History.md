@@ -1,12 +1,10 @@
-# 1.1.0-SNAPSHOT / 2020-??-??
+# 1.0.1 / 2020-07-08
 
-## New and Noteworthy
+This is a bugfix release.
 
 ## Fixed Issues
 
 *   [#62](https://github.com/pmd/pmd-regression-tester/pull/62): Violation descriptions parsed incompletely
-
-## External Contributions
 
 # 1.0.0 / 2020-04-25
 
