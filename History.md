@@ -1,3 +1,11 @@
+# 1.1.0-SNAPSHOT / 2020-??-??
+
+## New and Noteworthy
+
+## Fixed Issues
+
+## External Contributions
+
 # 1.0.1 / 2020-07-08
 
 This is a bugfix release.

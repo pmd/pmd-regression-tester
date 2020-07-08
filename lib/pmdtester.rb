@@ -32,7 +32,7 @@ require_relative 'pmdtester/parsers/projects_parser'
 # and unexpected behaviors will not be introduced to PMD project
 # after fixing an issue and new rules can work as expected.
 module PmdTester
-  VERSION = '1.0.1'
+  VERSION = '1.1.0-SNAPSHOT'
   BASE = 'base'
   PATCH = 'patch'
 
