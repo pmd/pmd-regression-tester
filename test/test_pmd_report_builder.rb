@@ -11,7 +11,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     options = PmdTester::Options.new(argv)
 
     record_expectations('sha1abc', 'sha1abc', true)
-    record_expecations_after_build
+    record_expectations_after_build
 
     PmdTester::PmdReportBuilder
       .new(options.base_config, projects, options.local_git_repo, options.base_branch)
@@ -30,7 +30,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
                   .returns('checked out branch master').once
     PmdTester::Cmd.stubs(:execute).with('./mvnw clean package -Dmaven.test.skip=true' \
                   ' -Dmaven.javadoc.skip=true -Dmaven.source.skip=true').once
-    record_expecations_after_build
+    record_expectations_after_build
 
     PmdTester::PmdReportBuilder
       .new(options.base_config, projects, options.local_git_repo, options.base_branch)
@@ -51,7 +51,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
         .returns(zip_file_exists).once
   end
 
-  def record_expecations_after_build
+  def record_expectations_after_build
     PmdTester::Cmd.stubs(:execute).with('git rev-parse HEAD').returns('sha1abc').once
     PmdTester::Cmd.stubs(:execute).with('git log -1 --pretty=%B').returns('the commit message').once
     PmdTester::Cmd.stubs(:execute).with('unzip -qo pmd-dist/target/pmd-bin-6.10.0-SNAPSHOT.zip' \
