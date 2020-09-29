@@ -41,8 +41,6 @@ module PmdTester
           build_pmd(into_dir: distro_path)
         end
 
-        raise "Should have built #{distro_path}" unless File.directory?(distro_path)
-
         # we're still on the build branch
         @pmd_branch_details.branch_last_sha = build_branch_sha
         @pmd_branch_details.branch_last_message = get_last_commit_message
