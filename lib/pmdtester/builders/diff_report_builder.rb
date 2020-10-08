@@ -91,7 +91,7 @@ module PmdTester
     def build_filename_h3(doc, filename)
       if filename.nil?
         doc.h3 do
-          doc.text "(unknown file)"
+          doc.text '(unknown file)'
         end
       else
         doc.h3 do
