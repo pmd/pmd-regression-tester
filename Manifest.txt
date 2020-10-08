@@ -1,3 +1,5 @@
+.github/workflows/ruby.yml
+.gitignore
 .hoerc
 .rubocop.yml
 .rubocop_todo.yml
