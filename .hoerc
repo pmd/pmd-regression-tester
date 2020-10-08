@@ -1,1 +1,1 @@
-exclude: !ruby/regexp /tmp$|\.(git|idea|project)|target|test\/|Gemfile\.lock|\.bundle\/|install-jdk.sh|vendor\/cache/
+exclude: !ruby/regexp /tmp$|\.(git|idea)\/|\.project|target|test\/|Gemfile\.lock|\.bundle\/|install-jdk.sh|vendor\/cache/
