@@ -26,4 +26,14 @@ class TestPmdReportDocument < Test::Unit::TestCase
     assert_equal(1, doc.violations.violations_size)
     # TODO: check size of filtered errors
   end
+
+  def test_error_filename_without_path
+    doc = PmdReportDocument.new('base', '/tmp/workingDirectory')
+    parser = Nokogiri::XML::SAX::Parser.new(doc)
+    parser.parse(File.open('test/resources/pmd_report_document/error_filename_without_path.xml'))
+    assert_equal(1, doc.errors.errors_size)
+    filenames = doc.errors.errors.keys
+    assert_equal(1, filenames.length)
+    assert_equal('InputXpathQueryGeneratorTabWidth.java', filenames[0])
+  end
 end

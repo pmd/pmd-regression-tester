@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd xmlns="http://pmd.sourceforge.net/report/2.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://pmd.sourceforge.net/report/2.0.0 http://pmd.sourceforge.net/report_2_0_0.xsd"
+    version="6.3.0-SNAPSHOT" timestamp="2018-04-16T22:41:45.065">
+<error filename="InputXpathQueryGeneratorTabWidth.java" msg="NullPointerException: null">
+<![CDATA[java.lang.NullPointerException
+        at net.sourceforge.pmd.lang.java.rule.multithreading.DoubleCheckedLockingRule.visit(DoubleCheckedLockingRule.java:94)
+        at net.sourceforge.pmd.lang.java.ast.ASTMethodDeclaration.acceptVisitor(ASTMethodDeclaration.java:49)
+        at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.acceptVisitor(AbstractJavaNode.java:41)
+        at net.sourceforge.pmd.lang.java.ast.JavaParserVisitor.visitNode(JavaParserVisitor.java:22)
+        at net.sourceforge.pmd.lang.java.ast.JavaVisitor.visitJavaNode(JavaVisitor.java:6)
+        at net.sourceforge.pmd.lang.java.ast.JavaVisitor.visit(JavaVisitor.java:25)
+        at net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceBody.acceptVisitor(ASTClassOrInterfaceBody.java:26)
+        at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.acceptVisitor(AbstractJavaNode.java:41)
+        at net.sourceforge.pmd.lang.java.ast.JavaParserVisitor.visitNode(JavaParserVisitor.java:22)
+        at net.sourceforge.pmd.lang.java.ast.JavaVisitor.visitJavaNode(JavaVisitor.java:6)
+        at net.sourceforge.pmd.lang.java.ast.JavaVisitor.visit(JavaVisitor.java:11)
+        at net.sourceforge.pmd.lang.java.rule.multithreading.DoubleCheckedLockingRule.visit(DoubleCheckedLockingRule.java:68)
+        at net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceDeclaration.acceptVisitor(ASTClassOrInterfaceDeclaration.java:39)
+        at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.acceptVisitor(AbstractJavaNode.java:41)
+        at net.sourceforge.pmd.lang.java.ast.JavaParserVisitor.visitNode(JavaParserVisitor.java:22)
+        at net.sourceforge.pmd.lang.java.ast.JavaVisitor.visitJavaNode(JavaVisitor.java:6)
+        at net.sourceforge.pmd.lang.java.ast.JavaVisitor.visit(JavaVisitor.java:7)
+        at net.sourceforge.pmd.lang.java.rule.multithreading.DoubleCheckedLockingRule.visit(DoubleCheckedLockingRule.java:78)
+        at net.sourceforge.pmd.lang.java.ast.ASTCompilationUnit.acceptVisitor(ASTCompilationUnit.java:44)
+        at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.acceptVisitor(AbstractJavaNode.java:41)
+        at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.apply(AbstractJavaRule.java:38)
+        at net.sourceforge.pmd.lang.rule.AbstractDelegateRule.apply(AbstractDelegateRule.java:243)
+        at net.sourceforge.pmd.lang.rule.internal.RuleApplicator.applyOnIndex(RuleApplicator.java:61)
+        at net.sourceforge.pmd.lang.rule.internal.RuleApplicator.apply(RuleApplicator.java:47)
+        at net.sourceforge.pmd.RuleSets.apply(RuleSets.java:145)
+        at net.sourceforge.pmd.SourceCodeProcessor.processSource(SourceCodeProcessor.java:161)
+        at net.sourceforge.pmd.SourceCodeProcessor.processSourceCodeWithoutCache(SourceCodeProcessor.java:104)
+        at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:86)
+        at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:51)
+        at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:78)
+        at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:24)
+        at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+        at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:515)
+        at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+        at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+        at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+        at java.base/java.lang.Thread.run(Thread.java:834)
+]]>
+</error>
+</pmd>
