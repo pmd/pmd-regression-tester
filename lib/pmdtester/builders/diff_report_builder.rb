@@ -89,9 +89,15 @@ module PmdTester
     end
 
     def build_filename_h3(doc, filename)
-      doc.h3 do
-        doc.a(href: @project.get_webview_url(filename)) do
-          doc.text @project.get_path_inside_project(filename)
+      if filename.nil?
+        doc.h3 do
+          doc.text '(unknown file)'
+        end
+      else
+        doc.h3 do
+          doc.a(href: @project.get_webview_url(filename)) do
+            doc.text @project.get_path_inside_project(filename)
+          end
         end
       end
     end

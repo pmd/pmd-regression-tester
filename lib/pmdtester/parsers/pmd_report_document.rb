@@ -29,13 +29,15 @@ module PmdTester
 
       case name
       when 'file'
+        remove_work_dir!(attrs['name'])
         @current_violations = []
-        @current_filename = remove_work_dir!(attrs['name'])
+        @current_filename = attrs['name']
       when 'violation'
         @current_violation = PmdViolation.new(attrs, @branch_name)
       when 'error'
-        @current_filename = remove_work_dir!(attrs['filename'])
+        remove_work_dir!(attrs['filename'])
         remove_work_dir!(attrs['msg'])
+        @current_filename = attrs['filename']
         @current_error = PmdError.new(attrs, @branch_name)
       when 'configerror'
         @current_configerror = PmdConfigError.new(attrs, @branch_name)
