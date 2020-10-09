@@ -4,6 +4,8 @@
 
 ## Fixed Issues
 
+*   [#67](https://github.com/pmd/pmd-regression-tester/pull/67): Report contains errors having nil filename
+
 ## External Contributions
 
 # 1.0.1 / 2020-07-08
