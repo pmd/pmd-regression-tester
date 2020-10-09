@@ -78,7 +78,7 @@ class TestRunner < Test::Unit::TestCase
   def test_online_mode
     FileUtils.stubs(:mkdir_p).with('target/reports').at_most_once
     Dir.stubs(:chdir).with('target/reports').yields.once
-    Cmd.stubs(:execute).with('wget https://sourceforge.net/projects/pmd/files/pmd-regression-tester/master-baseline.zip').once
+    Cmd.stubs(:execute).with('wget --timestamping https://sourceforge.net/projects/pmd/files/pmd-regression-tester/master-baseline.zip').once
     Cmd.stubs(:execute).with('unzip -qo master-baseline.zip').once
     ProjectsParser.any_instance.stubs(:parse)
                   .with('target/reports/master/project-list.xml')

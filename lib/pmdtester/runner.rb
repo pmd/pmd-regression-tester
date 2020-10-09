@@ -93,7 +93,7 @@ module PmdTester
       FileUtils.mkdir_p(target_path) unless File.directory?(target_path)
 
       url = get_baseline_url(zip_filename)
-      wget_cmd = "wget #{url}"
+      wget_cmd = "wget --timestamping #{url}"
       unzip_cmd = "unzip -qo #{zip_filename}"
 
       Dir.chdir(target_path) do
