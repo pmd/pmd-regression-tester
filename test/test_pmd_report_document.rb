@@ -19,12 +19,26 @@ class TestPmdReportDocument < Test::Unit::TestCase
   end
 
   def test_filter_set
-    filter_set = Set['documentation']
+    filter_set = Set['documentation.xml']
     doc = PmdReportDocument.new('base', 'SHOULD_BE_REPLACED', filter_set)
     parser = Nokogiri::XML::SAX::Parser.new(doc)
     parser.parse(File.open('test/resources/pmd_report_document/test_document.xml'))
     assert_equal(1, doc.violations.violations_size)
-    # TODO: check size of filtered errors
+    assert_equal('UncommentedEmptyConstructor',
+                 doc.violations.violations[FIRST_FILE][0].attrs['rule'])
+    # note: errors are not filtered - they don't refer to a rule/ruleset
+  end
+
+  def test_filter_set_single_rule
+    filter_set = Set['codestyle.xml/FieldDeclarationsShouldBeAtStartOfClass']
+    doc = PmdReportDocument.new('base', 'SHOULD_BE_REPLACED', filter_set)
+    parser = Nokogiri::XML::SAX::Parser.new(doc)
+    parser.parse(File.open('test/resources/pmd_report_document/test_document.xml'))
+    assert_equal(4, doc.violations.violations_size, 'wrong number of violations')
+    assert_equal(3, doc.violations.violations.size, 'wrong number of files')
+    first_file = '/target/repositories/spring-framework/spring-aop/src/main/java/'\
+                 'org/springframework/aop/ClassFilter.java'
+    assert_equal('44', doc.violations.violations[first_file][0].attrs['beginline'])
   end
 
   def test_error_filename_without_path
