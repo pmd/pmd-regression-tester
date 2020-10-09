@@ -28,7 +28,6 @@ module PmdTester
       rule_sets = get_rule_sets(filenames)
       output_filter_set(rule_sets)
       build_config_file(rule_sets)
-      logger.debug "Dynamic configuration: #{[rule_sets]}"
       rule_sets
     end
 
@@ -82,6 +81,15 @@ module PmdTester
         logger.info NO_JAVA_RULES_CHANGED_MESSAGE
         return
       end
+
+      if rule_sets == ALL_RULE_SETS
+        logger.debug 'All rules are used. Not generating a dynamic ruleset.'
+        logger.debug "Using the configured/default ruleset base_config=#{@options.base_config} "\
+                     "patch_config=#{@options.patch_config}"
+        return
+      end
+
+      logger.debug "Generating dynamic configuration for: #{[rule_sets]}"
 
       doc = Nokogiri::XML(File.read(PATH_TO_ALL_JAVA_RULES))
       doc.search('rule').each do |rule|
