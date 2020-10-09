@@ -35,9 +35,25 @@ module PmdTester
 
     def output_filter_set(rule_refs)
       if rule_refs == ALL_CATEGORIES
-        # if `rule_refs` contains all categories, than no need to filter the baseline
-        @options.filter_set = nil
+        if @options.mode == Options::ONLINE
+          @options.filter_set = Set[]
+          doc = File.open(@options.patch_config) { |f| Nokogiri::XML(f) }
+          rules = doc.css('ruleset rule')
+          rules.each do |r|
+            ref = r.attributes['ref'].content
+            ref.delete_prefix!('category/java/')
+            @options.filter_set.add(ref)
+          end
+
+          logger.debug "Using filter based on patch config #{@options.patch_config}: " \
+                       "#{@options.filter_set}"
+        else
+          # if `rule_refs` contains all categories, then no need to filter the baseline
+          logger.debug 'No filter when comparing patch to baseline'
+          @options.filter_set = nil
+        end
       else
+        logger.debug "Filter is now #{rule_refs}"
         @options.filter_set = rule_refs
       end
     end

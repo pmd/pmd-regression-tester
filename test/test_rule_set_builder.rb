@@ -14,6 +14,7 @@ class TestRuleSetBuilder < Test::Unit::TestCase
     options.expects(:filter_set=).with(filter_set)
     options.expects(:base_config=).returns('')
     options.expects(:patch_config=).returns('')
+    options.expects(:mode).returns('local').at_most_once
     builder = RuleSetBuilder.new(options)
     Cmd.expects(:execute).returns(diff_filenames)
     builder.build
