@@ -133,8 +133,11 @@ module PmdTester
         return
       end
 
-      logger.debug "Generating dynamic configuration for: #{[rule_refs]}"
+      write_dynamic_file(rule_refs)
+    end
 
+    def write_dynamic_file(rule_refs)
+      logger.debug "Generating dynamic configuration for: #{[rule_refs]}"
       builder = Nokogiri::XML::Builder.new(encoding: 'UTF-8') do |xml|
         xml.ruleset('xmlns' => 'http://pmd.sourceforge.net/ruleset/2.0.0',
                     'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
@@ -146,10 +149,7 @@ module PmdTester
           end
         end
       end
-      write_dynamic_file(builder.to_xml(indent: 4, encoding: 'UTF-8'))
-    end
-
-    def write_dynamic_file(doc)
+      doc = builder.to_xml(indent: 4, encoding: 'UTF-8')
       File.open(PATH_TO_DYNAMIC_CONFIG, 'w') do |x|
         x << doc.gsub(/\n\s+\n/, "\n")
       end
