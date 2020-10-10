@@ -5,6 +5,7 @@
 ## Fixed Issues
 
 *   [#67](https://github.com/pmd/pmd-regression-tester/pull/67): Report contains errors having nil filename
+*   [#68](https://github.com/pmd/pmd-regression-tester/pull/68): Don't generate a dynamic ruleset if not needed
 
 ## External Contributions
 

@@ -6,14 +6,25 @@ require 'test_helper'
 class TestRuleSetBuilder < Test::Unit::TestCase
   PATH_TO_TEST_RESOURCES = 'test/resources/rule_set_builder'
   include PmdTester
-  def mock_build(diff_filenames, filter_set)
+
+  def cleanup
+    filename = RuleSetBuilder::PATH_TO_DYNAMIC_CONFIG
+    File.delete(filename) if File.exist?(filename)
+  end
+
+  def mock_build(diff_filenames, filter_set = nil, patch_config = nil)
     options = mock
     options.expects(:local_git_repo).returns('.')
     options.expects(:base_branch).returns('base_branch')
     options.expects(:patch_branch).returns('patch_branch')
     options.expects(:filter_set=).with(filter_set)
-    options.expects(:base_config=).returns('')
-    options.expects(:patch_config=).returns('')
+    if patch_config
+      options.expects(:base_config).returns('')
+      options.expects(:patch_config).returns(patch_config)
+    else
+      options.expects(:base_config=).with('target/dynamic-config.xml')
+      options.expects(:patch_config=).with('target/dynamic-config.xml')
+    end
     builder = RuleSetBuilder.new(options)
     Cmd.expects(:execute).returns(diff_filenames)
     builder.build
@@ -38,10 +49,9 @@ class TestRuleSetBuilder < Test::Unit::TestCase
       pmd-java/src/main/java/net/sourceforge/pmd/lang/java/rule/codestyle/UnnecessaryConstructorRule.java
       pmd-core/src/main/java/net/sourceforge/pmd/lang/rule/xpath/SaxonXPathRuleQuery.java
     DOC
-    mock_build(diff_filenames, nil)
+    mock_build(diff_filenames, nil, 'my-patch-config.xml')
 
-    expected = File.read("#{PATH_TO_TEST_RESOURCES}/expected-all-java.xml")
-    actual = File.read(RuleSetBuilder::PATH_TO_DYNAMIC_CONFIG)
-    assert_equal(expected, actual)
+    assert(!File.exist?(RuleSetBuilder::PATH_TO_DYNAMIC_CONFIG),
+           "File #{RuleSetBuilder::PATH_TO_DYNAMIC_CONFIG} must not exist")
   end
 end
