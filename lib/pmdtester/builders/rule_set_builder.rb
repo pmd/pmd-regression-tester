@@ -126,6 +126,15 @@ module PmdTester
         return
       end
 
+      if rule_refs == ALL_CATEGORIES
+        logger.debug 'All rules are used. Not generating a dynamic ruleset.'
+        logger.debug "Using the configured/default ruleset base_config=#{@options.base_config} "\
+                     "patch_config=#{@options.patch_config}"
+        return
+      end
+
+      logger.debug "Generating dynamic configuration for: #{[rule_refs]}"
+
       builder = Nokogiri::XML::Builder.new(encoding: 'UTF-8') do |xml|
         xml.ruleset('xmlns' => 'http://pmd.sourceforge.net/ruleset/2.0.0',
                     'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
