@@ -56,26 +56,32 @@ module PmdTester
 
     def build_summary_table_body(doc)
       doc.tbody do
-        build_summary_row(doc, 'number of errors', @report_diff.base_errors_size,
+        build_summary_row(doc, 'number of errors', 'Errors', @report_diff.base_errors_size,
                           @report_diff.patch_errors_size, @report_diff.removed_errors_size,
                           @report_diff.new_errors_size)
-        build_summary_row(doc, 'number of violations', @report_diff.base_violations_size,
+        build_summary_row(doc, 'number of violations', 'Violations', @report_diff.base_violations_size,
                           @report_diff.patch_violations_size, @report_diff.removed_violations_size,
                           @report_diff.new_violations_size)
-        build_summary_row(doc, 'number of config errors', @report_diff.base_configerrors_size,
+        build_summary_row(doc, 'number of config errors', 'configerrors', @report_diff.base_configerrors_size,
                           @report_diff.patch_configerrors_size,
                           @report_diff.removed_configerrors_size,
                           @report_diff.new_configerrors_size)
-        build_summary_row(doc, 'execution time', @report_diff.base_execution_time,
+        build_summary_row(doc, 'execution time', '', @report_diff.base_execution_time,
                           @report_diff.patch_execution_time, @report_diff.diff_execution_time)
-        build_summary_row(doc, 'timestamp', @report_diff.base_timestamp,
+        build_summary_row(doc, 'timestamp', '', @report_diff.base_timestamp,
                           @report_diff.patch_timestamp, '')
       end
     end
 
-    def build_summary_row(doc, item, base, patch, *diff)
+    def build_summary_row(doc, item, target, base, patch, *diff)
       doc.tr do
-        doc.td(class: 'c') { doc.text item }
+        doc.td(class: 'c') do
+          if target != ''
+            doc.a(href: "##{target}") { doc.text item }
+          else
+            doc.text item
+          end
+        end
         doc.td(class: 'b') { doc.text base }
         doc.td(class: 'a') { doc.text patch }
         doc.td(class: 'c') do
