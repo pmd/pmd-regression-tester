@@ -10,7 +10,7 @@ module PmdTester
     end
 
     def run
-      clean
+      clean unless @options.keep_reports
       case @options.mode
       when Options::LOCAL
         run_local_mode
