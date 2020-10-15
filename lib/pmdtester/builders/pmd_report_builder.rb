@@ -119,7 +119,12 @@ module PmdTester
                 "-r #{project.get_pmd_report_path(@pmd_branch_name)} " \
                 "-failOnViolation false -t #{@threads}"
       start_time = Time.now
-      Cmd.execute(pmd_cmd)
+      if File.exist?(project.get_pmd_report_path(@pmd_branch_name))
+        logger.warn "#{@pmd_branch_name}: Skipping PMD run - report " \
+                    "#{project.get_pmd_report_path(@pmd_branch_name)} already exists"
+      else
+        Cmd.execute(pmd_cmd)
+      end
       end_time = Time.now
       [end_time - start_time, end_time]
     end
