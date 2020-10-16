@@ -56,39 +56,80 @@ module PmdTester
 
     def build_summary_table_body(doc)
       doc.tbody do
-        build_summary_row(doc, 'number of errors', 'Errors', @report_diff.base_errors_size,
-                          @report_diff.patch_errors_size, @report_diff.removed_errors_size,
-                          @report_diff.new_errors_size)
-        build_summary_row(doc, 'number of violations', 'Violations', @report_diff.base_violations_size,
-                          @report_diff.patch_violations_size, @report_diff.removed_violations_size,
-                          @report_diff.new_violations_size)
-        build_summary_row(doc, 'number of config errors', 'configerrors', @report_diff.base_configerrors_size,
-                          @report_diff.patch_configerrors_size,
-                          @report_diff.removed_configerrors_size,
-                          @report_diff.new_configerrors_size)
-        build_summary_row(doc, 'execution time', '', @report_diff.base_execution_time,
-                          @report_diff.patch_execution_time, @report_diff.diff_execution_time)
-        build_summary_row(doc, 'timestamp', '', @report_diff.base_timestamp,
-                          @report_diff.patch_timestamp, '')
+        build_error_summary_row(doc)
+        build_violations_summary_row(doc)
+        build_configerrors_summary_row(doc)
+        build_execution_time_summary_row(doc)
+        build_timestamp_summary_row(doc)
       end
     end
 
-    def build_summary_row(doc, item, target, base, patch, *diff)
+    def build_error_summary_row(doc)
+      build_summary_row(doc, {
+                          title: 'number of errors',
+                          target: 'Errors',
+                          base: @report_diff.base_errors_size,
+                          patch: @report_diff.patch_errors_size,
+                          removed: @report_diff.removed_errors_size,
+                          added: @report_diff.new_errors_size
+                        })
+    end
+
+    def build_violations_summary_row(doc)
+      build_summary_row(doc, {
+                          title: 'number of violations',
+                          target: 'Violations',
+                          base: @report_diff.base_violations_size,
+                          patch: @report_diff.patch_violations_size,
+                          removed: @report_diff.removed_violations_size,
+                          added: @report_diff.new_violations_size
+                        })
+    end
+
+    def build_configerrors_summary_row(doc)
+      build_summary_row(doc, {
+                          title: 'number of config errors',
+                          target: 'configerrors',
+                          base: @report_diff.base_configerrors_size,
+                          patch: @report_diff.patch_configerrors_size,
+                          removed: @report_diff.removed_configerrors_size,
+                          added: @report_diff.new_configerrors_size
+                        })
+    end
+
+    def build_execution_time_summary_row(doc)
+      build_summary_row(doc, {
+                          title: 'execution time',
+                          base: @report_diff.base_execution_time,
+                          patch: @report_diff.patch_execution_time,
+                          diff_execution_time: @report_diff.diff_execution_time
+                        })
+    end
+
+    def build_timestamp_summary_row(doc)
+      build_summary_row(doc, {
+                          title: 'timestamp',
+                          base: @report_diff.base_timestamp,
+                          patch: @report_diff.patch_timestamp
+                        })
+    end
+
+    def build_summary_row(doc, row_data)
       doc.tr do
         doc.td(class: 'c') do
-          if target != ''
-            doc.a(href: "##{target}") { doc.text item }
+          if row_data.key?(:target)
+            doc.a(href: "##{row_data[:target]}") { doc.text row_data[:title] }
           else
-            doc.text item
+            doc.text row_data[:title]
           end
         end
-        doc.td(class: 'b') { doc.text base }
-        doc.td(class: 'a') { doc.text patch }
+        doc.td(class: 'b') { doc.text row_data[:base] }
+        doc.td(class: 'a') { doc.text row_data[:patch] }
         doc.td(class: 'c') do
-          if diff.size == 1
-            doc.text diff[0]
-          else
-            build_table_content_for(doc, diff[0], diff[1])
+          if row_data.key?(:removed) && row_data.key?(:added)
+            build_table_content_for(doc, row_data[:removed], row_data[:added])
+          elsif row_data.key?(:diff_execution_time)
+            doc.text row_data[:diff_execution_time]
           end
         end
       end
