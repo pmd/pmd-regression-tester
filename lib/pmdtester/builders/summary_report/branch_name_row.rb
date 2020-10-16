@@ -26,7 +26,7 @@ module SummaryReportBuilderBranchNameRow
 
     doc.br
     doc.text "\n"
-    doc.a(href: "https://github.com/pmd/pmd/pulls/#{pull_request}") do
+    doc.a(href: "https://github.com/pmd/pmd/pull/#{pull_request}") do
       doc.text "PR ##{pull_request}"
     end
   end
