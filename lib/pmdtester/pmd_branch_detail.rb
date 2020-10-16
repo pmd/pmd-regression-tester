@@ -14,6 +14,7 @@ module PmdTester
     attr_accessor :execution_time
     attr_reader :jdk_version
     attr_reader :language
+    attr_reader :pull_request
 
     def self.branch_filename(branch_name)
       branch_name&.tr('/', '_')
@@ -29,6 +30,7 @@ module PmdTester
       # the result of command 'java -version' is going to stderr
       @jdk_version = Cmd.stderr_of('java -version')
       @language = ENV['LANG']
+      @pull_request = ENV['TRAVIS_PULL_REQUEST']
     end
 
     def load
@@ -40,6 +42,7 @@ module PmdTester
         @execution_time = hash['execution_time']
         @jdk_version = hash['jdk_version']
         @language = hash['language']
+        @pull_request = hash['pull_request']
       else
         @jdk_version = ''
         @language = ''
@@ -54,7 +57,8 @@ module PmdTester
                branch_name: @branch_name,
                execution_time: @execution_time,
                jdk_version: @jdk_version,
-               language: @language }
+               language: @language,
+               pull_request: @pull_request }
       file = File.new(branch_details_path, 'w')
       file.puts JSON.generate(hash)
       file.close
