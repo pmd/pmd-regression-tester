@@ -4,7 +4,16 @@ require 'test_helper'
 
 # Unit test class for PmdTester::PmdBranchDetail
 class TestPmdBranchDetail < Test::Unit::TestCase
+  def setup
+    @old_pr = ENV['TRAVIS_PULL_REQUEST']
+  end
+
+  def cleanup
+    ENV['TRAVIS_PULL_REQUEST'] = @old_pr
+  end
+
   def test_save_and_load
+    ENV['TRAVIS_PULL_REQUEST'] = '1234'
     details = PmdTester::PmdBranchDetail.new('test_branch')
     details.branch_last_message = 'test message'
     details.branch_last_sha = 'test sha'
@@ -23,6 +32,7 @@ class TestPmdBranchDetail < Test::Unit::TestCase
     assert_not_empty(details.jdk_version)
     assert_equal(ENV['LANG'], details.language)
     assert_not_empty(details.language)
+    assert_equal('1234', details.pull_request)
   end
 
   def test_get_path

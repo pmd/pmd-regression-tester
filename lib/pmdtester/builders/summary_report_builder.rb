@@ -4,6 +4,8 @@ module PmdTester
   # Building summary report to show the details about projects and pmd branchs
   class SummaryReportBuilder < HtmlReportBuilder
     include PmdTester
+    include SummaryReportBuilderBranchNameRow
+
     REPORT_DIR = 'target/reports/diff'
     BASE_CONFIG_PATH = 'target/reports/diff/base_config.xml'
     PATCH_CONFIG_PATH = 'target/reports/diff/patch_config.xml'
@@ -62,8 +64,7 @@ module PmdTester
 
     def build_branch_table_body(doc)
       doc.tbody do
-        build_branch_table_row(doc, 'branch name', @base_details.branch_name,
-                               @patch_details.branch_name)
+        build_branch_name_table_row(doc)
         build_branch_table_row(doc, 'branch last commit sha', @base_details.branch_last_sha,
                                @patch_details.branch_last_sha)
         build_branch_table_row(doc, 'branch last commit message', @base_details.branch_last_message,

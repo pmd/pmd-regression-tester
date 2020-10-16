@@ -22,6 +22,7 @@ require_relative 'pmdtester/builders/diff_report/errors'
 require_relative 'pmdtester/builders/diff_report_builder'
 require_relative 'pmdtester/builders/pmd_report_builder'
 require_relative 'pmdtester/builders/rule_set_builder'
+require_relative 'pmdtester/builders/summary_report/branch_name_row'
 require_relative 'pmdtester/builders/summary_report_builder'
 
 require_relative 'pmdtester/parsers/options'
