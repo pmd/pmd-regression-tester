@@ -10,7 +10,7 @@ module PmdTester
     end
 
     def run
-      clean
+      clean unless @options.keep_reports
       case @options.mode
       when Options::LOCAL
         run_local_mode
@@ -51,15 +51,18 @@ module PmdTester
 
       baseline_path = download_baseline(@options.base_branch)
 
-      # patch branch build pmd report with same list of projects as base branch
-      project_list = "#{baseline_path}/project-list.xml"
+      project_list = determine_project_list_for_online_mode(baseline_path)
       get_projects(project_list)
 
       if @options.auto_config_flag
         return if RuleSetBuilder.new(@options).build.empty?
-      else
+      elsif @options.patch_config == Options::DEFAULT_CONFIG_PATH
         # patch branch build pmd reports with same configuration as base branch
+        # if not specified otherwise. This allows to use a different config (e.g. less rules)
+        # than used for creating the baseline. Use with care, though
         @options.patch_config = "#{baseline_path}/config.xml"
+      else
+        logger.info "Using config #{@options.patch_config} which might differ from baseline"
       end
 
       PmdReportBuilder
@@ -70,6 +73,19 @@ module PmdTester
       build_html_reports
     end
 
+    def determine_project_list_for_online_mode(baseline_path)
+      # patch branch build pmd report with same list of projects as base branch
+      # if not specified otherwise. This allows to use a different project list
+      # than used for creating the baseline. Use with care, though
+      if @options.project_list == Options::DEFAULT_LIST_PATH
+        project_list = "#{baseline_path}/project-list.xml"
+      else
+        logger.info "Using project list #{@options.project_list} which might differ from baseline"
+        project_list = @options.project_list
+      end
+      project_list
+    end
+
     def download_baseline(branch_name)
       branch_filename = PmdBranchDetail.branch_filename(branch_name)
       zip_filename = "#{branch_filename}-baseline.zip"
@@ -77,7 +93,7 @@ module PmdTester
       FileUtils.mkdir_p(target_path) unless File.directory?(target_path)
 
       url = get_baseline_url(zip_filename)
-      wget_cmd = "wget #{url}"
+      wget_cmd = "wget --timestamping #{url}"
       unzip_cmd = "unzip -qo #{zip_filename}"
 
       Dir.chdir(target_path) do

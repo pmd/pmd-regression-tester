@@ -30,6 +30,7 @@ module PmdTester
     attr_reader :auto_config_flag
     attr_reader :debug_flag
     attr_accessor :filter_set
+    attr_reader :keep_reports
 
     def initialize(argv)
       options = parse(argv)
@@ -46,6 +47,7 @@ module PmdTester
       @auto_config_flag = options[:a]
       @debug_flag = options[:d]
       @filter_set = nil
+      @keep_reports = options.keep_reports?
 
       # if the 'config' option is selected then `config` overrides `base_config` and `patch_config`
       @base_config = @config if !@config.nil? && @mode == 'local'
@@ -88,6 +90,8 @@ module PmdTester
         o.bool '-a', '--auto-gen-config',
                'whether to generate configurations automatically based on branch differences,' \
                'this option only works in online and local mode'
+        o.bool '--keep-reports',
+               'whether to keep old reports and skip running PMD again if possible'
         o.bool '-d', '--debug',
                'whether change log level to DEBUG to see more information'
         o.on '-v', '--version' do

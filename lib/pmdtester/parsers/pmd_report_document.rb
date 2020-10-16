@@ -79,8 +79,12 @@ module PmdTester
     def match_filter_set?(violation)
       return true if @filter_set.nil?
 
-      @filter_set.each do |ruleset|
-        return true if ruleset.eql?(violation.attrs['ruleset'].delete(' ').downcase)
+      @filter_set.each do |filter_rule_ref|
+        ruleset_attr = violation.attrs['ruleset'].delete(' ').downcase + '.xml'
+        rule = violation.attrs['rule']
+        rule_ref = "#{ruleset_attr}/#{rule}"
+        return true if filter_rule_ref.eql?(ruleset_attr)
+        return true if filter_rule_ref.eql?(rule_ref)
       end
 
       false
