@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <projectlist xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xsi:noNamespaceSchemaLocation="projectlist_1_0_0.xsd">
+xsi:noNamespaceSchemaLocation="projectlist_1_1_0.xsd">
   <description>Standard Projects</description>
 
   <project>
@@ -10,6 +10,8 @@ xsi:noNamespaceSchemaLocation="projectlist_1_0_0.xsd">
     <connection>https://github.com/checkstyle/checkstyle</connection>
     <exclude-pattern>**/src/test/resources-noncompilable/**/*</exclude-pattern>
     <exclude-pattern>**/src/test/resources/**/*</exclude-pattern>
+    <build-command>mvn test-compile</build-command>
+    <auxclasspath-command>echo -n "$(pwd)/target/classes:"</auxclasspath-command>
   </project>
 
   <project>

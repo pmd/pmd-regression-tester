@@ -13,15 +13,17 @@ module PmdTester
     attr_reader :exclude_pattern
     attr_accessor :report_diff
     # key: pmd branch name as String => value: local path of pmd report
+    attr_reader :build_command
+    attr_reader :auxclasspath_command
+    # stores the auxclasspath calculated after cloning/preparing the project
+    attr_accessor :auxclasspath
 
     def initialize(project)
       @name = project.at_xpath('name').text
       @type = project.at_xpath('type').text
       @connection = project.at_xpath('connection').text
 
-      @tag = 'master'
-      tag_element = project.at_xpath('tag')
-      @tag = tag_element.text unless tag_element.nil?
+      @tag = project.at_xpath('tag')&.text || 'master'
 
       webview_url_element = project.at_xpath('webview-url')
       @webview_url = default_webview_url
@@ -31,6 +33,9 @@ module PmdTester
       project.xpath('exclude-pattern').each do |ep|
         @exclude_pattern.push(ep.text)
       end
+
+      @build_command = project.at_xpath('build-command')&.text
+      @auxclasspath_command = project.at_xpath('auxclasspath-command')&.text
 
       @report_diff = ReportDiff.new
     end
