@@ -100,6 +100,7 @@ module PmdTester
     end
 
     def generate_config_for(project)
+      logger.debug "Generating ruleset with excludes from #{@branch_config}"
       doc = Nokogiri::XML(File.read(@branch_config))
       ruleset = doc.at_css('ruleset')
       project.exclude_pattern.each do |exclude_pattern|
@@ -109,6 +110,8 @@ module PmdTester
       File.open(project.get_config_path(@pmd_branch_name), 'w') do |x|
         x << doc.to_s
       end
+
+      logger.debug "Created file #{project.get_config_path(@pmd_branch_name)}"
     end
 
     def generate_pmd_reports
