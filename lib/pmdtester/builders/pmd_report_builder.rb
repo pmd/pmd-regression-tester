@@ -17,39 +17,7 @@ module PmdTester
       @pwd = Dir.getwd
 
       @pmd_branch_details = PmdBranchDetail.new(pmd_branch_name)
-    end
-
-    def execute_reset_cmd(type, tag)
-      case type
-      when 'git'
-        reset_cmd = "git reset --hard #{tag}"
-      when 'hg'
-        reset_cmd = "hg up #{tag}"
-      end
-
-      Cmd.execute(reset_cmd)
-    end
-
-    def clone_projects
-      logger.info 'Cloning projects started'
-
-      @projects.each do |project|
-        logger.info "Start cloning #{project.name} repository"
-        path = project.local_source_path
-        clone_cmd = "#{project.type} clone #{project.connection} #{path}"
-        if File.exist?(path)
-          logger.warn "Skipping clone, project path #{path} already exists"
-        else
-          Cmd.execute(clone_cmd)
-        end
-
-        Dir.chdir(path) do
-          execute_reset_cmd(project.type, project.tag)
-        end
-        logger.info "Cloning #{project.name} completed"
-      end
-
-      logger.info 'Cloning projects completed'
+      @project_builder = ProjectBuilder.new(projects)
     end
 
     def get_pmd_binary_file
@@ -92,7 +60,8 @@ module PmdTester
       package_cmd = './mvnw clean package' \
                     ' -Dmaven.test.skip=true' \
                     ' -Dmaven.javadoc.skip=true' \
-                    ' -Dmaven.source.skip=true'
+                    ' -Dmaven.source.skip=true' \
+                    ' -Dcheckstyle.skip=true'
       Cmd.execute(package_cmd)
     end
 
@@ -117,7 +86,8 @@ module PmdTester
       pmd_cmd = "#{run_path} pmd -d #{project.local_source_path} -f xml " \
                 "-R #{project.get_config_path(@pmd_branch_name)} " \
                 "-r #{project.get_pmd_report_path(@pmd_branch_name)} " \
-                "-failOnViolation false -t #{@threads}"
+                "-failOnViolation false -t #{@threads} " \
+                "#{project.auxclasspath}"
       start_time = Time.now
       if File.exist?(project.get_pmd_report_path(@pmd_branch_name))
         logger.warn "#{@pmd_branch_name}: Skipping PMD run - report " \
@@ -167,7 +137,8 @@ module PmdTester
     end
 
     def build
-      clone_projects
+      @project_builder.clone_projects
+      @project_builder.build_projects
       get_pmd_binary_file
       generate_pmd_reports
     end

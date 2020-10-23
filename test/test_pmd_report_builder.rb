@@ -29,7 +29,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     PmdTester::Cmd.stubs(:execute).with('git checkout master')
                   .returns('checked out branch master').once
     PmdTester::Cmd.stubs(:execute).with('./mvnw clean package -Dmaven.test.skip=true' \
-                  ' -Dmaven.javadoc.skip=true -Dmaven.source.skip=true').once
+                  ' -Dmaven.javadoc.skip=true -Dmaven.source.skip=true -Dcheckstyle.skip=true').once
     record_expecations_after_build
 
     PmdTester::PmdReportBuilder
