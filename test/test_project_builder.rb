@@ -21,6 +21,11 @@ class TestProjectBuilder < Test::Unit::TestCase
   end
 
   def test_build
+    Dir.stubs(:getwd)
+       .returns('target/repositories/checkstyle')
+       .returns('target/repositories/checkstyle')
+       .returns('target/repositories/spring-framework')
+       .returns('target/repositories/spring-framework')
     expect_build('checkstyle', 'mvn test-compile',
                  "#!/usr/bin/env bash\necho -n \"\$(pwd)/target/classes:\"\n        ")
     expect_build('spring-framework')

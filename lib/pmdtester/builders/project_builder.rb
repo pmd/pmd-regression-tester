@@ -58,7 +58,7 @@ module PmdTester
       # where the source code has been cloned to
       if project.build_command
         logger.debug "Executing build-command: #{project.build_command}"
-        run_as_script(project.local_source_path, project.build_command)
+        run_as_script(Dir.getwd, project.build_command)
       end
       if project.auxclasspath_command
         logger.debug "Executing auxclasspath-command: #{project.auxclasspath_command}"
@@ -74,13 +74,13 @@ module PmdTester
       logger.debug "Creating script #{script.path}"
       begin
         script.write(command)
+        script.close
         shell = 'sh -xe'
         if command.start_with?('#!')
           shell = command.lines[0].chomp[2..] # remove leading "#!"
         end
         stdout = Cmd.execute("#{shell} #{script.path}")
       ensure
-        script.close
         script.unlink
       end
       stdout
