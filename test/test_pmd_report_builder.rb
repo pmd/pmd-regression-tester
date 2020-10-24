@@ -54,6 +54,10 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     PmdTester::PmdReportBuilder
       .new(options.base_config, projects, options.local_git_repo, options.base_branch)
       .build
+
+    expected = File.read('test/resources/pmd_report_builder/expected-config.xml')
+    actual = File.read('target/reports/master/checkstyle/config.xml')
+    assert_equal(expected, actual)
   end
 
   private
