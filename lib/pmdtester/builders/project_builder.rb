@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'fileutils'
+require 'tempfile'
 
 module PmdTester
   # Clones and builds the projects, that are configured in the project-list.xml
@@ -51,13 +52,36 @@ module PmdTester
     private
 
     def prepare_project(project)
-      Cmd.execute(project.build_command) if project.build_command
+      # Note: current working directory is the project directory,
+      # where the source code has been cloned to
+      if project.build_command
+        logger.debug "Executing build-command: #{project.build_command}"
+        run_as_script(project.local_source_path, project.build_command)
+      end
       if project.auxclasspath_command
-        project.auxclasspath = Cmd.execute(project.auxclasspath_command)
-        project.auxclasspath = "-auxclasspath #{project.auxclasspath}"
+        logger.debug "Executing auxclasspath-command: #{project.auxclasspath_command}"
+        auxclasspath = run_as_script(project.local_source_path, project.auxclasspath_command)
+        project.auxclasspath = "-auxclasspath #{auxclasspath}"
       else
         project.auxclasspath = ''
       end
+    end
+
+    def run_as_script(path, command)
+      script = Tempfile.new(['pmd-regression-', '.sh'], path)
+      logger.debug "Creating script #{script.path}"
+      begin
+        script.write(command)
+        shell = 'sh -xe'
+        if command.start_with?('#!')
+          shell = command.lines[0].chomp[2..] # remove leading "#!"
+        end
+        stdout = Cmd.execute("#{shell} #{script.path}")
+      ensure
+        script.close
+        script.unlink
+      end
+      stdout
     end
 
     def execute_reset_cmd(type, tag)

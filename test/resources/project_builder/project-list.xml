@@ -11,7 +11,9 @@ xsi:noNamespaceSchemaLocation="projectlist_1_1_0.xsd">
     <exclude-pattern>**/src/test/resources-noncompilable/**/*</exclude-pattern>
     <exclude-pattern>**/src/test/resources/**/*</exclude-pattern>
     <build-command>mvn test-compile</build-command>
-    <auxclasspath-command>echo -n "$(pwd)/target/classes:"</auxclasspath-command>
+    <auxclasspath-command><![CDATA[#!/usr/bin/env bash
+echo -n "$(pwd)/target/classes:"
+        ]]></auxclasspath-command>
   </project>
 
   <project>
