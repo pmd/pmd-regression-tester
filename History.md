@@ -2,6 +2,8 @@
 
 ## New and Noteworthy
 
+At least ruby 2.7 is required.
+
 ## Fixed Issues
 
 *   [#67](https://github.com/pmd/pmd-regression-tester/pull/67): Report contains errors having nil filename

@@ -3,6 +3,7 @@
 .hoerc
 .rubocop.yml
 .rubocop_todo.yml
+.ruby-version
 .travis.yml
 Gemfile
 History.md
