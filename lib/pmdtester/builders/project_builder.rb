@@ -40,8 +40,10 @@ module PmdTester
       @projects.each do |project|
         path = project.local_source_path
         Dir.chdir(path) do
-          logger.info "Start building #{project.name} in #{path}"
+          progress_logger = SimpleProgressLogger.new("building #{project.name} in #{path}")
+          progress_logger.start
           prepare_project(project)
+          progress_logger.stop
         end
         logger.info "Building #{project.name} completed"
       end

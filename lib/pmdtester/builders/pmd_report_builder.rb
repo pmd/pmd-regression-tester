@@ -120,7 +120,7 @@ module PmdTester
 
       sum_time = 0
       @projects.each do |project|
-        progress_logger = SimpleProgressLogger.new(project.name)
+        progress_logger = SimpleProgressLogger.new("generating #{project.name}'s PMD report")
         progress_logger.start
         generate_config_for(project)
         execution_time, end_time = generate_pmd_report(project)
