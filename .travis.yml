@@ -4,7 +4,7 @@ before_install:
 - TARGET_DIR=${HOME}/openjdk11
 - mkdir -p ${LOCAL_DIR}
 - mkdir -p ${TARGET_DIR}
-- DOWNLOAD_URL="https://pmd-code.org/openjdk/latest/jdk-11/linux64.tar.gz"
+- DOWNLOAD_URL="https://pmd-code.org/openjdk/latest/jdk-11-linux64.tar.gz"
 - OPENJDK_ARCHIVE=$(basename $DOWNLOAD_URL)
 - if [ ! -e ${LOCAL_DIR}/${OPENJDK_ARCHIVE} ]; then wget --directory-prefix ${LOCAL_DIR} --timestamping --continue ${DOWNLOAD_URL}; fi
 - tar --extract --file ${LOCAL_DIR}/${OPENJDK_ARCHIVE} -C ${TARGET_DIR} --strip-components=1
