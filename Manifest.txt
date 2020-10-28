@@ -3,6 +3,7 @@
 .hoerc
 .rubocop.yml
 .rubocop_todo.yml
+.ruby-version
 .travis.yml
 Gemfile
 History.md
@@ -15,6 +16,7 @@ config/all-java.xml
 config/design.xml
 config/project-list.xml
 config/projectlist_1_0_0.xsd
+config/projectlist_1_1_0.xsd
 lib/pmdtester.rb
 lib/pmdtester/builders/diff_builder.rb
 lib/pmdtester/builders/diff_report/configerrors.rb
@@ -23,6 +25,7 @@ lib/pmdtester/builders/diff_report/violations.rb
 lib/pmdtester/builders/diff_report_builder.rb
 lib/pmdtester/builders/html_report_builder.rb
 lib/pmdtester/builders/pmd_report_builder.rb
+lib/pmdtester/builders/project_builder.rb
 lib/pmdtester/builders/rule_set_builder.rb
 lib/pmdtester/builders/simple_progress_logger.rb
 lib/pmdtester/builders/summary_report/branch_name_row.rb

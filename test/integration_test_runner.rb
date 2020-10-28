@@ -49,6 +49,7 @@ class IntegrationTestRunner < Test::Unit::TestCase
     assert_equal(0, $CHILD_STATUS.exitstatus)
     assert_path_exist('target/reports/pmd_releases_6.7.0/checkstyle/pmd_report.xml')
     assert_path_exist('target/reports/pmd_releases_6.7.0/pmd/pmd_report.xml')
+    assert_path_exist('target/repositories/checkstyle/classpath.txt')
     assert_path_not_exist('target/reports/diff/checkstyle/index.html')
     assert_path_not_exist('target/reports/diff/pmd/index.html')
     assert_path_not_exist('target/reports/diff/index.html')

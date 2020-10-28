@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <projectlist xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xsi:noNamespaceSchemaLocation="projectlist_1_0_0.xsd">
+xsi:noNamespaceSchemaLocation="projectlist_1_1_0.xsd">
   <description>Standard Projects</description>
 
   <project>
@@ -9,8 +9,18 @@ xsi:noNamespaceSchemaLocation="projectlist_1_0_0.xsd">
     <type>git</type>
     <connection>https://github.com/checkstyle/checkstyle</connection>
     <tag>checkstyle-8.0</tag>
-    <exclude-pattern>**/src/test/resources-noncompilable/**/*</exclude-pattern>
-    <exclude-pattern>**/src/test/resources/**/*</exclude-pattern>
+    <exclude-pattern>.*/src/test/resources-noncompilable/.*</exclude-pattern>
+    <exclude-pattern>.*/src/test/resources/.*</exclude-pattern>
+
+    <build-command><![CDATA[#!/usr/bin/env bash
+if test -e classpath.txt; then
+  exit
+fi
+
+mvn test-compile
+mvn dependency:build-classpath -DincludeScope=test -Dmdep.outputFile=classpath.txt
+]]></build-command>
+    <auxclasspath-command>echo -n "$(pwd)/target/classes:$(pwd)/target/test-classes:"; cat classpath.txt</auxclasspath-command>
   </project>
 
   <project>

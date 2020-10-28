@@ -11,14 +11,9 @@ xsi:noNamespaceSchemaLocation="projectlist_1_1_0.xsd">
     <exclude-pattern>**/src/test/resources-noncompilable/**/*</exclude-pattern>
     <exclude-pattern>**/src/test/resources/**/*</exclude-pattern>
     <build-command>mvn test-compile</build-command>
-    <auxclasspath-command>echo -n "$(pwd)/target/classes:"</auxclasspath-command>
-  </project>
-
-  <project>
-    <name>openjdk10</name>
-    <type>hg</type>
-    <connection>http://hg.openjdk.java.net/jdk10/jdk10/jdk</connection>
-    <webview-url>http://hg.openjdk.java.net/jdk10/jdk10/jdk/file/777356696811</webview-url>
+    <auxclasspath-command><![CDATA[#!/usr/bin/env bash
+echo -n "$(pwd)/target/classes:"
+        ]]></auxclasspath-command>
   </project>
 
   <project>

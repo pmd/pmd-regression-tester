@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<!-- version 1.0.0 -->
+<!-- version 1.1.0 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:element name="projectlist">
     <xs:complexType>
@@ -24,6 +24,8 @@
       <xs:element name="webview-url" type="xs:string" minOccurs="0" maxOccurs="1"/>
       <xs:element name="tag" type="xs:string" minOccurs="0" maxOccurs="1"/>
       <xs:element name="exclude-pattern" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="build-command" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="auxclasspath-command" type="xs:string" minOccurs="0" maxOccurs="1"/>
     </xs:sequence>
   </xs:complexType>
 </xs:schema>

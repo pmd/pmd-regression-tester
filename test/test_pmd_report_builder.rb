@@ -29,12 +29,55 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     PmdTester::Cmd.stubs(:execute).with('git checkout master')
                   .returns('checked out branch master').once
     PmdTester::Cmd.stubs(:execute).with('./mvnw clean package -Dmaven.test.skip=true' \
-                  ' -Dmaven.javadoc.skip=true -Dmaven.source.skip=true').once
+                  ' -Dmaven.javadoc.skip=true -Dmaven.source.skip=true -Dcheckstyle.skip=true').once
     record_expecations_after_build
 
     PmdTester::PmdReportBuilder
       .new(options.base_config, projects, options.local_git_repo, options.base_branch)
       .build
+  end
+
+  def test_build_with_projects
+    project_list = 'test/resources/pmd_report_builder/project-list.xml'
+    projects = PmdTester::ProjectsParser.new.parse(project_list)
+    assert_equal(1, projects.size)
+    argv = %w[-r target/repositories/pmd -b master -p pmd_releases/6.1.0
+              -c config/design.xml --debug -l]
+    argv.push project_list
+    options = PmdTester::Options.new(argv)
+
+    projects[0].auxclasspath = '-auxclasspath extra:dirs'
+    record_expectations('sha1abc', 'sha1abc', true)
+    record_expecations_after_build
+    record_expectations_project_build
+
+    PmdTester::PmdReportBuilder
+      .new(options.base_config, projects, options.local_git_repo, options.base_branch)
+      .build
+
+    expected = File.read('test/resources/pmd_report_builder/expected-config.xml')
+    actual = File.read('target/reports/master/checkstyle/config.xml')
+    assert_equal(expected, actual)
+  end
+
+  private
+
+  def record_expectations_project_build
+    PmdTester::ProjectBuilder.any_instance.stubs(:clone_projects).once
+    PmdTester::ProjectBuilder.any_instance.stubs(:build_projects).once
+    PmdTester::SimpleProgressLogger.any_instance.stubs(:start).once
+    PmdTester::SimpleProgressLogger.any_instance.stubs(:stop).once
+    File.stubs(:exist?).with('target/reports/master/checkstyle/pmd_report.xml').returns(false).once
+    PmdTester::Cmd.stubs(:execute)
+                  .with('target/pmd-bin-6.10.0-SNAPSHOT/bin/run.sh ' \
+                        'pmd -d target/repositories/checkstyle -f xml ' \
+                        '-R target/reports/master/checkstyle/config.xml ' \
+                        '-r target/reports/master/checkstyle/pmd_report.xml ' \
+                        '-failOnViolation false -t 1 ' \
+                        '-auxclasspath extra:dirs').once
+    Dir.unstub(:getwd)
+    Dir.stubs(:getwd).returns('current-dir').twice
+    PmdTester::PmdReportDetail.any_instance.stubs(:save).once
   end
 
   def record_expectations(sha1_head, sha1_base, zip_file_exists)

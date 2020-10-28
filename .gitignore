@@ -6,3 +6,4 @@ Gemfile.lock
 .bundle
 target/
 vendor/
+localtests/
