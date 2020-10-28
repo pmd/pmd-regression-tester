@@ -1,7 +1,3 @@
-require "liquid"
-require "safe_yaml"
-
-
 module PmdTester
     def render(report_diff, project)
 
