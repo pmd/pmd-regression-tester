@@ -4,8 +4,12 @@
 
 At least ruby 2.7 is required.
 
+Typeresolution is now supported by two new tags in the project-list.xml file:
+`build-command` and `auxclasspath-command`. For details, see pull request [#72](https://github.com/pmd/pmd-regression-tester/pull/72).
+
 ## Fixed Issues
 
+*   [#48](https://github.com/pmd/pmd-regression-tester/issues/48): Support auxclasspath / typeresolution
 *   [#67](https://github.com/pmd/pmd-regression-tester/pull/67): Report contains errors having nil filename
 *   [#68](https://github.com/pmd/pmd-regression-tester/pull/68): Don't generate a dynamic ruleset if not needed
 *   [#69](https://github.com/pmd/pmd-regression-tester/pull/69): Detect single rules with auto-gen-config
