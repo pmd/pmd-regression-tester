@@ -33,6 +33,7 @@ module PmdTester
         @current_violations = []
         @current_filename = attrs['name']
       when 'violation'
+        attrs['filename'] = @current_filename
         @current_violation = PmdViolation.new(attrs, @branch_name)
       when 'error'
         remove_work_dir!(attrs['filename'])

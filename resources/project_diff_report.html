@@ -1,0 +1,115 @@
+<html lang="en">
+<head>
+    <title>{{title}}</title>
+    <link href="https://unpkg.com/bootstrap-table@1.18.0/dist/bootstrap-table.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/bootstrap-table@1.18.0/dist/bootstrap-table.min.js"></script>
+
+    <link rel="stylesheet" href="css/maven-base.css">
+    <link rel="stylesheet" href="css/maven-theme.css">
+</head>
+<body>
+<div class="section" id="Summary">
+
+    <table class="bodyTable">
+        <thead>
+        <tr>
+            <th>Item</th>
+            <th>Base</th>
+            <th>Patch</th>
+            <th>Difference</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>Violations</td>
+            <td class="removed">{{ diff.base_violations_size }}</td>
+            <td class="new">{{ diff.patch_violations_size }}</td>
+            <td>
+                <span class="removed">-{{ diff.removed_violations_size }}</span>
+                | <span class="new">+{{ diff.new_violations_size }}</span>
+            </td>
+        </tr>
+
+        <tr>
+            <td>Errors</td>
+            <td class="removed">{{ diff.base_errors_size }}</td>
+            <td class="new">{{ diff.patch_errors_size }}</td>
+            <td>
+                <span class="removed">-{{ diff.removed_errors_size }}</span> |
+                <span class="new">+{{ diff.new_errors_size }}</span>
+            </td>
+        </tr>
+        <tr>
+            <td>Config errors</td>
+            <td class="removed">{{ diff.base_configerrors_size }}</td>
+            <td class="new">{{ diff.patch_configerrors_size }}</td>
+            <td>
+                <span class="removed">-{{ diff.removed_configerrors_size }}</span>
+                | <span class="new">+{{ diff.new_configerrors_size }}</span>
+            </td>
+        </tr>
+        <tr>
+            <td>Execution time</td>
+            <td class="removed">{{ diff.base_execution_time }}</td>
+            <td class="new">{{ diff.patch_execution_time }}</td>
+            <td>{{ diff.patch_execution_time | minus: diff.base_execution_time
+                }}
+            </td>
+        </tr>
+        <tr>
+            <td>Timestamp</td>
+            <td>{{ diff.base_timestamp }}</td>
+            <td>{{ diff.patch_timestamp }}</td>
+            <td></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+{% assign cur_id = 0 %}
+
+<div class="section">
+    <h2>Violations</h2>
+
+    {% for file in violation_diffs %}
+
+    <div class="file-section">
+        <h3><a href="{{ file.url }}">{{ file.display_name }}</a></h3>
+        <table class="violations-table">
+            <thead>
+            <tr>
+                <th></th>
+                <th>Rule</th>
+                <th>Message</th>
+                <th>Line</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for violation in file.violations %}
+
+                {% if violation.branch = 'patch' %}
+                <tr class="new">
+                {% else %}
+                <tr class="removed">
+                {% endif %}
+
+                    <td><a id="violation{{ cur_id }}">#</a></td>
+                    <td><a href="{{ violation.externalInfoUrl }}">{{ violation.rule }}</a></td>
+                    <td>{{ violation.message }}</td>
+                    <td><a href="{{ file.url }}#L{{ violation.beginline }}">{{ violation.beginline }}</a></td>
+                </tr>
+
+                {% increment cur_id %}
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% endfor %}
+
+
+</div>
+
+
+</body>
+</html>
