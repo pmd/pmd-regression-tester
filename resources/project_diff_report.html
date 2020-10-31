@@ -22,8 +22,8 @@
         <tbody>
         <tr>
             <td>Violations</td>
-            <td class="removed">{{ diff.base_violations_size }}</td>
-            <td class="new">{{ diff.patch_violations_size }}</td>
+            <td class="b">{{ diff.base_violations_size }}</td>
+            <td class="a">{{ diff.patch_violations_size }}</td>
             <td>
                 <span class="removed">-{{ diff.removed_violations_size }}</span>
                 | <span class="new">+{{ diff.new_violations_size }}</span>
@@ -32,8 +32,8 @@
 
         <tr>
             <td>Errors</td>
-            <td class="removed">{{ diff.base_errors_size }}</td>
-            <td class="new">{{ diff.patch_errors_size }}</td>
+            <td class="b">{{ diff.base_errors_size }}</td>
+            <td class="a">{{ diff.patch_errors_size }}</td>
             <td>
                 <span class="removed">-{{ diff.removed_errors_size }}</span> |
                 <span class="new">+{{ diff.new_errors_size }}</span>
@@ -41,8 +41,8 @@
         </tr>
         <tr>
             <td>Config errors</td>
-            <td class="removed">{{ diff.base_configerrors_size }}</td>
-            <td class="new">{{ diff.patch_configerrors_size }}</td>
+            <td class="b">{{ diff.base_configerrors_size }}</td>
+            <td class="a">{{ diff.patch_configerrors_size }}</td>
             <td>
                 <span class="removed">-{{ diff.removed_configerrors_size }}</span>
                 | <span class="new">+{{ diff.new_configerrors_size }}</span>
@@ -50,8 +50,8 @@
         </tr>
         <tr>
             <td>Execution time</td>
-            <td class="removed">{{ diff.base_execution_time }}</td>
-            <td class="new">{{ diff.patch_execution_time }}</td>
+            <td class="b">{{ diff.base_execution_time }}</td>
+            <td class="a">{{ diff.patch_execution_time }}</td>
             <td>{{ diff.patch_execution_time | minus: diff.base_execution_time
                 }}
             </td>
@@ -87,13 +87,13 @@
             <tbody>
             {% for violation in file.violations %}
 
-                {% if violation.branch = 'patch' %}
-                <tr class="new">
+                {% if violation.branch == 'patch' %}
+                <tr class="a">
                 {% else %}
-                <tr class="removed">
+                <tr class="b">
                 {% endif %}
 
-                    <td><a id="violation{{ cur_id }}">#</a></td>
+                    <td><a id="v{{ cur_id }}">#</a></td>
                     <td><a href="{{ violation.externalInfoUrl }}">{{ violation.rule }}</a></td>
                     <td>{{ violation.message }}</td>
                     <td><a href="{{ file.url }}#L{{ violation.beginline }}">{{ violation.beginline }}</a></td>

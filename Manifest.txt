@@ -25,6 +25,7 @@ lib/pmdtester/builders/diff_report/violations.rb
 lib/pmdtester/builders/diff_report_builder.rb
 lib/pmdtester/builders/html_report_builder.rb
 lib/pmdtester/builders/pmd_report_builder.rb
+lib/pmdtester/builders/liquid_html_builder.rb
 lib/pmdtester/builders/project_builder.rb
 lib/pmdtester/builders/rule_set_builder.rb
 lib/pmdtester/builders/simple_progress_logger.rb
@@ -37,6 +38,7 @@ lib/pmdtester/parsers/projects_parser.rb
 lib/pmdtester/pmd_branch_detail.rb
 lib/pmdtester/pmd_configerror.rb
 lib/pmdtester/pmd_error.rb
+lib/pmdtester/pmd_fileinfo.rb
 lib/pmdtester/pmd_report_detail.rb
 lib/pmdtester/pmd_violation.rb
 lib/pmdtester/project.rb

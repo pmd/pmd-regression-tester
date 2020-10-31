@@ -125,7 +125,9 @@ module PmdTester
 
     def build_html_reports
       build_diff_html_reports
+      logger.info 'Building summary page'
       SummaryReportBuilder.new.build(@projects, @options.base_branch, @options.patch_branch)
+      logger.info 'Done with summary page'
     end
 
     def build_diff_html_reports
@@ -137,7 +139,7 @@ module PmdTester
                                              project.get_report_info_path(@options.patch_branch),
                                              @options.filter_set)
         project.report_diff = report_diffs
-        DiffReportBuilder.new.build(project)
+        ProjectDiffRenderer.new.write_liquid_file(project)
       end
       logger.info 'Built all difference reports successfully!'
     end

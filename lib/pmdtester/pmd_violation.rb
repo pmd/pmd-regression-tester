@@ -82,5 +82,9 @@ module PmdTester
     def hash
       [@attrs['beginline'], @attrs['rule'], @text].hash
     end
+
+    def to_liquid
+      {**attrs, 'branch' => branch, 'message' => text}
+    end
   end
 end

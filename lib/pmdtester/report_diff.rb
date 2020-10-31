@@ -180,5 +180,33 @@ module PmdTester
     def introduce_new_errors?
       !@new_errors_size.zero? || !@new_configerrors_size.zero?
     end
+
+    def to_liquid
+      {
+          'base_violations_size' => base_violations_size,
+          'patch_violations_size' => patch_violations_size,
+          'new_violations_size' => new_violations_size,
+          'removed_violations_size' => removed_violations_size,
+          'violation_diffs_size' => violation_diffs_size,
+          'base_errors_size' => base_errors_size,
+          'patch_errors_size' => patch_errors_size,
+          'new_errors_size' => new_errors_size,
+          'removed_errors_size' => removed_errors_size,
+          'error_diffs_size' => error_diffs_size,
+          'base_configerrors_size' => base_configerrors_size,
+          'patch_configerrors_size' => patch_configerrors_size,
+          'new_configerrors_size' => new_configerrors_size,
+          'removed_configerrors_size' => removed_configerrors_size,
+          'configerrors_diffs_size' => configerrors_diffs_size,
+          'base_execution_time' => base_execution_time,
+          'patch_execution_time' => patch_execution_time,
+          'diff_execution_time' => diff_execution_time,
+          'base_timestamp' => base_timestamp,
+          'patch_timestamp' => patch_timestamp,
+          'violation_diffs' => violation_diffs,
+          'error_diffs' => error_diffs,
+          'configerrors_diffs' => configerrors_diffs,
+      }
+    end
   end
 end
