@@ -124,7 +124,11 @@ table.bodyTable td.a {
   background-color: #af8;
 }
 
-table.bodyTable td.b {
+#violationsTable tr.a {
+  background-color: #af8;
+}
+
+#violationsTable tr.b {
   background-color: #fca;
 }
 
