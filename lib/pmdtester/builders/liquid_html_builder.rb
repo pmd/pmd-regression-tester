@@ -1,29 +1,54 @@
 require 'liquid'
+require 'json'
 
 module PmdTester
 
   module LiquidRenderer
     include PmdTester
 
-    CSS_SRC_DIR = ResourceLocator.locate('resources/css')
-
     def write_liquid_file(project)
 
       index = File.new(project.diff_report_index_path, 'w')
-
-      html_report = render_liquid(project)
-      copy_css(project.target_diff_report_path)
-
-      index.puts html_report
+      index.puts render_liquid(project)
       index.close
+
+      copy_res(project.target_diff_report_path, "css")
+      copy_res(project.target_diff_report_path, "js")
+
+      violations_json = File.new("#{project.target_diff_report_path}/violations.js", 'w')
+      violations_json.puts dump_violations_json(project)
+      violations_json.close
+
 
       logger.info "Built difference report of #{project.name} successfully!"
       logger.info "#{project.diff_report_index_path}"
     end
 
-    def copy_css(report_dir)
-      css_dest_dir = "#{report_dir}/css"
-      FileUtils.copy_entry(CSS_SRC_DIR, css_dest_dir)
+    def copy_res(report_dir, path)
+      css_dest_dir = "#{report_dir}/#{path}"
+      FileUtils.copy_entry(ResourceLocator.locate("resources/#{path}"), css_dest_dir)
+    end
+
+    def dump_violations_json(project)
+
+      all_vs = []
+      project.report_diff.violation_diffs.each do |file, vs|
+        vs.each do |v|
+          f = project.get_path_inside_project(file)
+          all_vs.push(
+              JSON.generate(
+                  {
+                      "t" => v.branch == 'patch' ? '+' : '-',
+                      "line" => v.attrs["beginline"],
+                      "file" => f,
+                      "rule" => v.attrs["rule"],
+                      "message" => v.text
+                  })
+          )
+        end
+      end
+
+      "allViolations = [#{all_vs.join(",")}]"
     end
 
     def render_liquid(project)
