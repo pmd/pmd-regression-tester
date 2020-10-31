@@ -6,6 +6,7 @@
 
     <script type="text/javascript" src="js/jquery.min.js"></script>
     <script type="text/javascript" src="js/datatables.min.js"></script>
+    <!-- This is generated -->
     <script type="text/javascript" src="violations.js"></script>
 
     <link rel="stylesheet" href="css/maven-base.css">
@@ -39,9 +40,6 @@
                 {"data": "rule"},
                 {"data": "message"},
                 {"data": "line"},
-            ],
-            columnDefs: [
-                {targets : [0], visible: false}
             ],
             displayLength: 50,
             rowCallback(row, data, index) {

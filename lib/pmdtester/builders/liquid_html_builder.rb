@@ -8,13 +8,16 @@ module PmdTester
 
     def write_liquid_file(project)
 
+      # Renders index.html using liquid
       index = File.new(project.diff_report_index_path, 'w')
       index.puts render_liquid(project)
       index.close
 
+      # copy resources
       copy_res(project.target_diff_report_path, "css")
       copy_res(project.target_diff_report_path, "js")
 
+      # generate array of violations in json
       violations_json = File.new("#{project.target_diff_report_path}/violations.js", 'w')
       violations_json.puts dump_violations_json(project)
       violations_json.close
