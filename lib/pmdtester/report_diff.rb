@@ -94,7 +94,7 @@ module PmdTester
       @violation_diffs = merge_changed_violations(@violation_diffs)
 
       @new_violations_size, @changed_violations_size, @removed_violations_size = get_diffs_size(@violation_diffs)
-      @violation_diffs_size = @violation_diffs.size
+      @violation_diffs_size = @new_violations_size + @changed_violations_size + @removed_violations_size
     end
 
     def calculate_errors(base_errors, patch_errors)
@@ -102,7 +102,7 @@ module PmdTester
       @patch_errors_size = patch_errors.errors_size
       @error_diffs = build_diffs(base_errors.errors, patch_errors.errors)
       @new_errors_size, _, @removed_errors_size = get_diffs_size(@error_diffs)
-      @error_diffs_size = @error_diffs.size
+      @error_diffs_size = @new_errors_size + @removed_errors_size
     end
 
     def calculate_configerrors(base_configerrors, patch_configerrors)
@@ -110,7 +110,7 @@ module PmdTester
       @patch_configerrors_size = patch_configerrors.size
       @configerrors_diffs = build_diffs(base_configerrors.errors, patch_configerrors.errors)
       @new_configerrors_size, _, @removed_configerrors_size = get_diffs_size(@configerrors_diffs)
-      @configerrors_diffs_size = @configerrors_diffs.size
+      @configerrors_diffs_size = @new_configerrors_size + @removed_configerrors_size
     end
 
     def calculate_details(base_info, patch_info)

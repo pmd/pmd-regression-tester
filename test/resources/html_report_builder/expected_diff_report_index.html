@@ -20,7 +20,7 @@
 <td class="b">1</td>
 <td class="a">1</td>
 <td class="c">
-<font color="red">-1</font> | <font color="green">+1</font>
+<span class="removed">-1</span> | <span class="added">+1</span>
 </td>
 </tr>
 <tr>
@@ -28,7 +28,7 @@
 <td class="b">5</td>
 <td class="a">8</td>
 <td class="c">
-<font color="red">-2</font> | <font color="green">+5</font>
+<span class="removed">-1</span> | <span class="changed">~1</span> | <span class="added">+4</span>
 </td>
 </tr>
 <tr>
@@ -36,7 +36,7 @@
 <td class="b">1</td>
 <td class="a">2</td>
 <td class="c">
-<font color="red">-0</font> | <font color="green">+1</font>
+<span class="removed">-0</span> | <span class="added">+1</span>
 </td>
 </tr>
 <tr>
@@ -61,18 +61,14 @@
 <table class="bodyTable" border="0">
 <thead><tr>
 <th></th>
-<th>Priority</th>
 <th>Rule</th>
 <th>Message</th>
 <th>Line</th>
 </tr></thead>
 <tbody><tr class="b">
 <td><a id="A1" href="#A1">#</a></td>
-<td>3</td>
 <td><a href="http://pmd.sourceforge.net/snapshot/pmd_rules_java_codestyle.html#fielddeclarationsshouldbeatstartofclass">FieldDeclarationsShouldBeAtStartOfClass</a></td>
-<td>
-Fields should be declared at the top of the class, before any method declarations, constructors, initializers or inner classes.
-</td>
+<td>Fields should be declared at the top of the class, before any method declarations, constructors, initializers or inner classes.</td>
 <td><a href="https://github.com/spring-projects/spring-framework/tree/v5.0.6.RELEASE/spring-aop/src/main/java/org/springframework/aop/Pointcut.java#L51">51</a></td>
 </tr></tbody>
 </table>
@@ -82,37 +78,21 @@ Fields should be declared at the top of the class, before any method declaration
 <table class="bodyTable" border="0">
 <thead><tr>
 <th></th>
-<th>Priority</th>
 <th>Rule</th>
 <th>Message</th>
 <th>Line</th>
 </tr></thead>
 <tbody>
-<tr class="b">
+<tr class="d">
 <td><a id="A2" href="#A2">#</a></td>
-<td>3</td>
 <td><a href="http://pmd.sourceforge.net/snapshot/pmd_rules_java_design.html#godclass">GodClass</a></td>
-<td>
-Possible God Class (WMC=101, ATFD=29, TCC=3.374%)
-</td>
+<td>Possible God Class (WMC=101, ATFD=29, TCC=<del class="differ">4</del><ins class="differ">3</ins>.<del class="differ">000</del><ins class="differ">374</ins>%)</td>
 <td><a href="https://github.com/spring-projects/spring-framework/tree/v5.0.6.RELEASE/spring-aop/src/main/java/org/springframework/aop/aspectj/AbstractAspectJAdvice.java#L63">63</a></td>
 </tr>
 <tr class="a">
 <td><a id="A3" href="#A3">#</a></td>
-<td>3</td>
-<td><a href="http://pmd.sourceforge.net/snapshot/pmd_rules_java_design.html#godclass">GodClass</a></td>
-<td>
-Possible God Class (WMC=101, ATFD=29, TCC=4.000%)
-</td>
-<td><a href="https://github.com/spring-projects/spring-framework/tree/v5.0.6.RELEASE/spring-aop/src/main/java/org/springframework/aop/aspectj/AbstractAspectJAdvice.java#L63">63</a></td>
-</tr>
-<tr class="a">
-<td><a id="A4" href="#A4">#</a></td>
-<td>3</td>
 <td><a href="http://pmd.sourceforge.net/snapshot/pmd_rules_java_codestyle.html#fielddeclarationsshouldbeatstartofclass">FieldDeclarationsShouldBeAtStartOfClass</a></td>
-<td>
-Fields should be declared at the top of the class, before any method declarations, constructors, initializers or inner classes.
-</td>
+<td>Fields should be declared at the top of the class, before any method declarations, constructors, initializers or inner classes.</td>
 <td><a href="https://github.com/spring-projects/spring-framework/tree/v5.0.6.RELEASE/spring-aop/src/main/java/org/springframework/aop/aspectj/AbstractAspectJAdvice.java#L96">96</a></td>
 </tr>
 </tbody>
@@ -123,18 +103,14 @@ Fields should be declared at the top of the class, before any method declaration
 <table class="bodyTable" border="0">
 <thead><tr>
 <th></th>
-<th>Priority</th>
 <th>Rule</th>
 <th>Message</th>
 <th>Line</th>
 </tr></thead>
 <tbody><tr class="a">
-<td><a id="A5" href="#A5">#</a></td>
-<td>3</td>
+<td><a id="A4" href="#A4">#</a></td>
 <td><a href="http://pmd.sourceforge.net/snapshot/pmd_rules_java_codestyle.html#fielddeclarationsshouldbeatstartofclass">FieldDeclarationsShouldBeAtStartOfClass</a></td>
-<td>
-Fields should be declared at the top of the class, before any method declarations, constructors, initializers or inner classes.
-</td>
+<td>Fields should be declared at the top of the class, before any method declarations, constructors, initializers or inner classes.</td>
 <td><a href="https://github.com/spring-projects/spring-framework/tree/v5.0.6.RELEASE/spring-aop/src/main/java/org/springframework/aop/ClassFilter.java#L44">44</a></td>
 </tr></tbody>
 </table>
@@ -144,18 +120,14 @@ Fields should be declared at the top of the class, before any method declaration
 <table class="bodyTable" border="0">
 <thead><tr>
 <th></th>
-<th>Priority</th>
 <th>Rule</th>
 <th>Message</th>
 <th>Line</th>
 </tr></thead>
 <tbody><tr class="a">
-<td><a id="A6" href="#A6">#</a></td>
-<td>3</td>
+<td><a id="A5" href="#A5">#</a></td>
 <td><a href="http://pmd.sourceforge.net/snapshot/pmd_rules_java_codestyle.html#fielddeclarationsshouldbeatstartofclass">FieldDeclarationsShouldBeAtStartOfClass</a></td>
-<td>
-Fields should be declared at the top of the class, before any method declarations, constructors, initializers or inner classes.
-</td>
+<td>Fields should be declared at the top of the class, before any method declarations, constructors, initializers or inner classes.</td>
 <td><a href="https://github.com/spring-projects/spring-framework/tree/v5.0.6.RELEASE/spring-aop/src/main/java/org/springframework/aop/MethodMatcher.java#L97">97</a></td>
 </tr></tbody>
 </table>
@@ -165,18 +137,14 @@ Fields should be declared at the top of the class, before any method declaration
 <table class="bodyTable" border="0">
 <thead><tr>
 <th></th>
-<th>Priority</th>
 <th>Rule</th>
 <th>Message</th>
 <th>Line</th>
 </tr></thead>
 <tbody><tr class="a">
-<td><a id="A7" href="#A7">#</a></td>
-<td>1</td>
+<td><a id="A6" href="#A6">#</a></td>
 <td><a href="http://pmd.sourceforge.net/snapshot/pmd_rules_java_design.html#classwithonlyprivateconstructorsshouldbefinal">ClassWithOnlyPrivateConstructorsShouldBeFinal</a></td>
-<td>
-A class which only has private constructors should be final
-</td>
+<td>A class which only has private constructors should be final</td>
 <td><a href="https://github.com/spring-projects/spring-framework/tree/v5.0.6.RELEASE/spring-aop/src/main/java/org/springframework/aop/TrueClassFilter.java#L27">27</a></td>
 </tr></tbody>
 </table>
