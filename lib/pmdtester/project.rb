@@ -63,6 +63,10 @@ module PmdTester
       file_path.gsub(%r{/#{local_source_path}}, @name)
     end
 
+    def get_local_path(file_path)
+      file_path.sub(%r{/#{local_source_path}/}, "")
+    end
+
     def get_pmd_report_path(branch_name)
       if branch_name.nil?
         nil

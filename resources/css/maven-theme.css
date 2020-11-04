@@ -124,16 +124,16 @@ table.bodyTable td.a {
   background-color: #af8;
 }
 
-#violationsTable tr.a {
+#violationsTable tr.added {
   background-color: #af8;
 }
 
-#violationsTable tr.b {
+#violationsTable tr.removed {
   background-color: #fca;
 }
 
-table.bodyTable td.c {
-  background-color: #eee;
+#violationsTable tr.changed {
+  background-color: #fef7bc;
 }
 
 .source {

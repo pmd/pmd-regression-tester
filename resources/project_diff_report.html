@@ -7,7 +7,7 @@
     <script type="text/javascript" src="js/jquery.min.js"></script>
     <script type="text/javascript" src="js/datatables.min.js"></script>
     <!-- This is generated -->
-    <script type="text/javascript" src="violations.js"></script>
+    <script type="text/javascript" src="project_data.js"></script>
 
     <link rel="stylesheet" href="css/maven-base.css">
     <link rel="stylesheet" href="css/maven-theme.css">
@@ -21,9 +21,9 @@
     <table id="violationsTable" width="100%">
         <thead>
         <tr>
+            <th>Location</th>
             <th>Rule</th>
             <th>Message</th>
-            <th>Line</th>
         </tr>
         </thead>
     </table>
@@ -32,19 +32,47 @@
 </div>
 
 <script type="text/javascript">
+
+    function makeCodeLink(violation) {
+        let template = project.source_link_template
+        template = template.replace('{file}', violation.file)
+        return template.replace('{line}', violation.line)
+    }
+
+    function extractFilename(path) {
+        const pathArray = path.split("/");
+        return pathArray[pathArray.length - 1];
+    }
+
+    const cssClass = {
+        "+": "added",
+        "-": "removed",
+        "~": "changed",
+    }
+
     $(document).ready(function () {
         $('#violationsTable').DataTable({
-            data: allViolations,
+            data: project.violations,
             columns: [
                 {"data": "file"},
                 {"data": "rule"},
                 {"data": "message"},
-                {"data": "line"},
+            ],
+            columnDefs: [
+                {
+                    render(data, type, row) {
+                        // display only the file name (not full path), but use full
+                        // path for sorting and such
+                        return type === "display"
+                            ? "<a href='" + makeCodeLink(row) + "'>" + extractFilename(data) + " @ line " + row.line + "</a>"
+                            : data;
+                    },
+                    targets: 0
+                }
             ],
             displayLength: 50,
             rowCallback(row, data, index) {
-                let klass = (data.t === "+") ? "a" : "b";
-                $(row).addClass(klass);
+                $(row).addClass(cssClass[data.t]);
             },
         });
     });
