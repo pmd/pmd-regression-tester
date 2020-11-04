@@ -58,6 +58,7 @@ module PmdTester
       @base_violations_size = 0
       @patch_violations_size = 0
       @new_violations_size = 0
+      @changed_violations_size = 0
       @removed_violations_size = 0
       @violation_diffs_size = 0
     end
