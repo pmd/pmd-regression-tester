@@ -62,7 +62,7 @@ module PmdTester
     end
 
     def line_move?(other)
-      message.eql?(other.message) && (line - other.line).abs == 1
+      message.eql?(other.message) && (line - other.line).abs <= 5
     end
 
     def try_merge?(other)
