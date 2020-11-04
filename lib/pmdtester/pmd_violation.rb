@@ -74,6 +74,29 @@ module PmdTester
       end
     end
 
+    def rule
+      @attrs['rule']
+    end
+
+    def info_url
+      @attrs['externalInfoUrl']
+    end
+
+    # only makes sense if this is a diff
+    def added?
+      branch != BASE and not changed
+    end
+
+    # only makes sense if this is a diff
+    def changed?
+      @changed
+    end
+
+    # only makes sense if this is a diff
+    def removed?
+      branch == BASE
+    end
+
     def eql?(other)
       same_modulo_message?(other) &&
         @text.eql?(other.text)

@@ -2,9 +2,12 @@
 <head>
     <title>{{title}}</title>
 
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css" href="css/datatables.min.css"/>
 
-    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script src="js/jquery-3.2.1.slim.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/datatables.min.js"></script>
     <!-- This is generated -->
     <script type="text/javascript" src="project_data.js"></script>
@@ -15,70 +18,118 @@
 <body>
 <div class="section">
     <h2>Summary</h2>
-    <table id="table-summary">
-        <thead><tr>
-            <th></th>
-            <th>Base</th>
-            <th>Patch</th>
-            <th>Difference</th>
-        </tr></thead>
-        <tbody>
-        <tr>
-            <td class="item"><a href="#section-errors">Errors</a></td>
-            <td class="base">{{diff.base_errors_size}}</td>
-            <td class="patch">{{diff.patch_errors_size}}</td>
-            <td class="diff">
-                <span class="removed">-{{diff.removed_errors_size}}</span> | <span class="added">+{{diff.new_errors_size}}</span>
-            </td>
-        </tr>
-        <tr>
-            <td class="item"><a href="#section-violations">Violations</a></td>
-            <td class="base">{{diff.base_violations_size}}</td>
-            <td class="patch">{{diff.patch_violations_size}}</td>
-            <td class="diff">
-                <span class="removed">-{{diff.removed_violations_size}}</span> | <span class="changed">~{{diff.changed_violations_size}}</span> | <span class="added">+{{diff.new_violations_size}}</span>
-            </td>
-        </tr>
-        <tr>
-            <td class="item"><a href="#section-configerrors">Config errors</a></td>
-            <td class="base">{{diff.base_configerrors_size}}</td>
-            <td class="patch">{{diff.patch_configerrors_size}}</td>
-            <td class="diff">
-                <span class="removed">-{{diff.removed_configerrors_size}}</span> | <span class="added">+{{diff.new_configerrors_size}}</span>
-            </td>
-        </tr>
-        <tr>
-            <td class="item">Execution time</td>
-            <td class="base">{{diff.base_execution_time}}</td>
-            <td class="patch">{{diff.patch_execution_time}}</td>
-            <td class="diff">{{diff.diff_execution_time}}</td>
-        </tr>
-        <tr>
-            <td class="item">Timestamp</td>
-            <td class="base">{{diff.base_timestamp}}</td>
-            <td class="patch">{{diff.patch_timestamp}}</td>
-            <td class="diff"></td>
-        </tr>
-        </tbody>
-    </table>
+    <div class="section-content">
+        <table id="table-summary">
+            <thead>
+            <tr>
+                <th></th>
+                <th>Base</th>
+                <th>Patch</th>
+                <th>Difference</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td class="item"><a href="#section-errors">Errors</a></td>
+                <td class="base">{{diff.base_errors_size}}</td>
+                <td class="patch">{{diff.patch_errors_size}}</td>
+                <td class="diff">
+                    <span class="removed">-{{diff.removed_errors_size}}</span>
+                    | <span class="added">+{{diff.new_errors_size}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="item"><a href="#section-violations">Violations</a>
+                </td>
+                <td class="base">{{diff.base_violations_size}}</td>
+                <td class="patch">{{diff.patch_violations_size}}</td>
+                <td class="diff">
+                    <span class="removed">-{{diff.removed_violations_size}}</span>
+                    | <span class="changed">~{{diff.changed_violations_size}}</span>
+                    | <span class="added">+{{diff.new_violations_size}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="item"><a href="#section-configerrors">Config
+                    errors</a></td>
+                <td class="base">{{diff.base_configerrors_size}}</td>
+                <td class="patch">{{diff.patch_configerrors_size}}</td>
+                <td class="diff">
+                    <span class="removed">-{{diff.removed_configerrors_size}}</span>| <span class="added">+{{diff.new_configerrors_size}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="item">Execution time</td>
+                <td class="base">{{diff.base_execution_time}}</td>
+                <td class="patch">{{diff.patch_execution_time}}</td>
+                <td class="diff">{{diff.diff_execution_time}}</td>
+            </tr>
+            <tr>
+                <td class="item">Timestamp</td>
+                <td class="base">{{diff.base_timestamp}}</td>
+                <td class="patch">{{diff.patch_timestamp}}</td>
+                <td class="diff"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="section" id="section-rule-summary">
+
+    <h2>Summary by rule</h2>
+
+    <div class="section-content">
+
+        <table id="rule-summary">
+            <thead>
+            <tr>
+                <th>Rule</th>
+                <!--            <th>Base</th>-->
+                <!--            <th>Patch</th>-->
+                <th>Added</th>
+                <th>Changed</th>
+                <th>Removed</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            {% assign sorted_rule_diffs = diff.rule_diffs | sort: 'name' %}
+
+
+            {% for rule_diff in sorted_rule_diffs %}
+            <tr>
+                <td id="rule-summary-{{rule_diff.name}}" class="rulename"><a class="rulelink" href="{{rule_diff.info_url}}">{{ rule_diff.name }}</a></td>
+                {% comment %}
+                <td class="basecount">{{ rule_diff.base_count }}</td>
+                <td class="patchcount">{{ rule_diff.patch_count }}</td>
+                {% endcomment %}
+                <td class="added" data-count="{{ rule_diff.added }}">{{ rule_diff.added }}</td>
+                <td class="changed" data-count="{{ rule_diff.changed }}">{{ rule_diff.changed }}</td>
+                <td class="removed" data-count="{{ rule_diff.removed }}">{{ rule_diff.removed }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 <div class="section" id="section-violations">
 
     <h2>Violations</h2>
 
+    <div class="section-content">
 
+        <table id="violationsTable" width="100%">
+            <thead>
+            <tr>
+                <th>Location</th>
+                <th>Rule</th>
+                <th>Message</th>
+            </tr>
+            </thead>
+        </table>
 
-    <table id="violationsTable" width="100%">
-        <thead>
-        <tr>
-            <th>Location</th>
-            <th>Rule</th>
-            <th>Message</th>
-        </tr>
-        </thead>
-    </table>
-
-
+    </div>
 </div>
 
 <script type="text/javascript">
@@ -109,7 +160,7 @@
                 {"data": "message"},
             ],
             columnDefs: [
-                {
+                { //file column
                     render(data, type, row) {
                         // display only the file name (not full path), but use full
                         // path for sorting and such
@@ -121,6 +172,17 @@
                             return data;
                     },
                     targets: 0
+                },
+                { // rule column
+                    render(data, type, row) {
+                        // display only the file name (not full path), but use full
+                        // path for sorting and such
+                        if (type === "display")
+                            return "<a href='#rule-summary-" + data + "'>" + data + "</a>"
+                        else
+                            return data;
+                    },
+                    targets: 1
                 }
             ],
             displayLength: 50,

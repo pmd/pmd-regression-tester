@@ -153,25 +153,26 @@ module PmdTester
       diff_violations.each do |fname, different|
         diff_violations[fname] = different.dup.delete_if do |v|
           v.branch == BASE &&
-            # try_merge will set v2.changed = true if it succeeds
-            different.any? { |v2| v2.try_merge?(v) }
+              # try_merge will set v2.changed = true if it succeeds
+              different.any? { |v2| v2.try_merge?(v) }
         end
       end
     end
 
-    def get_diffs_size(diffs_hash)
+    def get_diffs_size(item_array)
+      if item_array.is_a?(Hash)
+        item_array = item_array.values.flatten
+      end
       new_size = 0
       changed_size = 0
       removed_size = 0
-      diffs_hash.each_value do |value|
-        value.each do |item|
-          if item.changed
-            changed_size += 1
-          elsif item.branch.eql?(BASE)
-            removed_size += 1
-          else
-            new_size += 1
-          end
+      item_array.each do |item|
+        if item.changed
+          changed_size += 1
+        elsif item.branch.eql?(BASE)
+          removed_size += 1
+        else
+          new_size += 1
         end
       end
       [new_size, changed_size, removed_size]
@@ -180,6 +181,22 @@ module PmdTester
     def introduce_new_errors?
       !@new_errors_size.zero? || !@new_configerrors_size.zero?
     end
+
+    def make_rule_diffs
+      rule_to_violations = @violation_diffs.values.flatten.group_by { |v| v.rule }
+
+      rule_to_violations.values.map do |vs|
+        added, changed, removed = get_diffs_size(vs)
+        {# Note: don't use symbols as hash keys for liquid
+         'name' => vs[0].rule,
+         'info_url' => vs[0].info_url,
+         'added' => added,
+         'changed' => changed,
+         'removed' => removed,
+        }
+      end
+    end
+
 
     def to_liquid
       {
@@ -208,6 +225,7 @@ module PmdTester
           'violation_diffs' => violation_diffs,
           'error_diffs' => error_diffs,
           'configerrors_diffs' => configerrors_diffs,
+          'rule_diffs' => make_rule_diffs,
       }
     end
   end

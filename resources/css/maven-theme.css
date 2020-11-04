@@ -124,16 +124,34 @@ table.bodyTable td.a {
   background-color: #af8;
 }
 
-#violationsTable tr.added {
+/* newer stuff */
+
+#violationsTable tr.added,
+#rule-summary td.added {
   background-color: #af8;
 }
 
-#violationsTable tr.removed {
+#violationsTable tr.removed,
+#rule-summary td.removed{
   background-color: #fca;
 }
 
-#violationsTable tr.changed {
+#violationsTable tr.changed,
+#rule-summary td.changed {
   background-color: #fef7bc;
+}
+
+#rule-summary td[data-count='0'],
+#rule-summary td {
+  background-color: #fefefe;
+}
+
+#rule-summary td.rulename {
+  align: right;
+}
+
+div.section-content {
+  margin: 100px;
 }
 
 .source {

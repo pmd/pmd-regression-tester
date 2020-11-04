@@ -75,7 +75,7 @@ module PmdTester
       liquid_env = {
           'diff' => project.report_diff,
           'violation_diffs' => violations,
-          'title' => 'TODO'
+          'title' => "Diff report for #{project.name}"
       }
 
 
