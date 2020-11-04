@@ -47,7 +47,7 @@ module PmdTester
       FileUtils.copy_entry(CSS_SRC_DIR, css_dest_dir)
     end
 
-    def build_table_content_for(doc, removed_size, new_size, changed_size=nil)
+    def build_table_content_for(doc, removed_size, new_size, changed_size = nil)
       doc.span(class: 'removed') { doc.text "-#{removed_size}" }
       if changed_size
         doc.text ' | '

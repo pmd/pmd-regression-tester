@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'differ'
 
 # Contains methods to write out html for the violations.
@@ -75,7 +76,7 @@ module DiffReportBuilderViolations
   end
 
   def diff_fragments(doc, violation)
-    old_message = violation.attrs["oldMessage"]
+    old_message = violation.attrs['oldMessage']
     new_message = violation.text
     diff = Differ.diff_by_word(old_message, new_message)
     doc << diff.format_as(:html)

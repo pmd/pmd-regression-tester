@@ -59,13 +59,13 @@ module PmdTester
       @text = ''
     end
 
-    def is_same_modulo_message?(other)
+    def same_modulo_message?(other)
       @attrs['beginline'].eql?(other.attrs['beginline']) &&
-          @attrs['rule'].eql?(other.attrs['rule'])
+        @attrs['rule'].eql?(other.attrs['rule'])
     end
 
     def try_merge?(other)
-      if branch != BASE && @branch != other.branch && is_same_modulo_message?(other)
+      if branch != BASE && @branch != other.branch && same_modulo_message?(other)
         @changed = true
         @attrs['oldMessage'] = other.text
         true
@@ -75,7 +75,7 @@ module PmdTester
     end
 
     def eql?(other)
-      is_same_modulo_message?(other) &&
+      same_modulo_message?(other) &&
         @text.eql?(other.text)
     end
 

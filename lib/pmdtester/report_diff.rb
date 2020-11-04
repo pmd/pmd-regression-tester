@@ -146,11 +146,11 @@ module PmdTester
     # @param diff_violations a hash { filename => list[violation]}, containing those that changed
     def merge_changed_violations(diff_violations)
       diff_violations.each do |fname, different|
-        diff_violations[fname] = different.dup.delete_if { |v|
+        diff_violations[fname] = different.dup.delete_if do |v|
           v.branch == BASE &&
-              # try_merge will set v2.changed = true if it succeeds
-              different.any? { |v2| v2.try_merge?(v) }
-        }
+            # try_merge will set v2.changed = true if it succeeds
+            different.any? { |v2| v2.try_merge?(v) }
+        end
       end
     end
 
