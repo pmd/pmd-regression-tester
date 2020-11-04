@@ -78,6 +78,18 @@ module PmdTester
       end
     end
 
+    def old_message
+      @attrs['oldMessage']
+    end
+
+    def old_line
+      @attrs['oldLine']
+    end
+
+    def info_url
+      @attrs['externalInfoUrl']
+    end
+
     def line
       @attrs['beginline']
     end
