@@ -68,7 +68,7 @@ module DiffReportBuilderViolations
   end
 
   def display_line(violation)
-    if violation.changed && violation.old_line != violation.line
+    if violation.changed && violation.old_line && violation.old_line != violation.line
       "#{violation.old_line} => #{violation.line}"
     else
       violation.line

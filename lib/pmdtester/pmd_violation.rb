@@ -67,11 +67,11 @@ module PmdTester
 
     def try_merge?(other)
       if branch != BASE && branch != other.branch && rule_name == other.rule_name &&
+         !changed && # not already changed
          (line == other.line || line_move?(other))
         @changed = true
         @attrs['oldMessage'] = other.text
         @attrs['oldLine'] = other.line
-        puts "Merged #{self} into #{other}"
         true
       else
         false
@@ -83,7 +83,7 @@ module PmdTester
     end
 
     def old_line
-      @attrs['oldLine']
+      @attrs['oldLine']&.to_i
     end
 
     def info_url
@@ -91,7 +91,7 @@ module PmdTester
     end
 
     def line
-      @attrs['beginline']
+      @attrs['beginline'].to_i
     end
 
     def rule_name

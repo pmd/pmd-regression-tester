@@ -17,6 +17,9 @@ Fields should be declared at the top of the class, before any method declaration
 <violation beginline="30" endline="73" begincolumn="1" endcolumn="1" rule="ClassWithOnlyPrivateConstructorsShouldBeFinal" ruleset="Design" package="org.springframework.aop" externalInfoUrl="http://pmd.sourceforge.net/snapshot/pmd_rules_java_design.html#classwithonlyprivateconstructorsshouldbefinal" priority="1">
 A class which only has private constructors should be final
 </violation>
+<violation beginline="40" endline="60" begincolumn="1" endcolumn="1" rule="SomeRule" ruleset="Design" package="org.springframework.aop" externalInfoUrl="http://pmd.sourceforge.net/snapshot/pmd_rules_java_design.html#somerule" priority="1">
+Some message
+</violation>
 </file>
 <file name="SHOULD_BE_REPLACED/target/repositories/spring-framework/spring-aop/src/main/java/org/springframework/aop/aspectj/AbstractAspectJAdvice.java">
 <violation beginline="63" endline="742" begincolumn="17" endcolumn="1" rule="GodClass" ruleset="Design" package="org.springframework.aop.aspectj" class="AbstractAspectJAdvice" externalInfoUrl="http://pmd.sourceforge.net/snapshot/pmd_rules_java_design.html#godclass" priority="3">
