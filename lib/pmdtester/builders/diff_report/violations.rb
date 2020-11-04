@@ -26,7 +26,7 @@ module DiffReportBuilderViolations
   end
 
   def build_violation_table_head(doc)
-    build_table_head(doc, '', 'Priority', 'Rule', 'Message', 'Line')
+    build_table_head(doc, '', 'Rule', 'Message', 'Line')
   end
 
   def build_violation_table_body(doc, key, value)
@@ -50,9 +50,6 @@ module DiffReportBuilderViolations
       build_table_anchor_column(doc, 'A', increment_violation_index)
 
       violation = pmd_violation.attrs
-
-      # The priority of the rule
-      doc.td violation['priority']
 
       # The rule that trigger the violation
       doc.td do
