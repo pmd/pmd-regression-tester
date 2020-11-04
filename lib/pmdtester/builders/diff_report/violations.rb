@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require 'differ'
 
 # Contains methods to write out html for the violations.
 # This mixin is used by DiffReportBuilder.
@@ -59,7 +60,11 @@ module DiffReportBuilderViolations
       end
 
       # The violation message
-      doc.td "\n" + pmd_violation.text + "\n"
+      if pmd_violation.changed
+        doc.td { diff_fragments(doc, pmd_violation) }
+      else
+        doc.td pmd_violation.text
+      end
 
       # The begin line of the violation
       line = violation['beginline']
@@ -70,6 +75,13 @@ module DiffReportBuilderViolations
         doc.a(href: link.to_s) { doc.text line }
       end
     end
+  end
+
+  def diff_fragments(doc, violation)
+    old_message = violation.attrs["oldMessage"]
+    new_message = violation.text
+    diff = Differ.diff_by_word(old_message, new_message)
+    doc << diff.format_as(:html)
   end
 
   def get_link_to_source(violation, key)
