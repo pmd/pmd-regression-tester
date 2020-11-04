@@ -13,10 +13,60 @@
     <link rel="stylesheet" href="css/maven-theme.css">
 </head>
 <body>
-
 <div class="section">
+    <h2>Summary</h2>
+    <table id="table-summary">
+        <thead><tr>
+            <th></th>
+            <th>Base</th>
+            <th>Patch</th>
+            <th>Difference</th>
+        </tr></thead>
+        <tbody>
+        <tr>
+            <td class="item"><a href="#section-errors">Errors</a></td>
+            <td class="base">{{diff.base_errors_size}}</td>
+            <td class="patch">{{diff.patch_errors_size}}</td>
+            <td class="diff">
+                <span class="removed">-{{diff.removed_errors_size}}</span> | <span class="added">+{{diff.new_errors_size}}</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="item"><a href="#section-violations">Violations</a></td>
+            <td class="base">{{diff.base_violations_size}}</td>
+            <td class="patch">{{diff.patch_violations_size}}</td>
+            <td class="diff">
+                <span class="removed">-{{diff.removed_violations_size}}</span> | <span class="changed">~{{diff.changed_violations_size}}</span> | <span class="added">+{{diff.new_violations_size}}</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="item"><a href="#section-configerrors">Config errors</a></td>
+            <td class="base">{{diff.base_configerrors_size}}</td>
+            <td class="patch">{{diff.patch_configerrors_size}}</td>
+            <td class="diff">
+                <span class="removed">-{{diff.removed_configerrors_size}}</span> | <span class="added">+{{diff.new_configerrors_size}}</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="item">Execution time</td>
+            <td class="base">{{diff.base_execution_time}}</td>
+            <td class="patch">{{diff.patch_execution_time}}</td>
+            <td class="diff">{{diff.diff_execution_time}}</td>
+        </tr>
+        <tr>
+            <td class="item">Timestamp</td>
+            <td class="base">{{diff.base_timestamp}}</td>
+            <td class="patch">{{diff.patch_timestamp}}</td>
+            <td class="diff"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="section" id="section-violations">
 
     <h2>Violations</h2>
+
+
 
     <table id="violationsTable" width="100%">
         <thead>
@@ -63,9 +113,12 @@
                     render(data, type, row) {
                         // display only the file name (not full path), but use full
                         // path for sorting and such
-                        return type === "display"
-                            ? "<a href='" + makeCodeLink(row) + "'>" + extractFilename(data) + " @ line " + row.line + "</a>"
-                            : data;
+                        if (type === "display")
+                            return "<a href='" + makeCodeLink(row) + "'>" + extractFilename(data) + " @ line " + row.line + "</a>"
+                        else if (type === "sort")
+                            return data + "#" + row.line
+                        else
+                            return data;
                     },
                     targets: 0
                 }
