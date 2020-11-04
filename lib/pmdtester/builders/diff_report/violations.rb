@@ -39,15 +39,7 @@ module DiffReportBuilderViolations
   end
 
   def build_violation_table_row(doc, key, pmd_violation)
-    klass = if pmd_violation.changed
-              'd'
-            elsif pmd_violation.branch == PmdTester::BASE
-              'b'
-            else
-              'a'
-            end
-
-    doc.tr(class: klass) do
+    doc.tr(class: get_css_class(pmd_violation)) do
       build_table_anchor_column(doc, 'A', increment_violation_index)
 
       violation = pmd_violation.attrs
@@ -91,5 +83,17 @@ module DiffReportBuilderViolations
   def increment_violation_index
     @violation_index ||= 0 # init with 0
     @violation_index += 1
+  end
+
+  private
+
+  def get_css_class(pmd_violation)
+    if pmd_violation.changed
+      'd'
+    elsif pmd_violation.branch == PmdTester::BASE
+      'b'
+    else
+      'a'
+    end
   end
 end

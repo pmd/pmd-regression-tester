@@ -142,8 +142,7 @@ module PmdTester
             end
             doc.td project.tag
             doc.td do
-              build_table_content_for(doc, project.removed_errors_size,
-                                      project.new_errors_size)
+              build_table_content_for(doc, project.removed_errors_size, project.new_errors_size)
             end
             doc.td do
               build_table_content_for(doc, project.removed_violations_size,

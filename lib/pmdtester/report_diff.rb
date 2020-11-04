@@ -94,8 +94,12 @@ module PmdTester
       @violation_diffs = build_diffs(base_violations.violations, patch_violations.violations)
       @violation_diffs = merge_changed_violations(@violation_diffs)
 
-      @new_violations_size, @changed_violations_size, @removed_violations_size = get_diffs_size(@violation_diffs)
-      @violation_diffs_size = @new_violations_size + @changed_violations_size + @removed_violations_size
+      @new_violations_size,
+          @changed_violations_size,
+          @removed_violations_size = get_diffs_size(@violation_diffs)
+      @violation_diffs_size = @new_violations_size +
+                              @changed_violations_size +
+                              @removed_violations_size
     end
 
     def calculate_errors(base_errors, patch_errors)
