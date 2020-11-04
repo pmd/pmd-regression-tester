@@ -1,13 +1,13 @@
-body {
-  padding: 0px 0px 10px 0px;
-}
+/*body {*/
+/*  padding: 0px 0px 10px 0px;*/
+/*}*/
 body, td, select, input, li{
   font-family: Verdana, Helvetica, Arial, sans-serif;
-  font-size: 13px;
+  font-size: 13pt;
 }
 code{
   font-family: Courier, monospace;
-  font-size: 13px;
+  font-size: 13pt;
 }
 a {
   text-decoration: none;
@@ -66,32 +66,11 @@ p {
   line-height: 1.3em;
   font-size: small;
 }
-#breadcrumbs {
-  border-top: 1px solid #aaa;
-  border-bottom: 1px solid #aaa;
-  background-color: #ccc;
-}
-#leftColumn {
-  margin: 10px 0 0 5px;
-  border: 1px solid #999;
-  background-color: #eee;
-}
-#navcolumn h5 {
-  font-size: smaller;
-  border-bottom: 1px solid #aaaaaa;
-  padding-top: 2px;
-  color: #000;
-}
 
-table.bodyTable th {
-  color: white;
-  background-color: #bbb;
-  text-align: left;
-  font-weight: bold;
-}
+/* newer stuff */
 
-table.bodyTable th, table.bodyTable td {
-  font-size: 1em;
+table {
+  width: 100%;
 }
 
 span.added {
@@ -103,28 +82,6 @@ span.removed {
 span.changed {
   color: darkorange;
 }
-
-table.bodyTable tr.a {
-  background-color: #af8;
-}
-
-table.bodyTable tr.b {
-  background-color: #fca;
-}
-
-table.bodyTable tr.c {
-  background-color: #eee;
-}
-
-table.bodyTable tr.d {
-  background-color: #fef7bc;
-}
-
-table.bodyTable td.a {
-  background-color: #af8;
-}
-
-/* newer stuff */
 
 #violationsTable tr.added,
 #rule-summary td.added {
@@ -153,51 +110,3 @@ table.bodyTable td.a {
 div.section-content {
   margin: 100px;
 }
-
-.source {
-  border: 1px solid #999;
-}
-dl {
-  padding: 4px 4px 4px 6px;
-  border: 1px solid #aaa;
-  background-color: #ffc;
-}
-dt {
-  color: #900;
-}
-
-#banner {
-  border-bottom: 1px solid #fff;
-}
-
-button {
-    background-color: #ddd;
-    border: none;
-    color: #900;
-    padding: 6px 12px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 25px;
-    margin: 4px 2px;
-    cursor: pointer;
-}
-
-#example {
-  position: relative;
-}
-
-#example-checkbox {
-  display: none;
-}
-
-#example-checkbox:checked + #example:after {
-  content: attr(data-text);
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: white;
-}
-
