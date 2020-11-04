@@ -55,6 +55,10 @@ module PmdTester
       @attrs['msg']
     end
 
+    def changed
+      false
+    end
+
     def eql?(other)
       filename.eql?(other.filename) && msg.eql?(other.msg) &&
         @text.eql?(other.text)

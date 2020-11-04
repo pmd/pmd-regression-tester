@@ -47,10 +47,14 @@ module PmdTester
       FileUtils.copy_entry(CSS_SRC_DIR, css_dest_dir)
     end
 
-    def build_table_content_for(doc, removed_size, new_size)
-      doc.font(color: 'red') { doc.text "-#{removed_size}" }
+    def build_table_content_for(doc, removed_size, new_size, changed_size=nil)
+      doc.span(class: 'removed') { doc.text "-#{removed_size}" }
+      if changed_size
+        doc.text ' | '
+        doc.span(class: 'changed') { doc.text "~#{changed_size}" }
+      end
       doc.text ' | '
-      doc.font(color: 'green') { doc.text "+#{new_size}" }
+      doc.span(class: 'added') { doc.text "+#{new_size}" }
     end
   end
 end

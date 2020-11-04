@@ -49,15 +49,33 @@ module PmdTester
     attr_reader :attrs
     attr_accessor :text
 
+    # means it was in both branches but changed messages
+    attr_accessor :changed
+
     def initialize(attrs, branch)
       @attrs = attrs
       @branch = branch
+      @changed = false
       @text = ''
     end
 
-    def eql?(other)
+    def is_same_modulo_message?(other)
       @attrs['beginline'].eql?(other.attrs['beginline']) &&
-        @attrs['rule'].eql?(other.attrs['rule']) &&
+          @attrs['rule'].eql?(other.attrs['rule'])
+    end
+
+    def try_merge?(other)
+      if branch != BASE && @branch != other.branch && is_same_modulo_message?(other)
+        @changed = true
+        @attrs['oldMessage'] = other.text
+        true
+      else
+        false
+      end
+    end
+
+    def eql?(other)
+      is_same_modulo_message?(other) &&
         @text.eql?(other.text)
     end
 

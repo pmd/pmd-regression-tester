@@ -52,6 +52,10 @@ module PmdTester
       @attrs['msg']
     end
 
+    def changed
+      false
+    end
+
     def eql?(other)
       rulename.eql?(other.rulename) && msg.eql?(other.msg)
     end

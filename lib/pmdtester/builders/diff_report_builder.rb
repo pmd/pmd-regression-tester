@@ -82,7 +82,8 @@ module PmdTester
                           base: @report_diff.base_violations_size,
                           patch: @report_diff.patch_violations_size,
                           removed: @report_diff.removed_violations_size,
-                          added: @report_diff.new_violations_size
+                          added: @report_diff.new_violations_size,
+                          changed: @report_diff.changed_violations_size
                         })
     end
 
@@ -127,7 +128,7 @@ module PmdTester
         doc.td(class: 'a') { doc.text row_data[:patch] }
         doc.td(class: 'c') do
           if row_data.key?(:removed) && row_data.key?(:added)
-            build_table_content_for(doc, row_data[:removed], row_data[:added])
+            build_table_content_for(doc, row_data[:removed], row_data[:added], row_data[:changed])
           elsif row_data.key?(:diff_execution_time)
             doc.text row_data[:diff_execution_time]
           end
