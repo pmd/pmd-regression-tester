@@ -25,7 +25,7 @@ class TestPmdReportDocument < Test::Unit::TestCase
     parser.parse(File.open('test/resources/pmd_report_document/test_document.xml'))
     assert_equal(1, doc.violations.violations_size)
     assert_equal('UncommentedEmptyConstructor',
-                 doc.violations.violations[FIRST_FILE][0].attrs['rule'])
+                 doc.violations.violations[FIRST_FILE][0].rule_name)
     # note: errors are not filtered - they don't refer to a rule/ruleset
   end
 

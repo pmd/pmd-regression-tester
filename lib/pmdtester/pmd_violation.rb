@@ -47,36 +47,61 @@ module PmdTester
     # </xs:complexType>
 
     attr_reader :attrs
+    attr_reader :fname
     attr_accessor :text
 
     # means it was in both branches but changed messages
     attr_accessor :changed
 
-    def initialize(attrs, branch)
+    def initialize(attrs, branch, fname)
       @attrs = attrs
       @branch = branch
       @changed = false
+      @fname = fname
       @text = ''
     end
 
-    def same_modulo_message?(other)
-      @attrs['beginline'].eql?(other.attrs['beginline']) &&
-        @attrs['rule'].eql?(other.attrs['rule'])
+    def line_move?(other)
+      message.eql?(other.message) && (line - other.line).abs <= 5
     end
 
     def try_merge?(other)
-      if branch != BASE && @branch != other.branch && same_modulo_message?(other)
+      if branch != BASE && branch != other.branch && rule_name == other.rule_name &&
+         !changed && # not already changed
+         (line == other.line || line_move?(other))
         @changed = true
         @attrs['oldMessage'] = other.text
+        @attrs['oldLine'] = other.line
         true
       else
         false
       end
     end
 
-    def rule
+    def old_message
+      @attrs['oldMessage']
+    end
+
+    def old_line
+      @attrs['oldLine']&.to_i
+    end
+
+    def info_url
+      @attrs['externalInfoUrl']
+    end
+
+    def line
+      @attrs['beginline'].to_i
+    end
+
+    def rule_name
       @attrs['rule']
     end
+
+    def message
+      @text
+    end
+
 
     def info_url
       @attrs['externalInfoUrl']
@@ -98,12 +123,14 @@ module PmdTester
     end
 
     def eql?(other)
-      same_modulo_message?(other) &&
-        @text.eql?(other.text)
+      rule_name.eql?(other.rule_name) &&
+        line.eql?(other.line) &&
+        fname.eql?(other.fname) &&
+        message.eql?(other.message)
     end
 
     def hash
-      [@attrs['beginline'], @attrs['rule'], @text].hash
+      [line, rule_name, message].hash
     end
 
     def to_liquid

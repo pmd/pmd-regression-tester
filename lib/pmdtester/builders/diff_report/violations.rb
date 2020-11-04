@@ -38,45 +38,46 @@ module DiffReportBuilderViolations
     end
   end
 
-  def build_violation_table_row(doc, key, pmd_violation)
-    doc.tr(class: get_css_class(pmd_violation)) do
+  def build_violation_table_row(doc, key, violation)
+    doc.tr(class: get_css_class(violation)) do
       build_table_anchor_column(doc, 'A', increment_violation_index)
-
-      violation = pmd_violation.attrs
 
       # The rule that trigger the violation
       doc.td do
-        doc.a(href: (violation['externalInfoUrl']).to_s) { doc.text violation['rule'] }
+        doc.a(href: violation.info_url.to_s) { doc.text violation.rule_name }
       end
 
       # The violation message
-      if pmd_violation.changed
-        doc.td { diff_fragments(doc, pmd_violation) }
+      if violation.changed && violation.message != violation.old_message
+        doc.td { diff_fragments(doc, violation) }
       else
-        doc.td pmd_violation.text
+        doc.td violation.text
       end
-
-      # The begin line of the violation
-      line = violation['beginline']
 
       # The link to the source file
       doc.td do
         link = get_link_to_source(violation, key)
-        doc.a(href: link.to_s) { doc.text line }
+        doc.a(href: link.to_s) { doc.text display_line(violation) }
       end
     end
   end
 
   def diff_fragments(doc, violation)
-    old_message = violation.attrs['oldMessage']
-    new_message = violation.text
-    diff = Differ.diff_by_word(old_message, new_message)
+    diff = Differ.diff_by_word(violation.old_message, violation.message)
     doc << diff.format_as(:html)
+  end
+
+  def display_line(violation)
+    if violation.changed && violation.old_line && violation.old_line != violation.line
+      "#{violation.old_line} => #{violation.line}"
+    else
+      violation.line
+    end
   end
 
   def get_link_to_source(violation, key)
     l_str = @project.type == 'git' ? 'L' : 'l'
-    line_str = "##{l_str}#{violation['beginline']}"
+    line_str = "##{l_str}#{violation.line}"
     @project.get_webview_url(key) + line_str
   end
 
@@ -84,8 +85,6 @@ module DiffReportBuilderViolations
     @violation_index ||= 0 # init with 0
     @violation_index += 1
   end
-
-  private
 
   def get_css_class(pmd_violation)
     if pmd_violation.changed
