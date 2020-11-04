@@ -50,9 +50,6 @@ module PmdTester
     attr_reader :fname
     attr_accessor :text
 
-    # means it was in both branches but changed messages
-    attr_accessor :changed
-
     def initialize(attrs, branch, fname)
       @attrs = attrs
       @branch = branch
@@ -102,14 +99,9 @@ module PmdTester
       @text
     end
 
-
-    def info_url
-      @attrs['externalInfoUrl']
-    end
-
     # only makes sense if this is a diff
     def added?
-      branch != BASE and not changed
+      branch != BASE && !changed?
     end
 
     # only makes sense if this is a diff

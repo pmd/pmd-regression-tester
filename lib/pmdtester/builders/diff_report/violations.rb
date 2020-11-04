@@ -48,7 +48,7 @@ module DiffReportBuilderViolations
       end
 
       # The violation message
-      if violation.changed && violation.message != violation.old_message
+      if violation.changed? && violation.message != violation.old_message
         doc.td { diff_fragments(doc, violation) }
       else
         doc.td violation.text
@@ -68,7 +68,7 @@ module DiffReportBuilderViolations
   end
 
   def display_line(violation)
-    if violation.changed && violation.old_line && violation.old_line != violation.line
+    if violation.changed? && violation.old_line && violation.old_line != violation.line
       "#{violation.old_line} => #{violation.line}"
     else
       violation.line
@@ -87,7 +87,7 @@ module DiffReportBuilderViolations
   end
 
   def get_css_class(pmd_violation)
-    if pmd_violation.changed
+    if pmd_violation.changed?
       'd'
     elsif pmd_violation.branch == PmdTester::BASE
       'b'

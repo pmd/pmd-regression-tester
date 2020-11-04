@@ -168,7 +168,7 @@ module PmdTester
       changed_size = 0
       removed_size = 0
       item_array.each do |item|
-        if item.changed
+        if item.changed?
           changed_size += 1
         elsif item.branch.eql?(BASE)
           removed_size += 1

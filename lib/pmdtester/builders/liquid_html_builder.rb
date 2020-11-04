@@ -47,7 +47,7 @@ module PmdTester
                       "line" => v.attrs["beginline"],
                       "file" => f,
                       "rule" => v.attrs["rule"],
-                      "message" => v.changed ? diff_fragments(v) : v.text
+                      "message" => v.changed? ? diff_fragments(v) : v.text
                   })
           )
         end
@@ -98,7 +98,7 @@ module PmdTester
     end
 
     def violation_type(v)
-      if v.changed
+      if v.changed?
         '~'
       elsif v.branch == 'patch'
         '+'
