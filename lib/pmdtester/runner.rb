@@ -147,23 +147,23 @@ module PmdTester
     end
 
     def summarize_diffs
-      new_errors_size = 0
-      removed_errors_size = 0
-      new_violations_size = 0
-      removed_violations_size = 0
-      new_configerrors_size = 0
-      removed_configerrors_size = 0
+      result = {
+        errors: { new: 0, removed: 0 },
+        violations: { new: 0, removed: 0, changed: 0 },
+        configerrors: { new: 0, removed: 0 }
+      }
+
       @projects.each do |project|
-        new_errors_size += project.new_errors_size
-        removed_errors_size += project.removed_errors_size
-        new_violations_size += project.new_violations_size
-        removed_violations_size += project.removed_violations_size
-        new_configerrors_size += project.new_configerrors_size
-        removed_configerrors_size += project.removed_configerrors_size
+        result[:errors][:new] += project.new_errors_size
+        result[:errors][:removed] += project.removed_errors_size
+        result[:violations][:new] += project.new_violations_size
+        result[:violations][:removed] += project.removed_violations_size
+        result[:violations][:changed] += project.changed_violations_size
+        result[:configerrors][:new] += project.new_configerrors_size
+        result[:configerrors][:removed] += project.removed_configerrors_size
       end
 
-      [new_errors_size, removed_errors_size, new_violations_size, removed_violations_size,
-       new_configerrors_size, removed_configerrors_size]
+      result
     end
   end
 end
