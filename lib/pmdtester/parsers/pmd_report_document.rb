@@ -31,9 +31,9 @@ module PmdTester
       when 'file'
         remove_work_dir!(attrs['name'])
         @current_violations = []
-        @current_filename = attrs['name']
+        @current_filename = attrs['name'].freeze
       when 'violation'
-        @current_violation = PmdViolation.new(attrs, @branch_name)
+        @current_violation = PmdViolation.new(attrs, @branch_name, @current_filename)
       when 'error'
         remove_work_dir!(attrs['filename'])
         remove_work_dir!(attrs['msg'])
@@ -81,7 +81,7 @@ module PmdTester
 
       @filter_set.each do |filter_rule_ref|
         ruleset_attr = violation.attrs['ruleset'].delete(' ').downcase + '.xml'
-        rule = violation.attrs['rule']
+        rule = violation.rule_name
         rule_ref = "#{ruleset_attr}/#{rule}"
         return true if filter_rule_ref.eql?(ruleset_attr)
         return true if filter_rule_ref.eql?(rule_ref)

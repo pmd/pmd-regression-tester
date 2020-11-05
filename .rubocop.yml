@@ -20,6 +20,10 @@ Metrics/MethodLength:
   Exclude:
     - 'lib/pmdtester/parsers/options.rb'
 
+Metrics/ClassLength:
+  Exclude:
+    - '**/*'
+
 Metrics/BlockLength:
   Exclude:
     - 'lib/pmdtester/parsers/options.rb'

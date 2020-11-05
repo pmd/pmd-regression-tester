@@ -25,12 +25,13 @@ class TestDiffBuilder < Test::Unit::TestCase
     assert_empty(diffs_report.configerrors_diffs)
     assert_equal(5, diffs_report.base_violations_size)
     assert_equal(8, diffs_report.patch_violations_size)
-    assert_equal(7, diffs_report.violation_diffs_size)
-    assert_equal(2, diffs_report.removed_violations_size)
-    assert_equal(5, diffs_report.new_violations_size)
+    assert_equal(6, diffs_report.violation_diffs_size)
+
+    assert_violations_equal(diffs_report, 1, 4, 1)
+
     assert_equal('Base1.java', keys[0])
     assert_equal('SameFileNameWithDiffViolations.java', keys[1])
-    assert_equal(3, violation_diffs[keys[1]].size)
+    assert_equal(2, violation_diffs[keys[1]].size)
     assert_equal('Patch1.java', keys[2])
     assert_equal('Patch2.java', keys[3])
     assert_equal('Patch3.java', keys[4])
@@ -98,5 +99,13 @@ class TestDiffBuilder < Test::Unit::TestCase
     assert_equal(true, report_diffs.diffs_exist?)
     report_diffs.violation_diffs_size = 0
     assert_equal(true, report_diffs.diffs_exist?)
+  end
+
+  private
+
+  def assert_violations_equal(diffs_report, removed, added, changed)
+    assert_equal(removed, diffs_report.removed_violations_size)
+    assert_equal(added, diffs_report.new_violations_size)
+    assert_equal(changed, diffs_report.changed_violations_size)
   end
 end

@@ -94,6 +94,16 @@ table.bodyTable th, table.bodyTable td {
   font-size: 1em;
 }
 
+span.added {
+  color: green;
+}
+span.removed {
+  color: red;
+}
+span.changed {
+  color: darkorange;
+}
+
 table.bodyTable tr.a {
   background-color: #af8;
 }

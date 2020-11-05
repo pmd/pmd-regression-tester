@@ -10,6 +10,7 @@ module PmdTester
     attr_accessor :base_violations_size
     attr_accessor :patch_violations_size
     attr_accessor :new_violations_size
+    attr_accessor :changed_violations_size
     attr_accessor :removed_violations_size
     attr_accessor :violation_diffs_size
 
@@ -57,6 +58,7 @@ module PmdTester
       @base_violations_size = 0
       @patch_violations_size = 0
       @new_violations_size = 0
+      @changed_violations_size = 0
       @removed_violations_size = 0
       @violation_diffs_size = 0
     end
@@ -88,27 +90,31 @@ module PmdTester
     def calculate_violations(base_violations, patch_violations)
       @base_violations_size = base_violations.violations_size
       @patch_violations_size = patch_violations.violations_size
-      violation_diffs = build_diffs(base_violations.violations, patch_violations.violations)
-      @violation_diffs = violation_diffs
-      @new_violations_size, @removed_violations_size = get_diffs_size(violation_diffs)
-      @violation_diffs_size = @new_violations_size + @removed_violations_size
+
+      @violation_diffs = build_diffs(base_violations.violations, patch_violations.violations)
+      @violation_diffs = merge_changed_violations(@violation_diffs)
+
+      @new_violations_size,
+          @changed_violations_size,
+          @removed_violations_size = get_diffs_size(@violation_diffs)
+      @violation_diffs_size = @new_violations_size +
+                              @changed_violations_size +
+                              @removed_violations_size
     end
 
     def calculate_errors(base_errors, patch_errors)
       @base_errors_size = base_errors.errors_size
       @patch_errors_size = patch_errors.errors_size
-      error_diffs = build_diffs(base_errors.errors, patch_errors.errors)
-      @error_diffs = error_diffs
-      @new_errors_size, @removed_errors_size = get_diffs_size(error_diffs)
+      @error_diffs = build_diffs(base_errors.errors, patch_errors.errors)
+      @new_errors_size, _, @removed_errors_size = get_diffs_size(@error_diffs)
       @error_diffs_size = @new_errors_size + @removed_errors_size
     end
 
     def calculate_configerrors(base_configerrors, patch_configerrors)
       @base_configerrors_size = base_configerrors.size
       @patch_configerrors_size = patch_configerrors.size
-      configerrors_diffs = build_diffs(base_configerrors.errors, patch_configerrors.errors)
-      @configerrors_diffs = configerrors_diffs
-      @new_configerrors_size, @removed_configerrors_size = get_diffs_size(configerrors_diffs)
+      @configerrors_diffs = build_diffs(base_configerrors.errors, patch_configerrors.errors)
+      @new_configerrors_size, _, @removed_configerrors_size = get_diffs_size(@configerrors_diffs)
       @configerrors_diffs_size = @new_configerrors_size + @removed_configerrors_size
     end
 
@@ -130,7 +136,10 @@ module PmdTester
     end
 
     def build_diffs(base_hash, patch_hash)
+      # Keys are filenames
+      # Values are lists of violations/errors
       diffs = base_hash.merge(patch_hash) do |_key, base_value, patch_value|
+        # make the difference of values
         (base_value | patch_value) - (base_value & patch_value)
       end
 
@@ -139,15 +148,34 @@ module PmdTester
       end
     end
 
+    # @param diff_violations a hash { filename => list[violation]}, containing those that changed
+    def merge_changed_violations(diff_violations)
+      diff_violations.each do |fname, different|
+        different.sort_by!(&:line)
+        diff_violations[fname] = different.delete_if do |v|
+          v.branch == BASE &&
+            # try_merge will set v2.changed = true if it succeeds
+            different.any? { |v2| v2.try_merge?(v) }
+        end
+      end
+    end
+
     def get_diffs_size(diffs_hash)
       new_size = 0
+      changed_size = 0
       removed_size = 0
       diffs_hash.each_value do |value|
         value.each do |item|
-          item.branch.eql?(BASE) ? removed_size += 1 : new_size += 1
+          if item.changed
+            changed_size += 1
+          elsif item.branch.eql?(BASE)
+            removed_size += 1
+          else
+            new_size += 1
+          end
         end
       end
-      [new_size, removed_size]
+      [new_size, changed_size, removed_size]
     end
 
     def introduce_new_errors?
