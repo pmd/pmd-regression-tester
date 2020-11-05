@@ -12,9 +12,9 @@ class TestProjectBuilder < Test::Unit::TestCase
 
   def test_clone
     expect_clone('checkstyle', 'git', 'https://github.com/checkstyle/checkstyle',
-                 'git reset --hard master')
+                 'git checkout master; git reset --hard master')
     expect_clone('spring-framework', 'git', 'https://github.com/spring-projects/spring-framework',
-                 'git reset --hard v5.0.6.RELEASE')
+                 'git checkout v5.0.6.RELEASE; git reset --hard v5.0.6.RELEASE')
 
     project_builder = PmdTester::ProjectBuilder.new(@projects)
     project_builder.clone_projects
