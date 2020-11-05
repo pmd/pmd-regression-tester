@@ -184,12 +184,12 @@ module PmdTester
     end
 
     def make_rule_diffs
-      rule_to_violations = @violation_diffs.values.flatten.group_by { |v| v.rule }
+      rule_to_violations = @violation_diffs.values.flatten.group_by(&:rule_name)
 
       rule_to_violations.values.map do |vs|
         added, changed, removed = get_diffs_size(vs)
         {# Note: don't use symbols as hash keys for liquid
-         'name' => vs[0].rule,
+         'name' => vs[0].rule_name,
          'info_url' => vs[0].info_url,
          'added' => added,
          'changed' => changed,

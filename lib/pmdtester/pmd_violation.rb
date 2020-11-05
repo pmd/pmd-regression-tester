@@ -64,7 +64,7 @@ module PmdTester
 
     def try_merge?(other)
       if branch != BASE && branch != other.branch && rule_name == other.rule_name &&
-         !changed && # not already changed
+         !changed? && # not already changed
          (line == other.line || line_move?(other))
         @changed = true
         @attrs['oldMessage'] = other.text
@@ -126,7 +126,7 @@ module PmdTester
     end
 
     def to_liquid
-      {**attrs, 'branch' => branch, 'message' => text}
+      {**attrs, 'branch' => branch, 'changed' => changed?}
     end
   end
 end

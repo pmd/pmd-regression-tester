@@ -52,7 +52,7 @@ module PmdTester
       @attrs['msg']
     end
 
-    def changed
+    def changed?
       false
     end
 

@@ -163,9 +163,10 @@
                     render(data, type, row) {
                         // display only the file name (not full path), but use full
                         // path for sorting and such
-                        if (type === "display")
-                            return "<a href='" + makeCodeLink(row) + "'>" + extractFilename(data) + " @ line " + row.line + "</a>"
-                        else if (type === "sort")
+                        if (type === "display") {
+                            let line = 'oldLine' in row ? row.oldLine + " -> " + row.line : row.line;
+                            return "<a href='" + makeCodeLink(row) + "'>" + extractFilename(data) + " @ line " + line + "</a>"
+                        } else if (type === "sort")
                             return data + "#" + row.line
                         else
                             return data;

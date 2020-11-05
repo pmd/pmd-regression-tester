@@ -14,8 +14,8 @@ module PmdTester
       index.close
 
       # copy resources
-      copy_res(project.target_diff_report_path, "css")
-      copy_res(project.target_diff_report_path, "js")
+      copy_res(project.target_diff_report_path, 'css')
+      copy_res(project.target_diff_report_path, 'js')
 
       # generate array of violations in json
       violations_json = File.new("#{project.target_diff_report_path}/project_data.js", 'w')
@@ -38,26 +38,15 @@ module PmdTester
 
       all_vs = []
       project.report_diff.violation_diffs.each do |file, vs|
+        f = project.get_local_path(file)
         vs.each do |v|
-          f = project.get_local_path(file)
-          all_vs.push(
-              JSON.generate(
-                  {
-                      "t" => violation_type(v),
-                      "line" => v.attrs["beginline"],
-                      "file" => f,
-                      "rule" => v.attrs["rule"],
-                      "message" => v.changed? ? diff_fragments(v) : v.text
-                  })
-          )
+          all_vs.push(make_violation_hash(f, v))
         end
       end
 
-      l_str = project.type == 'git' ? 'L' : 'l'
-      "let project = {" +
-          "\"source_link_template\": \"#{project.webview_url}/{file}##{l_str}{line}\",\n" +
-          "\"violations\": [#{all_vs.join(",")}]\n" +
-          "};"
+      project_data = JSON.fast_generate(make_project_json(all_vs, project))
+
+      "let project = #{project_data}"
     end
 
     def render_liquid(project)
@@ -86,14 +75,12 @@ module PmdTester
 
     def get_link_to_source(violation, fname, project)
       l_str = project.type == 'git' ? 'L' : 'l'
-      line_str = "##{l_str}#{violation['beginline']}"
+      line_str = "##{l_str}#{violation.line}"
       project.get_webview_url(fname) + line_str
     end
 
     def diff_fragments(violation)
-      old_message = violation.attrs['oldMessage']
-      new_message = violation.text
-      diff = Differ.diff_by_word(old_message, new_message)
+      diff = Differ.diff_by_word(violation.old_message, violation.message)
       diff.format_as(:html)
     end
 
@@ -105,6 +92,30 @@ module PmdTester
       else
         '-'
       end
+    end
+
+    def make_violation_hash(filename, v)
+      h = {
+          't' => violation_type(v),
+          'line' => v.line,
+          'file' => filename,
+          'rule' => v.rule_name,
+          'message' => v.changed? ? diff_fragments(v) : v.text,
+      }
+      if v.changed? && v.line != v.old_line
+        h['oldLine'] = v.old_line
+      end
+      h
+    end
+
+    private
+
+    def make_project_json(all_vs, project)
+      l_str = project.type == 'git' ? 'L' : 'l'
+      {
+          'source_link_template' => "#{project.webview_url}/{file}##{l_str}{line}",
+          'violations' => all_vs
+      }
     end
   end
 
