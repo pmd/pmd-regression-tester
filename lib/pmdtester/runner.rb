@@ -35,12 +35,10 @@ module PmdTester
       return if rule_sets&.empty?
 
       PmdReportBuilder
-        .new(@options.base_config, @projects, @options.local_git_repo, @options.base_branch,
-             @options.threads)
+        .new(@projects, @options, @options.base_config, @options.base_branch)
         .build
       PmdReportBuilder
-        .new(@options.patch_config, @projects, @options.local_git_repo, @options.patch_branch,
-             @options.threads)
+        .new(@projects, @options, @options.patch_config, @options.patch_branch)
         .build
 
       build_html_reports
@@ -66,8 +64,7 @@ module PmdTester
       end
 
       PmdReportBuilder
-        .new(@options.patch_config, @projects,
-             @options.local_git_repo, @options.patch_branch, @options.threads)
+        .new(@projects, @options, @options.patch_config, @options.patch_branch)
         .build
 
       build_html_reports
@@ -113,9 +110,8 @@ module PmdTester
 
       get_projects(@options.project_list) unless @options.nil?
       branch_details = PmdReportBuilder
-                       .new(@options.patch_config, @projects,
-                            @options.local_git_repo, @options.patch_branch,
-                            @options.threads)
+                       .new(@projects, @options,
+                            @options.patch_config, @options.patch_branch)
                        .build
       # copy list of projects file to the patch baseline
       FileUtils.cp(@options.project_list, branch_details.target_branch_project_list_path)

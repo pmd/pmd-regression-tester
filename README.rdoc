@@ -37,6 +37,7 @@ on a list of standard projects(Spring Framework, Hibernate, Solr, etc.)
     -a, --auto-gen-config  whether to generate configurations automatically based on branch differences,this option only works in online and local mode
     --keep-reports         whether to keep old reports and skip running PMD again if possible
     -d, --debug            whether change log level to DEBUG to see more information
+    --error-recovery       enable error recovery mode when executing PMD. Might help to analyze errors.
     -v, --version
     -h, --help
 
