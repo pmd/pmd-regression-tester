@@ -98,7 +98,7 @@
 
             {% for rule_diff in sorted_rule_diffs %}
             <tr>
-                <td id="rule-summary-{{rule_diff.name}}" class="rulename"><a class="rulelink" href="{{rule_diff.info_url}}">{{ rule_diff.name }}</a></td>
+                <td id="rule-summary-{{rule_diff.name}}" class="rulename">{{ rule_diff.name }} <span class="rule-doc-link"><a class="rulelink" href="{{rule_diff.info_url}}">[doc]</a></span></td>
                 <td class="basecount">{{ rule_diff.base_count }}</td>
                 <td class="patchcount">{{ rule_diff.patch_count }}</td>
                 <td class="added" data-count="{{ rule_diff.added }}">{{ rule_diff.added }}</td>
