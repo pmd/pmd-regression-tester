@@ -84,8 +84,8 @@
             <thead>
             <tr>
                 <th>Rule</th>
-                <!--            <th>Base</th>-->
-                <!--            <th>Patch</th>-->
+                <th>Base</th>
+                <th>Patch</th>
                 <th>Added</th>
                 <th>Changed</th>
                 <th>Removed</th>
@@ -99,10 +99,8 @@
             {% for rule_diff in sorted_rule_diffs %}
             <tr>
                 <td id="rule-summary-{{rule_diff.name}}" class="rulename"><a class="rulelink" href="{{rule_diff.info_url}}">{{ rule_diff.name }}</a></td>
-                {% comment %}
                 <td class="basecount">{{ rule_diff.base_count }}</td>
                 <td class="patchcount">{{ rule_diff.patch_count }}</td>
-                {% endcomment %}
                 <td class="added" data-count="{{ rule_diff.added }}">{{ rule_diff.added }}</td>
                 <td class="changed" data-count="{{ rule_diff.changed }}">{{ rule_diff.changed }}</td>
                 <td class="removed" data-count="{{ rule_diff.removed }}">{{ rule_diff.removed }}</td>

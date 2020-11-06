@@ -91,8 +91,11 @@ module PmdTester
       @base_violations_size = base_violations.violations_size
       @patch_violations_size = patch_violations.violations_size
 
+
       @violation_diffs = build_diffs(base_violations.violations, patch_violations.violations)
       @violation_diffs = merge_changed_violations(@violation_diffs)
+
+      @rule_diffs = make_rule_diffs(base_violations, patch_violations, @violation_diffs)
 
       @new_violations_size,
           @changed_violations_size,
@@ -183,14 +186,26 @@ module PmdTester
       !@new_errors_size.zero? || !@new_configerrors_size.zero?
     end
 
-    def make_rule_diffs
-      rule_to_violations = @violation_diffs.values.flatten.group_by(&:rule_name)
+    def freq_map(violations)
+      violations.violations.values
+          .flatten
+          .group_by(&:rule_name)
+          .transform_values! { |vs| vs.count }
+    end
+
+    def make_rule_diffs(base_violations, patch_violations, violation_diffs)
+      base_count_by_rule = freq_map(base_violations)
+      patch_count_by_rule = freq_map(patch_violations)
+      rule_to_violations = violation_diffs.values.flatten.group_by(&:rule_name)
 
       rule_to_violations.values.map do |vs|
         added, changed, removed = get_diffs_size(vs)
+        rule_name = vs[0].rule_name
         {# Note: don't use symbols as hash keys for liquid
-         'name' => vs[0].rule_name,
+         'name' => rule_name,
          'info_url' => vs[0].info_url,
+         'base_count' => base_count_by_rule.fetch(rule_name, 0),
+         'patch_count' => patch_count_by_rule.fetch(rule_name, 0),
          'added' => added,
          'changed' => changed,
          'removed' => removed,
@@ -226,7 +241,7 @@ module PmdTester
           'violation_diffs' => violation_diffs,
           'error_diffs' => error_diffs,
           'configerrors_diffs' => configerrors_diffs,
-          'rule_diffs' => make_rule_diffs,
+          'rule_diffs' => @rule_diffs,
       }
     end
   end
