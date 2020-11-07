@@ -21,7 +21,7 @@ module PmdTester
         doc.title title_name
 
         doc.style(type: 'text/css', media: 'all') do
-          doc.text '@import url("./css/maven-base.css");@import url("./css/maven-theme.css");'
+          doc.text '@import url("./css/maven-base.css");@import url("./css/pmd-tester.css");'
         end
       end
     end

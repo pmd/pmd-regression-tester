@@ -35,7 +35,7 @@ class TestDiffReportBuilder < Test::Unit::TestCase
 
     # Checking  css resources are copied into the diff report directory.
     assert_equal(true, File.exist?("#{css_path}/maven-base.css"))
-    assert_equal(true, File.exist?("#{css_path}/maven-theme.css"))
+    assert_equal(true, File.exist?("#{css_path}/pmd-tester.css"))
 
     # Checking the content of diff report is expected.
     expected_file = File.open(EXPECTED_REPORT_PATH).read
