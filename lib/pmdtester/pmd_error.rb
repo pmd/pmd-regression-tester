@@ -48,11 +48,23 @@ module PmdTester
     end
 
     def filename
-      @attrs['filename']
+      @attrs['filename'] # was already normalized to remove path outside project
     end
 
-    def msg
-      @attrs['msg']
+    def short_filename
+      filename.gsub(/([^\/]*+\/)+/, '')
+    end
+
+    def short_message
+      stack_trace.lines.first
+    end
+
+    def file_url
+      "todo"
+    end
+
+    def stack_trace
+      @text
     end
 
     def changed?
@@ -60,12 +72,33 @@ module PmdTester
     end
 
     def eql?(other)
-      filename.eql?(other.filename) && msg.eql?(other.msg) &&
-        @text.eql?(other.text)
+      filename.eql?(other.filename) && stack_trace.eql?(other.stack_trace) &&
+          @text.eql?(other.text)
     end
 
     def hash
-      [filename, msg, @text].hash
+      [filename, stack_trace, @text].hash
+    end
+
+    def error_type
+      if branch == BASE
+        'removed'
+      elsif changed?
+        'changed'
+      else
+        'added'
+      end
+    end
+
+    def to_liquid
+      {
+          'file_url' => file_url,
+          'stack_trace' => stack_trace,
+          'short_message' => short_message,
+          'short_filename' => short_filename,
+          'filename' => filename,
+          'change_type' => error_type
+      }
     end
   end
 end

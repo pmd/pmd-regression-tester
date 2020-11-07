@@ -136,6 +136,45 @@
     </div>
 </div>
 
+<div class="section" id="section-errors">
+
+    <h2>Errors</h2>
+
+    <div class="section-content">
+
+        <div class="table-responsive">
+            <table id="error-table" class="table">
+                <thead>
+                 <tr>
+                     <th>File</th>
+                     <th>Description (click to expand)</th>
+                 </tr>
+                </thead>
+                <tbody>
+                {% for error in diff.error_diffs %}
+                <tr id="error-{{forloop.index}}" class="accordion-toggle error-row {{error.change_type}}" data-toggle="collapse" data-target="#error-{{forloop.index}}-expanded">
+                    <td><a href="{{error.file_url}}"  target="_blank" rel="noopener noreferrer">{{error.short_filename}}</a></td>
+                    <td>{{error.short_message | replace: error.filename, "<span class='meta-var'>$FILE</span>" | escape }}</td>
+                </tr>
+                <tr>
+                    <td class="row-hidden" colspan="2">
+                        <div class="accordion-body collapse" id="error-{{forloop.index}}-expanded">
+                            <div class="collapsed-content-padder">
+                                <pre>
+{{ error.stack_trace | replace: error.filename, "<span class='meta-var'>$FILE</span>" | escape }}
+                                </pre>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
 <script type="text/javascript">
 
     function makeCodeLink(violation) {

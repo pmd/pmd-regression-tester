@@ -74,23 +74,20 @@ table {
 }
 
 div.section-content {
-  margin: 100px;
+  margin: 20px 100px 20px 100px;
 }
 
 /* Rule summary table */
 
-#violationsTable tr.added,
-#rule-summary td.added {
+tr.added, td.added {
   background-color: #af8;
 }
 
-#violationsTable tr.removed,
-#rule-summary td.removed{
+tr.removed, td.removed {
   background-color: #fca;
 }
 
-#violationsTable tr.changed,
-#rule-summary td.changed {
+tr.changed, td.changed {
   background-color: #fef7bc;
 }
 
@@ -103,12 +100,12 @@ div.section-content {
   font-size: small;
 }
 
-#rule-summary td.rule-hidden-row {
+td.row-hidden {
   padding: 0 !important;
   background-color: #f5f5f5;
 }
 
-div.rule-details-padder {
+div.collapsed-content-padder {
   margin: 10px 10px 10px 10px;
   padding: 0 0 0 40px;
   border-left: darkslategrey;
@@ -129,4 +126,8 @@ div.rule-details-padder {
 
 .pill.badge-pill.badge-secondary.changed {
   background-color: #f6af60;
+}
+
+span.meta-var {
+  text-decoration: underline;
 }

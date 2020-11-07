@@ -65,7 +65,6 @@ module PmdTester
                             project.get_path_inside_project(k))
           }
 
-
       liquid_env = {
           'diff' => project.report_diff,
           'violation_diffs' => violations,

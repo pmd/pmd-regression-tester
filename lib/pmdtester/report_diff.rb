@@ -238,9 +238,8 @@ module PmdTester
           'base_timestamp' => base_timestamp,
           'patch_timestamp' => patch_timestamp,
 
-          'violation_diffs' => violation_diffs,
-          'error_diffs' => error_diffs,
-          'configerrors_diffs' => configerrors_diffs,
+          'error_diffs' => error_diffs.values.flatten,
+          'configerrors_diffs' => configerrors_diffs.values.flatten,
           'rule_diffs' => @rule_diffs,
       }
     end
