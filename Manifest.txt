@@ -26,6 +26,7 @@ lib/pmdtester/builders/diff_report_builder.rb
 lib/pmdtester/builders/html_report_builder.rb
 lib/pmdtester/builders/pmd_report_builder.rb
 lib/pmdtester/builders/liquid_html_builder.rb
+lib/pmdtester/builders/project_hasher.rb
 lib/pmdtester/builders/project_builder.rb
 lib/pmdtester/builders/rule_set_builder.rb
 lib/pmdtester/builders/simple_progress_logger.rb

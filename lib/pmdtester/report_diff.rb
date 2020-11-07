@@ -219,7 +219,7 @@ module PmdTester
     end
 
 
-    def to_liquid
+    def to_h
       {
           'base_violations_size' => base_violations_size,
           'patch_violations_size' => patch_violations_size,
@@ -244,8 +244,6 @@ module PmdTester
           'base_timestamp' => base_timestamp,
           'patch_timestamp' => patch_timestamp,
 
-          'error_diffs' => error_diffs.values.flatten,
-          'configerrors_diffs' => configerrors_diffs.values.flatten,
           'rule_diffs' => @rule_diffs,
       }
     end

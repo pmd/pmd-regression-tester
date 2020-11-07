@@ -139,7 +139,7 @@ module PmdTester
                                              project.get_report_info_path(@options.patch_branch),
                                              @options.filter_set)
         project.report_diff = report_diffs
-        ProjectDiffRenderer.new.write_liquid_file(project)
+        LiquidProjectRenderer.new.write_liquid_file(project)
       end
       logger.info 'Built all difference reports successfully!'
     end
