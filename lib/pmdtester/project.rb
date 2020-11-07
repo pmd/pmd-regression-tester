@@ -102,54 +102,12 @@ module PmdTester
       "#{REPOSITORIES_PATH}/#{@name}"
     end
 
-    def target_diff_report_path
-      dir = "target/reports/diff/#{@name}"
-      FileUtils.mkdir_p(dir) unless File.directory?(dir)
-      dir
-    end
-
-    def diff_report_index_path
-      "#{target_diff_report_path}/index.html"
-    end
-
-    def diff_report_index_ref_path
-      "./#{name}/index.html"
-    end
-
     def diffs_exist?
       @report_diff.nil? ? false : @report_diff.diffs_exist?
     end
 
     def introduce_new_errors?
       @report_diff.nil? ? false : @report_diff.introduce_new_errors?
-    end
-
-    def removed_errors_size
-      @report_diff.removed_errors_size
-    end
-
-    def new_errors_size
-      @report_diff.new_errors_size
-    end
-
-    def removed_violations_size
-      @report_diff.removed_violations_size
-    end
-
-    def new_violations_size
-      @report_diff.new_violations_size
-    end
-
-    def changed_violations_size
-      @report_diff.changed_violations_size
-    end
-
-    def removed_configerrors_size
-      @report_diff.removed_configerrors_size
-    end
-
-    def new_configerrors_size
-      @report_diff.new_configerrors_size
     end
   end
 end

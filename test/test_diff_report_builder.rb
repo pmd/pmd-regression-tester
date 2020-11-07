@@ -31,7 +31,7 @@ class TestDiffReportBuilder < Test::Unit::TestCase
     project.report_diff = diff_builder.build(BASE_PMD_REPORT_PATH, PATCH_PMD_REPORT_PATH,
                                              BASE_REPORT_INFO_PATH, PATCH_REPORT_INFO_PATH)
 
-    PmdTester::LiquidProjectRenderer.new.write_project_index(project)
+    PmdTester::LiquidProjectRenderer.new.write_project_index(project, actual_report_path)
 
     # Checking  css resources are copied into the diff report directory.
     assert_equal(true, File.exist?("#{css_path}/maven-base.css"))
@@ -45,10 +45,10 @@ class TestDiffReportBuilder < Test::Unit::TestCase
 
   def test_report_diffs_empty
     project = PmdTester::ProjectsParser.new.parse('test/resources/project-list.xml')[1]
+    project.report_diff = PmdTester::ReportDiff.new
     actual_report_path = "target/reports/diff/#{project.name}"
 
-    report_diff = PmdTester::ReportDiff.new
-    PmdTester::LiquidProjectRenderer.new.write_project_index(project, report_diff)
+    PmdTester::LiquidProjectRenderer.new.write_project_index(project, actual_report_path)
 
     # Checking the content of diff report is expected.
     expected_file = File.open(EXPECTED_EMPTY_REPORT_PATH).read

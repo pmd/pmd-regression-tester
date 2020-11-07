@@ -34,7 +34,7 @@ module PmdTester
     include ProjectHasher
     include LiquidRenderer
 
-    def write_project_index(project)
+    def write_project_index(project, root)
 
       liquid_env = {
           'diff' => report_diff_to_h(project.report_diff),
@@ -43,14 +43,9 @@ module PmdTester
       }
 
       # Renders index.html using liquid
-      render_and_write('project_diff_report.html', project.diff_report_index_path, liquid_env)
-
+      write_file("#{root}/index.html", render_liquid('project_diff_report.html', liquid_env))
       # generate array of violations in json
-      write_file("#{project.target_diff_report_path}/project_data.js",
-                 dump_violations_json(project))
-
-      logger.info "Built difference report of #{project.name} successfully!"
-      logger.info "#{project.diff_report_index_path}"
+      write_file("#{root}/project_data.js", dump_violations_json(project))
     end
 
     def dump_violations_json(project)

@@ -14,7 +14,7 @@ module PmdTester
 
     def build(projects, base_name, patch_name)
       projects.each do |project|
-        process_project(project)
+        process_project(project, "#{REPORT_DIR}/#{project.name}")
       end
       logger.info 'Built all difference reports successfully!'
 
@@ -26,9 +26,9 @@ module PmdTester
 
     private
 
-    def process_project(project)
+    def process_project(project, dir)
       logger.info "Rendering #{project.name}..."
-      LiquidProjectRenderer.new.write_project_index(project)
+      LiquidProjectRenderer.new.write_project_index(project, dir)
     end
 
     def write_structure(target_root)
@@ -45,7 +45,7 @@ module PmdTester
         {
             'name' => p.name,
             'tag' => p.tag,
-            'report_url' => p.diff_report_index_path,
+            'report_url' => "./#{p.name}/index.html",
             **report_diff_to_h(p.report_diff)
         }
       }
