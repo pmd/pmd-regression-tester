@@ -36,15 +36,20 @@ module PmdTester
       # we should use a json builder gem
       # i don't know better...
 
+      # Put file names in an array, violations only mention a
+      # reference in the form of the index in the array
+      # This reduces the file size
+      filename_index=[]
       all_vs = []
       project.report_diff.violation_diffs.each do |file, vs|
-        f = project.get_local_path(file)
+        file_ref = filename_index.size
+        filename_index.push(project.get_local_path(file))
         vs.each do |v|
-          all_vs.push(make_violation_hash(f, v))
+          all_vs.push(make_violation_hash(file_ref, v))
         end
       end
 
-      project_data = JSON.fast_generate(make_project_json(all_vs, project))
+      project_data = JSON.fast_generate(make_project_json(all_vs, filename_index, project))
 
       "let project = #{project_data}"
     end
@@ -94,26 +99,27 @@ module PmdTester
       end
     end
 
-    def make_violation_hash(filename, v)
+    def make_violation_hash(file_ref, v)
       h = {
           't' => violation_type(v),
-          'line' => v.line,
-          'file' => filename,
-          'rule' => v.rule_name,
-          'message' => v.changed? ? diff_fragments(v) : v.text,
+          'l' => v.line,
+          'f' => file_ref,
+          'r' => v.rule_name,
+          'm' => v.changed? ? diff_fragments(v) : v.text,
       }
       if v.changed? && v.line != v.old_line
-        h['oldLine'] = v.old_line
+        h['ol'] = v.old_line
       end
       h
     end
 
     private
 
-    def make_project_json(all_vs, project)
+    def make_project_json(all_vs, filename_index, project)
       l_str = project.type == 'git' ? 'L' : 'l'
       {
           'source_link_template' => "#{project.webview_url}/{file}##{l_str}{line}",
+          'file_index' => filename_index,
           'violations' => all_vs
       }
     end

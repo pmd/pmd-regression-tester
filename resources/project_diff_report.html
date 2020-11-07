@@ -140,8 +140,8 @@
 
     function makeCodeLink(violation) {
         let template = project.source_link_template
-        template = template.replace('{file}', violation.file)
-        return template.replace('{line}', violation.line)
+        template = template.replace('{file}', violation.f)
+        return template.replace('{line}', violation.l)
     }
 
     function extractFilename(path) {
@@ -165,10 +165,13 @@
         $('#violationsTable').DataTable({
             data: project.violations,
             columns: [
-                {"data": "file"},
-                {"data": "rule"},
-                {"data": "message"},
-                {"data": "t"},
+                // other attributes:
+                // l: line
+                // ol: old line
+                {"data": "f"}, // file
+                {"data": "r"}, // rule
+                {"data": "m"}, // message
+                {"data": "t"}, // type
             ],
             deferRender: true,
             // scrollY: "6000px",
@@ -184,10 +187,11 @@
             columnDefs: [
                 { //file column
                     render(data, type, row) {
+                        data = project.file_index[data]
                         // display only the file name (not full path), but use full
                         // path for sorting and such
                         if (type === "display") {
-                            let line = 'oldLine' in row ? row.oldLine + " -> " + row.line : row.line;
+                            let line = 'ol' in row ? row.ol + " -> " + row.l : row.l;
                             //note : target='_blank' requires that the link open in a new tab
                             return "<a href='" + makeCodeLink(row) + "' target='_blank' rel='noopener noreferrer'>" + extractFilename(data) + " @ line " + line + "</a>"
                         } else if (type === "sort") {
