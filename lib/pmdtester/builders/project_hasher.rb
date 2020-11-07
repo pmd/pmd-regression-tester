@@ -20,34 +20,6 @@ module PmdTester
       }
     end
 
-    def dump_violations_json(project)
-      # we should use a json builder gem
-      # i don't know better...
-
-      # Put file names in an array, violations only mention a
-      # reference in the form of the index in the array
-      # This reduces the file size
-      project_hash = violations_to_hash(project)
-      project_data = JSON.fast_generate(project_hash)
-
-      "let project = #{project_data}"
-    end
-
-    def render_liquid(project)
-
-      liquid_env = {
-          'diff' => project.report_diff,
-          'error_diffs' => errors,
-          'title' => "Diff report for #{project.name}"
-      }
-
-
-      to_render = File.read(ResourceLocator.locate('resources/project_diff_report.html'))
-      template = Liquid::Template.parse(to_render, :error_mode => :strict)
-      template.render!(liquid_env, {strict_variables: true})
-    end
-
-    private
     def violations_to_hash(project)
       filename_index = []
       all_vs = []

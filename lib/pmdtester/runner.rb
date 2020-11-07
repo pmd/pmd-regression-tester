@@ -124,13 +124,6 @@ module PmdTester
     end
 
     def build_html_reports
-      build_diff_html_reports
-      logger.info 'Building summary page'
-      SummaryReportBuilder.new.build(@projects, @options.base_branch, @options.patch_branch)
-      logger.info 'Done with summary page'
-    end
-
-    def build_diff_html_reports
       @projects.each do |project|
         logger.info "Preparing report for #{project.name}"
         report_diffs = DiffBuilder.new.build(project.get_pmd_report_path(@options.base_branch),
@@ -139,9 +132,8 @@ module PmdTester
                                              project.get_report_info_path(@options.patch_branch),
                                              @options.filter_set)
         project.report_diff = report_diffs
-        LiquidProjectRenderer.new.write_liquid_file(project)
       end
-      logger.info 'Built all difference reports successfully!'
+      SummaryReportBuilder.new.build(@projects, @options.base_branch, @options.patch_branch)
     end
 
     def get_projects(file_path)
