@@ -6,8 +6,8 @@ module PmdTester
   module LiquidRenderer
 
     def render_liquid(template_path, env)
-      to_render = File.read(ResourceLocator.locate(template_path))
-      includes = Liquid::LocalFileSystem.new(ResourceLocator.locate('resources/_includes'), '%s.html')
+      to_render = File.read(ResourceLocator.resource(template_path))
+      includes = Liquid::LocalFileSystem.new(ResourceLocator.resource('_includes'), '%s.html')
       Liquid::Template.file_system = includes
       template = Liquid::Template.parse(to_render, :error_mode => :strict)
       template.render!(env, {strict_variables: true})
@@ -25,7 +25,7 @@ module PmdTester
     end
 
     def copy_resource(dir, to_root)
-      FileUtils.copy_entry(ResourceLocator.locate("resources/#{dir}"), "#{to_root}/#{dir}")
+      FileUtils.copy_entry(ResourceLocator.resource(dir), "#{to_root}/#{dir}")
     end
   end
 
@@ -36,29 +36,27 @@ module PmdTester
 
     def write_project_index(project)
 
-      project_h = project_to_h(project)
       liquid_env = {
-          'diff' => project_h['diff'],
-          'error_diffs' => project_h['errors'],
-          'project_name' => project_h['name']
+          'diff' => report_diff_to_h(project.report_diff),
+          'error_diffs' => errors_to_h(project),
+          'project_name' => project.name
       }
 
       # Renders index.html using liquid
       render_and_write('project_diff_report.html', project.diff_report_index_path, liquid_env)
 
       # generate array of violations in json
-      write_file("#{project.target_diff_report_path}/project_data.js", dump_violations_json(project_h))
+      write_file("#{project.target_diff_report_path}/project_data.js",
+                 dump_violations_json(project))
 
       logger.info "Built difference report of #{project.name} successfully!"
       logger.info "#{project.diff_report_index_path}"
     end
 
-    def dump_violations_json(project_hash)
-      h = project_hash
+    def dump_violations_json(project)
       h = {
-          'source_link_template' => h['source_link_template'],
-          'file_index' => h['file_index'],
-          'violations' => h['violations'],
+          'source_link_template' => link_template(project),
+          **violations_to_hash(project)
       }
 
       project_data = JSON.fast_generate(h)

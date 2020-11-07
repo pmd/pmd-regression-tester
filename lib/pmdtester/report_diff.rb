@@ -36,6 +36,7 @@ module PmdTester
 
     attr_accessor :violation_diffs
     attr_accessor :error_diffs
+    attr_accessor :rule_diffs
     attr_accessor :configerrors_diffs
 
     def initialize

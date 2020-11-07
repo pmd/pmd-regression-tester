@@ -5,6 +5,7 @@ module PmdTester
   class SummaryReportBuilder
     include PmdTester
     include LiquidRenderer
+    include ProjectHasher
 
     REPORT_DIR = 'target/reports/diff'
     BASE_CONFIG_PATH = 'target/reports/diff/base_config.xml'
@@ -19,7 +20,7 @@ module PmdTester
 
       FileUtils.mkdir_p(REPORT_DIR) unless File.directory?(REPORT_DIR)
       write_structure(REPORT_DIR)
-      write_index(REPORT_DIR, base_name, patch_name)
+      write_index(REPORT_DIR, base_name, patch_name, projects)
       logger.info 'Built summary report successfully!'
     end
 
@@ -36,18 +37,45 @@ module PmdTester
       copy_resource('js', target_root)
     end
 
-    def write_index(target_root, base_name, patch_name)
-      base_details = get_branch_details(base_name)
-      patch_details = get_branch_details(patch_name)
+    def write_index(target_root, base_name, patch_name, projects)
+      base_details = PmdBranchDetail.new(base_name)
+      patch_details = PmdBranchDetail.new(patch_name)
 
-      env = {} # todo
+      projects = projects.map { |p|
+        {
+            'name' => p.name,
+            'tag' => p.tag,
+            'report_url' => p.diff_report_index_path,
+            **report_diff_to_h(p.report_diff)
+        }
+      }
+
+      prnum = ENV['TRAVIS_PULL_REQUEST']
+      env = {
+          'comparison_url' => nil,
+          'base' => to_liquid(base_details),
+          'patch' => to_liquid(patch_details),
+          'pr_number' => prnum == 'false' ? nil : prnum,
+          'projects' => projects
+      }
       logger.info 'Writing /index.html...'
       render_and_write('project_index.html', "#{target_root}/index.html", env)
     end
 
-    def get_branch_details(branch_name)
-      details = PmdBranchDetail.new(branch_name)
-      details.load
+
+    def to_liquid(details)
+      {
+          'tree_url' => "https://github.com/pmd/pmd/tree/#{details.branch_last_sha}",
+          'name' => details.branch_name,
+          'tip' => {
+              'sha' => details.branch_last_sha,
+              'message' => details.branch_last_message,
+          },
+          'execution_time' => details.execution_time,
+          'jdk_info' => details.jdk_version,
+          'locale' => details.language,
+          'config_url' => 'todo'
+      }
     end
   end
 end

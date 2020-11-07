@@ -21,7 +21,6 @@ require_relative 'pmdtester/builders/project_hasher'
 require_relative 'pmdtester/builders/pmd_report_builder'
 require_relative 'pmdtester/builders/liquid_renderer'
 require_relative 'pmdtester/builders/rule_set_builder'
-require_relative 'pmdtester/builders/summary_report/branch_name_row'
 require_relative 'pmdtester/builders/summary_report_builder'
 
 require_relative 'pmdtester/parsers/options'

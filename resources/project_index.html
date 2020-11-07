@@ -85,8 +85,8 @@
                 <tr>
                     <td class="project-header"><a href="{{ project.report_url }}">{{ project.name }}</a></td>
                     <td>{{ project.tag }}</td>
-                    <td>{% include diff_pill_row h: project.violation_counts }}</td>
-                    <td>{% include diff_pill_row h: project.error_counts }}</td>
+                    <td>{% include 'diff_pill_row' h: project.violation_counts %}</td>
+                    <td>{% include 'diff_pill_row' h: project.error_counts %}</td>
                 </tr>
                 {% endfor %}
                 </tbody>

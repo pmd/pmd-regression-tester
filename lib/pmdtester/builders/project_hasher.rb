@@ -6,20 +6,37 @@ module PmdTester
   module ProjectHasher
     include PmdTester
 
-    def project_to_h(project)
-
-      errors = project.report_diff.error_diffs.values.flatten
-      errors = errors.map { |e| error_to_hash(e, project) }
-
+    def report_diff_to_h(d)
       {
-          'diff' => project.report_diff.to_h,
-          'source_link_template' => link_template(project),
-          'name' => project.name,
-          'errors' => errors,
-          **violations_to_hash(project)
+          'violation_counts' => {
+              'changed' => d.changed_violations_size,
+              'new' => d.new_violations_size,
+              'removed' => d.removed_violations_size,
+              'base_total' => d.base_violations_size,
+              'patch_total' => d.patch_violations_size,
+          },
+          'error_counts' => {
+              'changed' => d.changed_errors_size,
+              'new' => d.new_errors_size,
+              'removed' => d.removed_errors_size,
+              'base_total' => d.base_errors_size,
+              'patch_total' => d.patch_errors_size,
+          },
+          'base_execution_time' => d.base_execution_time,
+          'patch_execution_time' => d.patch_execution_time,
+          'diff_execution_time' => d.diff_execution_time,
+          'base_timestamp' => d.base_timestamp,
+          'patch_timestamp' => d.patch_timestamp,
+
+          'rule_diffs' => d.rule_diffs,
       }
     end
 
+    def errors_to_h(project)
+      errors = project.report_diff.error_diffs.values.flatten
+      errors.map { |e| error_to_hash(e, project) }
+    end
+    
     def violations_to_hash(project)
       filename_index = []
       all_vs = []

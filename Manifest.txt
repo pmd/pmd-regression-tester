@@ -25,7 +25,6 @@ lib/pmdtester/builders/project_hasher.rb
 lib/pmdtester/builders/project_builder.rb
 lib/pmdtester/builders/rule_set_builder.rb
 lib/pmdtester/builders/simple_progress_logger.rb
-lib/pmdtester/builders/summary_report/branch_name_row.rb
 lib/pmdtester/builders/summary_report_builder.rb
 lib/pmdtester/cmd.rb
 lib/pmdtester/parsers/options.rb
