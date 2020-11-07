@@ -183,7 +183,8 @@
                         // path for sorting and such
                         if (type === "display") {
                             let line = 'oldLine' in row ? row.oldLine + " -> " + row.line : row.line;
-                            return "<a href='" + makeCodeLink(row) + "'>" + extractFilename(data) + " @ line " + line + "</a>"
+                            //note : target='_blank' requires that the link open in a new tab
+                            return "<a href='" + makeCodeLink(row) + "' target='_blank' rel='noopener noreferrer'>" + extractFilename(data) + " @ line " + line + "</a>"
                         } else if (type === "sort") {
                             return data + "#" + row.line
                         } else if (type === 'shortFile') {
