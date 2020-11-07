@@ -79,15 +79,15 @@ div.section-content {
 
 /* Rule summary table */
 
-tr.added, td.added {
+tr.added, #rule-summary td.added {
   background-color: #af8;
 }
 
-tr.removed, td.removed {
+tr.removed, #rule-summary td.removed {
   background-color: #fca;
 }
 
-tr.changed, td.changed {
+tr.changed, #rule-summary td.changed {
   background-color: #fef7bc;
 }
 

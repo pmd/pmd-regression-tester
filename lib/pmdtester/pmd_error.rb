@@ -94,7 +94,7 @@ module PmdTester
     def try_merge?(other)
       if branch != BASE &&
          branch != other.branch &&
-         filename == other.filename &&
+         short_message == other.short_message &&
          !changed? # not already changed
         @changed = true
         @old_error = other
@@ -104,14 +104,5 @@ module PmdTester
       end
     end
 
-    def error_type
-      if branch == BASE
-        'removed'
-      elsif changed?
-        'changed'
-      else
-        'added'
-      end
-    end
   end
 end

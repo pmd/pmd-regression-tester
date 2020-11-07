@@ -46,6 +46,7 @@
                 <td class="patch">{{diff.patch_errors_size}}</td>
                 <td class="diff">
                     <span class="pill badge-pill badge-secondary removed">-{{diff.removed_errors_size}}</span>
+                    <span class="pill badge-pill badge-secondary changed">~{{diff.changed_errors_size}}</span>
                     <span class="pill badge-pill badge-secondary added">+{{diff.new_errors_size}}</span>
                 </td>
             </tr>
@@ -160,26 +161,9 @@
                     <td class="row-hidden" colspan="2">
                         <div class="accordion-body collapse" id="error-{{forloop.index}}-expanded">
                             <div class="collapsed-content-padder">
-                                {% if error.old_stack_trace_html %}
-                                <div class="d-md-flex h-md-100 align-items-center">
-                                    <div class="col-md-6 p-0 h-md-100">
-                                        <h5>Old stack trace</h5>
-                                        <pre>
-    {{ error.old_stack_trace_html }}
-                                        </pre>
-                                    </div>
-                                    <div class="col-md-6 p-0 h-md-100">
-                                        <h5>New stack trace</h5>
-                                        <pre>
-    {{ error.stack_trace_html }}
-                                        </pre>
-                                    </div>
-                                </div>
-                                {% else %}
                                 <pre>
-    {{ error.stack_trace_html }}
+{{ error.stack_trace_html }}
                                 </pre>
-                                {% endif %}
                             </div>
                         </div>
                     </td>
