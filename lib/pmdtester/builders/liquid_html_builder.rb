@@ -57,6 +57,8 @@ module PmdTester
 
 
       to_render = File.read(ResourceLocator.locate('resources/project_diff_report.html'))
+      includes = Liquid::LocalFileSystem.new(ResourceLocator.locate('resources/_includes'), '%s.html')
+      Liquid::Template.file_system = includes
       template = Liquid::Template.parse(to_render, :error_mode => :strict)
       template.render!(liquid_env, {strict_variables: true})
     end

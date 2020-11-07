@@ -1,0 +1,98 @@
+<html lang="en">
+<head>
+    <title>Project report index</title>
+
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"/>
+
+    <script src="js/jquery-3.2.1.slim.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="css/pmd-tester.css">
+</head>
+<body>
+<div class="section">
+    <h2>Branch details</h2>
+    <div class="section-content">
+        <div class="table-responsive">
+            <table id="table-summary" class="table">
+                <thead>
+                <tr>
+                    <th></th>
+                    <th>Base</th>
+                    <th>Patch</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="item">Branch info</td>
+                    <td><a href="{{base.tree_url}}">{{base.name}} {{ base.tip.sha | truncate: 8 }}</a>: {{ base.tip.message }}</td>
+                    <td>
+                        <a href="{{patch.tree_url}}">{{patch.name}} {{ patch.tip.sha | truncate: 8 }}: {{ patch.tip.message }}</a>
+                        {% if pr_number %}
+                        <a href="https://github.com/pmd/pmd/pull/{{pr_number}}">PR #{{pr_number}}</a>
+                        {% endif %}
+                        <a href="{{ comparison_url }}">Compare changes</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="item">Total PMD runtime</td>
+                    <td class="base">{{base.execution_time}}</td>
+                    <td class="patch">{{base.execution_time}}</td>
+                </tr>
+                <tr>
+                    <td class="item">JDK</td>
+                    <td class="base">{{base.jdk_info | escape }}</td>
+                    <td class="patch">{{patch.jdk_info | escape }}</td>
+                </tr>
+                <tr>
+                    <td class="item">Locale</td>
+                    <td class="base">{{base.locale | escape }}</td>
+                    <td class="patch">{{patch.locale | escape }}</td>
+                </tr>
+                <tr>
+                    <td class="item">Configuration</td>
+                    <td class="base"><a href="{{ base.config_url }}">Base config</a></td>
+                    <td class="patch"><a href="{{ patch.config_url }}">Patch config</a></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="section" id="section-projects">
+
+    <h2>Projects</h2>
+
+    <div class="section-content">
+
+        <div class="table-responsive">
+            <table id="project-summary" class="table">
+                <thead>
+                <tr>
+                    <th>Project</th>
+                    <th>Tag</th>
+                    <th>Violation diff</th>
+                    <th>Error diff</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                {% assign sorted_projects = projects | sort: 'name' %}
+
+                {% for project in sorted_projects %}
+                <tr>
+                    <td class="project-header"><a href="{{ project.report_url }}">{{ project.name }}</a></td>
+                    <td>{{ project.tag }}</td>
+                    <td>{% include diff_pill_row h: project.violation_counts }}</td>
+                    <td>{% include diff_pill_row h: project.error_counts }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

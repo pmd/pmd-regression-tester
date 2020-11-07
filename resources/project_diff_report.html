@@ -32,32 +32,18 @@
             <tr>
                 <td class="item"><a href="#section-violations">Violations</a>
                 </td>
-                <td class="base">{{diff.base_violations_size}}</td>
-                <td class="patch">{{diff.patch_violations_size}}</td>
+                <td class="base">{{diff.violation_counts.base_total}}</td>
+                <td class="patch">{{diff.violation_counts.patch_total}}</td>
                 <td class="diff">
-                    <span class="pill badge-pill badge-secondary removed">-{{diff.removed_violations_size}}</span>
-                    <span class="pill badge-pill badge-secondary changed">~{{diff.changed_violations_size}}</span>
-                    <span class="pill badge-pill badge-secondary added">+{{diff.new_violations_size}}</span>
+                    {% include 'diff_pill_row' h: diff.violation_counts %}
                 </td>
             </tr>
             <tr>
                 <td class="item"><a href="#section-errors">Errors</a></td>
-                <td class="base">{{diff.base_errors_size}}</td>
-                <td class="patch">{{diff.patch_errors_size}}</td>
+                <td class="base">{{diff.error_counts.base_total}}</td>
+                <td class="patch">{{diff.error_counts.patch_total}}</td>
                 <td class="diff">
-                    <span class="pill badge-pill badge-secondary removed">-{{diff.removed_errors_size}}</span>
-                    <span class="pill badge-pill badge-secondary changed">~{{diff.changed_errors_size}}</span>
-                    <span class="pill badge-pill badge-secondary added">+{{diff.new_errors_size}}</span>
-                </td>
-            </tr>
-            <tr>
-                <td class="item"><a href="#section-configerrors">Config
-                    errors</a></td>
-                <td class="base">{{diff.base_configerrors_size}}</td>
-                <td class="patch">{{diff.patch_configerrors_size}}</td>
-                <td class="diff">
-                    <span class="pill badge-pill badge-secondary removed">-{{diff.removed_configerrors_size}}</span>
-                    <span class="pill badge-pill badge-secondary added">+{{diff.new_configerrors_size}}</span>
+                    {% include 'diff_pill_row' h: diff.error_counts %}
                 </td>
             </tr>
             <tr>
