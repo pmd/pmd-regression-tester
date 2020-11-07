@@ -118,7 +118,9 @@ module PmdTester
   end
 
   def sanitize_stacktrace(e)
-    CGI::escapeHTML(e.stack_trace).gsub(e.filename, '<span class="meta-var">$FILE</span>')
+    CGI::escapeHTML(e.stack_trace)
+        .gsub(e.filename, '<span class="meta-var">$FILE</span>')
+        .gsub(/\w++(?=\(\w++\.java:\d++\))/, '<span class="stack-trace-method">\\0</span>')
   end
 
   def change_type(item)
