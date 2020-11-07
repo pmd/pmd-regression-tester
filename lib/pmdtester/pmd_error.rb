@@ -62,10 +62,6 @@ module PmdTester
       stack_trace.lines.first
     end
 
-    def file_url
-      "todo"
-    end
-
     def stack_trace
       @text
     end

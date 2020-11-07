@@ -55,39 +55,10 @@ module PmdTester
       "let project = #{project_data}"
     end
 
-    def sanitize_stacktrace(e)
-      (e.stack_trace).gsub(e.filename, '<span class="meta-var">$FILE</span>')
-    end
-
-    def error_to_liquid(e)
-      escaped_stacktrace = sanitize_stacktrace(e)
-      old_stacktrace = e.old_error.nil? ? nil : sanitize_stacktrace(e.old_error)
-
-      {
-          'file_url' => e.file_url,
-          'stack_trace_html' => escaped_stacktrace,
-          'old_stack_trace_html' => old_stacktrace,
-          'short_message' => e.short_message,
-          'short_filename' => e.short_filename,
-          'filename' => e.filename,
-          'change_type' => change_type(e)
-      }
-    end
-
-    def change_type(item)
-      if item.branch == BASE
-        'removed'
-      elsif item.changed?
-        'changed'
-      else
-        'added'
-      end
-    end
-
     def render_liquid(project)
 
       errors = project.report_diff.error_diffs.values.flatten
-      errors = errors.map { |e| error_to_liquid(e) }
+      errors = errors.map { |e| error_to_liquid(e, project) }
 
       liquid_env = {
           'diff' => project.report_diff,
@@ -101,41 +72,6 @@ module PmdTester
       template.render!(liquid_env, {strict_variables: true})
     end
 
-    def get_link_to_source(violation, fname, project)
-      l_str = project.type == 'git' ? 'L' : 'l'
-      line_str = "##{l_str}#{violation.line}"
-      project.get_webview_url(fname) + line_str
-    end
-
-    def diff_fragments(violation)
-      diff = Differ.diff_by_word(violation.old_message, violation.message)
-      diff.format_as(:html)
-    end
-
-    def violation_type(v)
-      if v.changed?
-        '~'
-      elsif v.branch == 'patch'
-        '+'
-      else
-        '-'
-      end
-    end
-
-    def make_violation_hash(file_ref, v)
-      h = {
-          't' => violation_type(v),
-          'l' => v.line,
-          'f' => file_ref,
-          'r' => v.rule_name,
-          'm' => v.changed? ? diff_fragments(v) : v.text,
-      }
-      if v.changed? && v.line != v.old_line
-        h['ol'] = v.old_line
-      end
-      h
-    end
-
     private
 
     def make_project_json(all_vs, filename_index, project)
@@ -145,6 +81,66 @@ module PmdTester
           'file_index' => filename_index,
           'violations' => all_vs
       }
+    end
+  end
+
+
+  def violation_type(v)
+    if v.changed?
+      '~'
+    elsif v.branch == 'patch'
+      '+'
+    else
+      '-'
+    end
+  end
+
+  def make_violation_hash(file_ref, v)
+    h = {
+        't' => violation_type(v),
+        'l' => v.line,
+        'f' => file_ref,
+        'r' => v.rule_name,
+        'm' => v.changed? ? diff_fragments(v) : v.text,
+    }
+    if v.changed? && v.line != v.old_line
+      h['ol'] = v.old_line
+    end
+    h
+  end
+
+  def diff_fragments(violation)
+    diff = Differ.diff_by_word(violation.message, violation.old_message)
+    diff.format_as(:html)
+  end
+
+
+  def error_to_liquid(e, project)
+    escaped_stacktrace = sanitize_stacktrace(e)
+    old_stacktrace = e.old_error.nil? ? nil : sanitize_stacktrace(e.old_error)
+
+    {
+        'file_url' =>  project.get_webview_url(e.filename),
+        'stack_trace_html' => escaped_stacktrace,
+        'old_stack_trace_html' => old_stacktrace,
+        'short_message' => e.short_message,
+        'short_filename' => e.short_filename,
+        'filename' => e.filename,
+        'change_type' => change_type(e)
+    }
+  end
+
+  def sanitize_stacktrace(e)
+    CGI::escapeHTML(e.stack_trace).gsub(e.filename, '<span class="meta-var">$FILE</span>')
+  end
+
+  def change_type(item)
+    if item.branch == BASE
+      'removed'
+    elsif item.changed?
+      'changed'
+    else
+      'added'
     end
   end
 
