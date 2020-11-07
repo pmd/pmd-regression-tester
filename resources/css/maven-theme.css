@@ -125,3 +125,8 @@ div.rule-details-padder {
   border-left: darkslategrey;
   border-left-style: solid;
 }
+
+.btn.btn-rounded {
+  border-radius: 50px
+}
+
