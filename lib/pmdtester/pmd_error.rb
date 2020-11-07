@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require 'differ'
 
 module PmdTester
   # This class is used to store pmd errors and its size.
@@ -39,12 +40,14 @@ module PmdTester
     #  </xs:complexType>
     attr_reader :attrs
     attr_accessor :text
+    attr_accessor :old_error
 
     def initialize(attrs, branch)
       @attrs = attrs
 
       @branch = branch
       @text = ''
+      @changed = false
     end
 
     def filename
@@ -68,7 +71,7 @@ module PmdTester
     end
 
     def changed?
-      false
+      @changed
     end
 
     def eql?(other)
@@ -80,6 +83,27 @@ module PmdTester
       [filename, stack_trace, @text].hash
     end
 
+    def sort_key
+      filename
+    end
+
+    def old_error
+      @old_error
+    end
+
+    def try_merge?(other)
+      if branch != BASE &&
+         branch != other.branch &&
+         filename == other.filename &&
+         !changed? # not already changed
+        @changed = true
+        @old_error = other
+        true
+      else
+        false
+      end
+    end
+
     def error_type
       if branch == BASE
         'removed'
@@ -88,17 +112,6 @@ module PmdTester
       else
         'added'
       end
-    end
-
-    def to_liquid
-      {
-          'file_url' => file_url,
-          'stack_trace' => stack_trace,
-          'short_message' => short_message,
-          'short_filename' => short_filename,
-          'filename' => filename,
-          'change_type' => error_type
-      }
     end
   end
 end

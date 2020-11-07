@@ -16,6 +16,7 @@ module PmdTester
 
     attr_accessor :base_errors_size
     attr_accessor :patch_errors_size
+    attr_accessor :changed_errors_size
     attr_accessor :new_errors_size
     attr_accessor :removed_errors_size
     attr_accessor :error_diffs_size
@@ -93,7 +94,7 @@ module PmdTester
 
 
       @violation_diffs = build_diffs(base_violations.violations, patch_violations.violations)
-      @violation_diffs = merge_changed_violations(@violation_diffs)
+      @violation_diffs = merge_changed_items(@violation_diffs)
 
       @rule_diffs = make_rule_diffs(base_violations, patch_violations, @violation_diffs)
 
@@ -109,7 +110,11 @@ module PmdTester
       @base_errors_size = base_errors.errors_size
       @patch_errors_size = patch_errors.errors_size
       @error_diffs = build_diffs(base_errors.errors, patch_errors.errors)
-      @new_errors_size, _, @removed_errors_size = get_diffs_size(@error_diffs)
+      @error_diffs = merge_changed_items(@error_diffs)
+
+      @new_errors_size,
+          @changed_errors_size,
+          @removed_errors_size = get_diffs_size(@error_diffs)
       @error_diffs_size = @new_errors_size + @removed_errors_size
     end
 
@@ -152,9 +157,9 @@ module PmdTester
     end
 
     # @param diff_violations a hash { filename => list[violation]}, containing those that changed
-    def merge_changed_violations(diff_violations)
+    def merge_changed_items(diff_violations)
       diff_violations.each do |fname, different|
-        different.sort_by!(&:line)
+        different.sort_by!(&:sort_key)
         diff_violations[fname] = different.delete_if do |v|
           v.branch == BASE &&
               # try_merge will set v2.changed = true if it succeeds
@@ -224,6 +229,7 @@ module PmdTester
           'violation_diffs_size' => violation_diffs_size,
           'base_errors_size' => base_errors_size,
           'patch_errors_size' => patch_errors_size,
+          'changed_errors_size' => changed_errors_size,
           'new_errors_size' => new_errors_size,
           'removed_errors_size' => removed_errors_size,
           'error_diffs_size' => error_diffs_size,

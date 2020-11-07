@@ -151,18 +151,35 @@
                  </tr>
                 </thead>
                 <tbody>
-                {% for error in diff.error_diffs %}
+                {% for error in error_diffs %}
                 <tr id="error-{{forloop.index}}" class="accordion-toggle error-row {{error.change_type}}" data-toggle="collapse" data-target="#error-{{forloop.index}}-expanded">
                     <td><a href="{{error.file_url}}"  target="_blank" rel="noopener noreferrer">{{error.short_filename}}</a></td>
-                    <td>{{error.short_message | replace: error.filename, "<span class='meta-var'>$FILE</span>" | escape }}</td>
+                    <td>{{error.short_message | escape | replace: error.filename, "<span class='meta-var'>$FILE</span>" }}</td>
                 </tr>
                 <tr>
                     <td class="row-hidden" colspan="2">
                         <div class="accordion-body collapse" id="error-{{forloop.index}}-expanded">
                             <div class="collapsed-content-padder">
+                                {% if error.old_stack_trace_html %}
+                                <div class="d-md-flex h-md-100 align-items-center">
+                                    <div class="col-md-6 p-0 h-md-100">
+                                        <h5>Old stack trace</h5>
+                                        <pre>
+    {{ error.old_stack_trace_html }}
+                                        </pre>
+                                    </div>
+                                    <div class="col-md-6 p-0 h-md-100">
+                                        <h5>New stack trace</h5>
+                                        <pre>
+    {{ error.stack_trace_html }}
+                                        </pre>
+                                    </div>
+                                </div>
+                                {% else %}
                                 <pre>
-{{ error.stack_trace | replace: error.filename, "<span class='meta-var'>$FILE</span>" | escape }}
+    {{ error.stack_trace_html }}
                                 </pre>
+                                {% endif %}
                             </div>
                         </div>
                     </td>

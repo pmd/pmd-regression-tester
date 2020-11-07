@@ -1,5 +1,6 @@
 require 'liquid'
 require 'json'
+require 'differ'
 
 module PmdTester
 
@@ -54,20 +55,43 @@ module PmdTester
       "let project = #{project_data}"
     end
 
+    def sanitize_stacktrace(e)
+      (e.stack_trace).gsub(e.filename, '<span class="meta-var">$FILE</span>')
+    end
+
+    def error_to_liquid(e)
+      escaped_stacktrace = sanitize_stacktrace(e)
+      old_stacktrace = e.old_error.nil? ? nil : sanitize_stacktrace(e.old_error)
+
+      {
+          'file_url' => e.file_url,
+          'stack_trace_html' => escaped_stacktrace,
+          'old_stack_trace_html' => old_stacktrace,
+          'short_message' => e.short_message,
+          'short_filename' => e.short_filename,
+          'filename' => e.filename,
+          'change_type' => change_type(e)
+      }
+    end
+
+    def change_type(item)
+      if item.branch == BASE
+        'removed'
+      elsif item.changed?
+        'changed'
+      else
+        'added'
+      end
+    end
+
     def render_liquid(project)
 
-      # puts PmdTester.constants.inspect
-
-      violations =
-          project.report_diff.violation_diffs.map { |k, vs|
-            PmdFileInfo.new(vs,
-                            project.get_webview_url(k),
-                            project.get_path_inside_project(k))
-          }
+      errors = project.report_diff.error_diffs.values.flatten
+      errors = errors.map { |e| error_to_liquid(e) }
 
       liquid_env = {
           'diff' => project.report_diff,
-          'violation_diffs' => violations,
+          'error_diffs' => errors,
           'title' => "Diff report for #{project.name}"
       }
 

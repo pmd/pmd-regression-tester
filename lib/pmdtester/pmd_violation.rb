@@ -114,6 +114,10 @@ module PmdTester
       branch == BASE
     end
 
+    def sort_key
+      line
+    end
+
     def eql?(other)
       rule_name.eql?(other.rule_name) &&
         line.eql?(other.line) &&
