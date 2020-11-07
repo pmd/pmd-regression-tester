@@ -80,34 +80,52 @@
 
     <div class="section-content">
 
-        <table id="rule-summary" class="table">
-            <thead>
-            <tr>
-                <th>Rule</th>
-                <th>Base</th>
-                <th>Patch</th>
-                <th>Added</th>
-                <th>Changed</th>
-                <th>Removed</th>
-            </tr>
-            </thead>
-            <tbody>
+        <div class="table-responsive">
+            <table id="rule-summary" class="table">
+                <thead>
+                <tr>
+                    <th>Rule</th>
+                    <th>Base</th>
+                    <th>Patch</th>
+                    <th>Added</th>
+                    <th>Changed</th>
+                    <th>Removed</th>
+                </tr>
+                </thead>
+                <tbody>
 
-            {% assign sorted_rule_diffs = diff.rule_diffs | sort: 'name' %}
+                {% assign sorted_rule_diffs = diff.rule_diffs | sort: 'name' %}
 
-
-            {% for rule_diff in sorted_rule_diffs %}
-            <tr>
-                <td id="rule-summary-{{rule_diff.name}}" class="rulename">{{ rule_diff.name }} <span class="rule-doc-link"><a class="rulelink" href="{{rule_diff.info_url}}">[doc]</a></span></td>
-                <td class="basecount">{{ rule_diff.base_count }}</td>
-                <td class="patchcount">{{ rule_diff.patch_count }}</td>
-                <td class="added" data-count="{{ rule_diff.added }}">{{ rule_diff.added }}</td>
-                <td class="changed" data-count="{{ rule_diff.changed }}">{{ rule_diff.changed }}</td>
-                <td class="removed" data-count="{{ rule_diff.removed }}">{{ rule_diff.removed }}</td>
-            </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+                {% for rule_diff in sorted_rule_diffs %}
+                <tr data-toggle="collapse" id="header-rule-{{rule_diff.name}}" data-target="#{{rule_diff.name}}-expanded" class="accordion-toggle">
+                    <td id="rule-summary-{{rule_diff.name}}" class="rulename">{{ rule_diff.name }} <span class="rule-doc-link"><a class="rulelink" href="{{rule_diff.info_url}}" target="_blank" rel="noopener noreferrer">[doc]</a></span></td>
+                    <td class="basecount">{{ rule_diff.base_count }}</td>
+                    <td class="patchcount">{{ rule_diff.patch_count }}</td>
+                    <td class="added" data-count="{{ rule_diff.added }}">{{ rule_diff.added }}</td>
+                    <td class="changed" data-count="{{ rule_diff.changed }}">{{ rule_diff.changed }}</td>
+                    <td class="removed" data-count="{{ rule_diff.removed }}">{{ rule_diff.removed }}</td>
+                </tr>
+                <tr>
+                    <td colspan="6" class="rule-hidden-row">
+                        <div class="accordion-body collapse" id="{{rule_diff.name}}-expanded">
+                            <div class="rule-details-padder">
+                                Oha
+<!--                                <table class="table violation-display" data-rule-name="{{rule_diff.name}}">-->
+<!--                                    <thead>-->
+<!--                                    <tr>-->
+<!--                                        <th>Location</th>-->
+<!--                                        <th>Message</th>-->
+<!--                                    </tr>-->
+<!--                                    </thead>-->
+<!--                                </table>-->
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 <div class="section" id="section-violations">
@@ -156,6 +174,15 @@
                 {"data": "rule"},
                 {"data": "message"},
             ],
+            deferRender: true,
+            scrollY: "6000px",
+            dom: 'Pfrtip',
+            searchPanes: {
+                viewTotal: true,
+                columns: [0, 1],
+            },
+            scrollCollapse: true,
+            paging: false,
             columnDefs: [
                 { //file column
                     render(data, type, row) {
@@ -164,10 +191,19 @@
                         if (type === "display") {
                             let line = 'oldLine' in row ? row.oldLine + " -> " + row.line : row.line;
                             return "<a href='" + makeCodeLink(row) + "'>" + extractFilename(data) + " @ line " + line + "</a>"
-                        } else if (type === "sort")
+                        } else if (type === "sort") {
                             return data + "#" + row.line
-                        else
+                        } else if (type === 'shortFile') {
+                            return extractFilename(data)
+                        } else {
                             return data;
+                        }
+                    },
+                    searchPanes :{
+                      orthogonal: {
+                          'display': 'shortFile',
+                          'search':  undefined
+                      }
                     },
                     targets: 0
                 },

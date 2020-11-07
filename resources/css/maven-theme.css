@@ -83,6 +83,13 @@ span.changed {
   color: darkorange;
 }
 
+
+div.section-content {
+  margin: 100px;
+}
+
+/* Rule summary table */
+
 #violationsTable tr.added,
 #rule-summary td.added {
   background-color: #af8;
@@ -103,10 +110,18 @@ span.changed {
   background-color: #fefefe;
 }
 
-#rule-summary td.rulename {
-  align: right;
+.rule-doc-link {
+  font-size: small;
 }
 
-div.section-content {
-  margin: 100px;
+#rule-summary td.rule-hidden-row {
+  padding: 0 !important;
+  background-color: #f5f5f5;
+}
+
+div.rule-details-padder {
+  margin: 10px 10px 10px 10px;
+  padding: 0 0 0 40px;
+  border-left: darkslategrey;
+  border-left-style: solid;
 }
