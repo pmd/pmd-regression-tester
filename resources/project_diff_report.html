@@ -97,30 +97,13 @@
                 {% assign sorted_rule_diffs = diff.rule_diffs | sort: 'name' %}
 
                 {% for rule_diff in sorted_rule_diffs %}
-                <tr data-toggle="collapse" id="header-rule-{{rule_diff.name}}" data-target="#{{rule_diff.name}}-expanded" class="accordion-toggle">
-                    <td id="rule-summary-{{rule_diff.name}}" class="rulename">{{ rule_diff.name }} <span class="rule-doc-link"><a class="rulelink" href="{{rule_diff.info_url}}" target="_blank" rel="noopener noreferrer">[doc]</a></span></td>
+                <tr id="rule-summary-{{rule_diff.name}}">
+                    <td class="rulename">{{ rule_diff.name }} <span class="rule-doc-link"><a class="rulelink" href="{{rule_diff.info_url}}" target="_blank" rel="noopener noreferrer">[doc]</a></span></td>
                     <td class="basecount">{{ rule_diff.base_count }}</td>
                     <td class="patchcount">{{ rule_diff.patch_count }}</td>
                     <td class="added" data-count="{{ rule_diff.added }}">{{ rule_diff.added }}</td>
                     <td class="changed" data-count="{{ rule_diff.changed }}">{{ rule_diff.changed }}</td>
                     <td class="removed" data-count="{{ rule_diff.removed }}">{{ rule_diff.removed }}</td>
-                </tr>
-                <tr>
-                    <td colspan="6" class="rule-hidden-row">
-                        <div class="accordion-body collapse" id="{{rule_diff.name}}-expanded">
-                            <div class="rule-details-padder">
-                                Oha
-<!--                                <table class="table violation-display" data-rule-name="{{rule_diff.name}}">-->
-<!--                                    <thead>-->
-<!--                                    <tr>-->
-<!--                                        <th>Location</th>-->
-<!--                                        <th>Message</th>-->
-<!--                                    </tr>-->
-<!--                                    </thead>-->
-<!--                                </table>-->
-                            </div>
-                        </div>
-                    </td>
                 </tr>
                 {% endfor %}
                 </tbody>
