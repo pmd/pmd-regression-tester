@@ -180,8 +180,9 @@
 
     function makeCodeLink(violation) {
         let template = project.source_link_template
-        template = template.replace('{file}', violation.f)
-        return template.replace('{line}', violation.l)
+        template = template.replace('{file}', project.file_index[violation.f])
+        template = template.replace('{line}', violation.l);
+        return template
     }
 
     function extractFilename(path) {

@@ -83,7 +83,7 @@ module PmdTester
     end
 
     def generate_pmd_report(project)
-      run_path = "target/pmd-bin-#{@pmd_version}/bin/run.sh"
+      run_path = "PMD_JAVA_OPTS=-ea target/pmd-bin-#{@pmd_version}/bin/run.sh"
       pmd_cmd = "#{run_path} pmd -d #{project.local_source_path} -f xml " \
                 "-R #{project.get_config_path(@pmd_branch_name)} " \
                 "-r #{project.get_pmd_report_path(@pmd_branch_name)} " \
