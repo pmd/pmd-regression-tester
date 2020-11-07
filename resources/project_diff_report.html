@@ -8,7 +8,6 @@
     <script src="js/jquery-3.2.1.slim.min.js"></script>
     <script src="js/popper.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
-    <script src="https://use.fontawesome.com/0727a89ddb.js"></script>
 
     <script type="text/javascript" src="js/datatables.min.js"></script>
     <!-- This is generated -->
@@ -103,7 +102,6 @@
                     <td class="rulename">
                         {{ rule_diff.name }}
                         <span class="rule-doc-link"><a class="rulelink" href="{{rule_diff.info_url}}" target="_blank" rel="noopener noreferrer">[doc]</a></span>
-                        <span class="rule-focus-button"><button type="button" class="btn btn-outline-info btn-rounded btn-icon" class="rule-focus-button" data-rule-name="{{rule_diff.name}}"><i class="fa fa-crosshairs"></i></button></span>
                     </td>
                     <td class="basecount">{{ rule_diff.base_count }}</td>
                     <td class="patchcount">{{ rule_diff.patch_count }}</td>
@@ -235,12 +233,6 @@
             rowCallback(row, data, index) {
                 $(row).addClass(cssClass[data.t]);
             },
-        });
-
-        $(".rule-focus-button > button").on("click", function(e) {
-            let rname = $(this).data('rule-name');
-            $('#violationsTable').DataTable().searchPanes.clearSelections();
-            $('#DataTables_Table_0').DataTable().row(`tr span.dtsp-name[title="${rname}"]`).select();
         });
 
     });
