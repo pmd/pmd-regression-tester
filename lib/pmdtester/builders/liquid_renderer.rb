@@ -18,10 +18,15 @@ module PmdTester
     end
 
     def write_file(target_file, contents)
+      dir = File.dirname(target_file)
+      unless File.directory?(dir)
+        FileUtils.mkdir_p(dir)
+      end
+
       index = File.new(target_file, 'w')
       index.puts contents
     ensure
-      index.close
+      index&.close
     end
 
     def copy_resource(dir, to_root)
