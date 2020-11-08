@@ -34,7 +34,7 @@ module PmdTester
     attr_accessor :base_timestamp
     attr_accessor :patch_timestamp
 
-    attr_accessor :violation_diffs
+    attr_accessor :violation_diffs_by_file
     attr_accessor :error_diffs
     attr_accessor :rule_diffs
     attr_accessor :configerrors_diffs
@@ -156,6 +156,7 @@ module PmdTester
         value.empty?
       end
     end
+
 
     # @param diff_violations a hash { filename => list[violation]}, containing those that changed
     def merge_changed_items(diff_violations)

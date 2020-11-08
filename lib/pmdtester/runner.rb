@@ -152,10 +152,10 @@ module PmdTester
       removed_violations_size = 0
       @projects.each do |project|
         diff = project.report_diff
-        new_errors_size += diff.new_errors_size
-        removed_errors_size += diff.removed_errors_size
-        new_violations_size += diff.new_violations_size
-        removed_violations_size += diff.removed_violations_size
+        new_errors_size += diff.error_counts.new
+        removed_errors_size += diff.error_counts.removed
+        new_violations_size += diff.violation_counts.new
+        removed_violations_size += diff.violation_counts.removed
       end
 
       [new_errors_size, removed_errors_size, new_violations_size, removed_violations_size, 0, 0]

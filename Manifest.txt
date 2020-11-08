@@ -38,6 +38,7 @@ lib/pmdtester/pmd_report_detail.rb
 lib/pmdtester/pmd_violation.rb
 lib/pmdtester/project.rb
 lib/pmdtester/report_diff.rb
+lib/pmdtester/report_diff_fast.rb
 lib/pmdtester/resource_locator.rb
 lib/pmdtester/runner.rb
 pmdtester.gemspec

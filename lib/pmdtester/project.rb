@@ -37,7 +37,7 @@ module PmdTester
       @build_command = project.at_xpath('build-command')&.text
       @auxclasspath_command = project.at_xpath('auxclasspath-command')&.text
 
-      @report_diff = ReportDiff.new
+      @report_diff = nil
     end
 
     # Generate the default webview url for the projects

@@ -8,39 +8,30 @@ module PmdTester
 
     def report_diff_to_h(d)
       {
-          'violation_counts' => {
-              'changed' => d.changed_violations_size,
-              'new' => d.new_violations_size,
-              'removed' => d.removed_violations_size,
-              'base_total' => d.base_violations_size,
-              'patch_total' => d.patch_violations_size,
-          },
-          'error_counts' => {
-              'changed' => d.changed_errors_size,
-              'new' => d.new_errors_size,
-              'removed' => d.removed_errors_size,
-              'base_total' => d.base_errors_size,
-              'patch_total' => d.patch_errors_size,
-          },
-          'base_execution_time' => d.base_execution_time,
-          'patch_execution_time' => d.patch_execution_time,
-          'diff_execution_time' => d.diff_execution_time,
-          'base_timestamp' => d.base_timestamp,
-          'patch_timestamp' => d.patch_timestamp,
+          'violation_counts' => d.violation_counts.to_h,
+          'error_counts' => d.error_counts.to_h,
 
-          'rule_diffs' => d.rule_diffs,
+          'base_execution_time' => PmdReportDetail.convert_seconds(d.base_report.exec_time),
+          'patch_execution_time' => PmdReportDetail.convert_seconds(d.patch_report.exec_time),
+          'diff_execution_time' => PmdReportDetail.convert_seconds(d.patch_report.exec_time -
+                                                                       d.base_report.exec_time),
+
+          'base_timestamp' => d.base_report.timestamp,
+          'patch_timestamp' => d.patch_report.timestamp,
+
+          'rule_diffs' => d.rule_summaries,
       }
     end
 
     def errors_to_h(project)
-      errors = project.report_diff.error_diffs.values.flatten
+      errors = project.report_diff.error_diffs_by_file.values.flatten
       errors.map { |e| error_to_hash(e, project) }
     end
     
     def violations_to_hash(project)
       filename_index = []
       all_vs = []
-      project.report_diff.violation_diffs.each do |file, vs|
+      project.report_diff.violation_diffs_by_file.each do |file, vs|
         file_ref = filename_index.size
         filename_index.push(project.get_local_path(file))
         vs.each do |v|

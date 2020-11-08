@@ -21,7 +21,7 @@ class TestDiffBuilder < Test::Unit::TestCase
     violation_diffs = diffs_report.violation_diffs
     keys = violation_diffs.keys
 
-    assert_empty(diffs_report.error_diffs)
+    assert_empty(diffs_report.error_diffs_by_file)
     assert_empty(diffs_report.configerrors_diffs)
     assert_equal(5, diffs_report.base_violations_size)
     assert_equal(8, diffs_report.patch_violations_size)
@@ -46,7 +46,7 @@ class TestDiffBuilder < Test::Unit::TestCase
     patch_report_path = 'test/resources/diff_builder/test_error_diffs_patch.xml'
     diffs_report = diff_builder.build(base_report_path, patch_report_path,
                                       BASE_REPORT_INFO_PATH, PATCH_REPORT_INFO_PATH)
-    error_diffs = diffs_report.error_diffs
+    error_diffs = diffs_report.error_diffs_by_file
     keys = error_diffs.keys
 
     assert_empty(diffs_report.violation_diffs)
@@ -74,8 +74,8 @@ class TestDiffBuilder < Test::Unit::TestCase
     configerrors_diffs = diffs_report.configerrors_diffs
     keys = configerrors_diffs.keys
 
-    assert_empty(diffs_report.violation_diffs)
-    assert_empty(diffs_report.error_diffs)
+    assert_empty(diffs_report.violation_diffs_by_file)
+    assert_empty(diffs_report.error_diffs_by_file)
     assert_equal(4, diffs_report.base_configerrors_size)
     assert_equal(3, diffs_report.patch_configerrors_size)
     assert_equal(5, diffs_report.configerrors_diffs_size)

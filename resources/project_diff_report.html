@@ -90,9 +90,9 @@
                         {{ rule_diff.name }}
                         <span class="external-link-secondary"><a class="rulelink" href="{{rule_diff.info_url}}" target="_blank" rel="noopener noreferrer">[doc]</a></span>
                     </td>
-                    <td class="basecount">{{ rule_diff.base_count }}</td>
-                    <td class="patchcount">{{ rule_diff.patch_count }}</td>
-                    <td class="added" data-count="{{ rule_diff.added }}">{{ rule_diff.added }}</td>
+                    <td class="basecount">{{ rule_diff.base_total }}</td>
+                    <td class="patchcount">{{ rule_diff.patch_total }}</td>
+                    <td class="added" data-count="{{ rule_diff.new }}">{{ rule_diff.new }}</td>
                     <td class="changed" data-count="{{ rule_diff.changed }}">{{ rule_diff.changed }}</td>
                     <td class="removed" data-count="{{ rule_diff.removed }}">{{ rule_diff.removed }}</td>
                 </tr>

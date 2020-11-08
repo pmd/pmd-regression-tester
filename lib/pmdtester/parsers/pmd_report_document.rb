@@ -8,10 +8,14 @@ module PmdTester
     attr_reader :violations
     attr_reader :errors
     attr_reader :configerrors
+    attr_reader :infos_by_rules
+
     def initialize(branch_name, working_dir, filter_set = nil)
       @violations = PmdViolations.new
       @errors = PmdErrors.new
       @configerrors = PmdConfigErrors.new
+
+      @infos_by_rules = {}
       @current_violations = []
       @current_violation = nil
       @current_error = nil
@@ -59,8 +63,14 @@ module PmdTester
         @violations.add_violations_by_filename(@current_filename, @current_violations)
         @current_filename = nil
       when 'violation'
-        @current_violation.text.strip!
-        @current_violations.push(@current_violation) if match_filter_set?(@current_violation)
+        v = @current_violation
+        v.text.strip!
+        if match_filter_set?(v)
+          @current_violations.push(v)
+          unless @infos_by_rules.has_key?(v.rule_name)
+            @infos_by_rules[v.rule_name] = RuleInfo.new(v.rule_name, v.info_url)
+          end
+        end
         @current_violation = nil
       when 'error'
         @errors.add_error_by_filename(@current_filename, @current_error)

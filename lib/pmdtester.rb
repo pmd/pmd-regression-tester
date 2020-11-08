@@ -11,6 +11,7 @@ require_relative 'pmdtester/pmd_report_detail'
 require_relative 'pmdtester/pmd_violation'
 require_relative 'pmdtester/project'
 require_relative 'pmdtester/report_diff'
+require_relative 'pmdtester/fast_report_diff'
 require_relative 'pmdtester/resource_locator'
 require_relative 'pmdtester/runner'
 
