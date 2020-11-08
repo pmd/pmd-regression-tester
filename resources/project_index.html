@@ -26,9 +26,9 @@
                 <tbody>
                 <tr>
                     <td class="item">Branch info</td>
-                    <td><a href="{{base.tree_url}}">{{base.name}} {{ base.tip.sha | truncate: 8 }}</a>: {{ base.tip.message }}</td>
+                    <td><a href="{{base.tree_url}}">{{base.name}} {{ base.tip.sha | truncate: 8, "" }}</a>: {{ base.tip.message }}</td>
                     <td>
-                        <a href="{{patch.tree_url}}">{{patch.name}} {{ patch.tip.sha | truncate: 8 }}: {{ patch.tip.message }}</a>
+                        <a href="{{patch.tree_url}}">{{patch.name}} {{ patch.tip.sha | truncate: 8, "" }}: {{ patch.tip.message }}</a>
                         {% if pr_number %}
                         <a href="https://github.com/pmd/pmd/pull/{{pr_number}}">PR #{{pr_number}}</a>
                         {% endif %}

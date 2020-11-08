@@ -12,9 +12,9 @@ module PmdTester
     attr_accessor :branch_name
     # The branch's execution time on all standard projects
     attr_accessor :execution_time
-    attr_reader :jdk_version
-    attr_reader :language
-    attr_reader :pull_request
+    attr_accessor :jdk_version
+    attr_accessor :language
+    attr_accessor :pull_request
 
     def self.branch_filename(branch_name)
       branch_name&.tr('/', '_')
@@ -33,22 +33,23 @@ module PmdTester
       @pull_request = ENV['TRAVIS_PULL_REQUEST']
     end
 
-    def load
-      if File.exist?(branch_details_path)
-        hash = JSON.parse(File.read(branch_details_path))
-        @branch_last_sha = hash['branch_last_sha']
-        @branch_last_message = hash['branch_last_message']
-        @branch_name = hash['branch_name']
-        @execution_time = hash['execution_time']
-        @jdk_version = hash['jdk_version']
-        @language = hash['language']
-        @pull_request = hash['pull_request']
+    def self.load(branch_name)
+      details = PmdBranchDetail.new(branch_name)
+      if File.exist?(details.path_to_save_file)
+        hash = JSON.parse(File.read(details.path_to_save_file))
+        details.branch_last_sha = hash['branch_last_sha']
+        details.branch_last_message = hash['branch_last_message']
+        details.branch_name = hash['branch_name']
+        details.execution_time = hash['execution_time']
+        details.jdk_version = hash['jdk_version']
+        details.language = hash['language']
+        details.pull_request = hash['pull_request']
       else
-        @jdk_version = ''
-        @language = ''
-        logger.warn "#{branch_details_path} doesn't exist!"
+        details.jdk_version = ''
+        details.language = ''
+        logger.warn "#{details.path_to_save_file} doesn't exist!"
       end
-      self
+      details
     end
 
     def save
@@ -59,13 +60,13 @@ module PmdTester
                jdk_version: @jdk_version,
                language: @language,
                pull_request: @pull_request }
-      file = File.new(branch_details_path, 'w')
+      file = File.new(path_to_save_file, 'w')
       file.puts JSON.generate(hash)
       file.close
       self
     end
 
-    def branch_details_path
+    def path_to_save_file
       "#{@base_branch_dir}/branch_info.json"
     end
 

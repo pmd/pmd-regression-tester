@@ -12,7 +12,7 @@ module PmdTester
     PATCH_CONFIG_PATH = 'target/reports/diff/patch_config.xml'
     INDEX_PATH = 'target/reports/diff/index.html'
 
-    def build(projects, base_name, patch_name)
+    def build(projects, base_details, patch_details)
       projects.each do |project|
         process_project(project, "#{REPORT_DIR}/#{project.name}")
       end
@@ -20,7 +20,7 @@ module PmdTester
 
       FileUtils.mkdir_p(REPORT_DIR) unless File.directory?(REPORT_DIR)
       write_structure(REPORT_DIR)
-      write_index(REPORT_DIR, base_name, patch_name, projects)
+      write_index(REPORT_DIR, base_details, patch_details, projects)
       logger.info 'Built summary report successfully!'
     end
 
@@ -37,9 +37,7 @@ module PmdTester
       copy_resource('js', target_root)
     end
 
-    def write_index(target_root, base_name, patch_name, projects)
-      base_details = PmdBranchDetail.new(base_name)
-      patch_details = PmdBranchDetail.new(patch_name)
+    def write_index(target_root, base_details, patch_details, projects)
 
       projects = projects.map { |p|
         {

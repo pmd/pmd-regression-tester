@@ -34,16 +34,16 @@ module PmdTester
       rule_sets = RuleSetBuilder.new(@options).build if @options.auto_config_flag
       return if rule_sets&.empty?
 
-      PmdReportBuilder
+      base_branch_details = PmdReportBuilder
         .new(@options.base_config, @projects, @options.local_git_repo, @options.base_branch,
              @options.threads)
         .build
-      PmdReportBuilder
+      patch_branch_details = PmdReportBuilder
         .new(@options.patch_config, @projects, @options.local_git_repo, @options.patch_branch,
              @options.threads)
         .build
 
-      build_html_reports
+      build_html_reports(base_branch_details, patch_branch_details)
     end
 
     def run_online_mode
@@ -65,12 +65,13 @@ module PmdTester
         logger.info "Using config #{@options.patch_config} which might differ from baseline"
       end
 
-      PmdReportBuilder
+      patch_branch_details = PmdReportBuilder
         .new(@options.patch_config, @projects,
              @options.local_git_repo, @options.patch_branch, @options.threads)
         .build
 
-      build_html_reports
+      base_branch_details = PmdBranchDetail.load(@options.base_branch)
+      build_html_reports(base_branch_details, patch_branch_details)
     end
 
     def determine_project_list_for_online_mode(baseline_path)
@@ -112,18 +113,19 @@ module PmdTester
       logger.info "Mode: #{@options.mode}"
 
       get_projects(@options.project_list) unless @options.nil?
-      branch_details = PmdReportBuilder
-                       .new(@options.patch_config, @projects,
-                            @options.local_git_repo, @options.patch_branch,
-                            @options.threads)
-                       .build
+      patch_branch_details = PmdReportBuilder
+                             .new(@options.patch_config, @projects,
+                                  @options.local_git_repo, @options.patch_branch,
+                                  @options.threads)
+                             .build
       # copy list of projects file to the patch baseline
-      FileUtils.cp(@options.project_list, branch_details.target_branch_project_list_path)
+      FileUtils.cp(@options.project_list, patch_branch_details.target_branch_project_list_path)
 
-      build_html_reports unless @options.html_flag
+      base_branch_details = PmdBranchDetail.load(@options.base_branch)
+      build_html_reports(base_branch_details, patch_branch_details) unless @options.html_flag
     end
 
-    def build_html_reports
+    def build_html_reports(base_branch_details, patch_branch_details)
       @projects.each do |project|
         logger.info "Preparing report for #{project.name}"
         report_diffs = DiffBuilder.new.build(project.get_pmd_report_path(@options.base_branch),
@@ -133,7 +135,10 @@ module PmdTester
                                              @options.filter_set)
         project.report_diff = report_diffs
       end
-      SummaryReportBuilder.new.build(@projects, @options.base_branch, @options.patch_branch)
+
+      SummaryReportBuilder.new.build(@projects,
+                                     base_branch_details,
+                                     patch_branch_details)
     end
 
     def get_projects(file_path)
