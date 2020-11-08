@@ -1,4 +1,4 @@
-require 'diffy'
+require 'differ'
 
 module PmdTester
 
@@ -86,10 +86,8 @@ module PmdTester
   end
 
   def diff_fragments(violation)
-    Diffy::Diff.new(violation.old_message, violation.message,
-                    :allow_empty_diff => false,
-                    :highlight_words => true,
-                    :format => :html).to_s(:html)
+    diff = Differ.diff_by_word(violation.message, violation.old_message)
+    diff.format_as(:html)
   end
 
 
