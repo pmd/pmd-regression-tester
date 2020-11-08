@@ -21,22 +21,6 @@ a:visited  {
 a:active, a:hover {
   color:#69c;
 }
-#legend li.externalLink {
-  background: url(../images/external.png) left top no-repeat;
-  padding-left: 18px;
-}
-a.externalLink, a.externalLink:link, a.externalLink:visited, a.externalLink:active, a.externalLink:hover {
-  background: url(../images/external.png) right center no-repeat;
-  padding-right: 18px;
-}
-#legend li.newWindow {
-  background: url(../images/newwindow.png) left top no-repeat;
-  padding-left: 18px;
-}
-a.newWindow, a.newWindow:link, a.newWindow:visited, a.newWindow:active, a.newWindow:hover {
-  background: url(../images/newwindow.png) right center no-repeat;
-  padding-right: 18px;
-}
 h2 {
   padding: 4px 4px 4px 6px;
   border: 1px solid #999;
@@ -96,8 +80,13 @@ tr.changed, #rule-summary td.changed {
   background-color: #fefefe;
 }
 
-.rule-doc-link {
+.external-link-secondary {
   font-size: small;
+  margin-left: 2em;
+}
+
+.external-link-secondary + .external-link-secondary {
+  margin-left: 0.5em;
 }
 
 td.row-hidden {
