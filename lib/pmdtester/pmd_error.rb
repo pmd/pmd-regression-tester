@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-require 'differ'
 
 module PmdTester
   # This class is used to store pmd errors and its size.

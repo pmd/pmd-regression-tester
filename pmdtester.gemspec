@@ -31,7 +31,7 @@ Gem::Specification.new do |s|
   if s.respond_to? :add_runtime_dependency then
     s.add_runtime_dependency(%q<nokogiri>.freeze, ["~> 1.8"])
     s.add_runtime_dependency(%q<slop>.freeze, ["~> 4.6"])
-    s.add_runtime_dependency(%q<differ>.freeze, ["~> 0.1"])
+    s.add_runtime_dependency(%q<diffy>.freeze, ["~> 3.4"])
     s.add_runtime_dependency(%q<rufus-scheduler>.freeze, ["~> 3.5"])
     s.add_runtime_dependency(%q<liquid>.freeze, [">= 4.0"])
     s.add_development_dependency(%q<hoe-bundler>.freeze, ["~> 1.5"])
@@ -45,7 +45,7 @@ Gem::Specification.new do |s|
   else
     s.add_dependency(%q<nokogiri>.freeze, ["~> 1.8"])
     s.add_dependency(%q<slop>.freeze, ["~> 4.6"])
-    s.add_dependency(%q<differ>.freeze, ["~> 0.1"])
+    s.add_dependency(%q<diffy>.freeze, ["~> 3.4"])
     s.add_dependency(%q<rufus-scheduler>.freeze, ["~> 3.5"])
     s.add_dependency(%q<liquid>.freeze, [">= 4.0"])
     s.add_dependency(%q<hoe-bundler>.freeze, ["~> 1.5"])
