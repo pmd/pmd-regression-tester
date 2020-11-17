@@ -19,7 +19,13 @@ function build_regression_tester() {
     bundle exec rake check_manifest
     bundle exec rake rubocop
     bundle exec rake clean test
+    echo "::endgroup::"
+
+    echo "::group::Run Integration Tests"
     bundle exec rake clean integration-test
+    echo "::endgroup::"
+
+    echo "::group::Build Package"
     bundle exec rake install_gem
     bundle exec pmdtester -h
     echo "::endgroup::"
