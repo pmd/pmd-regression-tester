@@ -6,6 +6,8 @@ bugs  :: https://github.com/pmd/pmd-regression-tester/issues
 
 build-status :: {<img src="https://github.com/pmd/pmd-regression-tester/workflows/build/badge.svg?branch=master" alt="Build Status" />}[https://github.com/pmd/pmd-regression-tester/actions?query=workflow%3Abuild]
 
+gem-version :: {<img src="https://badge.fury.io/rb/pmdtester.svg" alt="Gem Version" />}[https://rubygems.org/gems/pmdtester]
+
 == DESCRIPTION:
 
 A regression testing tool ensure that new problems and unexpected behaviors will not be introduced to PMD project after fixing an issue , and new rules can work as expected.
