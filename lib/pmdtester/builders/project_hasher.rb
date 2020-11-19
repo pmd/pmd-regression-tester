@@ -69,7 +69,7 @@ module PmdTester
       'l' => violation.line,
       'f' => file_ref,
       'r' => violation.rule_name,
-      'm' => violation.changed? ? diff_fragments(violation) : violation.text
+      'm' => violation.changed? ? diff_fragments(violation) : violation.message
     }
     h['ol'] = violation.old_line if violation.changed? && violation.line != violation.old_line
     h

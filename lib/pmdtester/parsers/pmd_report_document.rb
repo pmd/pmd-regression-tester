@@ -20,39 +20,40 @@ module PmdTester
       @current_violation = nil
       @current_error = nil
       @current_configerror = nil
-      @current_element = ''
-      @filename = ''
       @filter_set = filter_set
       @working_dir = working_dir
       @branch_name = branch_name
+
+      @cur_text = String.new(capacity: 200)
     end
 
     def start_element(name, attrs = [])
       attrs = attrs.to_h
-      @current_element = name
 
       case name
       when 'file'
-        remove_work_dir!(attrs['name'])
+        @current_filename = remove_work_dir!(attrs['name'])
         @current_violations = []
-        @current_filename = attrs['name'].freeze
       when 'violation'
-        attrs['filename'] = @current_filename
         @current_violation = PmdViolation.new(attrs, @branch_name, @current_filename)
       when 'error'
-        remove_work_dir!(attrs['filename'])
         remove_work_dir!(attrs['msg'])
-        @current_filename = attrs['filename']
-        @current_error = PmdError.new(attrs, @branch_name)
+        @current_filename = remove_work_dir!(attrs['filename'])
+        @current_error = PmdError.new(attrs, @branch_name, @current_filename)
       end
     end
 
     def remove_work_dir!(str)
       str.sub!(/#{@working_dir}/, '')
+      str
     end
 
     def characters(string)
-      @current_violation&.text += string
+      @cur_text << remove_work_dir!(string)
+    end
+
+    def cdata_block(string)
+      @cur_text << remove_work_dir!(string)
     end
 
     def end_element(name)
@@ -62,29 +63,32 @@ module PmdTester
         @current_filename = nil
       when 'violation'
         v = @current_violation
-        v.text.strip!
         if match_filter_set?(v)
+          v.message = finish_text!
           @current_violations.push(v)
           @infos_by_rules[v.rule_name] = RuleInfo.new(v.rule_name, v.info_url) unless @infos_by_rules.key?(v.rule_name)
         end
         @current_violation = nil
       when 'error'
+        @current_error.stack_trace = finish_text!
         @errors.add_all(@current_filename, [@current_error])
         @current_filename = nil
         @current_error = nil
       end
+      @cur_text.clear
     end
 
-    def cdata_block(string)
-      remove_work_dir!(string)
-      @current_error&.text = string
+    def finish_text!
+      res = @cur_text.strip!.dup.freeze
+      @cur_text.clear
+      res
     end
 
     def match_filter_set?(violation)
       return true if @filter_set.nil?
 
       @filter_set.each do |filter_rule_ref|
-        ruleset_attr = violation.attrs['ruleset'].delete(' ').downcase + '.xml'
+        ruleset_attr = violation.ruleset_file
         rule = violation.rule_name
         rule_ref = "#{ruleset_attr}/#{rule}"
         return true if filter_rule_ref.eql?(ruleset_attr)

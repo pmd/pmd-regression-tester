@@ -17,32 +17,20 @@ module PmdTester
     #       </xs:extension>
     #     </xs:simpleContent>
     #  </xs:complexType>
-    attr_reader :attrs
-    attr_accessor :text
+    attr_accessor :stack_trace
     attr_accessor :old_error
+    attr_reader :filename, :short_message
 
-    def initialize(attrs, branch)
-      @attrs = attrs
-
+    def initialize(attrs, branch, filename)
       @branch = branch
-      @text = ''
+      @stack_trace = ''
       @changed = false
-    end
-
-    def filename
-      @attrs['filename'] # was already normalized to remove path outside project
+      @short_message = attrs['msg']
+      @filename = filename
     end
 
     def short_filename
       filename.gsub(%r{([^/]*+/)+}, '')
-    end
-
-    def short_message
-      @attrs['msg']
-    end
-
-    def stack_trace
-      @text
     end
 
     def changed?

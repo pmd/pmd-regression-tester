@@ -27,16 +27,27 @@ module PmdTester
     #   </xs:simpleContent>
     # </xs:complexType>
 
-    attr_reader :attrs
-    attr_reader :fname
-    attr_accessor :text
+    attr_reader :fname, :info_url, :line, :old_line, :old_message, :rule_name, :ruleset_file
+    attr_accessor :message
 
     def initialize(attrs, branch, fname)
-      @attrs = attrs
       @branch = branch
-      @changed = false
       @fname = fname
-      @text = ''
+      @message = ''
+
+      @info_url = attrs['externalInfoUrl']
+      @line = attrs['beginline'].to_i
+      @rule_name = attrs['rule']
+
+      rset = attrs['ruleset']
+      rset.delete!(' ')
+      rset.downcase!
+      rset << '.xml'
+      @ruleset_file = rset
+
+      @changed = false
+      @old_message = nil
+      @old_line = nil
     end
 
     def line_move?(other)
@@ -45,39 +56,15 @@ module PmdTester
 
     def try_merge?(other)
       if branch != BASE && branch != other.branch && rule_name == other.rule_name &&
-         !changed? && # not already changed
-         (line == other.line || line_move?(other))
+        !changed? && # not already changed
+        (line == other.line || line_move?(other))
         @changed = true
-        @attrs['oldMessage'] = other.text
-        @attrs['oldLine'] = other.line
+        @old_message = other.message
+        @old_line = other.line
         true
       else
         false
       end
-    end
-
-    def old_message
-      @attrs['oldMessage']
-    end
-
-    def old_line
-      @attrs['oldLine']&.to_i
-    end
-
-    def info_url
-      @attrs['externalInfoUrl']
-    end
-
-    def line
-      @attrs['beginline'].to_i
-    end
-
-    def rule_name
-      @attrs['rule']
-    end
-
-    def message
-      @text
     end
 
     # only makes sense if this is a diff
@@ -111,7 +98,10 @@ module PmdTester
     end
 
     def to_liquid
-      { **attrs, 'branch' => branch, 'changed' => changed? }
+      {
+        'branch' => branch,
+        'changed' => changed?
+      }
     end
   end
 end

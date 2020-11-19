@@ -5,6 +5,7 @@ require 'test_helper'
 # Unit test class for PmdTester::DiffBuilder
 class TestDiffBuilder < Test::Unit::TestCase
   include PmdTester
+  include ProjectHasher
   BASE_REPORT_INFO_PATH = 'test/resources/diff_builder/base_report_info.json'
   PATCH_REPORT_INFO_PATH = 'test/resources/diff_builder/patch_report_info.json'
 

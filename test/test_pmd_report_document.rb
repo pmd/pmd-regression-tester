@@ -12,7 +12,7 @@ class TestPmdReportDocument < Test::Unit::TestCase
     parser = Nokogiri::XML::SAX::Parser.new(doc)
     parser.parse(File.open('test/resources/pmd_report_document/test_document.xml'))
     assert_equal(8, doc.violations.total_size)
-    assert_equal('Document \'empty\' constructor', doc.violations[FIRST_FILE][0].text)
+    assert_equal('Document \'empty\' constructor', doc.violations[FIRST_FILE][0].message)
     assert_equal(2, doc.errors.total_size)
     pmd_errors = doc.errors.all_values
     assert_not_nil(pmd_errors[0])
@@ -38,7 +38,7 @@ class TestPmdReportDocument < Test::Unit::TestCase
     assert_equal(3, doc.violations.num_files, 'wrong number of files')
     first_file = '/target/repositories/spring-framework/spring-aop/src/main/java/'\
                  'org/springframework/aop/ClassFilter.java'
-    assert_equal('44', doc.violations[first_file][0].attrs['beginline'])
+    assert_equal(44, doc.violations[first_file][0].line)
   end
 
   def test_error_filename_without_path
