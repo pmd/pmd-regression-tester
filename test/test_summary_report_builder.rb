@@ -21,9 +21,7 @@ class TestSummaryReportBuilder < Test::Unit::TestCase
     branch = PmdTester::PmdBranchDetail.load('test_branch', nil)
     PmdTester::Runner.build_html_reports(projects, branch, branch)
 
-    expected_file = File.read('test/resources/summary_report_builder/expected_index.html')
-    actual_file = File.read('target/reports/diff/index.html')
-    assert_equal(norm_whitespace(expected_file),
-                 norm_whitespace(actual_file))
+    assert_file_equals('test/resources/summary_report_builder/expected_index.html',
+                       'target/reports/diff/index.html')
   end
 end

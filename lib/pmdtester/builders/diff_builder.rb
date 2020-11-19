@@ -8,17 +8,16 @@ module PmdTester
     include PmdTester
     # The schema of pmd xml report refers to
     # http://pmd.sourceforge.net/report_2_0_0.xsd
-    def build(base_report_filename, patch_report_filename, base_info, patch_info, filter_set = nil)
+    def build(base_report_file, patch_report_file, base_info, patch_info, filter_set = nil)
       base_details = PmdReportDetail.new
       base_details.load(base_info) unless base_info.nil?
       patch_details = PmdReportDetail.new
       patch_details.load(patch_info) unless patch_info.nil?
 
-      logger.info "Parsing #{base_report_filename}"
-      base_report = parse_pmd_report(base_report_filename, BASE, base_details,
-                                     filter_set)
-      logger.info "Parsing #{patch_report_filename}"
-      patch_report = parse_pmd_report(patch_report_filename, PATCH, patch_details)
+      logger.info "Parsing #{base_report_file}"
+      base_report = parse_pmd_report(base_report_file, BASE, base_details, filter_set)
+      logger.info "Parsing #{patch_report_file}"
+      patch_report = parse_pmd_report(patch_report_file, PATCH, patch_details)
 
       logger.info 'Calculating diffs'
       ReportDiff.new(base_report: base_report, patch_report: patch_report)

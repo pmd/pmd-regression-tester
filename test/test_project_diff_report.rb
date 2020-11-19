@@ -34,9 +34,7 @@ class TestProjectDiffReport < Test::Unit::TestCase
     PmdTester::LiquidProjectRenderer.new.write_project_index(project, actual_report_path)
 
     # Checking the content of diff report is expected.
-    expected_file = File.open(EXPECTED_REPORT_PATH).read
-    actual_file = File.open("#{actual_report_path}/index.html").read
-    assert_equal(norm_whitespace(expected_file), norm_whitespace(actual_file))
+    assert_file_equals(EXPECTED_REPORT_PATH, "#{actual_report_path}/index.html")
   end
 
   def test_report_diffs_empty
@@ -49,9 +47,6 @@ class TestProjectDiffReport < Test::Unit::TestCase
     PmdTester::LiquidProjectRenderer.new.write_project_index(project, actual_report_path)
 
     # Checking the content of diff report is expected.
-    expected_file = File.open(EXPECTED_EMPTY_REPORT_PATH).read
-    actual_file = File.open("#{actual_report_path}/index.html").read
-    assert_equal(norm_whitespace(expected_file),
-                 norm_whitespace(actual_file))
+    assert_file_equals(EXPECTED_EMPTY_REPORT_PATH, "#{actual_report_path}/index.html")
   end
 end
