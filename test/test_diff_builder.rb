@@ -49,16 +49,14 @@ class TestDiffBuilder < Test::Unit::TestCase
     assert_counters_empty(diffs_report.violation_counts)
 
     assert_counters_eq(diffs_report.error_counts,
-                       base_total: 4, patch_total: 3, changed_total: 5)
+                       base_total: 4, patch_total: 3, changed_total: 3)
     assert_changes_eq(diffs_report.error_counts,
-                      removed: 3, added: 2, changed: 0)
+                      removed: 2, added: 1, changed: 0)
 
-    assert_equal(3, keys.size)
-    assert_equal('Base1.java', keys[0])
+    assert_equal(%w[Base1.java Patch1.java], keys)
+
     assert_equal(2, error_diffs['Base1.java'].size)
-    assert_equal('Both2.java', keys[1])
     assert_equal(2, error_diffs['Both2.java'].size)
-    assert_equal('Patch1.java', keys[2])
   end
 
   private
@@ -74,8 +72,8 @@ class TestDiffBuilder < Test::Unit::TestCase
   end
 
   def assert_changes_eq(counters, removed:, added:, changed:)
-    assert_equal(removed, counters.removed)
-    assert_equal(added, counters.new)
-    assert_equal(changed, counters.changed)
+    assert_equal(removed, counters.removed, "removed")
+    assert_equal(added, counters.new, "added")
+    assert_equal(changed, counters.changed, "changed")
   end
 end

@@ -158,8 +158,7 @@ module PmdTester
 
     def make_branch_details(config:, branch:)
       PmdReportBuilder
-          .new(config, @projects,
-               @options.local_git_repo, branch, @options.threads)
+          .new(config, @projects, @options.local_git_repo, branch, @options.threads)
           .build
     end
   end
