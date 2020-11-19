@@ -1,272 +1,360 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
-<html>
+<html lang="en">
 <head>
-<title>pmd xml difference report</title>
-<style type="text/css" media="all">@import url("./css/maven-base.css");@import url("../../../resources/css/pmd-tester.css");</style>
+    <title>Diff report for spring-framework</title>
+
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/datatables.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/pmd-tester.css">
+
+    <script src="../js/jquery-3.2.1.slim.min.js"></script>
+    <script src="../js/popper.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/datatables.min.js"></script>
+    <!-- This is generated -->
+    <script src="./project_data.js"></script>
+
 </head>
-<body class="composite"><div id="contentBox">
-<div class="section" id="Summary">
-<h2>Summary:</h2>
-<table class="bodyTable" border="0">
-<thead><tr>
-<th>Item</th>
-<th>Base</th>
-<th>Patch</th>
-<th>Difference</th>
-</tr></thead>
-<tbody>
-<tr>
-<td class="c"><a href="#Errors">number of errors</a></td>
-<td class="b">1</td>
-<td class="a">1</td>
-<td class="c">
-<span class="removed">-1</span> | <span class="added">+1</span>
-</td>
-</tr>
-<tr>
-<td class="c"><a href="#Violations">number of violations</a></td>
-<td class="b">6</td>
-<td class="a">10</td>
-<td class="c">
-<span class="removed">-1</span> | <span class="changed">~2</span> | <span class="added">+5</span>
-</td>
-</tr>
-<tr>
-<td class="c"><a href="#configerrors">number of config errors</a></td>
-<td class="b">1</td>
-<td class="a">2</td>
-<td class="c">
-<span class="removed">-0</span> | <span class="added">+1</span>
-</td>
-</tr>
-<tr>
-<td class="c">execution time</td>
-<td class="b">00:02:01</td>
-<td class="a">00:01:05</td>
-<td class="c">00:00:56</td>
-</tr>
-<tr>
-<td class="c">timestamp</td>
-<td class="b">base time stamp</td>
-<td class="a">patch time stamp</td>
-<td class="c"></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="Violations">
-<h2>Violations:</h2>
+<body>
 <div class="section">
-<h3><a href="https://github.com/spring-projects/spring-framework/tree/v5.0.6.RELEASE/spring-aop/src/main/java/org/springframework/aop/Pointcut.java">spring-framework/spring-aop/src/main/java/org/springframework/aop/Pointcut.java</a></h3>
-<table class="bodyTable" border="0">
-<thead><tr>
-<th></th>
-<th>Rule</th>
-<th>Message</th>
-<th>Line</th>
-</tr></thead>
-<tbody><tr class="b">
-<td><a id="A1" href="#A1">#</a></td>
-<td><a href="http://pmd.sourceforge.net/snapshot/pmd_rules_java_codestyle.html#fielddeclarationsshouldbeatstartofclass">FieldDeclarationsShouldBeAtStartOfClass</a></td>
-<td>Fields should be declared at the top of the class, before any method declarations, constructors, initializers or inner classes.</td>
-<td><a href="https://github.com/spring-projects/spring-framework/tree/v5.0.6.RELEASE/spring-aop/src/main/java/org/springframework/aop/Pointcut.java#L51">51</a></td>
-</tr></tbody>
-</table>
-</div>
-<div class="section">
-<h3><a href="https://github.com/spring-projects/spring-framework/tree/v5.0.6.RELEASE/spring-aop/src/main/java/org/springframework/aop/TrueMethodMatcher.java">spring-framework/spring-aop/src/main/java/org/springframework/aop/TrueMethodMatcher.java</a></h3>
-<table class="bodyTable" border="0">
-<thead><tr>
-<th></th>
-<th>Rule</th>
-<th>Message</th>
-<th>Line</th>
-</tr></thead>
-<tbody>
-<tr class="d">
-<td><a id="A2" href="#A2">#</a></td>
-<td><a href="http://pmd.sourceforge.net/snapshot/pmd_rules_java_design.html#somerule">SomeRule</a></td>
-<td>Some message</td>
-<td><a href="https://github.com/spring-projects/spring-framework/tree/v5.0.6.RELEASE/spring-aop/src/main/java/org/springframework/aop/TrueMethodMatcher.java#L39">40 =&gt; 39</a></td>
-</tr>
-<tr class="a">
-<td><a id="A3" href="#A3">#</a></td>
-<td><a href="http://pmd.sourceforge.net/snapshot/pmd_rules_java_design.html#somerule">SomeRule</a></td>
-<td>Some message</td>
-<td><a href="https://github.com/spring-projects/spring-framework/tree/v5.0.6.RELEASE/spring-aop/src/main/java/org/springframework/aop/TrueMethodMatcher.java#L41">41</a></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section">
-<h3><a href="https://github.com/spring-projects/spring-framework/tree/v5.0.6.RELEASE/spring-aop/src/main/java/org/springframework/aop/aspectj/AbstractAspectJAdvice.java">spring-framework/spring-aop/src/main/java/org/springframework/aop/aspectj/AbstractAspectJAdvice.java</a></h3>
-<table class="bodyTable" border="0">
-<thead><tr>
-<th></th>
-<th>Rule</th>
-<th>Message</th>
-<th>Line</th>
-</tr></thead>
-<tbody>
-<tr class="d">
-<td><a id="A4" href="#A4">#</a></td>
-<td><a href="http://pmd.sourceforge.net/snapshot/pmd_rules_java_design.html#godclass">GodClass</a></td>
-<td>Possible God Class (WMC=101, ATFD=29, TCC=<del class="differ">4</del><ins class="differ">3</ins>.<del class="differ">000</del><ins class="differ">374</ins>%)</td>
-<td><a href="https://github.com/spring-projects/spring-framework/tree/v5.0.6.RELEASE/spring-aop/src/main/java/org/springframework/aop/aspectj/AbstractAspectJAdvice.java#L63">63</a></td>
-</tr>
-<tr class="a">
-<td><a id="A5" href="#A5">#</a></td>
-<td><a href="http://pmd.sourceforge.net/snapshot/pmd_rules_java_codestyle.html#fielddeclarationsshouldbeatstartofclass">FieldDeclarationsShouldBeAtStartOfClass</a></td>
-<td>Fields should be declared at the top of the class, before any method declarations, constructors, initializers or inner classes.</td>
-<td><a href="https://github.com/spring-projects/spring-framework/tree/v5.0.6.RELEASE/spring-aop/src/main/java/org/springframework/aop/aspectj/AbstractAspectJAdvice.java#L96">96</a></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section">
-<h3><a href="https://github.com/spring-projects/spring-framework/tree/v5.0.6.RELEASE/spring-aop/src/main/java/org/springframework/aop/ClassFilter.java">spring-framework/spring-aop/src/main/java/org/springframework/aop/ClassFilter.java</a></h3>
-<table class="bodyTable" border="0">
-<thead><tr>
-<th></th>
-<th>Rule</th>
-<th>Message</th>
-<th>Line</th>
-</tr></thead>
-<tbody><tr class="a">
-<td><a id="A6" href="#A6">#</a></td>
-<td><a href="http://pmd.sourceforge.net/snapshot/pmd_rules_java_codestyle.html#fielddeclarationsshouldbeatstartofclass">FieldDeclarationsShouldBeAtStartOfClass</a></td>
-<td>Fields should be declared at the top of the class, before any method declarations, constructors, initializers or inner classes.</td>
-<td><a href="https://github.com/spring-projects/spring-framework/tree/v5.0.6.RELEASE/spring-aop/src/main/java/org/springframework/aop/ClassFilter.java#L44">44</a></td>
-</tr></tbody>
-</table>
-</div>
-<div class="section">
-<h3><a href="https://github.com/spring-projects/spring-framework/tree/v5.0.6.RELEASE/spring-aop/src/main/java/org/springframework/aop/MethodMatcher.java">spring-framework/spring-aop/src/main/java/org/springframework/aop/MethodMatcher.java</a></h3>
-<table class="bodyTable" border="0">
-<thead><tr>
-<th></th>
-<th>Rule</th>
-<th>Message</th>
-<th>Line</th>
-</tr></thead>
-<tbody><tr class="a">
-<td><a id="A7" href="#A7">#</a></td>
-<td><a href="http://pmd.sourceforge.net/snapshot/pmd_rules_java_codestyle.html#fielddeclarationsshouldbeatstartofclass">FieldDeclarationsShouldBeAtStartOfClass</a></td>
-<td>Fields should be declared at the top of the class, before any method declarations, constructors, initializers or inner classes.</td>
-<td><a href="https://github.com/spring-projects/spring-framework/tree/v5.0.6.RELEASE/spring-aop/src/main/java/org/springframework/aop/MethodMatcher.java#L97">97</a></td>
-</tr></tbody>
-</table>
-</div>
-<div class="section">
-<h3><a href="https://github.com/spring-projects/spring-framework/tree/v5.0.6.RELEASE/spring-aop/src/main/java/org/springframework/aop/TrueClassFilter.java">spring-framework/spring-aop/src/main/java/org/springframework/aop/TrueClassFilter.java</a></h3>
-<table class="bodyTable" border="0">
-<thead><tr>
-<th></th>
-<th>Rule</th>
-<th>Message</th>
-<th>Line</th>
-</tr></thead>
-<tbody><tr class="a">
-<td><a id="A8" href="#A8">#</a></td>
-<td><a href="http://pmd.sourceforge.net/snapshot/pmd_rules_java_design.html#classwithonlyprivateconstructorsshouldbefinal">ClassWithOnlyPrivateConstructorsShouldBeFinal</a></td>
-<td>A class which only has private constructors should be final</td>
-<td><a href="https://github.com/spring-projects/spring-framework/tree/v5.0.6.RELEASE/spring-aop/src/main/java/org/springframework/aop/TrueClassFilter.java#L27">27</a></td>
-</tr></tbody>
-</table>
-</div>
-</div>
-<div class="section" id="Errors">
-<h2>Errors:</h2>
-<div class="section">
-<h3><a href="https://github.com/spring-projects/spring-framework/tree/v5.0.6.RELEASE/spring-aop/src/main/java/org/springframework/aop/TrueMethodMatcher.java">spring-framework/spring-aop/src/main/java/org/springframework/aop/TrueMethodMatcher.java</a></h3>
-<table class="bodyTable" border="0">
-<thead><tr>
-<th></th>
-<th>Message</th>
-<th>Details</th>
-</tr></thead>
-<tbody>
-<tr class="b">
-<td><a id="B1" href="#B1">#</a></td>
-<td>This is an artificial error message.</td>
-<td><pre>net.sourceforge.pmd.PMDException: Error while parsing /home/bbg/projects/pmdtester/pmdtester/target/repositories/checkstyle/src/test/resources-noncompilable/com/puppycrawl/tools/checkstyle/asttreestringprinter/InputAstTreeStringPrinter.java
-	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:99)
-	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:51)
-	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:78)
-	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:24)
-	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
-	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:514)
-	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
-	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1135)
-	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
-	at java.base/java.lang.Thread.run(Thread.java:844)
-Caused by: net.sourceforge.pmd.lang.java.ast.ParseException: Encountered " <identifier> "classD "" at line 1, column 1.
-Was expecting one of:
-    <eof>
-    "import" ...
-    "\u001a" ...
-    "~[]" ...
+    <h2>Summary</h2>
+    <div class="section-content">
+        <table id="table-summary" class="table">
+            <thead>
+            <tr>
+                <th></th>
+                <th>Base</th>
+                <th>Patch</th>
+                <th>Difference</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td class="item"><a href="#section-violations">Violations</a>
+                </td>
+                <td class="base">6</td>
+                <td class="patch">10</td>
+                <td class="diff">
 
-	at net.sourceforge.pmd.lang.java.ast.JavaParser.generateParseException(JavaParser.java:11697)
-	at net.sourceforge.pmd.lang.java.ast.JavaParser.jj_consume_token(JavaParser.java:11581)
-	at net.sourceforge.pmd.lang.java.ast.JavaParser.CompilationUnit(JavaParser.java:323)
-<del class="differ">	at net.sourceforge.pmd.lang.java.AbstractJavaParser.parse(AbstractJavaParser.java:57)</del><ins class="differ">	at net.sourceforge.pmd.lang.java.AbstractJavaParser.parse(AbstractJavaParser.java:58)</ins>
-	at net.sourceforge.pmd.SourceCodeProcessor.parse(SourceCodeProcessor.java:111)
-	at net.sourceforge.pmd.SourceCodeProcessor.processSource(SourceCodeProcessor.java:175)
-	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:96)
-	... 9 more</eof></identifier></pre></td>
-</tr>
-<tr class="a">
-<td><a id="B2" href="#B2">#</a></td>
-<td>This is an artificial error message.</td>
-<td><pre>net.sourceforge.pmd.PMDException: Error while parsing /home/bbg/projects/pmdtester/pmdtester/target/repositories/checkstyle/src/test/resources-noncompilable/com/puppycrawl/tools/checkstyle/asttreestringprinter/InputAstTreeStringPrinter.java
-	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:99)
-	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:51)
-	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:78)
-	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:24)
-	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
-	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:514)
-	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
-	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1135)
-	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
-	at java.base/java.lang.Thread.run(Thread.java:844)
-Caused by: net.sourceforge.pmd.lang.java.ast.ParseException: Encountered " <identifier> "classD "" at line 1, column 1.
-Was expecting one of:
-    <eof>
-    "import" ...
-    "\u001a" ...
-    "~[]" ...
+<span class="pill badge-pill badge-secondary added">+5</span>
+<span class="pill badge-pill badge-secondary removed">-1</span>
 
-	at net.sourceforge.pmd.lang.java.ast.JavaParser.generateParseException(JavaParser.java:11697)
-	at net.sourceforge.pmd.lang.java.ast.JavaParser.jj_consume_token(JavaParser.java:11581)
-	at net.sourceforge.pmd.lang.java.ast.JavaParser.CompilationUnit(JavaParser.java:323)
-<del class="differ">	at net.sourceforge.pmd.lang.java.AbstractJavaParser.parse(AbstractJavaParser.java:58)</del><ins class="differ">	at net.sourceforge.pmd.lang.java.AbstractJavaParser.parse(AbstractJavaParser.java:57)</ins>
-	at net.sourceforge.pmd.SourceCodeProcessor.parse(SourceCodeProcessor.java:111)
-	at net.sourceforge.pmd.SourceCodeProcessor.processSource(SourceCodeProcessor.java:175)
-	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:96)
-	... 9 more</eof></identifier></pre></td>
-</tr>
-</tbody>
-</table>
+<span class="pill badge-pill badge-secondary changed">~2</span>
+
+
+                </td>
+            </tr>
+            <tr>
+                <td class="item"><a href="#section-errors">Errors</a></td>
+                <td class="base">1</td>
+                <td class="patch">1</td>
+                <td class="diff">
+
+<span class="pill badge-pill badge-secondary added">+0</span>
+<span class="pill badge-pill badge-secondary removed">-0</span>
+
+<span class="pill badge-pill badge-secondary changed">~1</span>
+
+
+                </td>
+            </tr>
+            <tr>
+                <td class="item">Execution time</td>
+                <td class="base">00:02:01</td>
+                <td class="patch">00:01:05</td>
+                <td class="diff">00:00:56</td>
+            </tr>
+            <tr>
+                <td class="item">Timestamp</td>
+                <td class="base">base time stamp</td>
+                <td class="patch">patch time stamp</td>
+                <td class="diff"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
+
+<div class="section" id="section-rule-summary">
+
+    <h2>Summary by rule</h2>
+
+    <div class="section-content">
+
+        <div class="table-responsive">
+            <table id="rule-summary" class="table">
+                <thead>
+                <tr>
+                    <th>Rule</th>
+                    <th>Base</th>
+                    <th>Patch</th>
+                    <th>Added</th>
+                    <th>Changed</th>
+                    <th>Removed</th>
+                </tr>
+                </thead>
+                <tbody>
+
+
+
+
+                <tr id="rule-summary-ClassWithOnlyPrivateConstructorsShouldBeFinal">
+                    <td class="rulename">
+                        ClassWithOnlyPrivateConstructorsShouldBeFinal
+                        <span class="external-link-secondary"><a class="rulelink" href="http://pmd.sourceforge.net/snapshot/pmd_rules_java_design.html#classwithonlyprivateconstructorsshouldbefinal" target="_blank" rel="noopener noreferrer">[doc]</a></span>
+                    </td>
+                    <td class="basecount">1</td>
+                    <td class="patchcount">2</td>
+                    <td class="added" data-count="1">1</td>
+                    <td class="changed" data-count="0">0</td>
+                    <td class="removed" data-count="0">0</td>
+                </tr>
+
+                <tr id="rule-summary-FieldDeclarationsShouldBeAtStartOfClass">
+                    <td class="rulename">
+                        FieldDeclarationsShouldBeAtStartOfClass
+                        <span class="external-link-secondary"><a class="rulelink" href="http://pmd.sourceforge.net/snapshot/pmd_rules_java_codestyle.html#fielddeclarationsshouldbeatstartofclass" target="_blank" rel="noopener noreferrer">[doc]</a></span>
+                    </td>
+                    <td class="basecount">2</td>
+                    <td class="patchcount">4</td>
+                    <td class="added" data-count="3">3</td>
+                    <td class="changed" data-count="0">0</td>
+                    <td class="removed" data-count="1">1</td>
+                </tr>
+
+                <tr id="rule-summary-GodClass">
+                    <td class="rulename">
+                        GodClass
+                        <span class="external-link-secondary"><a class="rulelink" href="http://pmd.sourceforge.net/snapshot/pmd_rules_java_design.html#godclass" target="_blank" rel="noopener noreferrer">[doc]</a></span>
+                    </td>
+                    <td class="basecount">1</td>
+                    <td class="patchcount">1</td>
+                    <td class="added" data-count="0">0</td>
+                    <td class="changed" data-count="1">1</td>
+                    <td class="removed" data-count="0">0</td>
+                </tr>
+
+                <tr id="rule-summary-SomeRule">
+                    <td class="rulename">
+                        SomeRule
+                        <span class="external-link-secondary"><a class="rulelink" href="http://pmd.sourceforge.net/snapshot/pmd_rules_java_design.html#somerule" target="_blank" rel="noopener noreferrer">[doc]</a></span>
+                    </td>
+                    <td class="basecount">1</td>
+                    <td class="patchcount">2</td>
+                    <td class="added" data-count="1">1</td>
+                    <td class="changed" data-count="1">1</td>
+                    <td class="removed" data-count="0">0</td>
+                </tr>
+
+                <tr id="rule-summary-UncommentedEmptyConstructor">
+                    <td class="rulename">
+                        UncommentedEmptyConstructor
+                        <span class="external-link-secondary"><a class="rulelink" href="http://pmd.sourceforge.net/snapshot/pmd_rules_java_documentation.html#uncommentedemptyconstructor" target="_blank" rel="noopener noreferrer">[doc]</a></span>
+                    </td>
+                    <td class="basecount">1</td>
+                    <td class="patchcount">1</td>
+                    <td class="added" data-count="0">0</td>
+                    <td class="changed" data-count="0">0</td>
+                    <td class="removed" data-count="0">0</td>
+                </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
-<div class="section" id="configerrors">
-<h2>Configuration Errors:</h2>
-<div class="section">
-<h3>NewRule</h3>
-<table class="bodyTable" border="0">
-<thead><tr>
-<th></th>
-<th>Rule</th>
-<th>Message</th>
-</tr></thead>
-<tbody><tr class="a">
-<td><a id="C1" href="#C1">#</a></td>
-<td>NewRule</td>
-<td>Property method_name not defined</td>
-</tr></tbody>
-</table>
+<div class="section" id="section-violations">
+
+    <h2>Violations</h2>
+
+    <div class="section-content">
+
+        <table id="violationsTable" width="100%" class="table">
+            <thead>
+            <tr>
+                <th>Location</th>
+                <th>Rule</th>
+                <th>Message</th>
+                <th>Type</th>
+            </tr>
+            </thead>
+        </table>
+
+    </div>
 </div>
+
+<div class="section" id="section-errors">
+
+    <h2>Errors</h2>
+
+    <div class="section-content">
+
+        <div class="table-responsive">
+            <table id="error-table" class="table">
+                <thead>
+                 <tr>
+                     <th>File</th>
+                     <th>Description (click to expand)</th>
+                 </tr>
+                </thead>
+                <tbody>
+
+                <tr id="error-1" class="accordion-toggle error-row changed" data-toggle="collapse" data-target="#error-1-expanded">
+                    <td><a href="https://github.com/spring-projects/spring-framework/tree/v5.0.6.RELEASE/spring-aop/src/main/java/org/springframework/aop/TrueMethodMatcher.java"  target="_blank" rel="noopener noreferrer">TrueMethodMatcher.java</a></td>
+                    <td>net.sourceforge.pmd.PMDException: Error while parsing /home/bbg/projects/pmdtester/pmdtester/target/repositories/checkstyle/src/test/resources-noncompilable/com/puppycrawl/tools/checkstyle/asttreestringprinter/InputAstTreeStringPrinter.java
+</td>
+                </tr>
+                <tr>
+                    <td class="row-hidden" colspan="2">
+                        <div class="accordion-body collapse" id="error-1-expanded">
+                            <div class="collapsed-content-padder">
+                                <pre>
+net.sourceforge.pmd.PMDException: Error while parsing /home/bbg/projects/pmdtester/pmdtester/target/repositories/checkstyle/src/test/resources-noncompilable/com/puppycrawl/tools/checkstyle/asttreestringprinter/InputAstTreeStringPrinter.java
+	at net.sourceforge.pmd.SourceCodeProcessor.<span class="stack-trace-method">processSourceCode</span>(SourceCodeProcessor.java:99)
+	at net.sourceforge.pmd.SourceCodeProcessor.<span class="stack-trace-method">processSourceCode</span>(SourceCodeProcessor.java:51)
+	at net.sourceforge.pmd.processor.PmdRunnable.<span class="stack-trace-method">call</span>(PmdRunnable.java:78)
+	at net.sourceforge.pmd.processor.PmdRunnable.<span class="stack-trace-method">call</span>(PmdRunnable.java:24)
+	at java.base/java.util.concurrent.FutureTask.<span class="stack-trace-method">run</span>(FutureTask.java:264)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.<span class="stack-trace-method">call</span>(Executors.java:514)
+	at java.base/java.util.concurrent.FutureTask.<span class="stack-trace-method">run</span>(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.<span class="stack-trace-method">runWorker</span>(ThreadPoolExecutor.java:1135)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.<span class="stack-trace-method">run</span>(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.<span class="stack-trace-method">run</span>(Thread.java:844)
+Caused by: net.sourceforge.pmd.lang.java.ast.ParseException: Encountered &quot; &lt;IDENTIFIER&gt; &quot;classD &quot;&quot; at line 1, column 1.
+Was expecting one of:
+    &lt;EOF&gt;
+    &quot;import&quot; ...
+    &quot;\u001a&quot; ...
+    &quot;~[]&quot; ...
+
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.<span class="stack-trace-method">generateParseException</span>(JavaParser.java:11697)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.<span class="stack-trace-method">jj_consume_token</span>(JavaParser.java:11581)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.<span class="stack-trace-method">CompilationUnit</span>(JavaParser.java:323)
+	at net.sourceforge.pmd.lang.java.AbstractJavaParser.<span class="stack-trace-method">parse</span>(AbstractJavaParser.java:57)
+	at net.sourceforge.pmd.SourceCodeProcessor.<span class="stack-trace-method">parse</span>(SourceCodeProcessor.java:111)
+	at net.sourceforge.pmd.SourceCodeProcessor.<span class="stack-trace-method">processSource</span>(SourceCodeProcessor.java:175)
+	at net.sourceforge.pmd.SourceCodeProcessor.<span class="stack-trace-method">processSourceCode</span>(SourceCodeProcessor.java:96)
+	... 9 more
+
+                                </pre>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+    </div>
 </div>
-</div></body>
+
+<script type="text/javascript">
+
+    function makeCodeLink(violation) {
+        let template = project.source_link_template
+        template = template.replace('{file}', project.file_index[violation.f])
+        template = template.replace('{line}', violation.l);
+        return template
+    }
+
+    function extractFilename(path) {
+        const pathArray = path.split("/");
+        return pathArray[pathArray.length - 1];
+    }
+
+    const cssClass = {
+        "+": "added",
+        "-": "removed",
+        "~": "changed",
+    }
+
+    const typeDisplay = {
+        "+": "Added",
+        "-": "Removed",
+        "~": "Changed",
+    }
+
+    $(document).ready(function () {
+        $('#violationsTable').DataTable({
+            data: project.violations,
+            columns: [
+                // other attributes:
+                // l: line
+                // ol: old line
+                {"data": "f"}, // file
+                {"data": "r"}, // rule
+                {"data": "m"}, // message
+                {"data": "t"}, // type
+            ],
+            deferRender: true,
+            // scrollY: "6000px",
+            dom: 'Pfrtip',
+            searchPanes: {
+                viewTotal: true,
+                cascadePanes: true,
+                columns: [0, 1, 3],
+                order: ['Rule', 'Location', 'Type']
+            },
+            // scrollCollapse: true,
+            // paging: false,
+            columnDefs: [
+                { //file column
+                    render(data, type, row) {
+                        data = project.file_index[data]
+                        // display only the file name (not full path), but use full
+                        // path for sorting and such
+                        if (type === "display") {
+                            let line = 'ol' in row ? row.ol + " -> " + row.l : row.l;
+                            //note : target='_blank' requires that the link open in a new tab
+                            return "<a href='" + makeCodeLink(row) + "' target='_blank' rel='noopener noreferrer'>" + extractFilename(data) + " @ line " + line + "</a>"
+                        } else if (type === "sort") {
+                            return data + "#" + row.line
+                        } else if (type === 'shortFile') {
+                            return extractFilename(data)
+                        } else {
+                            return data;
+                        }
+                    },
+                    searchPanes :{
+                        orthogonal: {
+                            'display': 'shortFile',
+                            'search':  undefined
+                        }
+                    },
+                    targets: 0
+                },
+                { // rule column
+                    render(data, type, row) {
+                        // display only the file name (not full path), but use full
+                        // path for sorting and such
+                        if (type === "display")
+                            return "<a href='#rule-summary-" + data + "'>" + data + "</a>"
+                        else
+                            return data;
+                    },
+                    searchPanes: {
+                        orthogonal: {
+                            'display' : 'sort' // do not use the display, which is an <a>
+                        }
+                    },
+                    targets: 1
+                },
+                { // type column
+                    visible: false,
+                    render(data, type, row) {
+                        return type ==='display' ? typeDisplay[data] : cssClass[data]
+                    },
+                    targets: 3
+                },
+            ],
+            displayLength: 25,
+            rowCallback(row, data, index) {
+                $(row).addClass(cssClass[data.t]);
+            },
+        });
+
+    });
+</script>
+
+</body>
 </html>

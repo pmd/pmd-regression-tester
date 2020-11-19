@@ -25,16 +25,12 @@ class TestDiffReportBuilder < Test::Unit::TestCase
     project = PmdTester::ProjectsParser.new.parse('test/resources/project-list.xml')[2]
 
     actual_report_path = "target/reports/diff/#{project.name}"
-    css_path = "#{actual_report_path}/css"
 
     diff_builder = PmdTester::DiffBuilder.new
     project.report_diff = diff_builder.build(BASE_PMD_REPORT_PATH, PATCH_PMD_REPORT_PATH,
                                              BASE_REPORT_INFO_PATH, PATCH_REPORT_INFO_PATH)
 
     PmdTester::LiquidProjectRenderer.new.write_project_index(project, actual_report_path)
-
-    # Checking  css resources are copied into the diff report directory.
-    assert_equal(true, File.exist?("#{css_path}/pmd-tester.css"))
 
     # Checking the content of diff report is expected.
     expected_file = File.open(EXPECTED_REPORT_PATH).read
