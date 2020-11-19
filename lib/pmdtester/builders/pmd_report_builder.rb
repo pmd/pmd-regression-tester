@@ -8,6 +8,7 @@ module PmdTester
   # projects and branch of pmd source code
   class PmdReportBuilder
     include PmdTester
+
     def initialize(branch_config, projects, local_git_repo, pmd_branch_name, threads = 1)
       @branch_config = branch_config
       @projects = projects
@@ -128,9 +129,12 @@ module PmdTester
         progress_logger.stop
         sum_time += execution_time
 
-        report_details = PmdReportDetail.new
-        report_details.execution_time = execution_time
-        report_details.timestamp = end_time
+        report_details = PmdReportDetail.new(
+          {
+            execution_time: execution_time,
+            timestamp: end_time
+          }
+        )
         report_details.save(project.get_report_info_path(@pmd_branch_name))
         logger.info "#{project.name}'s PMD report was generated successfully"
       end

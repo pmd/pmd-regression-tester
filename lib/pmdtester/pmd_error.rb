@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module PmdTester
-
   # This class represents a 'error' element of Pmd xml report
   # and which Pmd branch the 'error' is from
   class PmdError

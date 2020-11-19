@@ -9,10 +9,10 @@ module PmdTester
     attr_accessor :timestamp
     attr_accessor :working_dir
 
-    def initialize(json_h)
-      @execution_time = json_h.fetch('execution_time', 0)
-      @timestamp = json_h.fetch('timestamp', '')
-      @working_dir = json_h.fetch('working_dir') { |_| Dir.getwd }
+    def initialize(execution_time: 0, timestamp: '', working_dir: Dir.getwd)
+      @execution_time = execution_time
+      @timestamp = timestamp
+      @working_dir = working_dir
     end
 
     def save(report_info_path)
@@ -24,8 +24,8 @@ module PmdTester
 
     def self.load(report_info_path)
       if File.exist?(report_info_path)
-        hash = JSON.parse(File.read(report_info_path))
-        PmdReportDetail.new(hash)
+        hash = JSON.parse(File.read(report_info_path), symbolize_names: true)
+        PmdReportDetail.new(**hash)
       else
         puts "#{report_info_path} doesn't exist"
         PmdReportDetail.new({})

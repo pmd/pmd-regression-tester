@@ -1,5 +1,7 @@
-module PmdTester
+# frozen_string_literal: true
 
+# Some functions that that don't belong in a specific class
+module PmdTester
   # Parse the base and the patch report, compute their diff
   # Returns a +ReportDiff+
   def build_report_diff(base_report_file, patch_report_file, base_info, patch_info, filter_set = nil)
@@ -35,6 +37,7 @@ module PmdTester
   # Fill the report_diff field of every project
   def compute_project_diffs(projects, base_branch, patch_branch, filter_set = nil)
     projects.each do |project|
+      logger.info "Preparing report for #{project.name}"
       project.report_diff = build_report_diff(project.get_pmd_report_path(base_branch),
                                               project.get_pmd_report_path(patch_branch),
                                               project.get_report_info_path(base_branch),
@@ -50,58 +53,5 @@ module PmdTester
     SummaryReportBuilder.new.write_all_projects(projects,
                                                 base_branch_details,
                                                 patch_branch_details)
-  end
-
-  # A collection of things, grouped by file.
-  #
-  # (Note: this replaces PmdErrors and PmdViolations)
-  class CollectionByFile
-
-    def initialize
-      # a hash of filename -> [list of items]
-      @hash = Hash.new([])
-      @total = 0
-    end
-
-    def add_all(filename, values)
-      return if values.empty?
-
-      if @hash.key?(filename)
-        @hash[filename].concat(values)
-      else
-        @hash[filename] = values
-      end
-      @total += values.size
-    end
-
-    def total_size
-      @total
-    end
-
-    def all_files
-      @hash.keys
-    end
-
-    def num_files
-      @hash.size
-    end
-
-    def all_values
-      @hash.values.flatten
-    end
-
-    def each_value(&block)
-      @hash.each_value do |vs|
-        vs.each(&block)
-      end
-    end
-
-    def [](fname)
-      @hash[fname]
-    end
-
-    def to_h
-      @hash
-    end
   end
 end

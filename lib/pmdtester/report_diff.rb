@@ -116,10 +116,10 @@ module PmdTester
       @violation_counts.patch_total = patch_report.violations_by_file.total_size
       @error_counts.patch_total = patch_report.errors_by_file.total_size
 
-      @violation_diffs_by_file = build_diffs(@base_report.violations_by_file, @patch_report.violations_by_file, @violation_counts)
+      @violation_diffs_by_file = build_diffs(@violation_counts, &:violations_by_file)
       count(@violation_diffs_by_file) { |v| getvdiff(v.rule_name) } # record the diffs in the rule counter
 
-      @error_diffs_by_file = build_diffs(@base_report.errors_by_file, @patch_report.errors_by_file, @error_counts)
+      @error_diffs_by_file = build_diffs(@error_counts, &:errors_by_file)
 
       count_by_rule(@base_report.violations_by_file, base: true)
       count_by_rule(@patch_report.violations_by_file, base: false)
@@ -150,7 +150,9 @@ module PmdTester
       end
     end
 
-    def build_diffs(base_hash, patch_hash, counters)
+    def build_diffs(counters, &getter)
+      base_hash = getter.yield(@base_report)
+      patch_hash = getter.yield(@patch_report)
       # Keys are filenames
       # Values are lists of violations/errors
       diffs = base_hash.to_h.merge(patch_hash.to_h) do |_key, base_value, patch_value|
