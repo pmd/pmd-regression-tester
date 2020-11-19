@@ -90,17 +90,6 @@ class TestDiffBuilder < Test::Unit::TestCase
     assert_equal(true, diffs_report.introduce_new_errors?)
   end
 
-  def test_diff_exist
-    report_diffs = ReportDiff.new
-    assert_equal(false, report_diffs.diffs_exist?)
-    report_diffs.violation_diffs_size = 1
-    assert_equal(true, report_diffs.diffs_exist?)
-    report_diffs.error_diffs_size = 1
-    assert_equal(true, report_diffs.diffs_exist?)
-    report_diffs.violation_diffs_size = 0
-    assert_equal(true, report_diffs.diffs_exist?)
-  end
-
   private
 
   def assert_violations_equal(diffs_report, removed, added, changed)

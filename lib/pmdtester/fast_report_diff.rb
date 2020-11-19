@@ -53,6 +53,16 @@ module PmdTester
       @timestamp = timestamp
       @infos_by_rule = infos_by_rule
     end
+
+    def self.empty
+      new(
+          violations_h: {},
+          errors_h: {},
+          exec_time: 0,
+          timestamp: "0",
+          infos_by_rule: {}
+      )
+    end
   end
 
   # This class represents all the diff report information,
