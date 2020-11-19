@@ -47,7 +47,7 @@ class TestRunner < Test::Unit::TestCase
   end
 
   def test_local_mode
-    PmdReportBuilder.any_instance.stubs(:build).twice
+    PmdReportBuilder.any_instance.stubs(:build).returns(PmdBranchDetail.new('some_branch')).twice
     DiffBuilder.any_instance.stubs(:build).twice
     SummaryReportBuilder.any_instance.stubs(:write_all_projects).once
 
@@ -62,7 +62,7 @@ class TestRunner < Test::Unit::TestCase
                     .with(anything, anything, anything, anything, 4)
                     .returns(report_builder_mock)
                     .twice
-    report_builder_mock.stubs(:build).twice
+    report_builder_mock.stubs(:build).returns(PmdBranchDetail::new('some_branch')).twice
     DiffBuilder.any_instance.stubs(:build).twice
     SummaryReportBuilder.any_instance.stubs(:write_all_projects).once
 
@@ -104,7 +104,7 @@ class TestRunner < Test::Unit::TestCase
                     .with(anything, anything, anything, anything, 4)
                     .returns(report_builder_mock)
                     .once
-    report_builder_mock.stubs(:build).once
+    report_builder_mock.stubs(:build).returns(PmdBranchDetail::new('some_branch')).once
     SummaryReportBuilder.any_instance.stubs(:write_all_projects).once
 
     argv = %w[-r target/repositories/pmd -m online -b master -p pmd_releases/6.7.0 -t 4]

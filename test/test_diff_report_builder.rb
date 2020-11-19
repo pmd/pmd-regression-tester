@@ -4,6 +4,7 @@ require 'test_helper'
 
 # Unit test class for PmdTester::DiffReportBuilder
 class TestDiffReportBuilder < Test::Unit::TestCase
+  include TestUtils
   BASE_PMD_REPORT_PATH =
     'test/resources/html_report_builder/test_html_report_builder_base.xml'
   PATCH_PMD_REPORT_PATH =
@@ -50,11 +51,8 @@ class TestDiffReportBuilder < Test::Unit::TestCase
     # Checking the content of diff report is expected.
     expected_file = File.open(EXPECTED_EMPTY_REPORT_PATH).read
     actual_file = File.open("#{actual_report_path}/index.html").read
-    assert_equal(norm_whitespace(expected_file), norm_whitespace(actual_file))
+    assert_equal(norm_whitespace(expected_file),
+                 norm_whitespace(actual_file))
   end
   
-  # remove trailing whitespace
-  def norm_whitespace(text)
-    text.gsub(/\s+$/, "")
-  end
 end

@@ -37,7 +37,7 @@ module PmdTester
       base_branch_details = make_branch_details(config: @options.base_config, branch: @options.base_branch)
       patch_branch_details = make_branch_details(config: @options.patch_config, branch: @options.patch_branch)
 
-      build_html_reports(base_branch_details, patch_branch_details)
+      Runner.build_html_reports(@projects, base_branch_details, patch_branch_details)
     end
 
     def run_online_mode
@@ -62,7 +62,7 @@ module PmdTester
       patch_branch_details = make_branch_details(config: @options.patch_config, branch: @options.patch_branch)
 
       base_branch_details = PmdBranchDetail.load(@options.base_branch, logger)
-      build_html_reports(base_branch_details, patch_branch_details)
+      Runner.build_html_reports(@projects, base_branch_details, patch_branch_details)
     end
 
     def determine_project_list_for_online_mode(baseline_path)
@@ -109,21 +109,25 @@ module PmdTester
       FileUtils.cp(@options.project_list, patch_branch_details.target_branch_project_list_path)
 
       base_branch_details = PmdBranchDetail.load(@options.base_branch, logger)
-      build_html_reports(base_branch_details, patch_branch_details) unless @options.html_flag
+      Runner.build_html_reports(@projects, base_branch_details, patch_branch_details) unless @options.html_flag
     end
 
-    def build_html_reports(base_branch_details, patch_branch_details)
-      @projects.each do |project|
-        logger.info "Preparing report for #{project.name}"
-        report_diffs = DiffBuilder.new.build(project.get_pmd_report_path(@options.base_branch),
-                                             project.get_pmd_report_path(@options.patch_branch),
-                                             project.get_report_info_path(@options.base_branch),
-                                             project.get_report_info_path(@options.patch_branch),
-                                             @options.filter_set)
+
+    def self.compute_project_diffs(projects, base_branch, patch_branch, filter_set=nil)
+      projects.each do |project|
+        report_diffs = DiffBuilder.new.build(project.get_pmd_report_path(base_branch),
+                                             project.get_pmd_report_path(patch_branch),
+                                             project.get_report_info_path(base_branch),
+                                             project.get_report_info_path(patch_branch),
+                                             filter_set)
         project.report_diff = report_diffs
       end
+    end
 
-      SummaryReportBuilder.new.write_all_projects(@projects,
+    def self.build_html_reports(projects, base_branch_details, patch_branch_details)
+      compute_project_diffs(projects, base_branch_details.branch_name, patch_branch_details.branch_name)
+
+      SummaryReportBuilder.new.write_all_projects(projects,
                                                   base_branch_details,
                                                   patch_branch_details)
     end

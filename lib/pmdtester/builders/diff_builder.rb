@@ -28,7 +28,7 @@ module PmdTester
     def parse_pmd_report(report_filename, branch, report_details, filter_set = nil)
       doc = PmdReportDocument.new(branch, report_details.working_dir, filter_set)
       parser = Nokogiri::XML::SAX::Parser.new(doc)
-      parser.parse_file(report_filename) unless report_filename.nil?
+      parser.parse_file(report_filename) if File.exist?(report_filename)
       Report.new(
           violations_h: doc.violations.violations,
           errors_h: doc.errors.errors,
