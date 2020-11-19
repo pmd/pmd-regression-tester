@@ -40,19 +40,19 @@ module PmdTester
   # A full report, created by the report XML parser,
   # can be diffed with another report into a ReportDiff
   class Report
-    attr_reader :violations_h,
-                :errors_h,
+    attr_reader :violations_by_file,
+                :errors_by_file,
                 :exec_time,
                 :timestamp,
                 :infos_by_rule
 
-    def initialize(violations_h:,
-                   errors_h:,
+    def initialize(violations_by_file:,
+                   errors_by_file:,
                    exec_time:,
                    timestamp:,
                    infos_by_rule:)
-      @violations_h = violations_h
-      @errors_h = errors_h
+      @violations_by_file = violations_by_file
+      @errors_by_file = errors_by_file
       @exec_time = exec_time
       @timestamp = timestamp
       @infos_by_rule = infos_by_rule
@@ -60,8 +60,8 @@ module PmdTester
 
     def self.empty
       new(
-        violations_h: {},
-        errors_h: {},
+        violations_by_file: CollectionByFile.new,
+        errors_by_file: CollectionByFile.new,
         exec_time: 0,
         timestamp: '0',
         infos_by_rule: {}
@@ -86,8 +86,8 @@ module PmdTester
     attr_accessor :patch_report
 
     def initialize(base_report:, patch_report:)
-      @violation_counts = RunningDiffCounters.new(count_h_values(base_report.violations_h))
-      @error_counts = RunningDiffCounters.new(count_h_values(base_report.errors_h))
+      @violation_counts = RunningDiffCounters.new(base_report.violations_by_file.total_size)
+      @error_counts = RunningDiffCounters.new(base_report.errors_by_file.total_size)
       @violation_diffs_by_rule = {}
 
       @base_report = base_report
@@ -113,16 +113,16 @@ module PmdTester
     private
 
     def diff_with(patch_report)
-      @violation_counts.patch_total = count_h_values(patch_report.violations_h)
-      @error_counts.patch_total = count_h_values(patch_report.errors_h)
+      @violation_counts.patch_total = patch_report.violations_by_file.total_size
+      @error_counts.patch_total = patch_report.errors_by_file.total_size
 
-      @violation_diffs_by_file = build_diffs(@base_report.violations_h, @patch_report.violations_h, @violation_counts)
+      @violation_diffs_by_file = build_diffs(@base_report.violations_by_file, @patch_report.violations_by_file, @violation_counts)
       count(@violation_diffs_by_file) { |v| getvdiff(v.rule_name) } # record the diffs in the rule counter
 
-      @error_diffs_by_file = build_diffs(@base_report.errors_h, @patch_report.errors_h, @error_counts)
+      @error_diffs_by_file = build_diffs(@base_report.errors_by_file, @patch_report.errors_by_file, @error_counts)
 
-      count_by_rule(@base_report.violations_h, base: true)
-      count_by_rule(@patch_report.violations_h, base: false)
+      count_by_rule(@base_report.violations_by_file, base: true)
+      count_by_rule(@patch_report.violations_by_file, base: false)
       self
     end
 
@@ -138,12 +138,8 @@ module PmdTester
       end
     end
 
-    def count_h_values(base_violations_h)
-      base_violations_h.reduce(0) { |sum, (_k, vs)| sum + vs.size }
-    end
-
     def count_by_rule(violations_h, base:)
-      violations_h.values.flatten.each do |v|
+      violations_h.each_value do |v|
         record_rule_info(v)
         rule_diff = getvdiff(v.rule_name)
         if base
@@ -157,7 +153,7 @@ module PmdTester
     def build_diffs(base_hash, patch_hash, counters)
       # Keys are filenames
       # Values are lists of violations/errors
-      diffs = base_hash.merge(patch_hash) do |_key, base_value, patch_value|
+      diffs = base_hash.to_h.merge(patch_hash.to_h) do |_key, base_value, patch_value|
         # make the difference of values
         (base_value | patch_value) - (base_value & patch_value)
       end

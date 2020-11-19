@@ -11,9 +11,9 @@ module PmdTester
     attr_reader :infos_by_rules
 
     def initialize(branch_name, working_dir, filter_set = nil)
-      @violations = PmdViolations.new
-      @errors = PmdErrors.new
-      @configerrors = PmdConfigErrors.new
+      @violations = CollectionByFile.new
+      @errors = CollectionByFile.new
+      @configerrors = {}
 
       @infos_by_rules = {}
       @current_violations = []
@@ -44,8 +44,6 @@ module PmdTester
         remove_work_dir!(attrs['msg'])
         @current_filename = attrs['filename']
         @current_error = PmdError.new(attrs, @branch_name)
-      when 'configerror'
-        @current_configerror = PmdConfigError.new(attrs, @branch_name)
       end
     end
 
@@ -60,7 +58,7 @@ module PmdTester
     def end_element(name)
       case name
       when 'file'
-        @violations.add_violations_by_filename(@current_filename, @current_violations)
+        @violations.add_all(@current_filename, @current_violations)
         @current_filename = nil
       when 'violation'
         v = @current_violation
@@ -71,12 +69,9 @@ module PmdTester
         end
         @current_violation = nil
       when 'error'
-        @errors.add_error_by_filename(@current_filename, @current_error)
+        @errors.add_all(@current_filename, [@current_error])
         @current_filename = nil
         @current_error = nil
-      when 'configerror'
-        @configerrors.add_error(@current_configerror)
-        @current_configerror = nil
       end
     end
 

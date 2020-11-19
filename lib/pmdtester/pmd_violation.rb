@@ -1,25 +1,6 @@
 # frozen_string_literal: true
 
 module PmdTester
-  # This class is used to store pmd violations and its size.
-  class PmdViolations
-    attr_reader :violations
-    attr_reader :violations_size
-
-    def initialize
-      # key:filename as String => value:PmdViolation Array
-      @violations = {}
-      @violations_size = 0
-    end
-
-    def add_violations_by_filename(filename, violations)
-      return if violations.empty?
-
-      @violations.store(filename, violations)
-      @violations_size += violations.size
-    end
-  end
-
   # This class represents a 'violation' element of Pmd xml report
   # and which pmd branch the 'violation' is from
   class PmdViolation

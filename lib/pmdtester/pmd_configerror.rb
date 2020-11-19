@@ -1,28 +1,6 @@
 # frozen_string_literal: true
 
 module PmdTester
-  # This class is used to store pmd config errors and its size.
-  class PmdConfigErrors
-    attr_reader :errors
-    attr_reader :size
-
-    def initialize
-      # key:rulename as String => value:PmdConfigError Array
-      @errors = {}
-      @size = 0
-    end
-
-    def add_error(error)
-      rulename = error.rulename
-      if @errors.key?(rulename)
-        @errors[rulename].push(error)
-      else
-        @errors.store(rulename, [error])
-      end
-      @size += 1
-    end
-  end
-
   # This class represents a 'configerror' element of Pmd xml report
   # and which Pmd branch the 'configerror' is from
   class PmdConfigError

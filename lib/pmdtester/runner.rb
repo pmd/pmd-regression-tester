@@ -38,7 +38,7 @@ module PmdTester
       base_branch_details = make_branch_details(config: @options.base_config, branch: @options.base_branch)
       patch_branch_details = make_branch_details(config: @options.patch_config, branch: @options.patch_branch)
 
-      Runner.build_html_reports(@projects, base_branch_details, patch_branch_details)
+      build_html_reports(@projects, base_branch_details, patch_branch_details)
     end
 
     def run_online_mode
@@ -63,7 +63,7 @@ module PmdTester
       patch_branch_details = make_branch_details(config: @options.patch_config, branch: @options.patch_branch)
 
       base_branch_details = PmdBranchDetail.load(@options.base_branch, logger)
-      Runner.build_html_reports(@projects, base_branch_details, patch_branch_details)
+      build_html_reports(@projects, base_branch_details, patch_branch_details)
     end
 
     def determine_project_list_for_online_mode(baseline_path)
@@ -110,25 +110,7 @@ module PmdTester
       FileUtils.cp(@options.project_list, patch_branch_details.target_branch_project_list_path)
 
       base_branch_details = PmdBranchDetail.load(@options.base_branch, logger)
-      Runner.build_html_reports(@projects, base_branch_details, patch_branch_details) unless @options.html_flag
-    end
-
-    def self.compute_project_diffs(projects, base_branch, patch_branch, filter_set = nil)
-      projects.each do |project|
-        project.report_diff = build_report_diff(project.get_pmd_report_path(base_branch),
-                                                project.get_pmd_report_path(patch_branch),
-                                                project.get_report_info_path(base_branch),
-                                                project.get_report_info_path(patch_branch),
-                                                filter_set)
-      end
-    end
-
-    def self.build_html_reports(projects, base_branch_details, patch_branch_details)
-      compute_project_diffs(projects, base_branch_details.branch_name, patch_branch_details.branch_name)
-
-      SummaryReportBuilder.new.write_all_projects(projects,
-                                                  base_branch_details,
-                                                  patch_branch_details)
+      build_html_reports(@projects, base_branch_details, patch_branch_details) unless @options.html_flag
     end
 
     def get_projects(file_path)
