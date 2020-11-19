@@ -35,7 +35,7 @@ class TestDiffReportBuilder < Test::Unit::TestCase
     # Checking the content of diff report is expected.
     expected_file = File.open(EXPECTED_REPORT_PATH).read
     actual_file = File.open("#{actual_report_path}/index.html").read
-    assert_equal(expected_file, actual_file)
+    assert_equal(norm_whitespace(expected_file), norm_whitespace(actual_file))
   end
 
   def test_report_diffs_empty
@@ -50,6 +50,11 @@ class TestDiffReportBuilder < Test::Unit::TestCase
     # Checking the content of diff report is expected.
     expected_file = File.open(EXPECTED_EMPTY_REPORT_PATH).read
     actual_file = File.open("#{actual_report_path}/index.html").read
-    assert_equal(expected_file, actual_file)
+    assert_equal(norm_whitespace(expected_file), norm_whitespace(actual_file))
+  end
+  
+  # remove trailing whitespace
+  def norm_whitespace(text)
+    text.gsub(/\s+$/, "")
   end
 end
