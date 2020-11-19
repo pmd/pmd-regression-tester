@@ -1,10 +1,11 @@
-.github/workflows/ruby.yml
+.ci/build.sh
+.ci/files/env.gpg
+.github/workflows/build.yml
 .gitignore
 .hoerc
 .rubocop.yml
 .rubocop_todo.yml
 .ruby-version
-.travis.yml
 Gemfile
 History.md
 LICENSE
