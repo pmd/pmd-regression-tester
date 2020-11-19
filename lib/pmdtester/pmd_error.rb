@@ -25,6 +25,7 @@ module PmdTester
   # This class represents a 'error' element of Pmd xml report
   # and which Pmd branch the 'error' is from
   class PmdError
+    include PmdTester
     # The pmd branch type, 'base' or 'patch'
     attr_reader :branch
 
@@ -58,7 +59,7 @@ module PmdTester
     end
 
     def short_message
-      stack_trace.lines.first
+      @attrs['msg']
     end
 
     def stack_trace
@@ -70,27 +71,24 @@ module PmdTester
     end
 
     def eql?(other)
-      filename.eql?(other.filename) && stack_trace.eql?(other.stack_trace) &&
-          @text.eql?(other.text)
+      filename.eql?(other.filename) &&
+          short_message.eql?(other.short_message) &&
+          stack_trace.eql?(other.stack_trace)
     end
 
     def hash
-      [filename, stack_trace, @text].hash
+      [filename, stack_trace].hash
     end
 
     def sort_key
       filename
     end
 
-    def old_error
-      @old_error
-    end
-
     def try_merge?(other)
       if branch != BASE &&
-         branch != other.branch &&
-         short_message == other.short_message &&
-         !changed? # not already changed
+          branch != other.branch &&
+          filename == other.filename &&
+          !changed? # not already changed
         @changed = true
         @old_error = other
         true
