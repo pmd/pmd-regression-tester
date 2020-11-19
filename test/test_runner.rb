@@ -24,7 +24,7 @@ class TestRunner < Test::Unit::TestCase
     FileUtils.expects(:cp).with(project_list_path, target_project_list_path).once
     DiffBuilder.any_instance.stubs(:build).twice
     LiquidProjectRenderer.any_instance.stubs(:write_project_index).twice
-    SummaryReportBuilder.any_instance.stubs(:build).once
+    SummaryReportBuilder.any_instance.stubs(:write_all_projects).once
     SummaryReportBuilder.any_instance.stubs(:process_project).twice
 
     argv = %w[-r target/repositories/pmd -p pmd_releases/6.1.0
@@ -42,7 +42,7 @@ class TestRunner < Test::Unit::TestCase
     FileUtils.expects(:cp).with(anything, anything).once
     DiffBuilder.any_instance.stubs(:build).twice
     LiquidProjectRenderer.any_instance.stubs(:write_project_index).twice
-    SummaryReportBuilder.any_instance.stubs(:build).once
+    SummaryReportBuilder.any_instance.stubs(:write_all_projects).once
 
     argv = %w[-r target/repositories/pmd -p pmd_releases/6.1.0
               -pc config/design.xml -l test/resources/project-test.xml -m single -t 4]
@@ -53,7 +53,7 @@ class TestRunner < Test::Unit::TestCase
     PmdReportBuilder.any_instance.stubs(:build).twice
     DiffBuilder.any_instance.stubs(:build).twice
     LiquidProjectRenderer.any_instance.stubs(:write_project_index).twice
-    SummaryReportBuilder.any_instance.stubs(:build).once
+    SummaryReportBuilder.any_instance.stubs(:write_all_projects).once
 
     argv = %w[-r target/repositories/pmd -b master -bc config/design.xml -p pmd_releases/6.1.0
               -pc config/design.xml -l test/resources/project-test.xml]
@@ -69,7 +69,7 @@ class TestRunner < Test::Unit::TestCase
     report_builder_mock.stubs(:build).twice
     DiffBuilder.any_instance.stubs(:build).twice
     LiquidProjectRenderer.any_instance.stubs(:write_project_index).twice
-    SummaryReportBuilder.any_instance.stubs(:build).once
+    SummaryReportBuilder.any_instance.stubs(:write_all_projects).once
 
     argv = %w[-r target/repositories/pmd -b master -bc config/design.xml -p pmd_releases/6.1.0
               -pc config/design.xml -l test/resources/project-test.xml -t 4]
@@ -86,7 +86,7 @@ class TestRunner < Test::Unit::TestCase
                   .returns([]).once
 
     PmdReportBuilder.any_instance.stubs(:build).returns(PmdBranchDetail.new('test_branch')).once
-    SummaryReportBuilder.any_instance.stubs(:build).once
+    SummaryReportBuilder.any_instance.stubs(:write_all_projects).once
 
     argv = %w[-r target/repositories/pmd -m online -b master -p pmd_releases/6.7.0]
     run_runner(argv)
@@ -106,7 +106,7 @@ class TestRunner < Test::Unit::TestCase
                     .returns(report_builder_mock)
                     .once
     report_builder_mock.stubs(:build).once
-    SummaryReportBuilder.any_instance.stubs(:build).once
+    SummaryReportBuilder.any_instance.stubs(:write_all_projects).once
 
     argv = %w[-r target/repositories/pmd -m online -b master -p pmd_releases/6.7.0 -t 4]
     run_runner(argv)

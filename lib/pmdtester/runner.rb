@@ -34,14 +34,8 @@ module PmdTester
       rule_sets = RuleSetBuilder.new(@options).build if @options.auto_config_flag
       return if rule_sets&.empty?
 
-      base_branch_details = PmdReportBuilder
-        .new(@options.base_config, @projects, @options.local_git_repo, @options.base_branch,
-             @options.threads)
-        .build
-      patch_branch_details = PmdReportBuilder
-        .new(@options.patch_config, @projects, @options.local_git_repo, @options.patch_branch,
-             @options.threads)
-        .build
+      base_branch_details = make_branch_details(config: @options.base_config, branch: @options.base_branch)
+      patch_branch_details = make_branch_details(config: @options.patch_config, branch: @options.patch_branch)
 
       build_html_reports(base_branch_details, patch_branch_details)
     end
@@ -65,10 +59,7 @@ module PmdTester
         logger.info "Using config #{@options.patch_config} which might differ from baseline"
       end
 
-      patch_branch_details = PmdReportBuilder
-        .new(@options.patch_config, @projects,
-             @options.local_git_repo, @options.patch_branch, @options.threads)
-        .build
+      patch_branch_details = make_branch_details(config: @options.patch_config, branch: @options.patch_branch)
 
       base_branch_details = PmdBranchDetail.load(@options.base_branch, logger)
       build_html_reports(base_branch_details, patch_branch_details)
@@ -113,11 +104,7 @@ module PmdTester
       logger.info "Mode: #{@options.mode}"
 
       get_projects(@options.project_list) unless @options.nil?
-      patch_branch_details = PmdReportBuilder
-                             .new(@options.patch_config, @projects,
-                                  @options.local_git_repo, @options.patch_branch,
-                                  @options.threads)
-                             .build
+      patch_branch_details = make_branch_details(config: @options.patch_config, branch: @options.patch_branch)
       # copy list of projects file to the patch baseline
       FileUtils.cp(@options.project_list, patch_branch_details.target_branch_project_list_path)
 
@@ -136,9 +123,9 @@ module PmdTester
         project.report_diff = report_diffs
       end
 
-      SummaryReportBuilder.new.build(@projects,
-                                     base_branch_details,
-                                     patch_branch_details)
+      SummaryReportBuilder.new.write_all_projects(@projects,
+                                                  base_branch_details,
+                                                  patch_branch_details)
     end
 
     def get_projects(file_path)
@@ -165,6 +152,15 @@ module PmdTester
       end
 
       result
+    end
+
+    private
+
+    def make_branch_details(config:, branch:)
+      PmdReportBuilder
+          .new(config, @projects,
+               @options.local_git_repo, branch, @options.threads)
+          .build
     end
   end
 end

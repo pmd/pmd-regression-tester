@@ -12,7 +12,7 @@ module PmdTester
     PATCH_CONFIG_PATH = 'target/reports/diff/patch_config.xml'
     INDEX_PATH = 'target/reports/diff/index.html'
 
-    def build(projects, base_details, patch_details)
+    def write_all_projects(projects, base_details, patch_details)
       projects.each do |project|
         process_project(project, "#{REPORT_DIR}/#{project.name}")
       end

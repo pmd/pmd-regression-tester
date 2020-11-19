@@ -17,7 +17,7 @@ class TestSummaryReportBuilder < Test::Unit::TestCase
     FileUtils.cp("#{test_resources_path}/branch_info.json", branch_path)
     FileUtils.cp("#{test_resources_path}/empty_config.xml", "#{branch_path}/config.xml")
 
-    PmdTester::SummaryReportBuilder.new.build(projects, 'test_branch', 'test_branch')
+    PmdTester::SummaryReportBuilder.new.write_all_projects(projects, 'test_branch', 'test_branch')
 
     actual_file_path = 'target/reports/diff/index.html'
     expected_file_path = 'test/resources/summary_report_builder/expected_index.html'
