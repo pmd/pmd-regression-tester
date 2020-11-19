@@ -33,7 +33,7 @@ module PmdTester
       @pull_request = ENV['TRAVIS_PULL_REQUEST']
     end
 
-    def self.load(branch_name)
+    def self.load(branch_name, logger)
       details = PmdBranchDetail.new(branch_name)
       if File.exist?(details.path_to_save_file)
         hash = JSON.parse(File.read(details.path_to_save_file))

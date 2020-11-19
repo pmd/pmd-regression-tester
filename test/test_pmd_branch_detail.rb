@@ -22,7 +22,7 @@ class TestPmdBranchDetail < Test::Unit::TestCase
     dir = 'target/reports/test_branch'
     FileUtils.mkdir(dir) unless File.directory?(dir)
     details.save
-    details = PmdTester::PmdBranchDetail.load(details.path_to_save_file)
+    details = PmdTester::PmdBranchDetail.load(details.path_to_save_file, logger)
 
     assert_equal('test_branch', details.branch_name)
     assert_equal('test message', details.branch_last_message)

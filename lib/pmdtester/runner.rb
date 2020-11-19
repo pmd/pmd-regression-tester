@@ -70,7 +70,7 @@ module PmdTester
              @options.local_git_repo, @options.patch_branch, @options.threads)
         .build
 
-      base_branch_details = PmdBranchDetail.load(@options.base_branch)
+      base_branch_details = PmdBranchDetail.load(@options.base_branch, logger)
       build_html_reports(base_branch_details, patch_branch_details)
     end
 
@@ -121,7 +121,7 @@ module PmdTester
       # copy list of projects file to the patch baseline
       FileUtils.cp(@options.project_list, patch_branch_details.target_branch_project_list_path)
 
-      base_branch_details = PmdBranchDetail.load(@options.base_branch)
+      base_branch_details = PmdBranchDetail.load(@options.base_branch, logger)
       build_html_reports(base_branch_details, patch_branch_details) unless @options.html_flag
     end
 

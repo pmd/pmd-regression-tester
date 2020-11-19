@@ -22,7 +22,7 @@ module PmdTester
       patch_report = parse_pmd_report(patch_report_filename, PATCH, patch_details)
 
       logger.info "Calculating diffs"
-      ReportDiff.new(base_report).diff_with(patch_report)
+      ReportDiff.new(base_report: base_report, patch_report: patch_report)
     end
 
     def parse_pmd_report(report_filename, branch, report_details, filter_set = nil)

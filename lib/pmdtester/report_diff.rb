@@ -82,20 +82,34 @@ module PmdTester
     attr_accessor :base_report
     attr_accessor :patch_report
 
-    def initialize(base_report)
+    def initialize(base_report:, patch_report:)
       @violation_counts = RunningDiffCounters.new(count_h_values(base_report.violations_h))
       @error_counts = RunningDiffCounters.new(count_h_values(base_report.errors_h))
       @violation_diffs_by_rule = {}
 
       @base_report = base_report
+      @patch_report = patch_report
 
       @rule_infos_union = base_report.infos_by_rule.dup
       @violation_diffs_by_file = {}
       @error_diffs_by_file = {}
+
+      diff_with(patch_report)
     end
 
+    def rule_summaries
+      @violation_diffs_by_rule.map do |(rule, counters)|
+        {
+            'name' => rule,
+            'info_url' => @rule_infos_union[rule].info_url,
+            **counters.to_h
+        }
+      end
+    end
+
+    private
+
     def diff_with(patch_report)
-      @patch_report = patch_report
 
       @violation_counts.patch_total = count_h_values(patch_report.violations_h)
       @error_counts.patch_total = count_h_values(patch_report.errors_h)
@@ -109,22 +123,6 @@ module PmdTester
       count_by_rule(@patch_report.violations_h, base: false)
       self
     end
-
-    def rule_summaries
-      @violation_diffs_by_rule.map do |(rule, counters)|
-        {
-            'name' => rule,
-            'info_url' => @rule_infos_union[rule].info_url,
-            **counters.to_h
-        }
-      end
-    end
-
-    def diffs_exist?
-      @violation_counts.changed_total != 0 || @error_counts.changed_total != 0
-    end
-
-    private
 
     def record_rule_info(v)
       unless @rule_infos_union.has_key?(v.rule_name)

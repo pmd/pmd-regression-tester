@@ -25,6 +25,7 @@ class TestRunner < Test::Unit::TestCase
     DiffBuilder.any_instance.stubs(:build).twice
     LiquidProjectRenderer.any_instance.stubs(:write_project_index).twice
     SummaryReportBuilder.any_instance.stubs(:build).once
+    SummaryReportBuilder.any_instance.stubs(:process_project).twice
 
     argv = %w[-r target/repositories/pmd -p pmd_releases/6.1.0
               -pc config/design.xml -l test/resources/project-test.xml -m single]
