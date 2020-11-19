@@ -13,11 +13,10 @@ class TestDiffBuilder < Test::Unit::TestCase
   end
 
   def test_violation_diffs
-    diff_builder = DiffBuilder.new
     base_report_path = 'test/resources/diff_builder/test_violation_diffs_base.xml'
     patch_report_path = 'test/resources/diff_builder/test_violation_diffs_patch.xml'
-    diffs_report = diff_builder.build(base_report_path, patch_report_path,
-                                      BASE_REPORT_INFO_PATH, PATCH_REPORT_INFO_PATH)
+    diffs_report = build_report_diff(base_report_path, patch_report_path,
+                                     BASE_REPORT_INFO_PATH, PATCH_REPORT_INFO_PATH)
     violation_diffs = diffs_report.violation_diffs_by_file
     keys = violation_diffs.keys
 
@@ -38,11 +37,10 @@ class TestDiffBuilder < Test::Unit::TestCase
   end
 
   def test_error_diffs
-    diff_builder = DiffBuilder.new
     base_report_path = 'test/resources/diff_builder/test_error_diffs_base.xml'
     patch_report_path = 'test/resources/diff_builder/test_error_diffs_patch.xml'
-    diffs_report = diff_builder.build(base_report_path, patch_report_path,
-                                      BASE_REPORT_INFO_PATH, PATCH_REPORT_INFO_PATH)
+    diffs_report = build_report_diff(base_report_path, patch_report_path,
+                                     BASE_REPORT_INFO_PATH, PATCH_REPORT_INFO_PATH)
     error_diffs = diffs_report.error_diffs_by_file
     keys = error_diffs.keys
 

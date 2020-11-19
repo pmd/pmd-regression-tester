@@ -5,6 +5,7 @@ module PmdTester
   # and running the PmdTester
   class Runner
     include PmdTester
+
     def initialize(argv)
       @options = Options.new(argv)
     end
@@ -114,12 +115,11 @@ module PmdTester
 
     def self.compute_project_diffs(projects, base_branch, patch_branch, filter_set = nil)
       projects.each do |project|
-        report_diffs = DiffBuilder.new.build(project.get_pmd_report_path(base_branch),
-                                             project.get_pmd_report_path(patch_branch),
-                                             project.get_report_info_path(base_branch),
-                                             project.get_report_info_path(patch_branch),
-                                             filter_set)
-        project.report_diff = report_diffs
+        project.report_diff = build_report_diff(project.get_pmd_report_path(base_branch),
+                                                project.get_pmd_report_path(patch_branch),
+                                                project.get_report_info_path(base_branch),
+                                                project.get_report_info_path(patch_branch),
+                                                filter_set)
       end
     end
 
@@ -137,9 +137,9 @@ module PmdTester
 
     def summarize_diffs
       result = {
-        errors: { new: 0, removed: 0 },
-        violations: { new: 0, removed: 0, changed: 0 },
-        configerrors: { new: 0, removed: 0 }
+        errors: {new: 0, removed: 0},
+        violations: {new: 0, removed: 0, changed: 0},
+        configerrors: {new: 0, removed: 0}
       }
 
       @projects.each do |project|

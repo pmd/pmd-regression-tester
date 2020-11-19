@@ -22,17 +22,17 @@ module PmdTester
       file.close
     end
 
-    def load(report_info_path)
+    def self.load(report_info_path)
+      instance = PmdReportDetail.new
       if File.exist?(report_info_path)
         hash = JSON.parse(File.read(report_info_path))
-        @execution_time = hash['execution_time']
-        @timestamp = hash['timestamp']
-        @working_dir = hash['working_dir']
-        hash
+        instance.execution_time = hash['execution_time']
+        instance.timestamp = hash['timestamp']
+        instance.working_dir = hash['working_dir']
       else
         puts "#{report_info_path} doesn't exist"
-        {}
       end
+      instance
     end
 
     def format_execution_time

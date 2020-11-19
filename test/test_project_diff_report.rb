@@ -4,6 +4,7 @@ require 'test_helper'
 
 # Unit test class for PmdTester::DiffReportBuilder
 class TestProjectDiffReport < Test::Unit::TestCase
+  include PmdTester
   include TestUtils
   BASE_PMD_REPORT_PATH =
     'test/resources/html_report_builder/test_html_report_builder_base.xml'
@@ -17,6 +18,7 @@ class TestProjectDiffReport < Test::Unit::TestCase
     'test/resources/html_report_builder/expected_diff_report_index.html'
   EXPECTED_EMPTY_REPORT_PATH =
     'test/resources/html_report_builder/expected_empty_diff_report.html'
+
   def setup
     `rake clean`
   end
@@ -27,9 +29,8 @@ class TestProjectDiffReport < Test::Unit::TestCase
 
     actual_report_path = "target/reports/diff/#{project.name}"
 
-    diff_builder = PmdTester::DiffBuilder.new
-    project.report_diff = diff_builder.build(BASE_PMD_REPORT_PATH, PATCH_PMD_REPORT_PATH,
-                                             BASE_REPORT_INFO_PATH, PATCH_REPORT_INFO_PATH)
+    project.report_diff = build_report_diff(BASE_PMD_REPORT_PATH, PATCH_PMD_REPORT_PATH,
+                                            BASE_REPORT_INFO_PATH, PATCH_REPORT_INFO_PATH)
 
     PmdTester::LiquidProjectRenderer.new.write_project_index(project, actual_report_path)
 

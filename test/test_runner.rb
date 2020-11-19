@@ -22,7 +22,7 @@ class TestRunner < Test::Unit::TestCase
     PmdReportBuilder.any_instance.stubs(:build)
                     .returns(PmdBranchDetail.new('test_branch')).once
     FileUtils.expects(:cp).with(project_list_path, target_project_list_path).once
-    DiffBuilder.any_instance.stubs(:build).twice
+    PmdTester.stubs(:build_report_diff).twice
     SummaryReportBuilder.any_instance.stubs(:write_all_projects).once
 
     argv = %w[-r target/repositories/pmd -p pmd_releases/6.1.0
@@ -38,7 +38,7 @@ class TestRunner < Test::Unit::TestCase
                     .once
     report_builder_mock.stubs(:build).returns(PmdBranchDetail.new('test_branch')).once
     FileUtils.expects(:cp).with(anything, anything).once
-    DiffBuilder.any_instance.stubs(:build).twice
+    PmdTester.stubs(:build_report_diff).twice
     SummaryReportBuilder.any_instance.stubs(:write_all_projects).once
 
     argv = %w[-r target/repositories/pmd -p pmd_releases/6.1.0
@@ -48,7 +48,7 @@ class TestRunner < Test::Unit::TestCase
 
   def test_local_mode
     PmdReportBuilder.any_instance.stubs(:build).returns(PmdBranchDetail.new('some_branch')).twice
-    DiffBuilder.any_instance.stubs(:build).twice
+    PmdTester.stubs(:build_report_diff).twice
     SummaryReportBuilder.any_instance.stubs(:write_all_projects).once
 
     argv = %w[-r target/repositories/pmd -b master -bc config/design.xml -p pmd_releases/6.1.0
@@ -63,7 +63,7 @@ class TestRunner < Test::Unit::TestCase
                     .returns(report_builder_mock)
                     .twice
     report_builder_mock.stubs(:build).returns(PmdBranchDetail.new('some_branch')).twice
-    DiffBuilder.any_instance.stubs(:build).twice
+    PmdTester.stubs(:build_report_diff).twice
     SummaryReportBuilder.any_instance.stubs(:write_all_projects).once
 
     argv = %w[-r target/repositories/pmd -b master -bc config/design.xml -p pmd_releases/6.1.0
