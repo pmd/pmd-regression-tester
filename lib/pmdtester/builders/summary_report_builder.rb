@@ -18,7 +18,7 @@ module PmdTester
       end
       logger.info 'Built all difference reports successfully!'
 
-      FileUtils.mkdir_p(REPORT_DIR) unless File.directory?(REPORT_DIR)
+      FileUtils.mkdir_p(REPORT_DIR)
       write_structure(REPORT_DIR)
       write_index(REPORT_DIR, base_details, patch_details, projects)
       logger.info 'Built summary report successfully!'

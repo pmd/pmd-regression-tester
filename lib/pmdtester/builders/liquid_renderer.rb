@@ -4,6 +4,7 @@ require 'json'
 module PmdTester
 
   module LiquidRenderer
+    include PmdTester
 
     def render_liquid(template_path, env)
       to_render = File.read(ResourceLocator.resource(template_path))
@@ -24,13 +25,15 @@ module PmdTester
       end
 
       index = File.new(target_file, 'w')
-      index.puts contents
+      index.puts contents unless index.nil? # may be nil when stubbing
     ensure
       index&.close
     end
 
     def copy_resource(dir, to_root)
-      FileUtils.copy_entry(ResourceLocator.resource(dir), "#{to_root}/#{dir}")
+      src = ResourceLocator.resource(dir)
+      dest = "#{to_root}/#{dir}"
+      FileUtils.copy_entry(src, dest)
     end
   end
 
