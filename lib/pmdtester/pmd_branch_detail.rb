@@ -47,7 +47,7 @@ module PmdTester
       else
         details.jdk_version = ''
         details.language = ''
-        logger.warn "#{details.path_to_save_file} doesn't exist!"
+        logger&.warn "#{details.path_to_save_file} doesn't exist!"
       end
       details
     end
@@ -60,6 +60,9 @@ module PmdTester
                jdk_version: @jdk_version,
                language: @language,
                pull_request: @pull_request }
+
+      FileUtils.mkdir_p(@base_branch_dir) unless File.directory?(@base_branch_dir)
+
       file = File.new(path_to_save_file, 'w')
       file.puts JSON.generate(hash)
       file.close

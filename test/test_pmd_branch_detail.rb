@@ -19,10 +19,8 @@ class TestPmdBranchDetail < Test::Unit::TestCase
     details.branch_last_sha = 'test sha'
     details.execution_time = 'test time'
 
-    dir = 'target/reports/test_branch'
-    FileUtils.mkdir(dir) unless File.directory?(dir)
     details.save
-    details = PmdTester::PmdBranchDetail.load(details.path_to_save_file, logger)
+    details = PmdTester::PmdBranchDetail.load('test_branch', nil)
 
     assert_equal('test_branch', details.branch_name)
     assert_equal('test message', details.branch_last_message)
