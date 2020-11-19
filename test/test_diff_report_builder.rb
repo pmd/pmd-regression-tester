@@ -45,7 +45,7 @@ class TestDiffReportBuilder < Test::Unit::TestCase
 
   def test_report_diffs_empty
     project = PmdTester::ProjectsParser.new.parse('test/resources/project-list.xml')[1]
-    project.report_diff = PmdTester::FastReportDiff.new(PmdTester::Report.empty)
+    project.report_diff = PmdTester::ReportDiff.new(PmdTester::Report.empty)
     actual_report_path = "target/reports/diff/#{project.name}"
 
     PmdTester::LiquidProjectRenderer.new.write_project_index(project, actual_report_path)
