@@ -50,5 +50,6 @@ resources/js/datatables.min.js
 resources/js/jquery-3.2.1.slim.min.js
 resources/js/jquery.min.js
 resources/js/popper.min.js
+resources/js/project-report.js
 resources/project_diff_report.html
 resources/project_index.html
