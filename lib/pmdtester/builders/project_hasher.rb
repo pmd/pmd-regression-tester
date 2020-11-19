@@ -1,25 +1,27 @@
+# frozen_string_literal: true
+
 require 'differ'
 
+# the same module as all the others? come on rubocop
 module PmdTester
-
   # Turn a project report into a hash that can be rendered somewhere else
   module ProjectHasher
     include PmdTester
 
-    def report_diff_to_h(d)
+    def report_diff_to_h(rdiff)
       {
-          'violation_counts' => d.violation_counts.to_h,
-          'error_counts' => d.error_counts.to_h,
+        'violation_counts' => rdiff.violation_counts.to_h,
+        'error_counts' => rdiff.error_counts.to_h,
 
-          'base_execution_time' => PmdReportDetail.convert_seconds(d.base_report.exec_time),
-          'patch_execution_time' => PmdReportDetail.convert_seconds(d.patch_report.exec_time),
-          'diff_execution_time' => PmdReportDetail.convert_seconds(d.patch_report.exec_time -
-                                                                       d.base_report.exec_time),
+        'base_execution_time' => PmdReportDetail.convert_seconds(rdiff.base_report.exec_time),
+        'patch_execution_time' => PmdReportDetail.convert_seconds(rdiff.patch_report.exec_time),
+        'diff_execution_time' => PmdReportDetail.convert_seconds(rdiff.patch_report.exec_time -
+                                                                   rdiff.base_report.exec_time),
 
-          'base_timestamp' => d.base_report.timestamp,
-          'patch_timestamp' => d.patch_report.timestamp,
+        'base_timestamp' => rdiff.base_report.timestamp,
+        'patch_timestamp' => rdiff.patch_report.timestamp,
 
-          'rule_diffs' => d.rule_summaries,
+        'rule_diffs' => rdiff.rule_summaries
       }
     end
 
@@ -27,7 +29,7 @@ module PmdTester
       errors = project.report_diff.error_diffs_by_file.values.flatten
       errors.map { |e| error_to_hash(e, project) }
     end
-    
+
     def violations_to_hash(project)
       filename_index = []
       all_vs = []
@@ -40,8 +42,8 @@ module PmdTester
       end
 
       {
-          'file_index' => filename_index,
-          'violations' => all_vs
+        'file_index' => filename_index,
+        'violations' => all_vs
       }
     end
   end
@@ -51,28 +53,25 @@ module PmdTester
     "#{project.webview_url}/{file}##{l_str}{line}"
   end
 
-
-  def violation_type(v)
-    if v.changed?
+  def violation_type(violation)
+    if violation.changed?
       '~'
-    elsif v.branch == 'patch'
+    elsif violation.branch == 'patch'
       '+'
     else
       '-'
     end
   end
 
-  def make_violation_hash(file_ref, v)
+  def make_violation_hash(file_ref, violation)
     h = {
-        't' => violation_type(v),
-        'l' => v.line,
-        'f' => file_ref,
-        'r' => v.rule_name,
-        'm' => v.changed? ? diff_fragments(v) : v.text,
+      't' => violation_type(violation),
+      'l' => violation.line,
+      'f' => file_ref,
+      'r' => violation.rule_name,
+      'm' => violation.changed? ? diff_fragments(violation) : violation.text
     }
-    if v.changed? && v.line != v.old_line
-      h['ol'] = v.old_line
-    end
+    h['ol'] = violation.old_line if violation.changed? && violation.line != violation.old_line
     h
   end
 
@@ -81,26 +80,25 @@ module PmdTester
     diff.format_as(:html)
   end
 
-
-  def error_to_hash(e, project)
-    escaped_stacktrace = sanitize_stacktrace(e)
-    old_stacktrace = e.old_error.nil? ? nil : sanitize_stacktrace(e.old_error)
+  def error_to_hash(error, project)
+    escaped_stacktrace = sanitize_stacktrace(error)
+    old_stacktrace = error.old_error.nil? ? nil : sanitize_stacktrace(error.old_error)
 
     {
-        'file_url' =>  project.get_webview_url(e.filename),
-        'stack_trace_html' => escaped_stacktrace,
-        'old_stack_trace_html' => old_stacktrace,
-        'short_message' => e.short_message,
-        'short_filename' => e.short_filename,
-        'filename' => e.filename,
-        'change_type' => change_type(e)
+      'file_url' => project.get_webview_url(error.filename),
+      'stack_trace_html' => escaped_stacktrace,
+      'old_stack_trace_html' => old_stacktrace,
+      'short_message' => error.short_message,
+      'short_filename' => error.short_filename,
+      'filename' => error.filename,
+      'change_type' => change_type(error)
     }
   end
 
-  def sanitize_stacktrace(e)
-    CGI::escapeHTML(e.stack_trace)
-        .gsub(e.filename, '<span class="meta-var">$FILE</span>')
-        .gsub(/\w++(?=\(\w++\.java:\d++\))/, '<span class="stack-trace-method">\\0</span>')
+  def sanitize_stacktrace(error)
+    CGI.escapeHTML(error.stack_trace)
+       .gsub(error.filename, '<span class="meta-var">$FILE</span>')
+       .gsub(/\w++(?=\(\w++\.java:\d++\))/, '<span class="stack-trace-method">\\0</span>')
   end
 
   def change_type(item)

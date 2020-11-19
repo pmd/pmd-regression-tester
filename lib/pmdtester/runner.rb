@@ -112,8 +112,7 @@ module PmdTester
       Runner.build_html_reports(@projects, base_branch_details, patch_branch_details) unless @options.html_flag
     end
 
-
-    def self.compute_project_diffs(projects, base_branch, patch_branch, filter_set=nil)
+    def self.compute_project_diffs(projects, base_branch, patch_branch, filter_set = nil)
       projects.each do |project|
         report_diffs = DiffBuilder.new.build(project.get_pmd_report_path(base_branch),
                                              project.get_pmd_report_path(patch_branch),
@@ -162,8 +161,8 @@ module PmdTester
 
     def make_branch_details(config:, branch:)
       PmdReportBuilder
-          .new(config, @projects, @options.local_git_repo, branch, @options.threads)
-          .build
+        .new(config, @projects, @options.local_git_repo, branch, @options.threads)
+        .build
     end
   end
 end

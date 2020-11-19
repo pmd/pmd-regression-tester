@@ -9,7 +9,6 @@ module PmdTester
     # The schema of pmd xml report refers to
     # http://pmd.sourceforge.net/report_2_0_0.xsd
     def build(base_report_filename, patch_report_filename, base_info, patch_info, filter_set = nil)
-
       base_details = PmdReportDetail.new
       base_details.load(base_info) unless base_info.nil?
       patch_details = PmdReportDetail.new
@@ -21,7 +20,7 @@ module PmdTester
       logger.info "Parsing #{patch_report_filename}"
       patch_report = parse_pmd_report(patch_report_filename, PATCH, patch_details)
 
-      logger.info "Calculating diffs"
+      logger.info 'Calculating diffs'
       ReportDiff.new(base_report: base_report, patch_report: patch_report)
     end
 
@@ -30,12 +29,12 @@ module PmdTester
       parser = Nokogiri::XML::SAX::Parser.new(doc)
       parser.parse_file(report_filename) if File.exist?(report_filename)
       Report.new(
-          violations_h: doc.violations.violations,
-          errors_h: doc.errors.errors,
-          infos_by_rule: doc.infos_by_rules,
+        violations_h: doc.violations.violations,
+        errors_h: doc.errors.errors,
+        infos_by_rule: doc.infos_by_rules,
 
-          timestamp: report_details.timestamp,
-          exec_time: report_details.execution_time,
+        timestamp: report_details.timestamp,
+        exec_time: report_details.execution_time
       )
     end
   end

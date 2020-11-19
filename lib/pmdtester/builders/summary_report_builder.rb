@@ -38,41 +38,39 @@ module PmdTester
     end
 
     def write_index(target_root, base_details, patch_details, projects)
-
-      projects = projects.map { |p|
+      projects = projects.map do |p|
         {
-            'name' => p.name,
-            'tag' => p.tag,
-            'report_url' => "./#{p.name}/index.html",
-            **report_diff_to_h(p.report_diff)
+          'name' => p.name,
+          'tag' => p.tag,
+          'report_url' => "./#{p.name}/index.html",
+          **report_diff_to_h(p.report_diff)
         }
-      }
+      end
 
       prnum = ENV['TRAVIS_PULL_REQUEST']
       env = {
-          'comparison_url' => nil,
-          'base' => to_liquid(base_details),
-          'patch' => to_liquid(patch_details),
-          'pr_number' => prnum == 'false' ? nil : prnum,
-          'projects' => projects
+        'comparison_url' => nil,
+        'base' => to_liquid(base_details),
+        'patch' => to_liquid(patch_details),
+        'pr_number' => prnum == 'false' ? nil : prnum,
+        'projects' => projects
       }
       logger.info 'Writing /index.html...'
       render_and_write('project_index.html', "#{target_root}/index.html", env)
     end
 
-
     def to_liquid(details)
       {
-          'tree_url' => "https://github.com/pmd/pmd/tree/#{details.branch_last_sha}",
-          'name' => details.branch_name,
-          'tip' => {
-              'sha' => details.branch_last_sha,
-              'message' => details.branch_last_message,
-          },
-          'execution_time' => details.execution_time,
-          'jdk_info' => details.jdk_version,
-          'locale' => details.language,
-          'config_url' => 'todo'
+        'tree_url' => "https://github.com/pmd/pmd/tree/#{details.branch_last_sha}",
+        'name' => details.branch_name,
+        'tip' => {
+          'sha' => details.branch_last_sha,
+          'message' => details.branch_last_message
+        },
+        'execution_time' => details.execution_time,
+        'jdk_info' => details.jdk_version,
+        'locale' => details.language,
+        'config_url' => 'todo'
       }
     end
   end

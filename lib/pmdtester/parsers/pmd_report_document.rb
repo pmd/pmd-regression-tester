@@ -67,9 +67,7 @@ module PmdTester
         v.text.strip!
         if match_filter_set?(v)
           @current_violations.push(v)
-          unless @infos_by_rules.has_key?(v.rule_name)
-            @infos_by_rules[v.rule_name] = RuleInfo.new(v.rule_name, v.info_url)
-          end
+          @infos_by_rules[v.rule_name] = RuleInfo.new(v.rule_name, v.info_url) unless @infos_by_rules.key?(v.rule_name)
         end
         @current_violation = nil
       when 'error'

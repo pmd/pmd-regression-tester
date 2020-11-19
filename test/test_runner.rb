@@ -62,7 +62,7 @@ class TestRunner < Test::Unit::TestCase
                     .with(anything, anything, anything, anything, 4)
                     .returns(report_builder_mock)
                     .twice
-    report_builder_mock.stubs(:build).returns(PmdBranchDetail::new('some_branch')).twice
+    report_builder_mock.stubs(:build).returns(PmdBranchDetail.new('some_branch')).twice
     DiffBuilder.any_instance.stubs(:build).twice
     SummaryReportBuilder.any_instance.stubs(:write_all_projects).once
 
@@ -76,7 +76,7 @@ class TestRunner < Test::Unit::TestCase
     FileUtils.stubs(:mkdir_p).with('target/reports/diff').at_least_once
     FileUtils.stubs(:copy_entry).with(anything, 'target/reports/diff/css').once
     FileUtils.stubs(:copy_entry).with(anything, 'target/reports/diff/js').once
-    File.stubs(:new).with('target/reports/diff/index.html', anything).returns().once
+    File.stubs(:new).with('target/reports/diff/index.html', anything).returns.once
 
     Dir.stubs(:chdir).with('target/reports').yields.once
     Cmd.stubs(:execute).with('wget --timestamping https://sourceforge.net/projects/pmd/files/pmd-regression-tester/master-baseline.zip').once
@@ -104,7 +104,7 @@ class TestRunner < Test::Unit::TestCase
                     .with(anything, anything, anything, anything, 4)
                     .returns(report_builder_mock)
                     .once
-    report_builder_mock.stubs(:build).returns(PmdBranchDetail::new('some_branch')).once
+    report_builder_mock.stubs(:build).returns(PmdBranchDetail.new('some_branch')).once
     SummaryReportBuilder.any_instance.stubs(:write_all_projects).once
 
     argv = %w[-r target/repositories/pmd -m online -b master -p pmd_releases/6.7.0 -t 4]

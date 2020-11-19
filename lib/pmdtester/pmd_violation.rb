@@ -130,7 +130,7 @@ module PmdTester
     end
 
     def to_liquid
-      {**attrs, 'branch' => branch, 'changed' => changed?}
+      { **attrs, 'branch' => branch, 'changed' => changed? }
     end
   end
 end

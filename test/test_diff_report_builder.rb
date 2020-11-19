@@ -54,5 +54,4 @@ class TestDiffReportBuilder < Test::Unit::TestCase
     assert_equal(norm_whitespace(expected_file),
                  norm_whitespace(actual_file))
   end
-  
 end

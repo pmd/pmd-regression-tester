@@ -55,7 +55,7 @@ module PmdTester
     end
 
     def short_filename
-      filename.gsub(/([^\/]*+\/)+/, '')
+      filename.gsub(%r{([^/]*+/)+}, '')
     end
 
     def short_message
@@ -72,8 +72,8 @@ module PmdTester
 
     def eql?(other)
       filename.eql?(other.filename) &&
-          short_message.eql?(other.short_message) &&
-          stack_trace.eql?(other.stack_trace)
+        short_message.eql?(other.short_message) &&
+        stack_trace.eql?(other.stack_trace)
     end
 
     def hash
@@ -86,9 +86,9 @@ module PmdTester
 
     def try_merge?(other)
       if branch != BASE &&
-          branch != other.branch &&
-          filename == other.filename &&
-          !changed? # not already changed
+         branch != other.branch &&
+         filename == other.filename &&
+         !changed? # not already changed
         @changed = true
         @old_error = other
         true
@@ -96,6 +96,5 @@ module PmdTester
         false
       end
     end
-
   end
 end

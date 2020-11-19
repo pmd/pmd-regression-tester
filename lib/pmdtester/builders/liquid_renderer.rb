@@ -1,8 +1,11 @@
+# frozen_string_literal: true
+
 require 'liquid'
 require 'json'
 
 module PmdTester
-
+  # A module to include in classes that use a Liquid template
+  # to generate content.
   module LiquidRenderer
     include PmdTester
 
@@ -10,8 +13,8 @@ module PmdTester
       to_render = File.read(ResourceLocator.resource(template_path))
       includes = Liquid::LocalFileSystem.new(ResourceLocator.resource('_includes'), '%s.html')
       Liquid::Template.file_system = includes
-      template = Liquid::Template.parse(to_render, :error_mode => :strict)
-      template.render!(env, {strict_variables: true})
+      template = Liquid::Template.parse(to_render, error_mode: :strict)
+      template.render!(env, { strict_variables: true })
     end
 
     def render_and_write(template_path, target_file, env)
@@ -20,12 +23,10 @@ module PmdTester
 
     def write_file(target_file, contents)
       dir = File.dirname(target_file)
-      unless File.directory?(dir)
-        FileUtils.mkdir_p(dir)
-      end
+      FileUtils.mkdir_p(dir) unless File.directory?(dir)
 
       index = File.new(target_file, 'w')
-      index.puts contents unless index.nil? # may be nil when stubbing
+      index&.puts contents # may be nil when stubbing
     ensure
       index&.close
     end
@@ -37,17 +38,17 @@ module PmdTester
     end
   end
 
+  # Renders the index of a project diff report.
   class LiquidProjectRenderer
     include PmdTester
     include ProjectHasher
     include LiquidRenderer
 
     def write_project_index(project, root)
-
       liquid_env = {
-          'diff' => report_diff_to_h(project.report_diff),
-          'error_diffs' => errors_to_h(project),
-          'project_name' => project.name
+        'diff' => report_diff_to_h(project.report_diff),
+        'error_diffs' => errors_to_h(project),
+        'project_name' => project.name
       }
 
       # Renders index.html using liquid
@@ -58,8 +59,8 @@ module PmdTester
 
     def dump_violations_json(project)
       h = {
-          'source_link_template' => link_template(project),
-          **violations_to_hash(project)
+        'source_link_template' => link_template(project),
+        **violations_to_hash(project)
       }
 
       project_data = JSON.fast_generate(h)

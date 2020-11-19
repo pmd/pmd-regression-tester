@@ -8,6 +8,6 @@ require_relative '../lib/pmdtester'
 module TestUtils
   # remove trailing whitespace
   def norm_whitespace(text)
-    text.gsub(/\s+$/, "")
+    text.gsub(/\s+$/, '')
   end
 end

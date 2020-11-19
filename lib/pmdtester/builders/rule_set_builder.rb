@@ -113,9 +113,7 @@ module PmdTester
     def check_single_filename(filename)
       logger.debug "Checking #{filename}"
       match_data = %r{#{PATH_TO_PMD_JAVA_BASED_RULES}/([^/]+)/([^/]+)Rule.java}.match(filename)
-      if match_data.nil?
-        match_data = %r{#{PATH_TO_PMD_XPATH_BASED_RULES}/([^/]+).xml}.match(filename)
-      end
+      match_data = %r{#{PATH_TO_PMD_XPATH_BASED_RULES}/([^/]+).xml}.match(filename) if match_data.nil?
       logger.debug "Matches: #{match_data.inspect}"
       match_data
     end

@@ -73,8 +73,8 @@ class TestDiffBuilder < Test::Unit::TestCase
   end
 
   def assert_changes_eq(counters, removed:, added:, changed:)
-    assert_equal(removed, counters.removed, "removed")
-    assert_equal(added, counters.new, "added")
-    assert_equal(changed, counters.changed, "changed")
+    assert_equal(removed, counters.removed, 'removed')
+    assert_equal(added, counters.new, 'added')
+    assert_equal(changed, counters.changed, 'changed')
   end
 end

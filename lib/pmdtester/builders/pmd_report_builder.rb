@@ -141,7 +141,8 @@ module PmdTester
       @pmd_branch_details
     end
 
-    def build # returns the branch details
+    # returns the branch details
+    def build
       @project_builder.clone_projects
       @project_builder.build_projects
       get_pmd_binary_file

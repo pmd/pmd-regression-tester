@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module PmdTester
+  # A bunch of counters to summarize differences
   class RunningDiffCounters
     attr_accessor :changed, :new, :removed, :patch_total, :base_total
 
@@ -17,15 +18,16 @@ module PmdTester
 
     def to_h
       {
-          'changed' => changed,
-          'new' => new,
-          'removed' => removed,
-          'base_total' => base_total,
-          'patch_total' => patch_total,
+        'changed' => changed,
+        'new' => new,
+        'removed' => removed,
+        'base_total' => base_total,
+        'patch_total' => patch_total
       }
     end
   end
 
+  # Simple info about a rule, collected by the report xml parser
   class RuleInfo
     attr_reader :name, :info_url
 
@@ -35,6 +37,8 @@ module PmdTester
     end
   end
 
+  # A full report, created by the report XML parser,
+  # can be diffed with another report into a ReportDiff
   class Report
     attr_reader :violations_h,
                 :errors_h,
@@ -56,11 +60,11 @@ module PmdTester
 
     def self.empty
       new(
-          violations_h: {},
-          errors_h: {},
-          exec_time: 0,
-          timestamp: "0",
-          infos_by_rule: {}
+        violations_h: {},
+        errors_h: {},
+        exec_time: 0,
+        timestamp: '0',
+        infos_by_rule: {}
       )
     end
   end
@@ -70,7 +74,6 @@ module PmdTester
   # as well as the specific information of the diff report.
   class ReportDiff
     include PmdTester
-
 
     attr_reader :error_counts
     attr_reader :violation_counts
@@ -100,9 +103,9 @@ module PmdTester
     def rule_summaries
       @violation_diffs_by_rule.map do |(rule, counters)|
         {
-            'name' => rule,
-            'info_url' => @rule_infos_union[rule].info_url,
-            **counters.to_h
+          'name' => rule,
+          'info_url' => @rule_infos_union[rule].info_url,
+          **counters.to_h
         }
       end
     end
@@ -110,7 +113,6 @@ module PmdTester
     private
 
     def diff_with(patch_report)
-
       @violation_counts.patch_total = count_h_values(patch_report.violations_h)
       @error_counts.patch_total = count_h_values(patch_report.errors_h)
 
@@ -124,10 +126,10 @@ module PmdTester
       self
     end
 
-    def record_rule_info(v)
-      unless @rule_infos_union.has_key?(v.rule_name)
-        @rule_infos_union[v.rule_name] = RuleInfo.new(v.rule_name, v.info_url)
-      end
+    def record_rule_info(violation)
+      return if @rule_infos_union.key?(violation.rule_name)
+
+      @rule_infos_union[violation.rule_name] = RuleInfo.new(violation.rule_name, violation.info_url)
     end
 
     def getvdiff(rule_name)
@@ -137,7 +139,7 @@ module PmdTester
     end
 
     def count_h_values(base_violations_h)
-      base_violations_h.reduce(0) { |sum, (k, vs)| sum + vs.size }
+      base_violations_h.reduce(0) { |sum, (_k, vs)| sum + vs.size }
     end
 
     def count_by_rule(violations_h, base:)
@@ -175,16 +177,14 @@ module PmdTester
         different.sort_by!(&:sort_key)
         diff_h[fname] = different.delete_if do |v|
           v.branch == BASE &&
-              # try_merge will set v2.changed = true if it succeeds
-              different.any? { |v2| v2.try_merge?(v) }
+            # try_merge will set v2.changed = true if it succeeds
+            different.any? { |v2| v2.try_merge?(v) }
         end
       end
     end
 
     def count(item_h)
-      if item_h.is_a?(Array)
-        item_h = {'' => item_h}
-      end
+      item_h = { '' => item_h } if item_h.is_a?(Array)
 
       item_h.each do |_k, items|
         items.each do |item|
