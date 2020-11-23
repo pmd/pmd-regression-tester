@@ -14,6 +14,7 @@ Typeresolution is now supported by two new tags in the project-list.xml file:
 *   [#68](https://github.com/pmd/pmd-regression-tester/pull/68): Don't generate a dynamic ruleset if not needed
 *   [#69](https://github.com/pmd/pmd-regression-tester/pull/69): Detect single rules with auto-gen-config
 *   [#70](https://github.com/pmd/pmd-regression-tester/pull/70): Add link to PR on github in HTML report
+*   [#75](https://github.com/pmd/pmd-regression-tester/pull/75): Add new option "--error-recovery"
 
 ## External Contributions
 
