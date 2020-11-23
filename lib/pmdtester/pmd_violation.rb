@@ -27,7 +27,7 @@ module PmdTester
     #   </xs:simpleContent>
     # </xs:complexType>
 
-    attr_reader :fname, :info_url, :line, :old_line, :old_message, :rule_name, :ruleset_file
+    attr_reader :fname, :info_url, :line, :old_line, :old_message, :rule_name, :ruleset_name
     attr_accessor :message
 
     def initialize(attrs, branch, fname)
@@ -39,11 +39,7 @@ module PmdTester
       @line = attrs['beginline'].to_i
       @rule_name = attrs['rule']
 
-      rset = attrs['ruleset']
-      rset.delete!(' ')
-      rset.downcase!
-      rset << '.xml'
-      @ruleset_file = rset
+      @ruleset_name = attrs['ruleset'].freeze
 
       @changed = false
       @old_message = nil
@@ -56,8 +52,8 @@ module PmdTester
 
     def try_merge?(other)
       if branch != BASE && branch != other.branch && rule_name == other.rule_name &&
-        !changed? && # not already changed
-        (line == other.line || line_move?(other))
+         !changed? && # not already changed
+         (line == other.line || line_move?(other))
         @changed = true
         @old_message = other.message
         @old_line = other.line

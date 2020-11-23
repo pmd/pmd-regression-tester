@@ -85,7 +85,7 @@ module PmdTester
     def match_filter_set?(violation)
       return true if @filter_set.nil?
 
-      ruleset_attr = violation.attrs['ruleset'].delete(' ').downcase + '.xml'
+      ruleset_attr = violation.ruleset_name.delete(' ').downcase! << '.xml'
       return true if @filter_set.include?(ruleset_attr)
 
       rule_ref = "#{ruleset_attr}/#{violation.rule_name}"
