@@ -38,6 +38,13 @@ class TestOptions < Test::Unit::TestCase
     assert_equal(Options::DEFAULT_CONFIG_PATH, opts.base_config)
     assert_equal(Options::DEFAULT_CONFIG_PATH, opts.patch_config)
     assert_equal(Options::DEFAULT_LIST_PATH, opts.project_list)
+    assert_false(opts.error_recovery)
+  end
+
+  def test_enable_error_recovery
+    command_line = %w[-r /path/to/repo -b pmd_releases/6.2.0 -p master --error-recovery]
+    opts = Options.new(command_line)
+    assert_true(opts.error_recovery)
   end
 
   def test_single_mode

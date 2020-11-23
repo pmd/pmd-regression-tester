@@ -8,16 +8,17 @@ module PmdTester
   # projects and branch of pmd source code
   class PmdReportBuilder
     include PmdTester
-    def initialize(branch_config, projects, local_git_repo, pmd_branch_name, threads = 1)
-      @branch_config = branch_config
+    def initialize(projects, options, branch_config, branch_name)
       @projects = projects
-      @local_git_repo = local_git_repo
-      @pmd_branch_name = pmd_branch_name
-      @threads = threads
+      @local_git_repo = options.local_git_repo
+      @threads = options.threads
+      @error_recovery = options.error_recovery
+      @branch_config = branch_config
+      @pmd_branch_name = branch_name
       @pwd = Dir.getwd
 
-      @pmd_branch_details = PmdBranchDetail.new(pmd_branch_name)
-      @project_builder = ProjectBuilder.new(projects)
+      @pmd_branch_details = PmdBranchDetail.new(@pmd_branch_name)
+      @project_builder = ProjectBuilder.new(@projects)
     end
 
     def get_pmd_binary_file
@@ -82,8 +83,10 @@ module PmdTester
     end
 
     def generate_pmd_report(project)
+      error_recovery_options = @error_recovery ? 'PMD_JAVA_OPTS="-Dpmd.error_recovery -ea" ' : ''
       run_path = "target/pmd-bin-#{@pmd_version}/bin/run.sh"
-      pmd_cmd = "#{run_path} pmd -d #{project.local_source_path} -f xml " \
+      pmd_cmd = "#{error_recovery_options}" \
+                "#{run_path} pmd -d #{project.local_source_path} -f xml " \
                 "-R #{project.get_config_path(@pmd_branch_name)} " \
                 "-r #{project.get_pmd_report_path(@pmd_branch_name)} " \
                 "-failOnViolation false -t #{@threads} " \

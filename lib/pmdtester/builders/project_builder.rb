@@ -89,7 +89,7 @@ module PmdTester
     def execute_reset_cmd(type, tag)
       case type
       when 'git'
-        reset_cmd = "git reset --hard #{tag}"
+        reset_cmd = "git checkout #{tag}; git reset --hard #{tag}"
       when 'hg'
         reset_cmd = "hg up #{tag}"
       end
