@@ -15,6 +15,7 @@ Typeresolution is now supported by two new tags in the project-list.xml file:
 *   [#69](https://github.com/pmd/pmd-regression-tester/pull/69): Detect single rules with auto-gen-config
 *   [#70](https://github.com/pmd/pmd-regression-tester/pull/70): Add link to PR on github in HTML report
 *   [#74](https://github.com/pmd/pmd-regression-tester/pull/74): Merge violations that have just changed messages
+*   [#76](https://github.com/pmd/pmd-regression-tester/pull/76): Speedup XML parsing
 
 ## External Contributions
 
