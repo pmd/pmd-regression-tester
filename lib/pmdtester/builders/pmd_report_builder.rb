@@ -132,12 +132,7 @@ module PmdTester
         progress_logger.stop
         sum_time += execution_time
 
-        report_details = PmdReportDetail.new(
-          {
-            execution_time: execution_time,
-            timestamp: end_time
-          }
-        )
+        report_details = PmdReportDetail.new(execution_time: execution_time, timestamp: end_time)
         report_details.save(project.get_report_info_path(@pmd_branch_name))
         logger.info "#{project.name}'s PMD report was generated successfully"
       end

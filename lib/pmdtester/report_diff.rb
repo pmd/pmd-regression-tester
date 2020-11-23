@@ -16,6 +16,14 @@ module PmdTester
       new + removed + changed
     end
 
+    def merge!(other)
+      self.changed += other.changed
+      self.new += other.new
+      self.removed += other.removed
+      self.base_total += other.base_total
+      self.patch_total += other.patch_total
+    end
+
     def to_h
       {
         'changed' => changed,

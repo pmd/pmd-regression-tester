@@ -38,11 +38,7 @@ module PmdTester
   def compute_project_diffs(projects, base_branch, patch_branch, filter_set = nil)
     projects.each do |project|
       logger.info "Preparing report for #{project.name}"
-      project.report_diff = build_report_diff(project.get_pmd_report_path(base_branch),
-                                              project.get_pmd_report_path(patch_branch),
-                                              project.get_report_info_path(base_branch),
-                                              project.get_report_info_path(patch_branch),
-                                              filter_set)
+      project.compute_report_diff(base_branch, patch_branch, filter_set)
     end
   end
 

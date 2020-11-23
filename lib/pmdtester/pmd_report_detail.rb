@@ -28,7 +28,7 @@ module PmdTester
         PmdReportDetail.new(**hash)
       else
         puts "#{report_info_path} doesn't exist"
-        PmdReportDetail.new({})
+        PmdReportDetail.new
       end
     end
 

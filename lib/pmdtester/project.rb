@@ -3,6 +3,8 @@
 module PmdTester
   # This class represents all the information about the project
   class Project
+    include PmdTester
+
     REPOSITORIES_PATH = 'target/repositories'
 
     attr_reader :name
@@ -100,6 +102,14 @@ module PmdTester
 
     def local_source_path
       "#{REPOSITORIES_PATH}/#{@name}"
+    end
+
+    def compute_report_diff(base_branch, patch_branch, filter_set)
+      self.report_diff = build_report_diff(get_pmd_report_path(base_branch),
+                                           get_pmd_report_path(patch_branch),
+                                           get_report_info_path(base_branch),
+                                           get_report_info_path(patch_branch),
+                                           filter_set)
     end
   end
 end
