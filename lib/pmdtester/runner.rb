@@ -119,9 +119,9 @@ module PmdTester
 
     def summarize_diffs
       result = {
-        errors: { new: 0, removed: 0 },
+        errors: { new: 0, removed: 0, changed: 0 },
         violations: { new: 0, removed: 0, changed: 0 },
-        configerrors: { new: 0, removed: 0 }
+        configerrors: { new: 0, removed: 0, changed: 0 }
       }
 
       @projects.each do |project|
