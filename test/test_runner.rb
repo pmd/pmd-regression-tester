@@ -33,7 +33,9 @@ class TestRunner < Test::Unit::TestCase
   def test_single_mode_multithreading
     report_builder_mock = mock
     PmdReportBuilder.stubs(:new)
-                    .with(anything, anything, anything, anything, 4)
+                    .with do |_, options, _, _|
+                      options.threads == 4
+                    end
                     .returns(report_builder_mock)
                     .once
     report_builder_mock.stubs(:build).returns(PmdBranchDetail.new('test_branch')).once
@@ -59,7 +61,9 @@ class TestRunner < Test::Unit::TestCase
   def test_local_mode_multithreading
     report_builder_mock = mock
     PmdReportBuilder.stubs(:new)
-                    .with(anything, anything, anything, anything, 4)
+                    .with do |_, options, _, _|
+                      options.threads == 5
+                    end
                     .returns(report_builder_mock)
                     .twice
     report_builder_mock.stubs(:build).returns(PmdBranchDetail.new('some_branch')).twice
@@ -67,7 +71,7 @@ class TestRunner < Test::Unit::TestCase
     SummaryReportBuilder.any_instance.stubs(:write_all_projects).once
 
     argv = %w[-r target/repositories/pmd -b master -bc config/design.xml -p pmd_releases/6.1.0
-              -pc config/design.xml -l test/resources/project-test.xml -t 4]
+              -pc config/design.xml -l test/resources/project-test.xml -t 5]
     run_runner(argv)
   end
 
@@ -101,13 +105,15 @@ class TestRunner < Test::Unit::TestCase
 
     report_builder_mock = mock
     PmdReportBuilder.stubs(:new)
-                    .with(anything, anything, anything, anything, 4)
+                    .with do |_, options, _, _|
+                      options.threads == 3
+                    end
                     .returns(report_builder_mock)
                     .once
     report_builder_mock.stubs(:build).returns(PmdBranchDetail.new('some_branch')).once
     SummaryReportBuilder.any_instance.stubs(:write_all_projects).once
 
-    argv = %w[-r target/repositories/pmd -m online -b master -p pmd_releases/6.7.0 -t 4]
+    argv = %w[-r target/repositories/pmd -m online -b master -p pmd_releases/6.7.0 -t 3]
     run_runner(argv)
   end
 end

@@ -9,8 +9,8 @@ xsi:noNamespaceSchemaLocation="projectlist_1_1_0.xsd">
     <type>git</type>
     <connection>https://github.com/checkstyle/checkstyle</connection>
     <tag>checkstyle-8.0</tag>
-    <exclude-pattern>.*/src/test/resources-noncompilable/.*</exclude-pattern>
-    <exclude-pattern>.*/src/test/resources/.*</exclude-pattern>
+    <exclude-pattern>.*/target/test-classes/com/puppycrawl/tools/checkstyle/.*</exclude-pattern>
+    <exclude-pattern>.*/target/generated-sources/.*</exclude-pattern>
 
     <build-command><![CDATA[#!/usr/bin/env bash
 if test -e classpath.txt; then
@@ -23,6 +23,7 @@ mvn dependency:build-classpath -DincludeScope=test -Dmdep.outputFile=classpath.t
     <auxclasspath-command>echo -n "$(pwd)/target/classes:$(pwd)/target/test-classes:"; cat classpath.txt</auxclasspath-command>
   </project>
 
+  <!-- this project configuration is here, so that PMD's repo is cloned into target/repositories for integration tests -->
   <project>
     <name>pmd</name>
     <type>git</type>

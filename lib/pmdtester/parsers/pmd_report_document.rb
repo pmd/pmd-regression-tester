@@ -62,11 +62,9 @@ module PmdTester
         @violations.add_all(@current_filename, @current_violations)
         @current_filename = nil
       when 'violation'
-        v = @current_violation
-        if match_filter_set?(v)
-          v.message = finish_text!
-          @current_violations.push(v)
-          @infos_by_rules[v.rule_name] = RuleInfo.new(v.rule_name, v.info_url) unless @infos_by_rules.key?(v.rule_name)
+        if match_filter_set?(@current_violation)
+          @current_violation.message = finish_text!
+          @current_violations.push(@current_violation)
         end
         @current_violation = nil
       when 'error'
@@ -87,15 +85,12 @@ module PmdTester
     def match_filter_set?(violation)
       return true if @filter_set.nil?
 
-      @filter_set.each do |filter_rule_ref|
-        ruleset_attr = violation.ruleset_file
-        rule = violation.rule_name
-        rule_ref = "#{ruleset_attr}/#{rule}"
-        return true if filter_rule_ref.eql?(ruleset_attr)
-        return true if filter_rule_ref.eql?(rule_ref)
-      end
+      ruleset_attr = violation.attrs['ruleset'].delete(' ').downcase + '.xml'
+      return true if @filter_set.include?(ruleset_attr)
 
-      false
+      rule_ref = "#{ruleset_attr}/#{violation.rule_name}"
+
+      @filter_set.include?(rule_ref)
     end
   end
 end

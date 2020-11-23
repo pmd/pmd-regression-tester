@@ -31,6 +31,7 @@ module PmdTester
     attr_reader :debug_flag
     attr_accessor :filter_set
     attr_reader :keep_reports
+    attr_reader :error_recovery
 
     def initialize(argv)
       options = parse(argv)
@@ -48,6 +49,7 @@ module PmdTester
       @debug_flag = options[:d]
       @filter_set = nil
       @keep_reports = options.keep_reports?
+      @error_recovery = options.error_recovery?
 
       # if the 'config' option is selected then `config` overrides `base_config` and `patch_config`
       @base_config = @config if !@config.nil? && @mode == 'local'
@@ -94,6 +96,8 @@ module PmdTester
                'whether to keep old reports and skip running PMD again if possible'
         o.bool '-d', '--debug',
                'whether change log level to DEBUG to see more information'
+        o.bool '--error-recovery',
+               'enable error recovery mode when executing PMD. Might help to analyze errors.'
         o.on '-v', '--version' do
           puts VERSION
           exit
