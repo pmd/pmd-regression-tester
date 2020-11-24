@@ -38,7 +38,20 @@ class TestOptions < Test::Unit::TestCase
     assert_equal(Options::DEFAULT_CONFIG_PATH, opts.base_config)
     assert_equal(Options::DEFAULT_CONFIG_PATH, opts.patch_config)
     assert_equal(Options::DEFAULT_LIST_PATH, opts.project_list)
+    assert_equal(Options::DEFAULT_BASELINE_URL_PREFIX, opts.baseline_download_url_prefix)
     assert_false(opts.error_recovery)
+  end
+
+  def test_download_url_with_trailing_slash
+    command_line = %w[-r /path/to/repo -b pmd_releases/6.2.0 -p master --baseline-download-url https://example.com/]
+    opts = Options.new(command_line)
+    assert_equal('https://example.com/', opts.baseline_download_url_prefix)
+  end
+
+  def test_download_url_without_trailing_slash
+    command_line = %w[-r /path/to/repo -b pmd_releases/6.2.0 -p master --baseline-download-url https://example.com]
+    opts = Options.new(command_line)
+    assert_equal('https://example.com/', opts.baseline_download_url_prefix)
   end
 
   def test_enable_error_recovery
