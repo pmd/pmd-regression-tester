@@ -35,14 +35,27 @@ module PmdTester
         @current_filename = remove_work_dir!(attrs['name'])
         @current_violations = []
       when 'violation'
-        @current_violation = PmdViolation.new(attrs, @branch_name, @current_filename)
+        @current_violation = PmdViolation.new(
+          branch: @branch_name,
+          fname: @current_filename,
+          info_url: attrs['externalInfoUrl'],
+          bline: attrs['beginline'].to_i,
+          rule_name: attrs['rule'],
+          ruleset_name: attrs['ruleset'].freeze
+        )
       when 'error'
-        remove_work_dir!(attrs['msg'])
         @current_filename = remove_work_dir!(attrs['filename'])
-        @current_error = PmdError.new(attrs, @branch_name, @current_filename)
+
+        @current_error = PmdError.new(
+          branch: @branch_name,
+          filename: @current_filename,
+          short_message: remove_work_dir!(attrs['msg'])
+        )
       end
     end
 
+    # Modifies the string in place and returns it
+    # (this is what sub! does, except it returns nil if no replacement occurred)
     def remove_work_dir!(str)
       str.sub!(/#{@working_dir}/, '')
       str

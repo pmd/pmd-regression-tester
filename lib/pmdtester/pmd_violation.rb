@@ -30,21 +30,24 @@ module PmdTester
     attr_reader :fname, :info_url, :line, :old_line, :old_message, :rule_name, :ruleset_name
     attr_accessor :message
 
-    def initialize(attrs, branch, fname)
+    # rubocop:disable Metrics/ParameterLists
+    # Disable it: how is replacing a long parameter list with a single hash helping?
+    def initialize(branch:, fname:, info_url:, bline:, rule_name:, ruleset_name:)
       @branch = branch
       @fname = fname
       @message = ''
 
-      @info_url = attrs['externalInfoUrl']
-      @line = attrs['beginline'].to_i
-      @rule_name = attrs['rule']
+      @info_url = info_url
+      @line = bline
+      @rule_name = rule_name
 
-      @ruleset_name = attrs['ruleset'].freeze
+      @ruleset_name = ruleset_name
 
       @changed = false
       @old_message = nil
       @old_line = nil
     end
+    # rubocop:enable Metrics/ParameterLists
 
     def line_move?(other)
       message.eql?(other.message) && (line - other.line).abs <= 5

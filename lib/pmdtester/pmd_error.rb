@@ -21,11 +21,11 @@ module PmdTester
     attr_accessor :old_error
     attr_reader :filename, :short_message
 
-    def initialize(attrs, branch, filename)
+    def initialize(branch:, filename:, short_message:)
       @branch = branch
       @stack_trace = ''
       @changed = false
-      @short_message = attrs['msg']
+      @short_message = short_message
       @filename = filename
     end
 
