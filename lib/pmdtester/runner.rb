@@ -47,7 +47,7 @@ module PmdTester
     def run_online_mode
       logger.info "Mode: #{@options.mode}"
 
-      baseline_path = download_baseline(@options.base_branch)
+      baseline_path = download_baseline(@options.baseline_download_url_prefix, @options.base_branch)
 
       project_list = determine_project_list_for_online_mode(baseline_path)
       get_projects(project_list)
@@ -83,13 +83,13 @@ module PmdTester
       project_list
     end
 
-    def download_baseline(branch_name)
+    def download_baseline(url_prefix, branch_name)
       branch_filename = PmdBranchDetail.branch_filename(branch_name)
       zip_filename = "#{branch_filename}-baseline.zip"
       target_path = 'target/reports'
       FileUtils.mkdir_p(target_path) unless File.directory?(target_path)
 
-      url = get_baseline_url(zip_filename)
+      url = get_baseline_url(url_prefix, zip_filename)
       wget_cmd = "wget --timestamping #{url}"
       unzip_cmd = "unzip -qo #{zip_filename}"
 
@@ -101,8 +101,8 @@ module PmdTester
       "#{target_path}/#{branch_filename}"
     end
 
-    def get_baseline_url(zip_filename)
-      "https://sourceforge.net/projects/pmd/files/pmd-regression-tester/#{zip_filename}"
+    def get_baseline_url(url_prefix, zip_filename)
+      "#{url_prefix}#{zip_filename}"
     end
 
     def run_single_mode

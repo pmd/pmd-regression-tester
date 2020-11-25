@@ -16,6 +16,7 @@ module PmdTester
     SINGLE = 'single'
     DEFAULT_CONFIG_PATH = ResourceLocator.locate('config/all-java.xml')
     DEFAULT_LIST_PATH = ResourceLocator.locate('config/project-list.xml')
+    DEFAULT_BASELINE_URL_PREFIX = 'https://sourceforge.net/projects/pmd/files/pmd-regression-tester/'
 
     attr_reader :local_git_repo
     attr_reader :base_branch
@@ -32,6 +33,7 @@ module PmdTester
     attr_accessor :filter_set
     attr_reader :keep_reports
     attr_reader :error_recovery
+    attr_reader :baseline_download_url_prefix
 
     def initialize(argv)
       options = parse(argv)
@@ -50,6 +52,12 @@ module PmdTester
       @filter_set = nil
       @keep_reports = options.keep_reports?
       @error_recovery = options.error_recovery?
+      url = options[:baseline_download_url]
+      @baseline_download_url_prefix = if url[-1] == '/'
+                                        url
+                                      else
+                                        "#{url}/"
+                                      end
 
       # if the 'config' option is selected then `config` overrides `base_config` and `patch_config`
       @base_config = @config if !@config.nil? && @mode == 'local'
@@ -98,6 +106,9 @@ module PmdTester
                'whether change log level to DEBUG to see more information'
         o.bool '--error-recovery',
                'enable error recovery mode when executing PMD. Might help to analyze errors.'
+        o.string '--baseline-download-url',
+                 'download url prefix from where to download the baseline in online mode',
+                 default: DEFAULT_BASELINE_URL_PREFIX
         o.on '-v', '--version' do
           puts VERSION
           exit

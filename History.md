@@ -17,6 +17,7 @@ Typeresolution is now supported by two new tags in the project-list.xml file:
 *   [#74](https://github.com/pmd/pmd-regression-tester/pull/74): Merge violations that have just changed messages
 *   [#75](https://github.com/pmd/pmd-regression-tester/pull/75): Add new option "--error-recovery"
 *   [#76](https://github.com/pmd/pmd-regression-tester/pull/76): Speedup XML parsing
+*   [#79](https://github.com/pmd/pmd-regression-tester/pull/79): Add new configuration option "--baseline-download-url"
 
 ## External Contributions
 
