@@ -1,33 +1,37 @@
 /*
     This is what's included in project_diff_report.html
     to make the violation table work.
+
+    It depends on the `project` global var, which is generated
+    in another JS file by LiquidProjectRenderer
  */
 
-function makeCodeLink(violation) {
-    let template = project.source_link_template
-    template = template.replace('{file}', project.file_index[violation.f])
-    template = template.replace('{line}', violation.l);
-    return template
-}
-
-function extractFilename(path) {
-    const pathArray = path.split("/");
-    return pathArray[pathArray.length - 1];
-}
-
-const cssClass = {
-    "+": "added",
-    "-": "removed",
-    "~": "changed",
-}
-
-const typeDisplay = {
-    "+": "Added",
-    "-": "Removed",
-    "~": "Changed",
-}
-
 $(document).ready(function () {
+
+    function makeCodeLink(violation) {
+        let template = project.source_link_template
+        template = template.replace('{file}', project.file_index[violation.f])
+        template = template.replace('{line}', violation.l);
+        return template
+    }
+
+    function extractFilename(path) {
+        const pathArray = path.split("/");
+        return pathArray[pathArray.length - 1];
+    }
+
+    const cssClass = {
+        "+": "added",
+        "-": "removed",
+        "~": "changed",
+    }
+
+    const typeDisplay = {
+        "+": "Added",
+        "-": "Removed",
+        "~": "Changed",
+    }
+
     $('#violationsTable').DataTable({
         data: project.violations,
         columns: [
