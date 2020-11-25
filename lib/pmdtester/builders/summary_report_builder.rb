@@ -21,7 +21,7 @@ module PmdTester
       FileUtils.mkdir_p(REPORT_DIR)
       write_structure(REPORT_DIR)
       write_index(REPORT_DIR, base_details, patch_details, projects)
-      logger.info 'Built summary report successfully!'
+      logger.info "Built summary report successfully in #{REPORT_DIR}!"
     end
 
     private

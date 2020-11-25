@@ -2,10 +2,19 @@
 
 ## New and Noteworthy
 
-At least ruby 2.7 is required.
+* At least ruby 2.7 is required.
 
-Typeresolution is now supported by two new tags in the project-list.xml file:
+* Typeresolution is now supported by two new tags in the project-list.xml file:
 `build-command` and `auxclasspath-command`. For details, see pull request [#72](https://github.com/pmd/pmd-regression-tester/pull/72).
+
+* As part of [#74](https://github.com/pmd/pmd-regression-tester/pull/74) runner now returns a single hash
+  with the summarized values instead of multiple numbers:
+
+```
+summary = PmdTester::Runner.new(argv).run
+puts summary
+# {:errors=>{:new=>0, :removed=>0}, :violations=>{:new=>0, :removed=>0, :changed=>0}, :configerrors=>{:new=>0, :removed=>0}}
+```
 
 ## Fixed Issues
 
@@ -17,6 +26,7 @@ Typeresolution is now supported by two new tags in the project-list.xml file:
 *   [#74](https://github.com/pmd/pmd-regression-tester/pull/74): Merge violations that have just changed messages
 *   [#75](https://github.com/pmd/pmd-regression-tester/pull/75): Add new option "--error-recovery"
 *   [#76](https://github.com/pmd/pmd-regression-tester/pull/76): Speedup XML parsing
+*   [#79](https://github.com/pmd/pmd-regression-tester/pull/79): Add new configuration option "--baseline-download-url"
 
 ## External Contributions
 

@@ -27,6 +27,7 @@ module PmdTester
 
       index = File.new(target_file, 'w')
       index&.puts contents # may be nil when stubbing
+      logger&.info "Written #{target_file}"
     ensure
       index&.close
     end
