@@ -25,7 +25,7 @@ module PmdTester
       index.puts html_report
       index.close
 
-      logger.info 'Built summary report successfully!'
+      logger.info "Built summary report successfully in #{REPORT_DIR}!"
     end
 
     def get_branch_details(branch_name)

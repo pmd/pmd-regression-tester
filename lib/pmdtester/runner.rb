@@ -90,6 +90,7 @@ module PmdTester
       FileUtils.mkdir_p(target_path) unless File.directory?(target_path)
 
       url = get_baseline_url(url_prefix, zip_filename)
+      logger.info "Downloading baseline for branch #{branch_name} from #{url}"
       wget_cmd = "wget --timestamping #{url}"
       unzip_cmd = "unzip -qo #{zip_filename}"
 

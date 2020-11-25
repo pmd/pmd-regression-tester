@@ -23,7 +23,8 @@ module PmdTester
       index.puts html_report
       index.close
 
-      logger.info "Built difference report of #{project.name} successfully!"
+      logger.info "Built difference report of #{project.name} " \
+                  "successfully in #{project.target_diff_report_path}!"
     end
 
     def build_body(doc)
