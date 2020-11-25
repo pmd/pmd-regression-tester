@@ -34,6 +34,7 @@ module PmdTester
   VERSION = '1.1.0-SNAPSHOT'
   BASE = 'base'
   PATCH = 'patch'
+  PR_NUM_ENV_VAR = 'PMD_CI_PULL_REQUEST_NUMBER' # see PmdBranchDetail
 
   def logger
     PmdTester.logger

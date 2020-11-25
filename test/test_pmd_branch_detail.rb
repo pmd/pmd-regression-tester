@@ -5,15 +5,15 @@ require 'test_helper'
 # Unit test class for PmdTester::PmdBranchDetail
 class TestPmdBranchDetail < Test::Unit::TestCase
   def setup
-    @old_pr = ENV['TRAVIS_PULL_REQUEST']
+    @old_pr = ENV[PmdTester::PR_NUM_ENV_VAR]
   end
 
   def cleanup
-    ENV['TRAVIS_PULL_REQUEST'] = @old_pr
+    ENV[PmdTester::PR_NUM_ENV_VAR] = @old_pr
   end
 
   def test_save_and_load
-    ENV['TRAVIS_PULL_REQUEST'] = '1234'
+    ENV[PmdTester::PR_NUM_ENV_VAR] = '1234'
     details = PmdTester::PmdBranchDetail.new('test_branch')
     details.branch_last_message = 'test message'
     details.branch_last_sha = 'test sha'

@@ -29,8 +29,8 @@
                     <td><a href="{{base.tree_url}}">{{base.name}} {{ base.tip.sha | truncate: 8, "" }}</a>: {{ base.tip.message }}</td>
                     <td>
                         <a href="{{patch.tree_url}}">{{patch.name}} {{ patch.tip.sha | truncate: 8, "" }}</a>: {{ patch.tip.message }}
-                        {% if pr_number %}
-                        <span class="external-link-secondary"><a href="https://github.com/pmd/pmd/pull/{{pr_number}}">PR #{{pr_number}}</a></span>
+                        {% if patch.pr_number %}
+                        <span class="external-link-secondary"><a href="https://github.com/pmd/pmd/pull/{{patch.pr_number}}">PR #{{patch.pr_number}}</a></span>
                         {% endif %}
                         <span class="external-link-secondary"><a href="{{ comparison_url }}">[Compare]</a></span>
                     </td>

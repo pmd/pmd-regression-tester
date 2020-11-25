@@ -29,8 +29,10 @@ module PmdTester
       @execution_time = 0
       # the result of command 'java -version' is going to stderr
       @jdk_version = Cmd.stderr_of('java -version')
-      @language = ENV['LANG']
-      @pull_request = ENV['TRAVIS_PULL_REQUEST']
+      @language = ENV['LANG'] # the locale
+
+      prnum = ENV[PR_NUM_ENV_VAR]
+      @pull_request = prnum == 'false' ? nil : prnum
     end
 
     def self.load(branch_name, logger)

@@ -47,12 +47,10 @@ module PmdTester
         }
       end
 
-      prnum = ENV['TRAVIS_PULL_REQUEST']
       env = {
-        'comparison_url' => nil,
+        'comparison_url' => nil, # todo
         'base' => to_liquid(base_details),
         'patch' => to_liquid(patch_details),
-        'pr_number' => prnum == 'false' ? nil : prnum,
         'projects' => projects
       }
       logger.info 'Writing /index.html...'
@@ -70,7 +68,8 @@ module PmdTester
         'execution_time' => details.execution_time,
         'jdk_info' => details.jdk_version,
         'locale' => details.language,
-        'config_url' => 'todo'
+        'config_url' => 'todo',  # todo
+        'pr_number' => details.pull_request
       }
     end
   end
