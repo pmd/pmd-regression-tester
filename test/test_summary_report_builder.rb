@@ -5,7 +5,7 @@ require 'test_helper'
 # Unit test class for PmdTester::SummaryReportBuilder
 class TestSummaryReportBuilder < Test::Unit::TestCase
   include TestUtils
-  include PmdTester
+  include PmdTester::PmdTesterUtils
   def setup
     `rake clean`
   end

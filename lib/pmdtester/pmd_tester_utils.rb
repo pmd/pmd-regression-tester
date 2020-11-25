@@ -55,4 +55,3 @@ module PmdTester
     end
   end
 end
-
