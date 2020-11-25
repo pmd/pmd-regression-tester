@@ -4,7 +4,7 @@ module PmdTester
   # The Runner is a class responsible of organizing all PmdTester modules
   # and running the PmdTester
   class Runner
-    include PmdTester
+    include PmdTesterUtils
 
     def initialize(argv)
       @options = Options.new(argv)

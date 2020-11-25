@@ -3,7 +3,7 @@
 module PmdTester
   # This class represents all the information about the project
   class Project
-    include PmdTester
+    include PmdTesterUtils
 
     REPOSITORIES_PATH = 'target/repositories'
 

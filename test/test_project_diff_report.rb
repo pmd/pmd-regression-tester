@@ -4,7 +4,7 @@ require 'test_helper'
 
 # Unit test class for PmdTester::DiffReportBuilder
 class TestProjectDiffReport < Test::Unit::TestCase
-  include PmdTester
+  include PmdTester::PmdTesterUtils
   include TestUtils
   BASE_PMD_REPORT_PATH =
     'test/resources/html_report_builder/test_html_report_builder_base.xml'
