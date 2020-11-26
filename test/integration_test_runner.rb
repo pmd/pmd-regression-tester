@@ -27,7 +27,8 @@ class IntegrationTestRunner < Test::Unit::TestCase
 
   def test_single_mode
     argv = '-r target/repositories/pmd -m single' \
-              ' -p pmd_releases/6.7.0 -pc config/design.xml -l test/resources/project-test.xml'
+              ' -p pmd_releases/6.7.0 -pc config/design.xml' \
+              ' -l test/resources/integration_test_runner/project-list-single.xml'
 
     system("bundle exec bin/pmdtester #{argv}")
 
@@ -42,7 +43,9 @@ class IntegrationTestRunner < Test::Unit::TestCase
 
   def test_single_mode_with_html_flag_option
     argv = '-r target/repositories/pmd -m single' \
-              ' -p pmd_releases/6.7.0 -pc config/design.xml -l test/resources/project-test.xml -f'
+              ' -p pmd_releases/6.7.0 -pc config/design.xml' \
+              ' -l test/resources/integration_test_runner/project-list-single.xml' \
+              ' -f'
 
     system("bundle exec bin/pmdtester #{argv}")
 

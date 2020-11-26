@@ -12,6 +12,7 @@ module PmdTester
 
     def run
       clean unless @options.keep_reports
+
       case @options.mode
       when Options::LOCAL
         run_local_mode
@@ -35,8 +36,8 @@ module PmdTester
       rule_sets = RuleSetBuilder.new(@options).build if @options.auto_config_flag
       return if rule_sets&.empty?
 
-      base_branch_details = make_branch_details(config: @options.base_config, branch: @options.base_branch)
-      patch_branch_details = make_branch_details(config: @options.patch_config, branch: @options.patch_branch)
+      base_branch_details = create_pmd_report(config: @options.base_config, branch: @options.base_branch)
+      patch_branch_details = create_pmd_report(config: @options.patch_config, branch: @options.patch_branch)
 
       build_html_reports(@projects, base_branch_details, patch_branch_details)
     end
@@ -60,7 +61,7 @@ module PmdTester
         logger.info "Using config #{@options.patch_config} which might differ from baseline"
       end
 
-      patch_branch_details = make_branch_details(config: @options.patch_config, branch: @options.patch_branch)
+      patch_branch_details = create_pmd_report(config: @options.patch_config, branch: @options.patch_branch)
 
       base_branch_details = PmdBranchDetail.load(@options.base_branch, logger)
       build_html_reports(@projects, base_branch_details, patch_branch_details)
@@ -106,12 +107,16 @@ module PmdTester
       logger.info "Mode: #{@options.mode}"
 
       get_projects(@options.project_list) unless @options.nil?
-      patch_branch_details = make_branch_details(config: @options.patch_config, branch: @options.patch_branch)
+      patch_branch_details = create_pmd_report(config: @options.patch_config, branch: @options.patch_branch)
       # copy list of projects file to the patch baseline
       FileUtils.cp(@options.project_list, patch_branch_details.target_branch_project_list_path)
 
-      base_branch_details = PmdBranchDetail.load(@options.base_branch, logger)
-      build_html_reports(@projects, base_branch_details, patch_branch_details) unless @options.html_flag
+      # for creating a baseline, no html report is needed
+      return if @options.html_flag
+
+      # in single mode, we don't have a base branch, only a patch branch...
+      empty_base_branch_details = PmdBranchDetail.load('single-mode', logger)
+      build_html_reports(@projects, empty_base_branch_details, patch_branch_details)
     end
 
     def get_projects(file_path)
@@ -125,8 +130,11 @@ module PmdTester
       @projects.each do |project|
         diff = project.report_diff
 
-        error_total.merge!(diff.error_counts)
-        violations_total.merge!(diff.violation_counts)
+        # in case we are in single mode, there might be no diffs (only the patch branch is available)
+        unless diff.nil?
+          error_total.merge!(diff.error_counts)
+          violations_total.merge!(diff.violation_counts)
+        end
       end
 
       {
@@ -138,7 +146,7 @@ module PmdTester
 
     private
 
-    def make_branch_details(config:, branch:)
+    def create_pmd_report(config:, branch:)
       PmdReportBuilder.new(@projects, @options, config, branch).build
     end
   end
