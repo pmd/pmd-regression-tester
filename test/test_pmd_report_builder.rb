@@ -104,8 +104,8 @@ class TestPmdReportBuilder < Test::Unit::TestCase
   def record_expectations(sha1_head, sha1_base, zip_file_exists)
     Dir.stubs(:getwd).returns('current-dir').once
     Dir.stubs(:chdir).with('target/repositories/pmd').yields.once
-    PmdTester::Cmd.stubs(:execute).with('git rev-parse HEAD').returns(sha1_head).once
-    PmdTester::Cmd.stubs(:execute).with('git rev-parse master').returns(sha1_base).once
+    PmdTester::Cmd.stubs(:execute).with('git rev-parse HEAD^{commit}').returns(sha1_head).once
+    PmdTester::Cmd.stubs(:execute).with('git rev-parse master^{commit}').returns(sha1_base).once
     PmdTester::Cmd.stubs(:execute).with('./mvnw -q -Dexec.executable="echo" ' \
                   "-Dexec.args='${project.version}' " \
                   '--non-recursive org.codehaus.mojo:exec-maven-plugin:1.5.0:exec')
