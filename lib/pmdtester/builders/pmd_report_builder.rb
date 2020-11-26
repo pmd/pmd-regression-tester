@@ -24,10 +24,13 @@ module PmdTester
     def get_pmd_binary_file
       logger.info "#{@pmd_branch_name}: Start packaging PMD"
       Dir.chdir(@local_git_repo) do
-        current_head_sha = Cmd.execute('git rev-parse HEAD')
-        current_branch_sha = Cmd.execute("git rev-parse #{@pmd_branch_name}")
+        current_head_sha = get_last_commit_sha
+        current_branch_sha = Cmd.execute("git rev-parse #{@pmd_branch_name}^{commit}")
 
         @pmd_version = determine_pmd_version
+
+        logger.debug "pmd_version in HEAD: #{@pmd_version}, " \
+                     "head_sha=#{current_head_sha}, branch_sha=#{current_branch_sha}"
 
         # in case we are already on the correct branch
         # and a binary zip already exists...
@@ -73,7 +76,7 @@ module PmdTester
     end
 
     def get_last_commit_sha
-      get_last_commit_sha_cmd = 'git rev-parse HEAD'
+      get_last_commit_sha_cmd = 'git rev-parse HEAD^{commit}'
       Cmd.execute(get_last_commit_sha_cmd)
     end
 
