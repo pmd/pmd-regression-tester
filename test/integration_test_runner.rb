@@ -56,10 +56,11 @@ class IntegrationTestRunner < Test::Unit::TestCase
   end
 
   def test_online_mode
-    # This test depends on the file test_branch_2-baseline.zip being available on sourceforge:
-    # https://sourceforge.net/projects/pmd/files/pmd-regression-tester/test_branch_2-baseline.zip/download
+    # This test depends on the file test_branch_2-baseline.zip being available at:
+    # https://pmd-code.org/pmd-regression-tester/test_branch_2-baseline.zip
     base_branch = 'test_branch_2'
-    argv = "-r target/repositories/pmd -m online -b #{base_branch} -p pmd_releases/6.7.0"
+    argv = "-r target/repositories/pmd -m online -b #{base_branch} -p pmd_releases/6.7.0 " \
+        '--baseline-download-url https://pmd-code.org/pmd-regression-tester/'
 
     system("bundle exec bin/pmdtester #{argv}")
 
@@ -76,15 +77,16 @@ class IntegrationTestRunner < Test::Unit::TestCase
   end
 
   def test_online_mode_different_project_list_and_config
-    # This test depends on the file pmd_releases_6.6.0-baseline.zip being available on sourceforge:
-    # https://sourceforge.net/projects/pmd/files/pmd-regression-tester/pmd_releases_6.6.0-baseline.zip/download
+    # This test depends on the file pmd_releases_6.6.0-baseline.zip being available at:
+    # https://pmd-code.org/pmd-regression-tester/pmd_releases_6.6.0-baseline.zip
     argv = '--local-git-repo target/repositories/pmd '\
            '--mode online '\
            '--base-branch pmd_releases/6.6.0 '\
            '--patch-branch pmd_releases/6.7.0 '\
            '--patch-config test/resources/integration_test_runner/patch-config.xml '\
            '--list-of-project test/resources/integration_test_runner/project-list.xml '\
-           '--auto-gen-config'
+           '--auto-gen-config ' \
+           '--baseline-download-url https://pmd-code.org/pmd-regression-tester/'
 
     system("bundle exec bin/pmdtester #{argv}")
 
