@@ -10,10 +10,10 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = Gem::Requirement.new("> 1.3.1".freeze) if s.respond_to? :required_rubygems_version=
   s.metadata = { "bug_tracker_uri" => "https://github.com/pmd/pmd-regression-tester/issues", "homepage_uri" => "https://pmd.github.io", "source_code_uri" => "https://github.com/pmd/pmd-regression-tester" } if s.respond_to? :metadata=
   s.require_paths = ["lib".freeze]
-  s.authors = ["Andreas Dangel".freeze, "Binguo Bao".freeze]
-  s.date = "2020-11-25"
+  s.authors = ["Andreas Dangel".freeze, "Binguo Bao".freeze, "Cl\u00E9ment Fournier".freeze]
+  s.date = "2020-11-26"
   s.description = "A regression testing tool ensure that new problems and unexpected behaviors will not be introduced to PMD project after fixing an issue , and new rules can work as expected.".freeze
-  s.email = ["andreas.dangel@pmd-code.org".freeze, "djydewang@gmail.com".freeze]
+  s.email = ["andreas.dangel@pmd-code.org".freeze, "djydewang@gmail.com".freeze, "clement.fournier76@gmail.com".freeze]
   s.executables = ["pmdtester".freeze]
   s.extra_rdoc_files = ["History.md".freeze, "Manifest.txt".freeze, "README.rdoc".freeze]
   s.files = [".ci/build.sh".freeze, ".ci/files/env.gpg".freeze, ".github/workflows/build.yml".freeze, ".gitignore".freeze, ".hoerc".freeze, ".rubocop.yml".freeze, ".rubocop_todo.yml".freeze, ".ruby-version".freeze, "Gemfile".freeze, "History.md".freeze, "LICENSE".freeze, "Manifest.txt".freeze, "README.rdoc".freeze, "Rakefile".freeze, "bin/pmdtester".freeze, "config/all-java.xml".freeze, "config/design.xml".freeze, "config/project-list.xml".freeze, "config/projectlist_1_0_0.xsd".freeze, "config/projectlist_1_1_0.xsd".freeze, "lib/pmdtester.rb".freeze, "lib/pmdtester/builders/liquid_renderer.rb".freeze, "lib/pmdtester/builders/pmd_report_builder.rb".freeze, "lib/pmdtester/builders/project_builder.rb".freeze, "lib/pmdtester/builders/project_hasher.rb".freeze, "lib/pmdtester/builders/rule_set_builder.rb".freeze, "lib/pmdtester/builders/simple_progress_logger.rb".freeze, "lib/pmdtester/builders/summary_report_builder.rb".freeze, "lib/pmdtester/cmd.rb".freeze, "lib/pmdtester/collection_by_file.rb".freeze, "lib/pmdtester/parsers/options.rb".freeze, "lib/pmdtester/parsers/pmd_report_document.rb".freeze, "lib/pmdtester/parsers/projects_parser.rb".freeze, "lib/pmdtester/pmd_branch_detail.rb".freeze, "lib/pmdtester/pmd_configerror.rb".freeze, "lib/pmdtester/pmd_error.rb".freeze, "lib/pmdtester/pmd_report_detail.rb".freeze, "lib/pmdtester/pmd_tester_utils.rb".freeze, "lib/pmdtester/pmd_violation.rb".freeze, "lib/pmdtester/project.rb".freeze, "lib/pmdtester/report_diff.rb".freeze, "lib/pmdtester/resource_locator.rb".freeze, "lib/pmdtester/runner.rb".freeze, "pmdtester.gemspec".freeze, "resources/_includes/diff_pill_row.html".freeze, "resources/css/bootstrap.min.css".freeze, "resources/css/datatables.min.css".freeze, "resources/css/pmd-tester.css".freeze, "resources/js/bootstrap.min.js".freeze, "resources/js/datatables.min.js".freeze, "resources/js/jquery-3.2.1.slim.min.js".freeze, "resources/js/jquery.min.js".freeze, "resources/js/popper.min.js".freeze, "resources/js/project-report.js".freeze, "resources/project_diff_report.html".freeze, "resources/project_index.html".freeze]
@@ -21,7 +21,7 @@ Gem::Specification.new do |s|
   s.licenses = ["BSD-2-Clause".freeze]
   s.rdoc_options = ["--main".freeze, "README.rdoc".freeze]
   s.required_ruby_version = Gem::Requirement.new(">= 2.7".freeze)
-  s.rubygems_version = "3.1.2".freeze
+  s.rubygems_version = "3.1.4".freeze
   s.summary = "A regression testing tool ensure that new problems and unexpected behaviors will not be introduced to PMD project after fixing an issue , and new rules can work as expected.".freeze
 
   if s.respond_to? :specification_version then
