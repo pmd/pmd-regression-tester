@@ -170,7 +170,8 @@ module PmdTester
 
       # working dir is dirty....
       # we don't allow this because we need the SHA to address the zip file
-      logger.error 'Won\'t build without a clean working tree, commit your changes'
+      logger.error "#{@pmd_branch_name}: Won\'t build without a clean working tree, " \
+                   'commit your changes'
     end
 
     def work_dir
