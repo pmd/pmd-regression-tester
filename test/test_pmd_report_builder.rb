@@ -4,6 +4,11 @@ require 'test_helper'
 
 # Unit test class for PmdReportBuilder
 class TestPmdReportBuilder < Test::Unit::TestCase
+  def setup
+    # pmd version that is simulated in tests when pmd should be built
+    @pmd_version = '6.10.0-SNAPSHOT'
+  end
+
   def test_build_skip
     projects = []
     argv = %w[-r target/repositories/pmd -b master -p pmd_releases/6.1.0
@@ -28,10 +33,10 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     record_expectations('sha1abc', 'sha1abc', false)
     PmdTester::Cmd.stubs(:execute).with('./mvnw clean package -Dmaven.test.skip=true' \
                   ' -Dmaven.javadoc.skip=true -Dmaven.source.skip=true -Dcheckstyle.skip=true').once
-    PmdTester::Cmd.stubs(:execute).with('unzip -qo pmd-dist/target/pmd-bin-6.10.0-SNAPSHOT.zip' \
+    PmdTester::Cmd.stubs(:execute).with("unzip -qo pmd-dist/target/pmd-bin-#{@pmd_version}.zip" \
                   ' -d pmd-dist/target/exploded').once
-    PmdTester::Cmd.stubs(:execute).with('mv pmd-dist/target/exploded/pmd-bin-6.10.0-SNAPSHOT' \
-                  " #{Dir.getwd}/target/pmd-bin-sha1abc").once
+    PmdTester::Cmd.stubs(:execute).with("mv pmd-dist/target/exploded/pmd-bin-#{@pmd_version}" \
+                  " #{Dir.getwd}/target/pmd-bin-#{@pmd_version}-master-sha1abc").once
     record_expectations_after_build
 
     PmdTester::PmdReportBuilder
@@ -89,7 +94,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     PmdTester::SimpleProgressLogger.any_instance.stubs(:start).once
     PmdTester::SimpleProgressLogger.any_instance.stubs(:stop).once
     error_prefix = error ? 'PMD_JAVA_OPTS="-Dpmd.error_recovery -ea" ' : ''
-    distro_path = "#{Dir.getwd}/target/pmd-bin-#{sha1}"
+    distro_path = "#{Dir.getwd}/target/pmd-bin-#{@pmd_version}-master-#{sha1}"
     PmdTester::Cmd.stubs(:execute)
                   .with("#{error_prefix}" \
                         "#{distro_path}/bin/run.sh " \
@@ -110,13 +115,13 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     PmdTester::Cmd.stubs(:execute).with('./mvnw -q -Dexec.executable="echo" ' \
                   "-Dexec.args='${project.version}' " \
                   '--non-recursive org.codehaus.mojo:exec-maven-plugin:1.5.0:exec')
-                  .returns('6.10.0-SNAPSHOT').at_least(1).at_most(2)
+                  .returns(@pmd_version).at_least(1).at_most(2)
     PmdTester::Cmd.stubs(:execute).with('git status --porcelain').returns('').once
 
     # back into get_pmd_binary_file
     PmdTester::Cmd.stubs(:execute).with('git rev-parse HEAD^{commit}').returns(sha1_head).once
     # PMD binary might not exist yet...
-    distro_path = "target/pmd-bin-#{sha1_base}"
+    distro_path = "target/pmd-bin-#{@pmd_version}-master-#{sha1_base}"
     if zip_file_exists
       FileUtils.mkdir_p(distro_path)
     elsif File.exist?(distro_path)

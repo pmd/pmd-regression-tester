@@ -169,8 +169,11 @@ module PmdTester
     end
 
     # path to the unzipped distribution
+    # e.g. <cwd>/pmd-bin-<version>-<branch>-<sha>
     def saved_distro_path(build_sha)
-      "#{work_dir}/pmd-bin-#{build_sha}"
+      "#{work_dir}/pmd-bin-#{@pmd_version}" \
+      "-#{PmdBranchDetail.branch_filename(@pmd_branch_name)}" \
+      "-#{build_sha}"
     end
 
     def wd_has_dirty_git_changes
