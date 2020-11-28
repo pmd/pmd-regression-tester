@@ -7,11 +7,19 @@ class TestPmdReportBuilder < Test::Unit::TestCase
   def setup
     # pmd version that is simulated in tests when pmd should be built
     @pmd_version = '6.10.0-SNAPSHOT'
+  end
 
+  def teardown
+    pmd_repo = 'target/repositories/pmd'
     # pre-built PMD binary
-    pmd_binary = "target/repositories/pmd/pmd-dist/target/pmd-bin-#{@pmd_version}.zip"
-
+    pmd_binary = "#{pmd_repo}/pmd-dist/target/pmd-bin-#{@pmd_version}.zip"
     File.unlink pmd_binary if File.exist? pmd_binary
+
+    # only deleting empty directories in order to leave pmd_repo intact
+    # for local dev environment, where a local pmd clone might already exist
+    ["#{pmd_repo}/pmd-dist/target", "#{pmd_repo}/pmd-dist", pmd_repo].each do |d|
+      Dir.unlink(d) if Dir.exist?(d) && Dir.empty?(d)
+    end
   end
 
   def test_build_skip
