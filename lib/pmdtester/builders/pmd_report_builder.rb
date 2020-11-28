@@ -49,17 +49,26 @@ module PmdTester
 
     # builds pmd on currently checked out branch
     def build_pmd(into_dir:)
-      logger.info "#{@pmd_branch_name}: Building PMD #{@pmd_version}..."
-      package_cmd = './mvnw clean package' \
-                    ' -Dmaven.test.skip=true' \
-                    ' -Dmaven.javadoc.skip=true' \
-                    ' -Dmaven.source.skip=true' \
-                    ' -Dcheckstyle.skip=true'
-      Cmd.execute(package_cmd)
+      # in CI there might have been a build performed already. In that case
+      # we reuse the build result, otherwise we build PMD freshly
+      pmd_dist_target = "pmd-dist/target/pmd-bin-#{@pmd_version}.zip"
+      if File.exist?("#{@local_git_repo}/#{pmd_dist_target}")
+        # that's a warning, because we don't know, whether this build really
+        # belongs to the current branch or whether it's from a previous branch.
+        # In CI, that's not a problem, because the workspace is always fresh.
+        logger.warn "#{@pmd_branch_name}: Reusing already existing #{pmd_dist_target}"
+      else
+        logger.info "#{@pmd_branch_name}: Building PMD #{@pmd_version}..."
+        package_cmd = './mvnw clean package' \
+                      ' -Dmaven.test.skip=true' \
+                      ' -Dmaven.javadoc.skip=true' \
+                      ' -Dmaven.source.skip=true' \
+                      ' -Dcheckstyle.skip=true'
+        Cmd.execute(package_cmd)
+      end
 
       logger.info "#{@pmd_branch_name}: Extracting the zip"
-      Cmd.execute("unzip -qo pmd-dist/target/pmd-bin-#{@pmd_version}.zip" \
-                  ' -d pmd-dist/target/exploded')
+      Cmd.execute("unzip -qo #{pmd_dist_target} -d pmd-dist/target/exploded")
       Cmd.execute("mv pmd-dist/target/exploded/pmd-bin-#{@pmd_version} #{into_dir}")
     end
 

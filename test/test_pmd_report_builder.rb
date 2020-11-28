@@ -7,6 +7,11 @@ class TestPmdReportBuilder < Test::Unit::TestCase
   def setup
     # pmd version that is simulated in tests when pmd should be built
     @pmd_version = '6.10.0-SNAPSHOT'
+
+    # pre-built PMD binary
+    pmd_binary = "target/repositories/pmd/pmd-dist/target/pmd-bin-#{@pmd_version}.zip"
+
+    File.unlink pmd_binary if File.exist? pmd_binary
   end
 
   def test_build_skip
@@ -16,6 +21,31 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     options = PmdTester::Options.new(argv)
 
     record_expectations('sha1abc', 'sha1abc', true)
+    record_expectations_after_build
+
+    PmdTester::PmdReportBuilder
+      .new(projects, options, options.base_config, options.base_branch)
+      .build
+  end
+
+  # In CI, there is no previous existing distro that can be reused,
+  # that means target/pmd-bin-6.10.0-SNAPSHOT-master-sha1abc does not
+  # exist. However, pmd-dist/target/pmd-bin-6.10.0-SNAPSHOT.zip exists
+  # from a previous build and should be reused.
+  def test_build_skip_ci
+    projects = []
+    argv = %w[-r target/repositories/pmd -b master -p pmd_releases/6.1.0
+              -c config/design.xml -l test/resources/project-test.xml]
+    options = PmdTester::Options.new(argv)
+
+    FileUtils.mkdir_p 'target/repositories/pmd/pmd-dist/target'
+    FileUtils.touch "target/repositories/pmd/pmd-dist/target/pmd-bin-#{@pmd_version}.zip"
+
+    record_expectations('sha1abc', 'sha1abc', false)
+    PmdTester::Cmd.stubs(:execute).with("unzip -qo pmd-dist/target/pmd-bin-#{@pmd_version}.zip" \
+      ' -d pmd-dist/target/exploded').once
+    PmdTester::Cmd.stubs(:execute).with("mv pmd-dist/target/exploded/pmd-bin-#{@pmd_version}" \
+      " #{Dir.getwd}/target/pmd-bin-#{@pmd_version}-master-sha1abc").once
     record_expectations_after_build
 
     PmdTester::PmdReportBuilder
