@@ -20,6 +20,13 @@ $(document).ready(function () {
         return pathArray[pathArray.length - 1];
     }
 
+    function renderCodeSnippet(violation) {
+        var node = document.createElement('p');
+        var url = project.source_link_base + '/' + project.file_index[violation.f];
+        window.pmd_code_snippets.fetch(node, url, violation.l, makeCodeLink(violation));
+        return node;
+    }
+
     const cssClass = {
         "+": "added",
         "-": "removed",
@@ -32,10 +39,10 @@ $(document).ready(function () {
         "~": "Changed",
     }
 
-    $('#violationsTable').DataTable({
+    var table = $('#violationsTable').DataTable({
         data: project.violations,
         columns: [
-            // other attributes:
+            // other attributes in data:
             // l: line
             // ol: old line
             {"data": "f"}, // file
@@ -45,12 +52,12 @@ $(document).ready(function () {
         ],
         deferRender: true,
         // scrollY: "6000px",
-        dom: 'Pfrtip',
+        dom: 'Pfrtip', // Search Panes, filtering input, processing display element, table, table information summary, pagination control
         searchPanes: {
             viewTotal: true,
             cascadePanes: true,
             columns: [0, 1, 3],
-            order: ['Rule', 'Location', 'Type']
+            order: ['Rule', 'Location (click row to expand)', 'Type']
         },
         // scrollCollapse: true,
         // paging: false,
@@ -108,6 +115,22 @@ $(document).ready(function () {
         rowCallback(row, data, index) {
             $(row).addClass(cssClass[data.t]);
         },
+    });
+
+    $('#violationsTable tbody').on('click', 'tr', function() {
+        var tr = $(this).closest('tr');
+        var row = table.row( tr );
+
+        if ( row.child.isShown() ) {
+            // This row is already open - close it
+            row.child.hide();
+            tr.removeClass('shown');
+        }
+        else {
+            // Open this row
+            row.child( renderCodeSnippet(row.data()) ).show();
+            tr.addClass('shown');
+        }
     });
 
 });

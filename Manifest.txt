@@ -47,6 +47,7 @@ resources/css/bootstrap.min.css
 resources/css/datatables.min.css
 resources/css/pmd-tester.css
 resources/js/bootstrap.min.js
+resources/js/code-snippets.js
 resources/js/datatables.min.js
 resources/js/jquery-3.2.1.slim.min.js
 resources/js/jquery.min.js

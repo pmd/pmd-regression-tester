@@ -5,9 +5,12 @@ body, td, select, input, li{
   font-family: Verdana, Helvetica, Arial, sans-serif;
   font-size: 13pt;
 }
-code{
+code {
   font-family: Courier, monospace;
   font-size: 13pt;
+}
+code.highlight {
+  background-color: yellow;
 }
 a {
   text-decoration: none;

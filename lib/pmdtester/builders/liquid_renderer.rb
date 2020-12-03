@@ -60,6 +60,7 @@ module PmdTester
 
     def dump_violations_json(project)
       h = {
+        'source_link_base' => project.webview_url,
         'source_link_template' => link_template(project),
         **violations_to_hash(project)
       }
