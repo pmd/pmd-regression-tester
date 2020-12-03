@@ -25,6 +25,8 @@ class IntegrationTestRunner < Test::Unit::TestCase
     assert_path_exist('target/reports/diff/pmd/index.html')
     assert_path_exist('target/reports/diff/pmd/project_data.js')
     assert_path_exist('target/reports/diff/index.html')
+    assert_path_exist('target/reports/diff/base_config.xml')
+    assert_path_exist('target/reports/diff/patch_config.xml')
   end
 
   def test_single_mode
@@ -41,6 +43,8 @@ class IntegrationTestRunner < Test::Unit::TestCase
     assert_path_exist('target/reports/diff/checkstyle/index.html')
     assert_path_exist('target/reports/diff/pmd/index.html')
     assert_path_exist('target/reports/diff/index.html')
+    assert_path_not_exist('target/reports/diff/base_config.xml')
+    assert_path_exist('target/reports/diff/patch_config.xml')
   end
 
   def test_single_mode_with_html_flag_option

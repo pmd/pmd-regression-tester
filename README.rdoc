@@ -69,14 +69,17 @@ The tool creates the following folders:
       ├── BASE_BRANCH_NAME      <- the base baseline is placed here
       ├── PATCH_BRANCH_NAME      <- the patch baseline is placed here
       └── diff
-          ├── index.xml <- the summary report of diff reports
-          ├── base_config.xml  <- the resources of the summary report
-          ├── patch_config.xml  <- the resources fo the summary report
-          ├── css  <- css reources are placed here
+          ├── index.html <- the summary report of diff reports
+          ├── base_config.xml   <- pmd config from the base branch
+          ├── patch_config.xml  <- pmd config from the patch branch
+          ├── css  <- css resources are placed here
+          ├── js   <- js resources
           ├── PROJECT_NAME_1
-              └── index.xml   <- the diff report of PROJECT_1
+          │   ├── project_data.js <- contains the violations as js/json
+          │   └── index.html   <- the diff report of PROJECT_1
           ├── .......
           └── PROJECT_NAME_n
+              ├── project_data.js <- contains the violations as js/json
               └── index.xml   <- the diff report of PROJECT_N
 
 ==== The baseline format
