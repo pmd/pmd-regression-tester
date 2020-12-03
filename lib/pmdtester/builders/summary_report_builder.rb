@@ -57,7 +57,7 @@ module PmdTester
       end
 
       env = {
-        'comparison_url' => nil, # todo
+        'comparison_url' => create_comparison_url(base_details, patch_details),
         'base' => to_liquid(base_details, BASE_CONFIG_NAME),
         'patch' => to_liquid(patch_details, PATCH_CONFIG_NAME),
         'projects' => projects
@@ -66,9 +66,15 @@ module PmdTester
       render_and_write('project_index.html', "#{target_root}/index.html", env)
     end
 
+    def create_comparison_url(base_details, patch_details)
+      base = CGI.escape(base_details.branch_name)
+      patch = CGI.escape(patch_details.branch_last_sha)
+      "https://github.com/pmd/pmd/compare/#{base}...#{patch}"
+    end
+
     def to_liquid(details, config_name)
       {
-        'tree_url' => "https://github.com/pmd/pmd/tree/#{details.branch_last_sha}",
+        'tree_url' => "https://github.com/pmd/pmd/tree/#{CGI.escape(details.branch_last_sha)}",
         'name' => details.branch_name,
         'tip' => {
           'sha' => details.branch_last_sha,
