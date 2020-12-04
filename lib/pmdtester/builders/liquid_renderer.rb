@@ -49,6 +49,7 @@ module PmdTester
       liquid_env = {
         'diff' => report_diff_to_h(project.report_diff),
         'error_diffs' => errors_to_h(project),
+        'configerror_diffs' => configerrors_to_h(project),
         'project_name' => project.name
       }
 

@@ -11,6 +11,7 @@ module PmdTester
       {
         'violation_counts' => rdiff.violation_counts.to_h,
         'error_counts' => rdiff.error_counts.to_h,
+        'configerror_counts' => rdiff.configerror_counts.to_h,
 
         'base_execution_time' => PmdReportDetail.convert_seconds(rdiff.base_report.exec_time),
         'patch_execution_time' => PmdReportDetail.convert_seconds(rdiff.patch_report.exec_time),
@@ -27,6 +28,11 @@ module PmdTester
     def errors_to_h(project)
       errors = project.report_diff.error_diffs_by_file.values.flatten
       errors.map { |e| error_to_hash(e, project) }
+    end
+
+    def configerrors_to_h(project)
+      configerrors = project.report_diff.configerror_diffs_by_rule.values.flatten
+      configerrors.map { |e| configerror_to_hash(e) }
     end
 
     def violations_to_hash(project)
@@ -97,6 +103,14 @@ module PmdTester
       CGI.escapeHTML(error.stack_trace)
          .gsub(error.filename, '<span class="meta-var">$FILE</span>')
          .gsub(/\w++(?=\(\w++\.java:\d++\))/, '<span class="stack-trace-method">\\0</span>')
+    end
+
+    def configerror_to_hash(configerror)
+      {
+        'rule' => configerror.rulename,
+        'message' => configerror.msg,
+        'change_type' => change_type(configerror)
+      }
     end
 
     def change_type(item)

@@ -49,6 +49,14 @@
                 </td>
             </tr>
             <tr>
+                <td class="item"><a href="#section-configerrors">ConfigErrors</a></td>
+                <td class="base">{{diff.configerror_counts.base_total}}</td>
+                <td class="patch">{{diff.configerror_counts.patch_total}}</td>
+                <td class="diff">
+                    {% include 'diff_pill_row' h: diff.configerror_counts %}
+                </td>
+            </tr>
+            <tr>
                 <td class="item">Execution time</td>
                 <td class="base">{{diff.base_execution_time}}</td>
                 <td class="patch">{{diff.patch_execution_time}}</td>
@@ -161,6 +169,33 @@
             </table>
         </div>
 
+    </div>
+</div>
+
+<div class="section" id="section-configerrors">
+
+    <h2>ConfigErrors</h2>
+
+    <div class="section-content">
+
+        <div class="table-responsive">
+            <table id="configerror-table" class="table">
+                <thead>
+                 <tr>
+                     <th>Rule</th>
+                     <th>Message</th>
+                 </tr>
+                </thead>
+                <tbody>
+                {% for configerror in configerror_diffs %}
+                <tr class="configerror-row {{configerror.change_type}}">
+                    <td>{{configerror.rule}}</td>
+                    <td>{{configerror.message}}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
