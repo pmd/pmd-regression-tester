@@ -80,7 +80,7 @@ module PmdTester
           'sha' => details.branch_last_sha,
           'message' => details.branch_last_message
         },
-        'execution_time' => details.execution_time,
+        'execution_time' => PmdReportDetail.convert_seconds(details.execution_time),
         'jdk_info' => details.jdk_version,
         'locale' => details.language,
         'config_url' => config_name,
