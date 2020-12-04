@@ -13,7 +13,7 @@ module PmdTester
     def initialize(branch_name, working_dir, filter_set = nil)
       @violations = CollectionByFile.new
       @errors = CollectionByFile.new
-      @configerrors = {}
+      @configerrors = Hash.new { |hash, key| hash[key] = [] }
 
       @infos_by_rules = {}
       @current_violations = []
@@ -32,33 +32,14 @@ module PmdTester
 
       case name
       when 'file'
-        @current_filename = remove_work_dir!(attrs['name'])
-        @current_violations = []
+        handle_start_file attrs
       when 'violation'
-        @current_violation = PmdViolation.new(
-          branch: @branch_name,
-          fname: @current_filename,
-          info_url: attrs['externalInfoUrl'],
-          bline: attrs['beginline'].to_i,
-          rule_name: attrs['rule'],
-          ruleset_name: attrs['ruleset'].freeze
-        )
+        handle_start_violation attrs
       when 'error'
-        @current_filename = remove_work_dir!(attrs['filename'])
-
-        @current_error = PmdError.new(
-          branch: @branch_name,
-          filename: @current_filename,
-          short_message: remove_work_dir!(attrs['msg'])
-        )
+        handle_start_error attrs
+      when 'configerror'
+        handle_start_configerror attrs
       end
-    end
-
-    # Modifies the string in place and returns it
-    # (this is what sub! does, except it returns nil if no replacement occurred)
-    def remove_work_dir!(str)
-      str.sub!(/#{@working_dir}/, '')
-      str
     end
 
     def characters(string)
@@ -85,8 +66,20 @@ module PmdTester
         @errors.add_all(@current_filename, [@current_error])
         @current_filename = nil
         @current_error = nil
+      when 'configerror'
+        @configerrors[@current_configerror.rulename].push(@current_configerror)
+        @current_configerror = nil
       end
       @cur_text.clear
+    end
+
+    private
+
+    # Modifies the string in place and returns it
+    # (this is what sub! does, except it returns nil if no replacement occurred)
+    def remove_work_dir!(str)
+      str.sub!(/#{@working_dir}/, '')
+      str
     end
 
     def finish_text!
@@ -104,6 +97,36 @@ module PmdTester
       rule_ref = "#{ruleset_attr}/#{violation.rule_name}"
 
       @filter_set.include?(rule_ref)
+    end
+
+    def handle_start_file(attrs)
+      @current_filename = remove_work_dir!(attrs['name'])
+      @current_violations = []
+    end
+
+    def handle_start_violation(attrs)
+      @current_violation = PmdViolation.new(
+        branch: @branch_name,
+        fname: @current_filename,
+        info_url: attrs['externalInfoUrl'],
+        bline: attrs['beginline'].to_i,
+        rule_name: attrs['rule'],
+        ruleset_name: attrs['ruleset'].freeze
+      )
+    end
+
+    def handle_start_error(attrs)
+      @current_filename = remove_work_dir!(attrs['filename'])
+
+      @current_error = PmdError.new(
+        branch: @branch_name,
+        filename: @current_filename,
+        short_message: remove_work_dir!(attrs['msg'])
+      )
+    end
+
+    def handle_start_configerror(attrs)
+      @current_configerror = PmdConfigError.new(attrs, @branch_name)
     end
   end
 end

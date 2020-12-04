@@ -50,30 +50,38 @@ module PmdTester
   class Report
     attr_reader :violations_by_file,
                 :errors_by_file,
+                :configerrors_by_rule,
                 :exec_time,
                 :timestamp,
                 :infos_by_rule
 
-    def initialize(violations_by_file:,
-                   errors_by_file:,
-                   exec_time:,
-                   timestamp:,
-                   infos_by_rule:)
-      @violations_by_file = violations_by_file
-      @errors_by_file = errors_by_file
+    def initialize(report_document: nil,
+                   exec_time: 0,
+                   timestamp: '0')
+      initialize_empty
+      initialize_with_report_document report_document unless report_document.nil?
       @exec_time = exec_time
       @timestamp = timestamp
-      @infos_by_rule = infos_by_rule
     end
 
     def self.empty
-      new(
-        violations_by_file: CollectionByFile.new,
-        errors_by_file: CollectionByFile.new,
-        exec_time: 0,
-        timestamp: '0',
-        infos_by_rule: {}
-      )
+      new
+    end
+
+    private
+
+    def initialize_with_report_document(report_document)
+      @violations_by_file = report_document.violations
+      @errors_by_file = report_document.errors
+      @configerrors_by_rule = report_document.configerrors
+      @infos_by_rule = report_document.infos_by_rules
+    end
+
+    def initialize_empty
+      @violations_by_file = CollectionByFile.new
+      @errors_by_file = CollectionByFile.new
+      @configerrors_by_rule = {}
+      @infos_by_rule = {}
     end
   end
 
@@ -85,9 +93,11 @@ module PmdTester
 
     attr_reader :error_counts
     attr_reader :violation_counts
+    attr_reader :configerror_counts
 
     attr_accessor :violation_diffs_by_file
     attr_accessor :error_diffs_by_file
+    attr_accessor :configerror_diffs_by_rule
 
     attr_accessor :rule_infos_union
     attr_accessor :base_report
@@ -96,15 +106,17 @@ module PmdTester
     def initialize(base_report:, patch_report:)
       @violation_counts = RunningDiffCounters.new(base_report.violations_by_file.total_size)
       @error_counts = RunningDiffCounters.new(base_report.errors_by_file.total_size)
-      @violation_diffs_by_rule = {}
+      @configerror_counts = RunningDiffCounters.new(base_report.configerrors_by_rule.values.flatten.length)
 
+      @violation_diffs_by_file = {}
+      @error_diffs_by_file = {}
+      @configerror_diffs_by_rule = {}
+
+      @rule_infos_union = base_report.infos_by_rule.dup
       @base_report = base_report
       @patch_report = patch_report
 
-      @rule_infos_union = base_report.infos_by_rule.dup
-      @violation_diffs_by_file = {}
-      @error_diffs_by_file = {}
-
+      @violation_diffs_by_rule = {}
       diff_with(patch_report)
     end
 
@@ -123,11 +135,13 @@ module PmdTester
     def diff_with(patch_report)
       @violation_counts.patch_total = patch_report.violations_by_file.total_size
       @error_counts.patch_total = patch_report.errors_by_file.total_size
+      @configerror_counts.patch_total = patch_report.configerrors_by_rule.values.flatten.length
 
       @violation_diffs_by_file = build_diffs(@violation_counts, &:violations_by_file)
       count(@violation_diffs_by_file) { |v| getvdiff(v.rule_name) } # record the diffs in the rule counter
 
       @error_diffs_by_file = build_diffs(@error_counts, &:errors_by_file)
+      @configerror_diffs_by_rule = build_diffs(@configerror_counts, &:configerrors_by_rule)
 
       count_by_rule(@base_report.violations_by_file, base: true)
       count_by_rule(@patch_report.violations_by_file, base: false)
@@ -178,6 +192,7 @@ module PmdTester
     end
 
     # @param diff_h a hash { filename => list[violation]}, containing those that changed
+    # in case of config errors it's a hash { rulename => list[configerror] }
     def merge_changed_items(diff_h)
       diff_h.each do |fname, different|
         different.sort_by!(&:sort_key)

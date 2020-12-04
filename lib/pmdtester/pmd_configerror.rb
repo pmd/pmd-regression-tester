@@ -13,13 +13,13 @@ module PmdTester
     #   <xs:attribute name="msg" type="xs:string" use="required" />
     # </xs:complexType>
     attr_reader :attrs
-    attr_accessor :text
+    attr_accessor :old_error
 
     def initialize(attrs, branch)
       @attrs = attrs
 
+      @changed = false
       @branch = branch
-      @text = ''
     end
 
     def rulename
@@ -30,12 +30,29 @@ module PmdTester
       @attrs['msg']
     end
 
+    def sort_key
+      rulename
+    end
+
     def changed?
-      false
+      @changed
     end
 
     def eql?(other)
       rulename.eql?(other.rulename) && msg.eql?(other.msg)
+    end
+
+    def try_merge?(other)
+      if branch != BASE &&
+         branch != other.branch &&
+         rulename == other.rulename &&
+         !changed? # not already changed
+        @changed = true
+        @old_error = other
+        true
+      end
+
+      false
     end
 
     def hash

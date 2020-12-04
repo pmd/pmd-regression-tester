@@ -59,6 +59,26 @@ class TestDiffBuilder < Test::Unit::TestCase
     assert_equal(1, error_diffs['Patch1.java'].size)
   end
 
+  def test_configerrors_diffs
+    base_report_path = 'test/resources/diff_builder/test_configerrors_diffs_base.xml'
+    patch_report_path = 'test/resources/diff_builder/test_configerrors_diffs_patch.xml'
+    diffs_report = build_report_diff(base_report_path, patch_report_path,
+                                     BASE_REPORT_INFO_PATH, PATCH_REPORT_INFO_PATH)
+    configerrors_diffs = diffs_report.configerror_diffs_by_rule
+    keys = configerrors_diffs.keys
+
+    assert_counters_empty(diffs_report.violation_counts)
+    assert_counters_empty(diffs_report.error_counts)
+    assert_counters_eq(diffs_report.configerror_counts,
+                       base_total: 4, patch_total: 3, changed_total: 5)
+    assert_changes_eq(diffs_report.configerror_counts,
+                      removed: 3, added: 1, changed: 1)
+
+    assert_equal(%w[RuleBase1 RuleBoth2 RulePatch1], keys)
+    assert_equal(2, configerrors_diffs['RuleBase1'].size)
+    assert_equal(2, configerrors_diffs['RuleBoth2'].size)
+  end
+
   private
 
   def assert_counters_empty(counters)

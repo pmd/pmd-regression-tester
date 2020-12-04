@@ -126,21 +126,23 @@ module PmdTester
     def summarize_diffs
       error_total = RunningDiffCounters.new(0)
       violations_total = RunningDiffCounters.new(0)
+      configerrors_total = RunningDiffCounters.new(0)
 
       @projects.each do |project|
         diff = project.report_diff
 
         # in case we are in single mode, there might be no diffs (only the patch branch is available)
-        unless diff.nil?
-          error_total.merge!(diff.error_counts)
-          violations_total.merge!(diff.violation_counts)
-        end
+        next if diff.nil?
+
+        error_total.merge!(diff.error_counts)
+        violations_total.merge!(diff.violation_counts)
+        configerrors_total.merge!(diff.configerror_counts)
       end
 
       {
         errors: error_total.to_h,
         violations: violations_total.to_h,
-        configerrors: RunningDiffCounters.new(0).to_h # note: this is now ignored
+        configerrors: configerrors_total.to_h
       }
     end
 

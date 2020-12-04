@@ -28,9 +28,7 @@ module PmdTester
       parser = Nokogiri::XML::SAX::Parser.new(doc)
       parser.parse_file(report_file) if File.exist?(report_file)
       Report.new(
-        violations_by_file: doc.violations,
-        errors_by_file: doc.errors,
-        infos_by_rule: doc.infos_by_rules,
+        report_document: doc,
 
         timestamp: report_details.timestamp,
         exec_time: report_details.execution_time
