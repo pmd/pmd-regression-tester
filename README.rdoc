@@ -151,3 +151,4 @@ The tool creates the following folders:
 * Commit ("Prepare next development version x.y.z-SNAPSHOT").
 * Push to master.
 * Push the tag. Github Actions will build and publish the new gem
+* Update the release notes on https://github.com/pmd/pmd-regression-tester/releases
