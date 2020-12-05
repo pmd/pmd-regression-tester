@@ -65,19 +65,21 @@ The tool creates the following folders:
   │   ├── PROJECT_NAME_1
   │   ├── ......
   │   └── PROJECT_NAME_n
-  └── reports
-      ├── BASE_BRANCH_NAME      <- the base baseline is placed here
-      ├── PATCH_BRANCH_NAME      <- the patch baseline is placed here
-      └── diff
-          ├── index.xml <- the summary report of diff reports
-          ├── base_config.xml  <- the resources of the summary report
-          ├── patch_config.xml  <- the resources fo the summary report
-          ├── css  <- css reources are placed here
-          ├── PROJECT_NAME_1
-              └── index.xml   <- the diff report of PROJECT_1
-          ├── .......
-          └── PROJECT_NAME_n
-              └── index.xml   <- the diff report of PROJECT_N
+  ├── reports
+  │   ├── BASE_BRANCH_NAME      <- the base baseline is placed here
+  │   ├── PATCH_BRANCH_NAME      <- the patch baseline is placed here
+  │   └── diff
+  │       ├── index.xml <- the summary report of diff reports
+  │       ├── base_config.xml  <- the resources of the summary report
+  │       ├── patch_config.xml  <- the resources fo the summary report
+  │       ├── css  <- css reources are placed here
+  │       ├── PROJECT_NAME_1
+  │       │   └── index.xml   <- the diff report of PROJECT_1
+  │       ├── .......
+  │       └── PROJECT_NAME_n
+  │           └── index.xml   <- the diff report of PROJECT_N
+  ├── pmd-bin-<version>-<branch_name>-<sha1>  <- cached pmd builds that are reused
+  └── ....
 
 ==== The baseline format
   branch_name
