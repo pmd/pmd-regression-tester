@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.metadata = { "bug_tracker_uri" => "https://github.com/pmd/pmd-regression-tester/issues", "homepage_uri" => "https://pmd.github.io", "source_code_uri" => "https://github.com/pmd/pmd-regression-tester" } if s.respond_to? :metadata=
   s.require_paths = ["lib".freeze]
   s.authors = ["Andreas Dangel".freeze, "Binguo Bao".freeze]
-  s.date = "2020-11-25"
+  s.date = "2020-11-28"
   s.description = "A regression testing tool ensure that new problems and unexpected behaviors will not be introduced to PMD project after fixing an issue , and new rules can work as expected.".freeze
   s.email = ["andreas.dangel@pmd-code.org".freeze, "djydewang@gmail.com".freeze]
   s.executables = ["pmdtester".freeze]
@@ -33,6 +33,7 @@ Gem::Specification.new do |s|
     s.add_runtime_dependency(%q<slop>.freeze, ["~> 4.6"])
     s.add_runtime_dependency(%q<differ>.freeze, ["~> 0.1"])
     s.add_runtime_dependency(%q<rufus-scheduler>.freeze, ["~> 3.5"])
+    s.add_runtime_dependency(%q<logger-colors>.freeze, ["~> 1.0"])
     s.add_development_dependency(%q<hoe-bundler>.freeze, ["~> 1.5"])
     s.add_development_dependency(%q<hoe-git>.freeze, ["~> 1.6"])
     s.add_development_dependency(%q<minitest>.freeze, ["~> 5.10"])
@@ -46,6 +47,7 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<slop>.freeze, ["~> 4.6"])
     s.add_dependency(%q<differ>.freeze, ["~> 0.1"])
     s.add_dependency(%q<rufus-scheduler>.freeze, ["~> 3.5"])
+    s.add_dependency(%q<logger-colors>.freeze, ["~> 1.0"])
     s.add_dependency(%q<hoe-bundler>.freeze, ["~> 1.5"])
     s.add_dependency(%q<hoe-git>.freeze, ["~> 1.6"])
     s.add_dependency(%q<minitest>.freeze, ["~> 5.10"])

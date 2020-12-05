@@ -8,7 +8,7 @@ xsi:noNamespaceSchemaLocation="projectlist_1_1_0.xsd">
     <name>checkstyle</name>
     <type>git</type>
     <connection>https://github.com/checkstyle/checkstyle</connection>
-    <tag>checkstyle-8.0</tag>
+    <tag>checkstyle-8.10</tag>
     <exclude-pattern>.*/target/test-classes/com/puppycrawl/tools/checkstyle/.*</exclude-pattern>
     <exclude-pattern>.*/target/generated-sources/.*</exclude-pattern>
 
@@ -17,7 +17,9 @@ if test -e classpath.txt; then
   exit
 fi
 
-mvn test-compile
+set -e
+
+mvn clean test-compile
 mvn dependency:build-classpath -DincludeScope=test -Dmdep.outputFile=classpath.txt
 ]]></build-command>
     <auxclasspath-command>echo -n "$(pwd)/target/classes:$(pwd)/target/test-classes:"; cat classpath.txt</auxclasspath-command>

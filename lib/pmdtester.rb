@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'logger'
+require 'logger/colors'
 
 require_relative 'pmdtester/cmd'
 require_relative 'pmdtester/pmd_branch_detail'

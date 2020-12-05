@@ -27,6 +27,7 @@ puts summary
 *   [#75](https://github.com/pmd/pmd-regression-tester/pull/75): Add new option "--error-recovery"
 *   [#76](https://github.com/pmd/pmd-regression-tester/pull/76): Speedup XML parsing
 *   [#79](https://github.com/pmd/pmd-regression-tester/pull/79): Add new configuration option "--baseline-download-url"
+*   [#80](https://github.com/pmd/pmd-regression-tester/pull/80): Cache and reuse pmd builds
 
 ## External Contributions
 
