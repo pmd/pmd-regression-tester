@@ -1,4 +1,4 @@
-# 1.1.0-SNAPSHOT / 2020-??-??
+# 1.1.0 / 2020-12-05
 
 ## New and Noteworthy
 
