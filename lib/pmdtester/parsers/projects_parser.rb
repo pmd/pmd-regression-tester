@@ -11,9 +11,7 @@ module PmdTester
       document = Nokogiri::XML(File.read(list_file))
 
       errors = schema.validate(document)
-      unless errors.empty?
-        raise ProjectsParserException.new(errors), "Schema validate failed: In #{list_file}"
-      end
+      raise ProjectsParserException.new(errors), "Schema validate failed: In #{list_file}" unless errors.empty?
 
       projects = []
       document.xpath('//project').each do |project|

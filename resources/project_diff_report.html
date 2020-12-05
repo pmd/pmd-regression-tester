@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Diff report for openjdk10</title>
+    <title>Diff report for {{project_name}}</title>
 
     <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css" href="../css/datatables.min.css"/>
@@ -34,56 +34,38 @@
             <tr>
                 <td class="item"><a href="#section-violations">Violations</a>
                 </td>
-                <td class="base">0</td>
-                <td class="patch">0</td>
+                <td class="base">{{diff.violation_counts.base_total}}</td>
+                <td class="patch">{{diff.violation_counts.patch_total}}</td>
                 <td class="diff">
-
-<span class="pill badge-pill badge-secondary added">+0</span>
-<span class="pill badge-pill badge-secondary removed">-0</span>
-
-<span class="pill badge-pill badge-secondary changed">~0</span>
-
-
+                    {% include 'diff_pill_row' h: diff.violation_counts %}
                 </td>
             </tr>
             <tr>
                 <td class="item"><a href="#section-errors">Errors</a></td>
-                <td class="base">0</td>
-                <td class="patch">0</td>
+                <td class="base">{{diff.error_counts.base_total}}</td>
+                <td class="patch">{{diff.error_counts.patch_total}}</td>
                 <td class="diff">
-
-<span class="pill badge-pill badge-secondary added">+0</span>
-<span class="pill badge-pill badge-secondary removed">-0</span>
-
-<span class="pill badge-pill badge-secondary changed">~0</span>
-
-
+                    {% include 'diff_pill_row' h: diff.error_counts %}
                 </td>
             </tr>
             <tr>
                 <td class="item"><a href="#section-configerrors">ConfigErrors</a></td>
-                <td class="base">0</td>
-                <td class="patch">0</td>
+                <td class="base">{{diff.configerror_counts.base_total}}</td>
+                <td class="patch">{{diff.configerror_counts.patch_total}}</td>
                 <td class="diff">
-
-<span class="pill badge-pill badge-secondary added">+0</span>
-<span class="pill badge-pill badge-secondary removed">-0</span>
-
-<span class="pill badge-pill badge-secondary changed">~0</span>
-
-
+                    {% include 'diff_pill_row' h: diff.configerror_counts %}
                 </td>
             </tr>
             <tr>
                 <td class="item">Execution time</td>
-                <td class="base">00:00:00</td>
-                <td class="patch">00:00:00</td>
-                <td class="diff">00:00:00</td>
+                <td class="base">{{diff.base_execution_time}}</td>
+                <td class="patch">{{diff.patch_execution_time}}</td>
+                <td class="diff">{{diff.diff_execution_time}}</td>
             </tr>
             <tr>
                 <td class="item">Timestamp</td>
-                <td class="base">0</td>
-                <td class="patch">0</td>
+                <td class="base">{{diff.base_timestamp}}</td>
+                <td class="patch">{{diff.patch_timestamp}}</td>
                 <td class="diff"></td>
             </tr>
             </tbody>
@@ -111,9 +93,21 @@
                 </thead>
                 <tbody>
 
+                {% assign sorted_rule_diffs = diff.rule_diffs | sort: 'name' %}
 
-
-
+                {% for rule_diff in sorted_rule_diffs %}
+                <tr id="rule-summary-{{rule_diff.name}}">
+                    <td class="rulename">
+                        {{ rule_diff.name }}
+                        <span class="external-link-secondary"><a class="rulelink" href="{{rule_diff.info_url}}" target="_blank" rel="noopener noreferrer">[doc]</a></span>
+                    </td>
+                    <td class="basecount">{{ rule_diff.base_total }}</td>
+                    <td class="patchcount">{{ rule_diff.patch_total }}</td>
+                    <td class="added" data-count="{{ rule_diff.new }}">{{ rule_diff.new }}</td>
+                    <td class="changed" data-count="{{ rule_diff.changed }}">{{ rule_diff.changed }}</td>
+                    <td class="removed" data-count="{{ rule_diff.removed }}">{{ rule_diff.removed }}</td>
+                </tr>
+                {% endfor %}
                 </tbody>
             </table>
         </div>
@@ -154,7 +148,23 @@
                  </tr>
                 </thead>
                 <tbody>
-
+                {% for error in error_diffs %}
+                <tr id="error-{{forloop.index}}" class="accordion-toggle error-row {{error.change_type}}" data-toggle="collapse" data-target="#error-{{forloop.index}}-expanded">
+                    <td><a href="{{error.file_url}}"  target="_blank" rel="noopener noreferrer">{{error.short_filename}}</a></td>
+                    <td>{{error.short_message | escape | replace: error.filename, "<span class='meta-var'>$FILE</span>" }}</td>
+                </tr>
+                <tr>
+                    <td class="row-hidden" colspan="2">
+                        <div class="accordion-body collapse" id="error-{{forloop.index}}-expanded">
+                            <div class="collapsed-content-padder">
+                                <pre>
+{{ error.stack_trace_html }}
+                                </pre>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
                 </tbody>
             </table>
         </div>
@@ -177,7 +187,12 @@
                  </tr>
                 </thead>
                 <tbody>
-
+                {% for configerror in configerror_diffs %}
+                <tr class="configerror-row {{configerror.change_type}}">
+                    <td>{{configerror.rule}}</td>
+                    <td>{{configerror.message}}</td>
+                </tr>
+                {% endfor %}
                 </tbody>
             </table>
         </div>

@@ -6,5 +6,9 @@ module PmdTester
     def self.locate(resource_path)
       File.expand_path(File.dirname(__FILE__) + "/../../#{resource_path}")
     end
+
+    def self.resource(resource_path)
+      locate("resources/#{resource_path}")
+    end
   end
 end

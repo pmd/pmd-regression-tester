@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+
+<projectlist xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:noNamespaceSchemaLocation="projectlist_1_1_0.xsd">
+  <description>Projects used in integration_test_runner.rb</description>
+
+  <project>
+    <name>checkstyle</name>
+    <type>git</type>
+    <connection>https://github.com/checkstyle/checkstyle</connection>
+    <tag>checkstyle-8.10</tag>
+    <exclude-pattern>.*/target/test-classes/com/puppycrawl/tools/checkstyle/.*</exclude-pattern>
+    <exclude-pattern>.*/target/generated-sources/.*</exclude-pattern>
+
+    <build-command><![CDATA[#!/usr/bin/env bash
+if test -e classpath.txt; then
+  exit
+fi
+
+set -e
+
+mvn clean test-compile
+mvn dependency:build-classpath -DincludeScope=test -Dmdep.outputFile=classpath.txt
+]]></build-command>
+    <auxclasspath-command>echo -n "$(pwd)/target/classes:$(pwd)/target/test-classes:"; cat classpath.txt</auxclasspath-command>
+  </project>
+
+  <!-- this project configuration is here, so that PMD's repo is cloned into target/repositories for integration tests -->
+  <project>
+    <name>pmd</name>
+    <type>git</type>
+    <connection>https://github.com/pmd/pmd</connection>
+    <tag>pmd_releases/6.7.0</tag> <!-- this is already the correct checkout to speed up repeated integration tests -->
+  </project>
+</projectlist>

@@ -8,6 +8,7 @@ module PmdTester
   # projects and branch of pmd source code
   class PmdReportBuilder
     include PmdTester
+
     def initialize(projects, options, branch_config, branch_name)
       @projects = projects
       @local_git_repo = options.local_git_repo
@@ -63,7 +64,8 @@ module PmdTester
                       ' -Dmaven.test.skip=true' \
                       ' -Dmaven.javadoc.skip=true' \
                       ' -Dmaven.source.skip=true' \
-                      ' -Dcheckstyle.skip=true'
+                      ' -Dcheckstyle.skip=true' \
+                      ' -T1C'
         Cmd.execute(package_cmd)
       end
 
@@ -136,9 +138,7 @@ module PmdTester
         progress_logger.stop
         sum_time += execution_time
 
-        report_details = PmdReportDetail.new
-        report_details.execution_time = execution_time
-        report_details.timestamp = end_time
+        report_details = PmdReportDetail.new(execution_time: execution_time, timestamp: end_time)
         report_details.save(project.get_report_info_path(@pmd_branch_name))
         logger.info "#{project.name}'s PMD report was generated successfully"
       end
@@ -149,6 +149,7 @@ module PmdTester
       @pmd_branch_details
     end
 
+    # returns the branch details
     def build
       @project_builder.clone_projects
       @project_builder.build_projects

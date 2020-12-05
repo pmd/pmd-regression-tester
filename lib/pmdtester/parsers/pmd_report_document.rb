@@ -8,85 +8,125 @@ module PmdTester
     attr_reader :violations
     attr_reader :errors
     attr_reader :configerrors
+    attr_reader :infos_by_rules
+
     def initialize(branch_name, working_dir, filter_set = nil)
-      @violations = PmdViolations.new
-      @errors = PmdErrors.new
-      @configerrors = PmdConfigErrors.new
+      @violations = CollectionByFile.new
+      @errors = CollectionByFile.new
+      @configerrors = Hash.new { |hash, key| hash[key] = [] }
+
+      @infos_by_rules = {}
       @current_violations = []
       @current_violation = nil
       @current_error = nil
       @current_configerror = nil
-      @current_element = ''
-      @filename = ''
       @filter_set = filter_set
       @working_dir = working_dir
       @branch_name = branch_name
+
+      @cur_text = String.new(capacity: 200)
     end
 
     def start_element(name, attrs = [])
       attrs = attrs.to_h
-      @current_element = name
 
       case name
       when 'file'
-        remove_work_dir!(attrs['name'])
-        @current_violations = []
-        @current_filename = attrs['name'].freeze
+        handle_start_file attrs
       when 'violation'
-        @current_violation = PmdViolation.new(attrs, @branch_name, @current_filename)
+        handle_start_violation attrs
       when 'error'
-        remove_work_dir!(attrs['filename'])
-        remove_work_dir!(attrs['msg'])
-        @current_filename = attrs['filename']
-        @current_error = PmdError.new(attrs, @branch_name)
+        handle_start_error attrs
       when 'configerror'
-        @current_configerror = PmdConfigError.new(attrs, @branch_name)
+        handle_start_configerror attrs
       end
     end
 
-    def remove_work_dir!(str)
-      str.sub!(/#{@working_dir}/, '')
+    def characters(string)
+      @cur_text << remove_work_dir!(string)
     end
 
-    def characters(string)
-      @current_violation&.text += string
+    def cdata_block(string)
+      @cur_text << remove_work_dir!(string)
     end
 
     def end_element(name)
       case name
       when 'file'
-        @violations.add_violations_by_filename(@current_filename, @current_violations)
+        @violations.add_all(@current_filename, @current_violations)
         @current_filename = nil
       when 'violation'
         if match_filter_set?(@current_violation)
-          @current_violation.text.strip!
+          @current_violation.message = finish_text!
           @current_violations.push(@current_violation)
         end
         @current_violation = nil
       when 'error'
-        @errors.add_error_by_filename(@current_filename, @current_error)
+        @current_error.stack_trace = finish_text!
+        @errors.add_all(@current_filename, [@current_error])
         @current_filename = nil
         @current_error = nil
       when 'configerror'
-        @configerrors.add_error(@current_configerror)
+        @configerrors[@current_configerror.rulename].push(@current_configerror)
         @current_configerror = nil
       end
+      @cur_text.clear
     end
 
-    def cdata_block(string)
-      remove_work_dir!(string)
-      @current_error&.text = string
+    private
+
+    # Modifies the string in place and returns it
+    # (this is what sub! does, except it returns nil if no replacement occurred)
+    def remove_work_dir!(str)
+      str.sub!(/#{@working_dir}/, '')
+      str
+    end
+
+    def finish_text!
+      res = @cur_text.strip!.dup.freeze
+      @cur_text.clear
+      res
     end
 
     def match_filter_set?(violation)
       return true if @filter_set.nil?
 
-      ruleset_attr = violation.attrs['ruleset'].delete(' ').downcase + '.xml'
+      ruleset_attr = violation.ruleset_name.delete(' ').downcase! << '.xml'
       return true if @filter_set.include?(ruleset_attr)
 
       rule_ref = "#{ruleset_attr}/#{violation.rule_name}"
 
       @filter_set.include?(rule_ref)
+    end
+
+    def handle_start_file(attrs)
+      @current_filename = remove_work_dir!(attrs['name'])
+      @current_violations = []
+    end
+
+    def handle_start_violation(attrs)
+      @current_violation = PmdViolation.new(
+        branch: @branch_name,
+        fname: @current_filename,
+        info_url: attrs['externalInfoUrl'],
+        bline: attrs['beginline'].to_i,
+        rule_name: attrs['rule'],
+        ruleset_name: attrs['ruleset'].freeze
+      )
+    end
+
+    def handle_start_error(attrs)
+      @current_filename = remove_work_dir!(attrs['filename'])
+
+      @current_error = PmdError.new(
+        branch: @branch_name,
+        filename: @current_filename,
+        short_message: remove_work_dir!(attrs['msg'])
+      )
+    end
+
+    def handle_start_configerror(attrs)
+      @current_configerror = PmdConfigError.new(attrs, @branch_name)
     end
   end
 end

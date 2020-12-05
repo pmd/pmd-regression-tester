@@ -1,30 +1,10 @@
 # frozen_string_literal: true
 
 module PmdTester
-  # This class is used to store pmd errors and its size.
-  class PmdErrors
-    attr_reader :errors
-    attr_reader :errors_size
-
-    def initialize
-      # key:filename as String => value:PmdError Array
-      @errors = {}
-      @errors_size = 0
-    end
-
-    def add_error_by_filename(filename, error)
-      if @errors.key?(filename)
-        @errors[filename].push(error)
-      else
-        @errors.store(filename, [error])
-      end
-      @errors_size += 1
-    end
-  end
-
   # This class represents a 'error' element of Pmd xml report
   # and which Pmd branch the 'error' is from
   class PmdError
+    include PmdTester
     # The pmd branch type, 'base' or 'patch'
     attr_reader :branch
 
@@ -37,35 +17,51 @@ module PmdTester
     #       </xs:extension>
     #     </xs:simpleContent>
     #  </xs:complexType>
-    attr_reader :attrs
-    attr_accessor :text
+    attr_accessor :stack_trace
+    attr_accessor :old_error
+    attr_reader :filename, :short_message
 
-    def initialize(attrs, branch)
-      @attrs = attrs
-
+    def initialize(branch:, filename:, short_message:)
       @branch = branch
-      @text = ''
+      @stack_trace = ''
+      @changed = false
+      @short_message = short_message
+      @filename = filename
     end
 
-    def filename
-      @attrs['filename']
+    def short_filename
+      filename.gsub(%r{([^/]*+/)+}, '')
     end
 
-    def msg
-      @attrs['msg']
-    end
-
-    def changed
-      false
+    def changed?
+      @changed
     end
 
     def eql?(other)
-      filename.eql?(other.filename) && msg.eql?(other.msg) &&
-        @text.eql?(other.text)
+      filename.eql?(other.filename) &&
+        short_message.eql?(other.short_message) &&
+        stack_trace.eql?(other.stack_trace)
     end
 
     def hash
-      [filename, msg, @text].hash
+      [filename, stack_trace].hash
+    end
+
+    def sort_key
+      filename
+    end
+
+    def try_merge?(other)
+      if branch != BASE &&
+         branch != other.branch &&
+         filename == other.filename &&
+         !changed? # not already changed
+        @changed = true
+        @old_error = other
+        true
+      else
+        false
+      end
     end
   end
 end

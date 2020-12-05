@@ -4,6 +4,8 @@ require 'test_helper'
 
 # Unit test class for PmdTester::SummaryReportBuilder
 class TestSummaryReportBuilder < Test::Unit::TestCase
+  include TestUtils
+  include PmdTester::PmdTesterUtils
   def setup
     `rake clean`
   end
@@ -16,10 +18,11 @@ class TestSummaryReportBuilder < Test::Unit::TestCase
     test_resources_path = 'test/resources/summary_report_builder'
     FileUtils.cp("#{test_resources_path}/branch_info.json", branch_path)
     FileUtils.cp("#{test_resources_path}/empty_config.xml", "#{branch_path}/config.xml")
-    PmdTester::SummaryReportBuilder.new.build(projects, 'test_branch', 'test_branch')
 
-    actual_file_path = 'target/reports/diff/index.html'
-    expected_file_path = 'test/resources/summary_report_builder/expected_index.html'
-    assert_equal(File.read(expected_file_path), File.read(actual_file_path))
+    branch = PmdTester::PmdBranchDetail.load('test_branch', nil)
+    build_html_reports(projects, branch, branch)
+
+    assert_file_equals('test/resources/summary_report_builder/expected_index.html',
+                       'target/reports/diff/index.html')
   end
 end

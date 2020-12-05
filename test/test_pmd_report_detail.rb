@@ -9,15 +9,15 @@ class TestPmdReportDetail < Test::Unit::TestCase
     dir = 'target/reports/test_branch'
     FileUtils.mkdir(dir) unless File.directory?(dir)
     report_path = "#{dir}/report_info.json"
-    details = PmdReportDetail.new
-    details.execution_time = 121
-    details.timestamp = 'timestamp'
-    details.save(report_path)
-    hash = PmdReportDetail.new.load(report_path)
 
-    assert_equal(121, hash['execution_time'])
-    assert_equal('timestamp', hash['timestamp'])
+    details = PmdReportDetail.new(execution_time: 121, timestamp: 'timestamp')
+    details.save(report_path)
+
+    details = PmdReportDetail.load(report_path)
+
+    assert_equal(121, details.execution_time)
+    assert_equal('timestamp', details.timestamp)
     assert_equal('00:02:01', details.format_execution_time)
-    assert_equal(Dir.getwd, hash['working_dir'])
+    assert_equal(Dir.getwd, details.working_dir)
   end
 end

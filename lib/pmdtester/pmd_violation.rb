@@ -1,25 +1,6 @@
 # frozen_string_literal: true
 
 module PmdTester
-  # This class is used to store pmd violations and its size.
-  class PmdViolations
-    attr_reader :violations
-    attr_reader :violations_size
-
-    def initialize
-      # key:filename as String => value:PmdViolation Array
-      @violations = {}
-      @violations_size = 0
-    end
-
-    def add_violations_by_filename(filename, violations)
-      return if violations.empty?
-
-      @violations.store(filename, violations)
-      @violations_size += violations.size
-    end
-  end
-
   # This class represents a 'violation' element of Pmd xml report
   # and which pmd branch the 'violation' is from
   class PmdViolation
@@ -46,20 +27,27 @@ module PmdTester
     #   </xs:simpleContent>
     # </xs:complexType>
 
-    attr_reader :attrs
-    attr_reader :fname
-    attr_accessor :text
+    attr_reader :fname, :info_url, :line, :old_line, :old_message, :rule_name, :ruleset_name
+    attr_accessor :message
 
-    # means it was in both branches but changed messages
-    attr_accessor :changed
-
-    def initialize(attrs, branch, fname)
-      @attrs = attrs
+    # rubocop:disable Metrics/ParameterLists
+    # Disable it: how is replacing a long parameter list with a single hash helping?
+    def initialize(branch:, fname:, info_url:, bline:, rule_name:, ruleset_name:)
       @branch = branch
-      @changed = false
       @fname = fname
-      @text = ''
+      @message = ''
+
+      @info_url = info_url
+      @line = bline
+      @rule_name = rule_name
+
+      @ruleset_name = ruleset_name
+
+      @changed = false
+      @old_message = nil
+      @old_line = nil
     end
+    # rubocop:enable Metrics/ParameterLists
 
     def line_move?(other)
       message.eql?(other.message) && (line - other.line).abs <= 5
@@ -67,39 +55,34 @@ module PmdTester
 
     def try_merge?(other)
       if branch != BASE && branch != other.branch && rule_name == other.rule_name &&
-         !changed && # not already changed
+         !changed? && # not already changed
          (line == other.line || line_move?(other))
         @changed = true
-        @attrs['oldMessage'] = other.text
-        @attrs['oldLine'] = other.line
+        @old_message = other.message
+        @old_line = other.line
         true
       else
         false
       end
     end
 
-    def old_message
-      @attrs['oldMessage']
+    # only makes sense if this is a diff
+    def added?
+      branch != BASE && !changed?
     end
 
-    def old_line
-      @attrs['oldLine']&.to_i
+    # only makes sense if this is a diff
+    def changed?
+      @changed
     end
 
-    def info_url
-      @attrs['externalInfoUrl']
+    # only makes sense if this is a diff
+    def removed?
+      branch == BASE
     end
 
-    def line
-      @attrs['beginline'].to_i
-    end
-
-    def rule_name
-      @attrs['rule']
-    end
-
-    def message
-      @text
+    def sort_key
+      line
     end
 
     def eql?(other)
@@ -111,6 +94,13 @@ module PmdTester
 
     def hash
       [line, rule_name, message].hash
+    end
+
+    def to_liquid
+      {
+        'branch' => branch,
+        'changed' => changed?
+      }
     end
   end
 end

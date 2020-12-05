@@ -5,24 +5,22 @@ require 'test_helper'
 # Unit test class for PmdTester::PmdBranchDetail
 class TestPmdBranchDetail < Test::Unit::TestCase
   def setup
-    @old_pr = ENV['TRAVIS_PULL_REQUEST']
+    @old_pr = ENV[PmdTester::PR_NUM_ENV_VAR]
   end
 
   def cleanup
-    ENV['TRAVIS_PULL_REQUEST'] = @old_pr
+    ENV[PmdTester::PR_NUM_ENV_VAR] = @old_pr
   end
 
   def test_save_and_load
-    ENV['TRAVIS_PULL_REQUEST'] = '1234'
+    ENV[PmdTester::PR_NUM_ENV_VAR] = '1234'
     details = PmdTester::PmdBranchDetail.new('test_branch')
     details.branch_last_message = 'test message'
     details.branch_last_sha = 'test sha'
     details.execution_time = 'test time'
 
-    dir = 'target/reports/test_branch'
-    FileUtils.mkdir(dir) unless File.directory?(dir)
     details.save
-    details.load
+    details = PmdTester::PmdBranchDetail.load('test_branch', nil)
 
     assert_equal('test_branch', details.branch_name)
     assert_equal('test message', details.branch_last_message)
@@ -38,7 +36,7 @@ class TestPmdBranchDetail < Test::Unit::TestCase
   def test_get_path
     details = PmdTester::PmdBranchDetail.new('test/branch')
     expected_path = 'target/reports/test_branch/branch_info.json'
-    assert_equal(expected_path, details.branch_details_path)
+    assert_equal(expected_path, details.path_to_save_file)
     expected_path = 'target/reports/test_branch/config.xml'
     assert_equal(expected_path, details.target_branch_config_path)
   end

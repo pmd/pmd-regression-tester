@@ -1,0 +1,131 @@
+/*body {*/
+/*  padding: 0px 0px 10px 0px;*/
+/*}*/
+body, td, select, input, li{
+  font-family: Verdana, Helvetica, Arial, sans-serif;
+  font-size: 13pt;
+}
+code {
+  font-family: Courier, monospace;
+  font-size: 13pt;
+}
+code.highlight {
+  background-color: yellow;
+}
+a {
+  text-decoration: none;
+}
+a:link {
+  color:#36a;
+}
+a:visited  {
+  color:#47a;
+}
+a:active, a:hover {
+  color:#69c;
+}
+h2 {
+  padding: 4px 4px 4px 6px;
+  border: 1px solid #999;
+  color: #900;
+  background-color: #ddd;
+  font-weight:900;
+  font-size: x-large;
+}
+h3 {
+  padding: 4px 4px 4px 6px;
+  border: 1px solid #aaa;
+  color: #900;
+  background-color: #eee;
+  font-weight: normal;
+  font-size: large;
+}
+h4 {
+  font-weight: normal;
+  font-size: large;
+}
+h5 {
+  padding: 4px 4px 4px 6px;
+  color: #900;
+  font-size: normal;
+}
+p {
+  line-height: 1.3em;
+  font-size: small;
+}
+
+/* newer stuff */
+
+table {
+  width: 100%;
+}
+
+div.section-content {
+  margin: 50px 100px 30px 100px;
+}
+
+/* Rule summary table */
+
+tr.added, #rule-summary td.added {
+  background-color: #af8;
+}
+
+tr.removed, #rule-summary td.removed {
+  background-color: #fca;
+}
+
+tr.changed, #rule-summary td.changed {
+  background-color: #fef7bc;
+}
+
+#rule-summary td[data-count='0'],
+#rule-summary td {
+  background-color: #fefefe;
+}
+
+.external-link-secondary {
+  font-size: small;
+  margin-left: 2em;
+}
+
+.external-link-secondary + .external-link-secondary {
+  margin-left: 0.5em;
+}
+
+td.row-hidden {
+  padding: 0 !important;
+  background-color: #f5f5f5;
+}
+
+div.collapsed-content-padder {
+  margin: 10px 10px 10px 10px;
+  padding: 0 0 0 40px;
+  border-left: darkslategrey;
+  border-left-style: solid;
+}
+
+.btn.btn-rounded {
+  border-radius: 50px
+}
+
+.pill.badge-pill.badge-secondary.removed {
+  background-color: indianred;
+}
+
+.pill.badge-pill.badge-secondary.added {
+  background-color: mediumseagreen;
+}
+
+.pill.badge-pill.badge-secondary.changed {
+  background-color: #f6af60;
+}
+
+/* Stuff for stack traces */
+
+span.meta-var {
+  text-decoration: underline;
+}
+
+span.stack-trace-method {
+  font-weight: bold;
+}

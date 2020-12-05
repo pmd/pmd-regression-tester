@@ -1,111 +1,170 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<title>Summary report</title>
-<style type="text/css" media="all">@import url("./css/maven-base.css");@import url("./css/maven-theme.css");</style>
+    <meta charset="utf-8">
+    <title>Project report index</title>
+
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"/>
+
+    <script src="js/jquery-3.2.1.slim.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="css/pmd-tester.css">
 </head>
-<div class="section" id="branchdetails">
-<h2>Branch details:</h2>
-<table class="bodyTable" border="0">
-<thead><tr>
-<th>Item</th>
-<th>base</th>
-<th>patch</th>
-</tr></thead>
-<tbody>
-<tr>
-<td class="c">branch name</td>
-<td class="a"><a href="https://github.com/pmd/pmd/tree/test_branch">test_branch</a></td>
-<td class="b">
-<a href="https://github.com/pmd/pmd/tree/test%20sha">test_branch</a><br>
-<a href="https://github.com/pmd/pmd/pull/42">PR #42</a><br>
-<a href="https://github.com/pmd/pmd/compare/test_branch...test%20sha">Compare changes</a>
-</td>
-</tr>
-<tr>
-<td class="c">branch last commit sha</td>
-<td class="a">test sha</td>
-<td class="b">test sha</td>
-</tr>
-<tr>
-<td class="c">branch last commit message</td>
-<td class="a">test message</td>
-<td class="b">test message</td>
-</tr>
-<tr>
-<td class="c">total execution time</td>
-<td class="a">00:02:01</td>
-<td class="b">00:02:01</td>
-</tr>
-<tr>
-<td class="c">jdk version</td>
-<td class="a">test version</td>
-<td class="b">test version</td>
-</tr>
-<tr>
-<td class="c">language</td>
-<td class="a">test language</td>
-<td class="b">test language</td>
-</tr>
-<tr>
-<td class="c">branch configuration</td>
-<td class="a"><a href="./base_config.xml">base config</a></td>
-<td class="b"><a href="./patch_config.xml">patch config</a></td>
-</tr>
-</tbody>
-</table>
+<body>
+<div class="section">
+    <h2>Branch details</h2>
+    <div class="section-content">
+        <div class="table-responsive">
+            <table id="table-summary" class="table">
+                <thead>
+                <tr>
+                    <th></th>
+                    <th>Base</th>
+                    <th>Patch</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="item">Branch info</td>
+                    <td><a href="https://github.com/pmd/pmd/tree/test+sha">test_branch test sha</a>: test message</td>
+                    <td>
+                        <a href="https://github.com/pmd/pmd/tree/test+sha">test_branch test sha</a>: test message
+                        <span class="external-link-secondary"><a href="https://github.com/pmd/pmd/pull/42">PR #42</a></span>
+                        <span class="external-link-secondary"><a href="https://github.com/pmd/pmd/compare/test_branch...test+sha">[Compare]</a></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="item">Total PMD runtime</td>
+                    <td class="base">00:02:01</td>
+                    <td class="patch">00:02:01</td>
+                </tr>
+                <tr>
+                    <td class="item">JDK</td>
+                    <td class="base">test version</td>
+                    <td class="patch">test version</td>
+                </tr>
+                <tr>
+                    <td class="item">Locale</td>
+                    <td class="base">test language</td>
+                    <td class="patch">test language</td>
+                </tr>
+                <tr>
+                    <td class="item">Configuration</td>
+                    <td class="base"><a href="base_config.xml">Base config</a></td>
+                    <td class="patch"><a href="patch_config.xml">Patch config</a></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
-<div class="section" id="projects">
-<h2>Projects:</h2>
-<table class="bodyTable" border="0">
-<thead><tr>
-<th>project name</th>
-<th>project branch/tag</th>
-<th>removed|new errors size</th>
-<th>removed|changed|new violations size</th>
-<th>removed|new configerrors size</th>
-</tr></thead>
-<tbody>
-<tr>
-<td><a href="./checkstyle/index.html">checkstyle</a></td>
-<td>master</td>
-<td>
-<span class="removed">-0</span> | <span class="added">+0</span>
+
+<div class="section" id="section-projects">
+
+    <h2>Projects</h2>
+
+    <div class="section-content">
+
+        <div class="table-responsive">
+            <table id="project-summary" class="table">
+                <thead>
+                <tr>
+                    <th>Project</th>
+                    <th>Tag</th>
+                    <th>Violation diff</th>
+                    <th>Error diff</th>
+                    <th>ConfigError diff</th>
+                </tr>
+                </thead>
+                <tbody>
+
+
+
+
+                <tr>
+                    <td class="project-header"><a href="./checkstyle/index.html">checkstyle</a></td>
+                    <td>master</td>
+                    <td>
+<span class="pill badge-pill badge-secondary added">+0</span>
+<span class="pill badge-pill badge-secondary removed">-0</span>
+
+<span class="pill badge-pill badge-secondary changed">~0</span>
+
 </td>
-<td>
-<span class="removed">-0</span> | <span class="changed">~0</span> | <span class="added">+0</span>
+                    <td>
+<span class="pill badge-pill badge-secondary added">+0</span>
+<span class="pill badge-pill badge-secondary removed">-0</span>
+
+<span class="pill badge-pill badge-secondary changed">~0</span>
+
 </td>
-<td>
-<span class="removed">-0</span> | <span class="added">+0</span>
+                    <td>
+<span class="pill badge-pill badge-secondary added">+0</span>
+<span class="pill badge-pill badge-secondary removed">-0</span>
+
+<span class="pill badge-pill badge-secondary changed">~0</span>
+
 </td>
-</tr>
-<tr>
-<td><a href="./openjdk10/index.html">openjdk10</a></td>
-<td>master</td>
-<td>
-<span class="removed">-0</span> | <span class="added">+0</span>
+                </tr>
+
+                <tr>
+                    <td class="project-header"><a href="./openjdk10/index.html">openjdk10</a></td>
+                    <td>master</td>
+                    <td>
+<span class="pill badge-pill badge-secondary added">+0</span>
+<span class="pill badge-pill badge-secondary removed">-0</span>
+
+<span class="pill badge-pill badge-secondary changed">~0</span>
+
 </td>
-<td>
-<span class="removed">-0</span> | <span class="changed">~0</span> | <span class="added">+0</span>
+                    <td>
+<span class="pill badge-pill badge-secondary added">+0</span>
+<span class="pill badge-pill badge-secondary removed">-0</span>
+
+<span class="pill badge-pill badge-secondary changed">~0</span>
+
 </td>
-<td>
-<span class="removed">-0</span> | <span class="added">+0</span>
+                    <td>
+<span class="pill badge-pill badge-secondary added">+0</span>
+<span class="pill badge-pill badge-secondary removed">-0</span>
+
+<span class="pill badge-pill badge-secondary changed">~0</span>
+
 </td>
-</tr>
-<tr>
-<td><a href="./spring-framework/index.html">spring-framework</a></td>
-<td>v5.0.6.RELEASE</td>
-<td>
-<span class="removed">-0</span> | <span class="added">+0</span>
+                </tr>
+
+                <tr>
+                    <td class="project-header"><a href="./spring-framework/index.html">spring-framework</a></td>
+                    <td>v5.0.6.RELEASE</td>
+                    <td>
+<span class="pill badge-pill badge-secondary added">+0</span>
+<span class="pill badge-pill badge-secondary removed">-0</span>
+
+<span class="pill badge-pill badge-secondary changed">~0</span>
+
 </td>
-<td>
-<span class="removed">-0</span> | <span class="changed">~0</span> | <span class="added">+0</span>
+                    <td>
+<span class="pill badge-pill badge-secondary added">+0</span>
+<span class="pill badge-pill badge-secondary removed">-0</span>
+
+<span class="pill badge-pill badge-secondary changed">~0</span>
+
 </td>
-<td>
-<span class="removed">-0</span> | <span class="added">+0</span>
+                    <td>
+<span class="pill badge-pill badge-secondary added">+0</span>
+<span class="pill badge-pill badge-secondary removed">-0</span>
+
+<span class="pill badge-pill badge-secondary changed">~0</span>
+
 </td>
-</tr>
-</tbody>
-</table>
+                </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
+</body>
 </html>

@@ -16,6 +16,12 @@ puts summary
 # {:errors=>{:new=>0, :removed=>0}, :violations=>{:new=>0, :removed=>0, :changed=>0}, :configerrors=>{:new=>0, :removed=>0}}
 ```
 
+* As part of [#73](https://github.com/pmd/pmd-regression-tester/issues/73) and [#78](https://github.com/pmd/pmd-regression-tester/pull/78)
+  a improved HTML report is now generated with the following features:
+  * searchable table for violations with filters by rule/file/kind (added, removed, changed)
+  * summary of changes by rule
+  * code snippets for the violations
+
 ## Fixed Issues
 
 *   [#48](https://github.com/pmd/pmd-regression-tester/issues/48): Support auxclasspath / typeresolution
@@ -23,6 +29,7 @@ puts summary
 *   [#68](https://github.com/pmd/pmd-regression-tester/pull/68): Don't generate a dynamic ruleset if not needed
 *   [#69](https://github.com/pmd/pmd-regression-tester/pull/69): Detect single rules with auto-gen-config
 *   [#70](https://github.com/pmd/pmd-regression-tester/pull/70): Add link to PR on github in HTML report
+*   [#73](https://github.com/pmd/pmd-regression-tester/issues/73): Better HTML presentation for diff report
 *   [#74](https://github.com/pmd/pmd-regression-tester/pull/74): Merge violations that have just changed messages
 *   [#75](https://github.com/pmd/pmd-regression-tester/pull/75): Add new option "--error-recovery"
 *   [#76](https://github.com/pmd/pmd-regression-tester/pull/76): Speedup XML parsing

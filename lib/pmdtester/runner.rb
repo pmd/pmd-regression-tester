@@ -4,13 +4,15 @@ module PmdTester
   # The Runner is a class responsible of organizing all PmdTester modules
   # and running the PmdTester
   class Runner
-    include PmdTester
+    include PmdTesterUtils
+
     def initialize(argv)
       @options = Options.new(argv)
     end
 
     def run
       clean unless @options.keep_reports
+
       case @options.mode
       when Options::LOCAL
         run_local_mode
@@ -34,14 +36,10 @@ module PmdTester
       rule_sets = RuleSetBuilder.new(@options).build if @options.auto_config_flag
       return if rule_sets&.empty?
 
-      PmdReportBuilder
-        .new(@projects, @options, @options.base_config, @options.base_branch)
-        .build
-      PmdReportBuilder
-        .new(@projects, @options, @options.patch_config, @options.patch_branch)
-        .build
+      base_branch_details = create_pmd_report(config: @options.base_config, branch: @options.base_branch)
+      patch_branch_details = create_pmd_report(config: @options.patch_config, branch: @options.patch_branch)
 
-      build_html_reports
+      build_html_reports(@projects, base_branch_details, patch_branch_details)
     end
 
     def run_online_mode
@@ -63,11 +61,10 @@ module PmdTester
         logger.info "Using config #{@options.patch_config} which might differ from baseline"
       end
 
-      PmdReportBuilder
-        .new(@projects, @options, @options.patch_config, @options.patch_branch)
-        .build
+      patch_branch_details = create_pmd_report(config: @options.patch_config, branch: @options.patch_branch)
 
-      build_html_reports
+      base_branch_details = PmdBranchDetail.load(@options.base_branch, logger)
+      build_html_reports(@projects, base_branch_details, patch_branch_details)
     end
 
     def determine_project_list_for_online_mode(baseline_path)
@@ -110,33 +107,16 @@ module PmdTester
       logger.info "Mode: #{@options.mode}"
 
       get_projects(@options.project_list) unless @options.nil?
-      branch_details = PmdReportBuilder
-                       .new(@projects, @options,
-                            @options.patch_config, @options.patch_branch)
-                       .build
+      patch_branch_details = create_pmd_report(config: @options.patch_config, branch: @options.patch_branch)
       # copy list of projects file to the patch baseline
-      FileUtils.cp(@options.project_list, branch_details.target_branch_project_list_path)
+      FileUtils.cp(@options.project_list, patch_branch_details.target_branch_project_list_path)
 
-      build_html_reports unless @options.html_flag
-    end
+      # for creating a baseline, no html report is needed
+      return if @options.html_flag
 
-    def build_html_reports
-      build_diff_html_reports
-      SummaryReportBuilder.new.build(@projects, @options.base_branch, @options.patch_branch)
-    end
-
-    def build_diff_html_reports
-      @projects.each do |project|
-        logger.info "Preparing report for #{project.name}"
-        report_diffs = DiffBuilder.new.build(project.get_pmd_report_path(@options.base_branch),
-                                             project.get_pmd_report_path(@options.patch_branch),
-                                             project.get_report_info_path(@options.base_branch),
-                                             project.get_report_info_path(@options.patch_branch),
-                                             @options.filter_set)
-        project.report_diff = report_diffs
-        DiffReportBuilder.new.build(project)
-      end
-      logger.info 'Built all difference reports successfully!'
+      # in single mode, we don't have a base branch, only a patch branch...
+      empty_base_branch_details = PmdBranchDetail.load('single-mode', logger)
+      build_html_reports(@projects, empty_base_branch_details, patch_branch_details)
     end
 
     def get_projects(file_path)
@@ -144,23 +124,32 @@ module PmdTester
     end
 
     def summarize_diffs
-      result = {
-        errors: { new: 0, removed: 0 },
-        violations: { new: 0, removed: 0, changed: 0 },
-        configerrors: { new: 0, removed: 0 }
-      }
+      error_total = RunningDiffCounters.new(0)
+      violations_total = RunningDiffCounters.new(0)
+      configerrors_total = RunningDiffCounters.new(0)
 
       @projects.each do |project|
-        result[:errors][:new] += project.new_errors_size
-        result[:errors][:removed] += project.removed_errors_size
-        result[:violations][:new] += project.new_violations_size
-        result[:violations][:removed] += project.removed_violations_size
-        result[:violations][:changed] += project.changed_violations_size
-        result[:configerrors][:new] += project.new_configerrors_size
-        result[:configerrors][:removed] += project.removed_configerrors_size
+        diff = project.report_diff
+
+        # in case we are in single mode, there might be no diffs (only the patch branch is available)
+        next if diff.nil?
+
+        error_total.merge!(diff.error_counts)
+        violations_total.merge!(diff.violation_counts)
+        configerrors_total.merge!(diff.configerror_counts)
       end
 
-      result
+      {
+        errors: error_total.to_h,
+        violations: violations_total.to_h,
+        configerrors: configerrors_total.to_h
+      }
+    end
+
+    private
+
+    def create_pmd_report(config:, branch:)
+      PmdReportBuilder.new(@projects, @options, config, branch).build
     end
   end
 end
