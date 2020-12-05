@@ -1,3 +1,11 @@
+# 1.2.0-SNAPSHOT / ????-??-??
+
+## New and Noteworthy
+
+## Fixed Issues
+
+## External Contributions
+
 # 1.1.0 / 2020-12-05
 
 ## New and Noteworthy
