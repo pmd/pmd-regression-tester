@@ -104,10 +104,12 @@ The tool creates the following folders:
 
 === Runtime dependency
 
-  nokogiri ~> 1.8
+  nokogiri >= 1.11.0.rc4
   slop ~> 4.6
   differ ~> 0.1
   rufus-scheduler ~> 3.5
+  logger-colors ~> 1.0
+  liquid >= 4.0
 
 === Development dependency
 

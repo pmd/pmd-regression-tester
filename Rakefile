@@ -19,7 +19,7 @@ hoe = Hoe.spec 'pmdtester' do
   developer 'Clément Fournier', 'clement.fournier76@gmail.com'
 
   self.clean_globs = %w[target/reports/**/* target/test/**/* target/dynamic-config.xml Gemfile.lock]
-  self.extra_deps += [['nokogiri', '~> 1.8'], ['slop', '~> 4.6'], ['differ', '~> 0.1'],
+  self.extra_deps += [['nokogiri', '>= 1.11.0.rc4'], ['slop', '~> 4.6'], ['differ', '~> 0.1'],
                       ['rufus-scheduler', '~> 3.5'], ['logger-colors', '~> 1.0'],
                       ['liquid', '>= 4.0']]
   self.extra_dev_deps += [
