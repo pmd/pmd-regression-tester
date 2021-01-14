@@ -64,7 +64,7 @@ module PmdTester
       patch_branch_details = create_pmd_report(config: @options.patch_config, branch: @options.patch_branch)
 
       base_branch_details = PmdBranchDetail.load(@options.base_branch, logger)
-      build_html_reports(@projects, base_branch_details, patch_branch_details)
+      build_html_reports(@projects, base_branch_details, patch_branch_details, @options.filter_set)
     end
 
     def determine_project_list_for_online_mode(baseline_path)

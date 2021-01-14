@@ -39,13 +39,15 @@ module PmdTester
     def compute_project_diffs(projects, base_branch, patch_branch, filter_set = nil)
       projects.each do |project|
         logger.info "Preparing report for #{project.name}"
+        logger.info "  with filter #{filter_set}" unless filter_set.nil?
         project.compute_report_diff(base_branch, patch_branch, filter_set)
       end
     end
 
     # Build the diff reports and write them all
-    def build_html_reports(projects, base_branch_details, patch_branch_details)
-      compute_project_diffs(projects, base_branch_details.branch_name, patch_branch_details.branch_name)
+    def build_html_reports(projects, base_branch_details, patch_branch_details, filter_set = nil)
+      compute_project_diffs(projects, base_branch_details.branch_name, patch_branch_details.branch_name,
+                            filter_set)
 
       SummaryReportBuilder.new.write_all_projects(projects,
                                                   base_branch_details,

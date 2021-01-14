@@ -27,7 +27,7 @@ module PmdTester
         hash = JSON.parse(File.read(report_info_path), symbolize_names: true)
         PmdReportDetail.new(**hash)
       else
-        puts "#{report_info_path} doesn't exist"
+        PmdTester.logger.warn("#{report_info_path} doesn't exist")
         PmdReportDetail.new
       end
     end

@@ -37,6 +37,32 @@ class TestDiffBuilder < Test::Unit::TestCase
     # assert_equal('00:00:56', diffs_report.diff_execution_time)
   end
 
+  def test_violation_diffs_with_filter
+    base_report_path = 'test/resources/diff_builder/test_violation_diffs_base.xml'
+    patch_report_path = 'test/resources/diff_builder/test_violation_diffs_patch.xml'
+    filter_set = Set['codestyle.xml/FieldDeclarationsShouldBeAtStartOfClass']
+    diffs_report = build_report_diff(base_report_path, patch_report_path,
+                                     BASE_REPORT_INFO_PATH, PATCH_REPORT_INFO_PATH,
+                                     filter_set)
+    violation_diffs = diffs_report.violation_diffs_by_file
+    keys = violation_diffs.keys
+
+    assert_counters_empty(diffs_report.error_counts)
+    assert_counters_eq(diffs_report.violation_counts,
+                       base_total: 2, patch_total: 8, changed_total: 8)
+    assert_changes_eq(diffs_report.violation_counts,
+                      removed: 1, added: 7, changed: 0)
+
+    assert_equal('Base1.java', keys[0])
+    assert_equal('SameFileNameWithDiffViolations.java', keys[1])
+    assert_equal(2, violation_diffs[keys[1]].size)
+    assert_equal('Same1.java', keys[2])
+    assert_equal('Patch1.java', keys[3])
+    assert_equal('Patch2.java', keys[4])
+    assert_equal('Patch3.java', keys[5])
+    assert_equal('Same2.java', keys[6])
+  end
+
   def test_error_diffs
     base_report_path = 'test/resources/diff_builder/test_error_diffs_base.xml'
     patch_report_path = 'test/resources/diff_builder/test_error_diffs_patch.xml'
