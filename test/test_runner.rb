@@ -140,8 +140,17 @@ class TestRunner < Test::Unit::TestCase
 
   def assert_summarized_diffs(diffs)
     refute_nil(diffs)
-    refute_nil(diffs[:errors])
-    refute_nil(diffs[:violations])
-    refute_nil(diffs[:configerrors])
+    assert_counters(diffs[:errors])
+    assert_counters(diffs[:violations])
+    assert_counters(diffs[:configerrors])
+  end
+
+  def assert_counters(counter)
+    refute_nil(counter)
+    refute_nil(counter[:changed])
+    refute_nil(counter[:new])
+    refute_nil(counter[:removed])
+    refute_nil(counter[:base_total])
+    refute_nil(counter[:patch_total])
   end
 end
