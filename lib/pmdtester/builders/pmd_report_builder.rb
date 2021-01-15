@@ -31,9 +31,10 @@ module PmdTester
 
         raise "Wrong branch #{get_last_commit_sha}" unless build_branch_sha == get_last_commit_sha
 
+        distro_path = saved_distro_path(build_branch_sha)
         logger.debug "#{@pmd_branch_name}: PMD Version is #{@pmd_version} " \
                      "(sha=#{build_branch_sha})"
-        distro_path = saved_distro_path(build_branch_sha)
+        logger.debug "#{@pmd_branch_name}: distro_path=#{distro_path}"
         if File.directory?(distro_path)
           logger.info "#{@pmd_branch_name}: Skipping packaging - saved version exists " \
                       " in #{distro_path}"
@@ -53,7 +54,9 @@ module PmdTester
       # in CI there might have been a build performed already. In that case
       # we reuse the build result, otherwise we build PMD freshly
       pmd_dist_target = "pmd-dist/target/pmd-bin-#{@pmd_version}.zip"
-      if File.exist?("#{@local_git_repo}/#{pmd_dist_target}")
+      binary_exists = File.exist?(pmd_dist_target)
+      logger.debug "#{@pmd_branch_name}: Does the file #{pmd_dist_target} exist? #{binary_exists} (cwd: #{Dir.getwd})"
+      if binary_exists
         # that's a warning, because we don't know, whether this build really
         # belongs to the current branch or whether it's from a previous branch.
         # In CI, that's not a problem, because the workspace is always fresh.

@@ -145,7 +145,6 @@ class TestPmdReportBuilder < Test::Unit::TestCase
   end
 
   def record_expectations(sha1_head, sha1_base, zip_file_exists)
-    Dir.expects(:chdir).with('target/repositories/pmd').yields.once
     PmdTester::Cmd.stubs(:execute).with('git rev-parse master^{commit}').returns(sha1_base).once
     # inside checkout_build_branch
     PmdTester::Cmd.stubs(:execute).with('git checkout master')

@@ -5,10 +5,8 @@
 ## Fixed Issues
 
 *   [#81](https://github.com/pmd/pmd-regression-tester/pull/81): Dynamically generated rulesets are not applied on diffs
-
-## External Contributions
-
 *   [#82](https://github.com/pmd/pmd-regression-tester/pull/82): Summary hash uses wrong key names
+*   An already built PMD binary was not reused in CI
 
 # 1.1.0 / 2020-12-05
 
