@@ -4,6 +4,8 @@
 
 ## Fixed Issues
 
+*   [#81](https://github.com/pmd/pmd-regression-tester/pull/81): Dynamically generated rulesets are not applied on diffs
+
 ## External Contributions
 
 # 1.1.0 / 2020-12-05
