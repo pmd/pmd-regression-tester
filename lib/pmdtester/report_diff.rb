@@ -33,6 +33,10 @@ module PmdTester
         'patch_total' => patch_total
       }
     end
+
+    def to_s
+      "RunningDiffCounters[#{to_h}]"
+    end
   end
 
   # Simple info about a rule, collected by the report xml parser
@@ -75,6 +79,12 @@ module PmdTester
       @errors_by_file = report_document.errors
       @configerrors_by_rule = report_document.configerrors
       @infos_by_rule = report_document.infos_by_rules
+
+      PmdTester.logger.debug("Loaded #{@violations_by_file.total_size} violations " \
+                             "in #{@violations_by_file.num_files} files")
+      PmdTester.logger.debug("Loaded #{@errors_by_file.total_size} errors " \
+                             "in #{@errors_by_file.num_files} files")
+      PmdTester.logger.debug("Loaded #{@configerrors_by_rule.size} config errors")
     end
 
     def initialize_empty
