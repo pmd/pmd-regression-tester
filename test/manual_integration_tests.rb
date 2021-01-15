@@ -210,6 +210,8 @@ class ManualIntegrationTests < Test::Unit::TestCase
       system('git reset --hard')
       system("git checkout #{branch}")
       system("git reset --hard origin/#{branch}")
+      system('git config user.email "andreas.dangel+pmd-bot@adangel.org"')
+      system('git config user.name "PMD CI (pmd-bot)"')
     end
   end
 
