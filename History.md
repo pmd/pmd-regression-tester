@@ -6,6 +6,8 @@
 
 ## External Contributions
 
+*   [#82](https://github.com/pmd/pmd-regression-tester/pull/82): Summary hash uses wrong key names
+
 # 1.1.0 / 2020-12-05
 
 ## New and Noteworthy
