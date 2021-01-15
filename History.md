@@ -1,6 +1,6 @@
-# 1.1.1-SNAPSHOT / ????-??-??
+# 1.1.1 / 2021-01-15
 
-## New and Noteworthy
+This is a bugfix release.
 
 ## Fixed Issues
 
