@@ -7,6 +7,8 @@ class TestPmdReportBuilder < Test::Unit::TestCase
   def setup
     # pmd version that is simulated in tests when pmd should be built
     @pmd_version = '6.10.0-SNAPSHOT'
+    # create a empty pmd repo directory
+    FileUtils.mkdir_p 'target/repositories/pmd'
   end
 
   def teardown
