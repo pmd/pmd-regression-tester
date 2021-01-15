@@ -1,0 +1,32 @@
+name: manual-integration-tests
+
+on: workflow_dispatch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    continue-on-error: false
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/cache@v2
+      with:
+        path: |
+          ~/.m2/repository
+          ~/.cache
+          vendor/bundle
+        key: ${{ runner.os }}-${{ hashFiles('pmdtester.gemspec') }}
+        restore-keys: |
+          ${{ runner.os }}-
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 2.7
+    - name: Build
+      run: .ci/manual-integration-tests.sh
+      shell: bash
+      env:
+        MAVEN_OPTS: -Dmaven.wagon.httpconnectionManager.ttlSeconds=180 -Dmaven.wagon.http.retryHandler.count=3
+        PMD_CI_SECRET_PASSPHRASE: ${{ secrets.PMD_CI_SECRET_PASSPHRASE }}
+        PMD_CI_REPO: ${{ github.repository }}
+        PMD_CI_PULL_REQUEST_NUMBER: ${{ github.event.pull_request.number }}
+        PMD_CI_GIT_REF: ${{ github.ref }}
