@@ -1,3 +1,11 @@
+# 1.2.0 / ????-??-??
+
+## New and Notworthy
+
+## Fixed Issues
+
+## External Contributions
+
 # 1.1.1 / 2021-01-15
 
 This is a bugfix release.
