@@ -1,6 +1,9 @@
 .ci/build.sh
 .ci/files/env.gpg
+.ci/inc/install-openjdk.inc
+.ci/manual-integration-tests.sh
 .github/workflows/build.yml
+.github/workflows/manual-integration-tests.yml
 .gitignore
 .hoerc
 .rubocop.yml
