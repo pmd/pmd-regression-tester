@@ -9,9 +9,9 @@ module PmdTester
 
     def report_diff_to_h(rdiff)
       {
-        'violation_counts' => rdiff.violation_counts.to_h,
-        'error_counts' => rdiff.error_counts.to_h,
-        'configerror_counts' => rdiff.configerror_counts.to_h,
+        'violation_counts' => rdiff.violation_counts.to_h.transform_keys(&:to_s),
+        'error_counts' => rdiff.error_counts.to_h.transform_keys(&:to_s),
+        'configerror_counts' => rdiff.configerror_counts.to_h.transform_keys(&:to_s),
 
         'base_execution_time' => PmdReportDetail.convert_seconds(rdiff.base_report.exec_time),
         'patch_execution_time' => PmdReportDetail.convert_seconds(rdiff.patch_report.exec_time),

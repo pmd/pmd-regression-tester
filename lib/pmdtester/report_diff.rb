@@ -26,11 +26,11 @@ module PmdTester
 
     def to_h
       {
-        'changed' => changed,
-        'new' => new,
-        'removed' => removed,
-        'base_total' => base_total,
-        'patch_total' => patch_total
+        changed: changed,
+        new: new,
+        removed: removed,
+        base_total: base_total,
+        patch_total: patch_total
       }
     end
 
@@ -135,7 +135,7 @@ module PmdTester
         {
           'name' => rule,
           'info_url' => @rule_infos_union[rule].info_url,
-          **counters.to_h
+          **counters.to_h.transform_keys(&:to_s)
         }
       end
     end
