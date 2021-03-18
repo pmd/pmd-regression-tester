@@ -15,7 +15,7 @@ function build() {
     pmd_ci_log_group_end
 
     pmd_ci_log_group_start "Install dependencies"
-        gem install bundler
+        gem install --user-install bundler
         bundle config set --local path vendor/bundle
         bundle install
     pmd_ci_log_group_end
