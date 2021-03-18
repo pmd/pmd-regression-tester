@@ -1,1 +1,1 @@
-exclude: !ruby/regexp /tmp$|\.(git|idea)\/|\.project|target|test\/|Gemfile\.lock|\.bundle\/|vendor\/bundle|localtests/
+exclude: !ruby/regexp /tmp$|\.git\/|\.idea|\.project|target\/|test\/|Gemfile\.lock|\.bundle\/|vendor\/|localtests\/|\.ci\/inc\/(log|utils|setup-secrets|openjdk|github-releases-api)\.bash|\.ci\/files\//
