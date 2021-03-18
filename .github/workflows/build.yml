@@ -22,6 +22,7 @@ jobs:
           ~/.m2/repository
           ~/.cache
           vendor/bundle
+          target/repositories
         key: ${{ runner.os }}-${{ hashFiles('pmdtester.gemspec') }}
         restore-keys: |
           ${{ runner.os }}-
