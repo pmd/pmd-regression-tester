@@ -1,67 +1,90 @@
 #!/usr/bin/env bash
 
-source $(dirname $0)/inc/install-openjdk.inc
-
+# Exit this script immediately if a command/function exits with a non-zero status.
 set -e
 
+SCRIPT_INCLUDES="log.bash utils.bash setup-secrets.bash openjdk.bash github-releases-api.bash"
+# shellcheck source=inc/fetch_ci_scripts.bash
+source "$(dirname "$0")/inc/fetch_ci_scripts.bash" && fetch_ci_scripts
 
-function build_regression_tester() {
-    echo "::group::Install OpenJDK 8+11"
-    install_openjdk 8
-    install_openjdk 11 # last one is the default
-    echo "::endgroup::"
+function build() {
+    pmd_ci_log_group_start "Install OpenJDK 8+11"
+        pmd_ci_openjdk_install_adoptopenjdk 11
+        pmd_ci_openjdk_install_adoptopenjdk 8
+        pmd_ci_openjdk_setdefault 11
+    pmd_ci_log_group_end
 
-    echo "::group::Install dependencies"
-    gem install bundler
-    bundle config set --local path vendor/bundle
-    bundle install
-    echo "::endgroup::"
+    pmd_ci_log_group_start "Install dependencies"
+        gem install bundler
+        bundle config set --local path vendor/bundle
+        bundle install
+    pmd_ci_log_group_end
 
-    echo "::group::Build with rake"
-    bundle exec rake check_manifest
-    bundle exec rake rubocop
-    bundle exec rake clean test
-    echo "::endgroup::"
+    echo
+    local version
+    version="$(bundle exec ruby -I. -e 'require "lib/pmdtester"; print PmdTester::VERSION;')"
+    pmd_ci_log_info "======================================================================="
+    pmd_ci_log_info "Building pmd-regression-tester ${version}"
+    pmd_ci_log_info "======================================================================="
+    pmd_ci_utils_determine_build_env pmd/pmd-regression-tester
+    echo
 
-    echo "::group::Run Integration Tests"
-    bundle exec rake clean integration-test
-    echo "::endgroup::"
+    pmd_ci_log_group_start "Build with rake"
+        bundle exec rake check_manifest
+        bundle exec rake rubocop
+        bundle exec rake clean test
+    pmd_ci_log_group_end
 
-    echo "::group::Build Package"
-    bundle exec rake install_gem
-    bundle exec pmdtester -h
-    echo "::endgroup::"
+    pmd_ci_log_group_start "Run Integration Tests"
+        bundle exec rake clean integration-test
+    pmd_ci_log_group_end
 
-    # builds on forks or builds for pull requests stop here
-    if [[ "${PMD_CI_REPO}" != "pmd/pmd-regression-tester" || -n "${PMD_CI_PULL_REQUEST_NUMBER}" ]]; then
+    pmd_ci_log_group_start "Build Package"
+        bundle exec rake install_gem
+        bundle exec pmdtester -h
+    pmd_ci_log_group_end
+
+    if pmd_ci_utils_is_fork_or_pull_request; then
+        # builds on forks or builds for pull requests stop here
         exit 0
     fi
 
-    # if this is a release build from a tag...
-    if [[ "${PMD_CI_REPO}" == "pmd/pmd-regression-tester" && "${PMD_CI_GIT_REF}" == refs/tags/* ]]; then
-        echo "::group::Publish to rubygems"
-        setup_secrets
+    # only builds on pmd/pmd-regression-tester continue here
+    pmd_ci_log_group_start "Setup environment"
+        pmd_ci_setup_secrets_private_env
+    pmd_ci_log_group_end
 
-        git stash --all
-        gem build pmdtester.gemspec
-        gem push pmdtester-*.gem
-        echo "::endgroup::"
+    if pmd_ci_maven_isReleaseBuild; then
+        pmd_ci_log_group_start "Publish to rubygems"
+            git stash --all
+            gem build pmdtester.gemspec
+            gem push pmdtester-*.gem
+        pmd_ci_log_group_end
+
+        pmd_ci_log_group_start "Update Github Releases"
+            # create a draft github release
+            pmd_ci_gh_releases_createDraftRelease "${PMD_CI_TAG}" "$(git rev-list -n 1 "${PMD_CI_TAG}")"
+            GH_RELEASE="$RESULT"
+
+            # Deploy to github releases
+            local gempkgfile
+            gempkgfile="$(echo pkg/pmdtester-*.gem)"
+            pmd_ci_gh_releases_uploadAsset "$GH_RELEASE" "${gempkgfile}"
+
+            # extract the release notes
+            RELEASE_NAME="${version}"
+            BEGIN_LINE=$(grep -n "^# " History.md|head -1|cut -d ":" -f 1)
+            BEGIN_LINE=$((BEGIN_LINE + 1))
+            END_LINE=$(grep -n "^# " History.md|head -2|tail -1|cut -d ":" -f 1)
+            END_LINE=$((END_LINE - 1))
+            RELEASE_BODY="$(head -$END_LINE History.md | tail -$((END_LINE - BEGIN_LINE)))"
+
+            pmd_ci_gh_releases_updateRelease "$GH_RELEASE" "$RELEASE_NAME" "$RELEASE_BODY"
+
+            # Publish release - this sends out notifications on github
+            pmd_ci_gh_releases_publishRelease "$GH_RELEASE"
+        pmd_ci_log_group_end
     fi
-
 }
 
-## helper functions
-
-function setup_secrets() {
-    echo "Setting up secrets..."
-    # Required secrets are: GEM_HOST_API_KEY
-    local -r env_file=".ci/files/env"
-    printenv PMD_CI_SECRET_PASSPHRASE | gpg --batch --yes --decrypt \
-        --passphrase-fd 0 \
-        --output ${env_file} ${env_file}.gpg
-    source ${env_file} >/dev/null 2>&1
-    rm ${env_file}
-}
-
-
-build_regression_tester
+build
