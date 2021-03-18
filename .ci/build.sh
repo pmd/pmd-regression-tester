@@ -56,9 +56,10 @@ function build() {
 
     if pmd_ci_maven_isReleaseBuild; then
         pmd_ci_log_group_start "Publish to rubygems"
-            git stash --all
             gem build pmdtester.gemspec
-            gem push pmdtester-*.gem
+            local gempkgfile
+            gempkgfile="$(echo pmdtester-*.gem)"
+            gem push "${gempkgfile}"
         pmd_ci_log_group_end
 
         pmd_ci_log_group_start "Update Github Releases"
@@ -67,8 +68,6 @@ function build() {
             GH_RELEASE="$RESULT"
 
             # Deploy to github releases
-            local gempkgfile
-            gempkgfile="$(echo pkg/pmdtester-*.gem)"
             pmd_ci_gh_releases_uploadAsset "$GH_RELEASE" "${gempkgfile}"
 
             # extract the release notes
