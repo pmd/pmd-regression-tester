@@ -8,6 +8,7 @@ body, td, select, input, li{
 code {
   font-family: Courier, monospace;
   font-size: 13pt;
+  white-space: pre;
 }
 code.highlight {
   background-color: yellow;
