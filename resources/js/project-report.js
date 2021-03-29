@@ -23,7 +23,7 @@ $(document).ready(function () {
     function renderCodeSnippet(violation) {
         var node = document.createElement('p');
         var url = project.source_link_base + '/' + project.file_index[violation.f];
-        window.pmd_code_snippets.fetch(node, url, violation.l, makeCodeLink(violation));
+        window.pmd_code_snippets.fetch(document, node, url, violation.l, makeCodeLink(violation));
         return node;
     }
 
