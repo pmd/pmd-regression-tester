@@ -1,10 +1,11 @@
-# 1.2.0 / ????-??-??
+# 1.1.2 / 2021-04-20
 
-## New and Notworthy
+This is a bugfix release.
 
 ## Fixed Issues
 
-## External Contributions
+*   [#85](https://github.com/pmd/pmd-regression-tester/issues/85): HTML is not escaped in snippet preview
+*   [#84](https://github.com/pmd/pmd-regression-tester/issues/84): Leading spaces are missing in code snippet preview
 
 # 1.1.1 / 2021-01-15
 
