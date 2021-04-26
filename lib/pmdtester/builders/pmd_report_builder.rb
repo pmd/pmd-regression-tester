@@ -119,7 +119,7 @@ module PmdTester
       doc = Nokogiri::XML(File.read(@branch_config))
       ruleset = doc.at_css('ruleset')
       ruleset.add_child("\n")
-      project.exclude_pattern.each do |exclude_pattern|
+      project.exclude_patterns.each do |exclude_pattern|
         ruleset.add_child("    <exclude-pattern>#{exclude_pattern}</exclude-pattern>\n")
       end
 

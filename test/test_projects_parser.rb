@@ -12,7 +12,7 @@ class TestProjectsParser < Test::Unit::TestCase
   def test_project_parser_checkstyle
     expected_exclude_pattern =
       %w[**/src/test/resources-noncompilable/**/* **/src/test/resources/**/*]
-    assert_equal(expected_exclude_pattern, @projects[0].exclude_pattern)
+    assert_equal(expected_exclude_pattern, @projects[0].exclude_patterns)
     assert_equal('https://github.com/checkstyle/checkstyle/tree/master', @projects[0].webview_url)
     assert_equal('master', @projects[0].tag)
     assert_equal('mvn test-compile', @projects[0].build_command)
@@ -26,7 +26,7 @@ class TestProjectsParser < Test::Unit::TestCase
     assert_equal('http://hg.openjdk.java.net/jdk10/jdk10/jdk/file/777356696811',
                  @projects[1].webview_url)
     assert_equal('master', @projects[1].tag)
-    assert_empty(@projects[1].exclude_pattern)
+    assert_empty(@projects[1].exclude_patterns)
     assert_nil(@projects[1].build_command)
     assert_nil(@projects[1].auxclasspath_command)
   end
@@ -38,7 +38,7 @@ class TestProjectsParser < Test::Unit::TestCase
     assert_equal('https://github.com/spring-projects/spring-framework/tree/v5.0.6.RELEASE',
                  @projects[2].webview_url)
     assert_equal('v5.0.6.RELEASE', @projects[2].tag)
-    assert_empty(@projects[2].exclude_pattern)
+    assert_empty(@projects[2].exclude_patterns)
     assert_nil(@projects[2].build_command)
     assert_nil(@projects[2].auxclasspath_command)
   end

@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'pathname'
+
 module PmdTester
   # This class represents all the information about the project
   class Project
@@ -12,7 +14,8 @@ module PmdTester
     attr_reader :connection
     attr_reader :webview_url
     attr_reader :tag
-    attr_reader :exclude_pattern
+    attr_reader :exclude_patterns
+    attr_reader :src_subpath
     attr_accessor :report_diff
     # key: pmd branch name as String => value: local path of pmd report
     attr_reader :build_command
@@ -31,9 +34,10 @@ module PmdTester
       @webview_url = default_webview_url
       @webview_url = webview_url_element.text unless webview_url_element.nil?
 
-      @exclude_pattern = []
+      @src_subpath = project.at_xpath('src-subpath')&.text || '.'
+      @exclude_patterns = []
       project.xpath('exclude-pattern').each do |ep|
-        @exclude_pattern.push(ep.text)
+        @exclude_patterns.push(ep.text)
       end
 
       @build_command = project.at_xpath('build-command')&.text
@@ -56,17 +60,17 @@ module PmdTester
     # Change the file path from 'LOCAL_DIR/SOURCE_CODE_PATH' to
     # 'WEB_VIEW_URL/SOURCE_CODE_PATH'
     def get_webview_url(file_path)
-      file_path.gsub(%r{/#{local_source_path}}, @webview_url)
+      file_path.gsub(%r{/#{clone_root_path}}, @webview_url)
     end
 
     # Change the file path from 'LOCAL_DIR/SOURCE_CODE_PATH' to
     # 'PROJECT_NAME/SOURCE_CODE_PATH'
     def get_path_inside_project(file_path)
-      file_path.gsub(%r{/#{local_source_path}}, @name)
+      file_path.gsub(%r{/#{clone_root_path}}, @name)
     end
 
     def get_local_path(file_path)
-      file_path.sub(%r{/#{local_source_path}/}, '')
+      file_path.sub(%r{/#{clone_root_path}/}, '')
     end
 
     def get_pmd_report_path(branch_name)
@@ -93,15 +97,24 @@ module PmdTester
       end
     end
 
+    ##
+    # Path to the sources to analyze (below or equal to clone_root_path)
+    def local_source_path 
+      # normalize path
+      Pathname.new("#{clone_root_path}/#{src_subpath}").cleanpath
+    end
+
+    ##
+    # Path to the clone directory
+    def clone_root_path
+      "#{REPOSITORIES_PATH}/#{@name}"
+    end
+
     def get_project_target_dir(branch_name)
       branch_filename = PmdBranchDetail.branch_filename(branch_name)
       dir = "target/reports/#{branch_filename}/#{@name}"
       FileUtils.mkdir_p(dir) unless File.directory?(dir)
       dir
-    end
-
-    def local_source_path
-      "#{REPOSITORIES_PATH}/#{@name}"
     end
 
     def compute_report_diff(base_branch, patch_branch, filter_set)

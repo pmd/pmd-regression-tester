@@ -1,0 +1,40 @@
+<?xml version="1.0" ?>
+<!-- version 1.1.0 -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="projectlist">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="description" type="xs:string" minOccurs="1" maxOccurs="1"/>
+        <xs:element name="project" type="project" minOccurs="1" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="project">
+    <xs:sequence>
+      <xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="type" minOccurs="1" maxOccurs="1">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="git"/>
+            <xs:enumeration value="hg"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="connection" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="webview-url" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="tag" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="src-subpath" type="xs:string" minOccurs="0" maxOccurs="1" default=".">
+        <xs:annotation>
+          <xs:documentation>
+            Value of the -dir option for the PMD run.
+            The value must be a directory path relative to the root directory of the clone.
+            Defaults to just '.', ie the entire directory.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="exclude-pattern" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="build-command" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="auxclasspath-command" type="xs:string" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

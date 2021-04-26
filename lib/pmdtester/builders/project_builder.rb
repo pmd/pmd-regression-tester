@@ -17,11 +17,16 @@ module PmdTester
 
       @projects.each do |project|
         logger.info "Start cloning #{project.name} repository"
-        path = project.local_source_path
-        clone_cmd = "#{project.type} clone #{project.connection} #{path}"
+        path = project.clone_root_path
+
         if File.exist?(path)
           logger.warn "Skipping clone, project path #{path} already exists"
         else
+          clone_cmd = "#{project.type} clone #{project.connection} #{path}"
+
+          if project.type == 'git'
+            clone_cmd += " --depth 1 --branch #{project.tag} --single-branch" # don't download whole history
+          end
           Cmd.execute(clone_cmd)
         end
 
@@ -38,7 +43,7 @@ module PmdTester
       logger.info 'Building projects started'
 
       @projects.each do |project|
-        path = project.local_source_path
+        path = project.clone_root_path
         Dir.chdir(path) do
           progress_logger = SimpleProgressLogger.new("building #{project.name} in #{path}")
           progress_logger.start
