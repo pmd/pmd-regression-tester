@@ -154,3 +154,4 @@ The tool creates the following folders:
 * Push to master.
 * Push the tag. Github Actions will build and publish the new gem
 * A github release is automatically created, verify it on https://github.com/pmd/pmd-regression-tester/releases
+* To make pmd's main CI use the new version (in [pmd/pmd](https://github.com/pmd/pmd/)), go to the root directory and run `bundle lock --update`. Commit these changes. 
