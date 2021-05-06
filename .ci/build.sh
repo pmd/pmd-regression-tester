@@ -54,7 +54,7 @@ function build() {
         pmd_ci_setup_secrets_private_env
     pmd_ci_log_group_end
 
-    if pmd_ci_maven_isReleaseBuild; then
+    if isReleaseBuild "$version"; then
         pmd_ci_log_group_start "Publish to rubygems"
             gem build pmdtester.gemspec
             local gempkgfile
@@ -84,6 +84,16 @@ function build() {
             pmd_ci_gh_releases_publishRelease "$GH_RELEASE"
         pmd_ci_log_group_end
     fi
+}
+
+function isReleaseBuild() {
+    local version="$1"
+
+    if [[ "${version}" != *-SNAPSHOT && "${PMD_CI_TAG}" != "" ]]; then
+        return 0
+    fi
+
+    return 1
 }
 
 build
