@@ -99,7 +99,7 @@ module PmdTester
 
     ##
     # Path to the sources to analyze (below or equal to clone_root_path)
-    def local_source_path 
+    def local_source_path
       # normalize path
       Pathname.new("#{clone_root_path}/#{src_subpath}").cleanpath
     end

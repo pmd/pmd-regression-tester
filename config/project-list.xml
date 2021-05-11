@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <projectlist xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xsi:noNamespaceSchemaLocation="projectlist_1_0_0.xsd">
+xsi:noNamespaceSchemaLocation="projectlist_1_2_0.xsd">
   <description>Standard Projects</description>
 
   <project>
@@ -20,10 +20,11 @@ xsi:noNamespaceSchemaLocation="projectlist_1_0_0.xsd">
     <tag>v5.0.6.RELEASE</tag>
   </project>
 
-  <!---<project>
-    <name>openjdk10</name>
-    <type>hg</type>
-    <connection>http://hg.openjdk.java.net/jdk10/jdk10/jdk</connection>
-    <webview-url>http://hg.openjdk.java.net/jdk10/jdk10/jdk/file/777356696811</webview-url>
-  </project> -->
+  <project>
+    <name>openjdk-11</name>
+    <type>git</type>
+    <connection>https://github.com/openjdk/jdk</connection>
+    <tag>jdk-11+28</tag>
+    <src-subpath>src/java.base</src-subpath>
+  </project>
 </projectlist>
