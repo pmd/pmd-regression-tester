@@ -23,7 +23,7 @@ module PmdTester
     # stores the auxclasspath calculated after cloning/preparing the project
     attr_accessor :auxclasspath
 
-    def initialize(project)
+    def initialize(project) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
       @name = project.at_xpath('name').text
       @type = project.at_xpath('type').text
       @connection = project.at_xpath('connection').text
