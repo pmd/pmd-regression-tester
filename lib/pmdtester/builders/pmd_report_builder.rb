@@ -69,7 +69,7 @@ module PmdTester
                       ' -Dmaven.source.skip=true' \
                       ' -Dcheckstyle.skip=true' \
                       ' -Dpmd.skip=true' \
-                      ' -T1C'
+                      ' -T1C -B'
         Cmd.execute(package_cmd)
       end
 

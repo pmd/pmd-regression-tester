@@ -73,7 +73,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     record_expectations('sha1abc', 'sha1abc', false)
     PmdTester::Cmd.stubs(:execute).with('./mvnw clean package -Dmaven.test.skip=true' \
                   ' -Dmaven.javadoc.skip=true -Dmaven.source.skip=true' \
-                  ' -Dcheckstyle.skip=true -Dpmd.skip=true -T1C').once
+                  ' -Dcheckstyle.skip=true -Dpmd.skip=true -T1C -B').once
     PmdTester::Cmd.stubs(:execute).with("unzip -qo pmd-dist/target/pmd-bin-#{@pmd_version}.zip" \
                   ' -d pmd-dist/target/exploded').once
     PmdTester::Cmd.stubs(:execute).with("mv pmd-dist/target/exploded/pmd-bin-#{@pmd_version}" \

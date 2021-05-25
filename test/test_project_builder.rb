@@ -24,7 +24,7 @@ class TestProjectBuilder < Test::Unit::TestCase
        .returns('target/repositories/checkstyle')
        .returns('target/repositories/spring-framework')
        .returns('target/repositories/spring-framework')
-    expect_build('checkstyle', 'mvn test-compile',
+    expect_build('checkstyle', 'mvn test-compile -B',
                  "#!/usr/bin/env bash\necho -n \"\$(pwd)/target/classes:\"\n        ")
     expect_build('spring-framework')
     project_builder = PmdTester::ProjectBuilder.new(@projects)

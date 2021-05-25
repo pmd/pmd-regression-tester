@@ -15,7 +15,7 @@ class TestProjectsParser < Test::Unit::TestCase
     assert_equal(expected_exclude_pattern, @projects[0].exclude_patterns)
     assert_equal('https://github.com/checkstyle/checkstyle/tree/master', @projects[0].webview_url)
     assert_equal('master', @projects[0].tag)
-    assert_equal('mvn test-compile', @projects[0].build_command)
+    assert_equal('mvn test-compile -B', @projects[0].build_command)
     assert_equal('echo -n "$(pwd)/target/classes:"', @projects[0].auxclasspath_command)
   end
 
