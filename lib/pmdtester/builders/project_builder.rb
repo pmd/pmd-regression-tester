@@ -25,7 +25,10 @@ module PmdTester
           clone_cmd = "#{project.type} clone #{project.connection} #{path}"
 
           if project.type == 'git'
-            clone_cmd += " --depth 1 --branch #{project.tag} --single-branch" # don't download whole history
+            # Don't download whole history
+            # Note we don't use --single-branch, because the repo is downloaded
+            # once but may be used with several tags.
+            clone_cmd += ' --depth 1'
           end
           Cmd.execute(clone_cmd)
         end
