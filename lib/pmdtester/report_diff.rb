@@ -57,15 +57,18 @@ module PmdTester
                 :configerrors_by_rule,
                 :exec_time,
                 :timestamp,
-                :infos_by_rule
+                :infos_by_rule,
+                :file
 
     def initialize(report_document: nil,
+                   file: '',
                    exec_time: 0,
                    timestamp: '0')
       initialize_empty
       initialize_with_report_document report_document unless report_document.nil?
       @exec_time = exec_time
       @timestamp = timestamp
+      @file = file
     end
 
     def self.empty

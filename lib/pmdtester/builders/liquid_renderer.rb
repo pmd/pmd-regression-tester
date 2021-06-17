@@ -57,6 +57,9 @@ module PmdTester
       write_file("#{root}/index.html", render_liquid('project_diff_report.html', liquid_env))
       # generate array of violations in json
       write_file("#{root}/project_data.js", dump_violations_json(project))
+      # copy original pmd reports
+      copy_file("#{root}/base_pmd_report.xml", project.report_diff.base_report.file)
+      copy_file("#{root}/patch_pmd_report.xml", project.report_diff.patch_report.file)
     end
 
     def dump_violations_json(project)
@@ -68,6 +71,17 @@ module PmdTester
 
       project_data = JSON.fast_generate(h)
       "let project = #{project_data}"
+    end
+
+    private
+
+    def copy_file(target_file, source_file)
+      if File.exist? source_file
+        FileUtils.cp(source_file, target_file)
+        logger&.info "Written #{target_file}"
+      else
+        logger&.warn "File #{source_file} not found"
+      end
     end
   end
 end

@@ -36,6 +36,9 @@ class TestProjectDiffReport < Test::Unit::TestCase
 
     # Checking the content of diff report is expected.
     assert_file_equals(EXPECTED_REPORT_PATH, "#{actual_report_path}/index.html")
+    assert_file_exists("#{actual_report_path}/project_data.js")
+    assert_file_exists("#{actual_report_path}/base_pmd_report.xml")
+    assert_file_exists("#{actual_report_path}/patch_pmd_report.xml")
   end
 
   def test_report_diffs_empty
