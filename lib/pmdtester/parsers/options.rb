@@ -29,6 +29,7 @@ module PmdTester
     attr_reader :threads
     attr_reader :html_flag
     attr_reader :auto_config_flag
+    attr_reader :filter_with_patch_config
     attr_reader :debug_flag
     attr_accessor :filter_set
     attr_reader :keep_reports
@@ -48,6 +49,7 @@ module PmdTester
       @threads = options[:t]
       @html_flag = options[:f]
       @auto_config_flag = options[:a]
+      @filter_with_patch_config = options.filter_with_patch_config?
       @debug_flag = options[:d]
       @filter_set = nil
       @keep_reports = options.keep_reports?
@@ -100,6 +102,9 @@ module PmdTester
         o.bool '-a', '--auto-gen-config',
                'whether to generate configurations automatically based on branch differences,' \
                'this option only works in online and local mode'
+        o.bool '--filter-with-patch-config',
+               'whether to use patch config to filter baseline result as if --auto-gen-config ' \
+               'has been used. This option only works in online mode.'
         o.bool '--keep-reports',
                'whether to keep old reports and skip running PMD again if possible'
         o.bool '-d', '--debug',

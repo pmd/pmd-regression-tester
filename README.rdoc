@@ -20,29 +20,30 @@ on a list of standard projects(Spring Framework, Hibernate, Solr, etc.)
 == SYNOPSIS:
 
 === Options:
-    -r, --local-git-repo     path to the local PMD repository
-    -b, --base-branch        name of the base branch in local PMD repository
-    -p, --patch-branch       name of the patch branch in local PMD repository
-    -bc, --base-config       path to the base PMD configuration file default:PMDTESTER_INSTALLED_DIR/config/all-java.xml
-    -pc, --patch-config      path to the patch PMD configuration file default:PMDTESTER_INSTALLED_DIR/config/all-java.xml
-    -c, --config             path to the base and patch PMD configuration file
-    -l, --list-of-project    path to the file which contains the list of standard projects default:PMDTESTER_INSTALLED_DIR/config/project-list.xml
-    -m, --mode               the mode of the tool: 'local', 'online' or 'single'
+    -r, --local-git-repo        path to the local PMD repository
+    -b, --base-branch           name of the base branch in local PMD repository
+    -p, --patch-branch          name of the patch branch in local PMD repository
+    -bc, --base-config          path to the base PMD configuration file
+    -pc, --patch-config         path to the patch PMD configuration file
+    -c, --config                path to the base and patch PMD configuration file
+    -l, --list-of-project       path to the file which contains the list of standard projects
+    -m, --mode                          the mode of the tool: 'local', 'online' or 'single'
           single: Set this option to 'single' if your patch branch contains changes
             for any option that can't work on master/base branch
           online: Set this option to 'online' if you want to download
             the PMD report of master/base branch rather than generating it locally
           local: Default option is 'local', PMD reports for the base and patch branches are generated locally.
 
-    -t, --threads            Sets the number of threads used by PMD. Set threads to 0 to disable multi-threading processing. default:1
-    -f, --html-flag          whether to not generate the html diff report in single mode
-    -a, --auto-gen-config    whether to generate configurations automatically based on branch differences,this option only works in online and local mode
-    --keep-reports           whether to keep old reports and skip running PMD again if possible
-    -d, --debug              whether change log level to DEBUG to see more information
-    --error-recovery         enable error recovery mode when executing PMD. Might help to analyze errors.
-    --baseline-download-url  download url prefix from where to download the baseline in online mode default:https://sourceforge.net/projects/pmd/files/pmd-regression-tester/
-    -v, --version
-    -h, --help
+    -t, --threads               Sets the number of threads used by PMD. Set threads to 0 to disable multi-threading processing.
+    -f, --html-flag             whether to not generate the html diff report in single mode
+    -a, --auto-gen-config       whether to generate configurations automatically based on branch differences,this option only works in online and local mode
+    --filter-with-patch-config  whether to use patch config to filter baseline result as if --auto-gen-config has been used. This option only works in online mode.
+    --keep-reports              whether to keep old reports and skip running PMD again if possible
+    -d, --debug                 whether change log level to DEBUG to see more information
+    --error-recovery            enable error recovery mode when executing PMD. Might help to analyze errors.
+    --baseline-download-url     download url prefix from where to download the baseline in online mode
+    -v, --version               
+    -h, --help                  
 
 === Quick start
 

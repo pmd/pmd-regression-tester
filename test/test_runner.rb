@@ -136,6 +136,40 @@ class TestRunner < Test::Unit::TestCase
     assert_summarized_diffs(summarized_results)
   end
 
+  def test_online_mode_keep_reports_second_run_filtering
+    FileUtils.mkdir_p 'target/reports/pmd_releases_6.7.0/checkstyle'
+    # placing the baseline zip here avoid downloading it during test run - and we can craft it for the test
+    FileUtils.cp 'test/resources/runner/master-baseline.zip', 'target/reports'
+    # placing the report here avoids running PMD again - and we can craft it for the test
+    FileUtils.cp 'test/resources/runner/pmd_report.xml', 'target/reports/pmd_releases_6.7.0/checkstyle/pmd_report.xml'
+
+    # create a empty directory for PMD build to avoid building PMD during test
+    fake_pmd_bin = 'target/pmd-bin-6.7.0-pmd_releases_6.7.0-b98bd0bb961d9f82437acccfe64923d992970310'
+    FileUtils.mkdir_p fake_pmd_bin unless Dir.exist?(fake_pmd_bin)
+
+    begin
+      argv = %w[-r target/repositories/pmd -m online -b master -p pmd_releases/6.7.0
+                --list-of-project test/resources/runner/project-list.xml
+                --keep-reports --filter-with-patch-config
+                --patch-config test/resources/runner/patch-config.xml]
+      summarized_results = run_runner(argv)
+      assert_equal(0, summarized_results[:violations][:changed])
+      assert_equal(1, summarized_results[:violations][:new])
+      # while the baseline has also a violation for a different rule (AbstractClassWithoutAbstractMethod)
+      # the patch-config.xml ruleset only contains the rule ConsecutiveLiteralAppends
+      # and so does the prepared result pmd_report.xml.
+      # with "--filter-with-patch-config" the irrelevant rules from baseline are ignored
+      assert_equal(0, summarized_results[:violations][:removed])
+      # baseline has only one violation for rule ConsecutiveLiteralAppends
+      assert_equal(1, summarized_results[:violations][:base_total])
+      # patch has two violations for rule ConsecutiveLiteralAppends
+      assert_equal(2, summarized_results[:violations][:patch_total])
+    ensure
+      # cleanup
+      Dir.rmdir fake_pmd_bin if Dir.empty?(fake_pmd_bin)
+    end
+  end
+
   private
 
   def assert_summarized_diffs(diffs)
