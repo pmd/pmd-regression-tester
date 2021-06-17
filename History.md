@@ -6,6 +6,8 @@
 
 ## Fixed Issues
 
+*   [#89](https://github.com/pmd/pmd-regression-tester/pull/89): Make it possible to select a subpath of cloned directory
+
 ## External Contributions
 
 # 1.1.2 / 2021-04-20
