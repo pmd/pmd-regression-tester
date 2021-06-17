@@ -16,10 +16,11 @@ xsi:noNamespaceSchemaLocation="projectlist_1_2_0.xsd">
   </project>
 
   <project>
-    <name>openjdk10</name>
-    <type>hg</type>
-    <connection>http://hg.openjdk.java.net/jdk10/jdk10/jdk</connection>
-    <webview-url>http://hg.openjdk.java.net/jdk10/jdk10/jdk/file/777356696811</webview-url>
+    <name>openjdk-11</name>
+    <type>git</type>
+    <connection>https://github.com/openjdk/jdk</connection>
+    <tag>jdk-11+28</tag>
+    <src-subpath>src/java.base</src-subpath>
   </project>
 
   <project>

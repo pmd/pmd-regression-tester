@@ -16,7 +16,6 @@
         <xs:simpleType>
           <xs:restriction base="xs:string">
             <xs:enumeration value="git"/>
-            <xs:enumeration value="hg"/>
           </xs:restriction>
         </xs:simpleType>
       </xs:element>

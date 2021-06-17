@@ -22,14 +22,14 @@ module PmdTester
         if File.exist?(path)
           logger.warn "Skipping clone, project path #{path} already exists"
         else
-          clone_cmd = "#{project.type} clone #{project.connection} #{path}"
+          raise "Unsupported project type '#{project.type}' - only git is supported" unless project.type == 'git'
 
-          if project.type == 'git'
-            # Don't download whole history
-            # Note we don't use --single-branch, because the repo is downloaded
-            # once but may be used with several tags.
-            clone_cmd += ' --depth 1'
-          end
+          # git:
+          # Don't download whole history
+          # Note we don't use --single-branch, because the repo is downloaded
+          # once but may be used with several tags.
+          clone_cmd = "git clone #{project.connection} #{path} --depth 1"
+
           Cmd.execute(clone_cmd)
         end
 
@@ -95,12 +95,9 @@ module PmdTester
     end
 
     def execute_reset_cmd(type, tag)
-      case type
-      when 'git'
-        reset_cmd = "git checkout #{tag}; git reset --hard #{tag}"
-      when 'hg'
-        reset_cmd = "hg up #{tag}"
-      end
+      raise "Unsupported project type '#{type}' - only git is supported" unless type == 'git'
+
+      reset_cmd = "git checkout #{tag}; git reset --hard #{tag}"
 
       Cmd.execute(reset_cmd)
     end

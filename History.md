@@ -2,6 +2,8 @@
 
 ## New and Noteworthy
 
+*   Support for Mercurial is removed. The only SCM supported in the project-list.xml is "git".
+
 ## Fixed Issues
 
 ## External Contributions

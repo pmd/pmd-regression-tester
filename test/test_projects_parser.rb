@@ -20,12 +20,12 @@ class TestProjectsParser < Test::Unit::TestCase
   end
 
   def test_project_parser_openjdk
-    assert_equal('openjdk10', @projects[1].name)
-    assert_equal('hg', @projects[1].type)
-    assert_equal('http://hg.openjdk.java.net/jdk10/jdk10/jdk', @projects[1].connection)
-    assert_equal('http://hg.openjdk.java.net/jdk10/jdk10/jdk/file/777356696811',
-                 @projects[1].webview_url)
-    assert_equal('master', @projects[1].tag)
+    assert_equal('openjdk-11', @projects[1].name)
+    assert_equal('git', @projects[1].type)
+    assert_equal('https://github.com/openjdk/jdk', @projects[1].connection)
+    assert_equal('https://github.com/openjdk/jdk/tree/jdk-11+28', @projects[1].webview_url)
+    assert_equal('jdk-11+28', @projects[1].tag)
+    assert_equal('src/java.base', @projects[1].src_subpath)
     assert_empty(@projects[1].exclude_patterns)
     assert_nil(@projects[1].build_command)
     assert_nil(@projects[1].auxclasspath_command)
@@ -54,7 +54,7 @@ class TestProjectsParser < Test::Unit::TestCase
       assert_equal("15:0: ERROR: Element 'connection': This element is not expected. " \
                        'Expected is ( type ).', e.errors[1].to_s)
       assert_equal("20:0: ERROR: Element 'type': [facet 'enumeration'] " \
-                       "The value 'invalid type' is not an element of the set {'git', 'hg'}.",
+                       "The value 'invalid type' is not an element of the set {'git'}.",
                    e.errors[2].to_s)
     end
   end
