@@ -87,7 +87,7 @@ class TestOptions < Test::Unit::TestCase
 
   def test_local_miss_base_name
     argv = %w[-r target/repositories/pmd -bc config/design.xml
-              -p pmd_releases/6.1.0 -pc config/design.xml -l test/resources/project-test.xml]
+              -p pmd_releases/6.1.0 -pc config/design.xml -l test/resources/options/project-test.xml]
     expect = 'base branch name is required in local mode.'
     parse_and_assert_error_messages(argv, expect)
   end

@@ -5,7 +5,7 @@ require 'test_helper'
 # Unit test for PmdTester::ProjectsParser
 class TestProjectsParser < Test::Unit::TestCase
   def setup
-    @projects = PmdTester::ProjectsParser.new.parse('test/resources/project-list.xml')
+    @projects = PmdTester::ProjectsParser.new.parse('test/resources/projects_parser/project-list.xml')
     assert_equal(3, @projects.size)
   end
 
@@ -44,7 +44,7 @@ class TestProjectsParser < Test::Unit::TestCase
   end
 
   def test_invalid_list
-    list_file = 'test/resources/project-list-invalid.xml'
+    list_file = 'test/resources/projects_parser/project-list-invalid.xml'
     begin
       PmdTester::ProjectsParser.new.parse(list_file)
     rescue PmdTester::ProjectsParserException => e

@@ -9,7 +9,7 @@ class IntegrationTestRunner < Test::Unit::TestCase
 
   def test_local_mode
     argv = '-r target/repositories/pmd -b pmd_releases/6.7.0 -bc config/design.xml' \
-              ' -p master -pc config/design.xml -l test/resources/project-test.xml'
+              ' -p master -pc config/design.xml -l test/resources/integration_test_runner/project-test.xml'
 
     system("bundle exec bin/pmdtester #{argv}")
 

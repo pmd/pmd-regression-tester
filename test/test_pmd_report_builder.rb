@@ -27,7 +27,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
   def test_build_skip
     projects = []
     argv = %w[-r target/repositories/pmd -b master -p pmd_releases/6.1.0
-              -c config/design.xml -l test/resources/project-test.xml]
+              -c config/design.xml -l test/resources/pmd_report_builder/project-test.xml]
     options = PmdTester::Options.new(argv)
 
     record_expectations('sha1abc', 'sha1abc', true)
@@ -45,7 +45,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
   def test_build_skip_ci
     projects = []
     argv = %w[-r target/repositories/pmd -b master -p pmd_releases/6.1.0
-              -c config/design.xml -l test/resources/project-test.xml]
+              -c config/design.xml -l test/resources/pmd_report_builder/project-test.xml]
     options = PmdTester::Options.new(argv)
 
     FileUtils.mkdir_p 'target/repositories/pmd/pmd-dist/target'
@@ -66,7 +66,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
   def test_build_normal
     projects = []
     argv = %w[-r target/repositories/pmd -b master -p pmd_releases/6.1.0
-              -c config/design.xml -l test/resources/project-test.xml]
+              -c config/design.xml -l test/resources/pmd_report_builder/project-test.xml]
     options = PmdTester::Options.new(argv)
 
     # PMD binary does not exist yet this time...
