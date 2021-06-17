@@ -18,6 +18,8 @@ class TestPmdBranchDetail < Test::Unit::TestCase
     details.branch_last_message = 'test message'
     details.branch_last_sha = 'test sha'
     details.execution_time = 'test time'
+    assert_instance_of(Time, details.timestamp)
+    details.timestamp = 'the timestamp'
 
     details.save
     details = PmdTester::PmdBranchDetail.load('test_branch', nil)
@@ -25,6 +27,7 @@ class TestPmdBranchDetail < Test::Unit::TestCase
     assert_equal('test_branch', details.branch_name)
     assert_equal('test message', details.branch_last_message)
     assert_equal('test sha', details.branch_last_sha)
+    assert_equal('the timestamp', details.timestamp)
     assert_equal('test time', details.execution_time)
     assert_equal(PmdTester::Cmd.stderr_of('java -version'), details.jdk_version)
     assert_not_empty(details.jdk_version)

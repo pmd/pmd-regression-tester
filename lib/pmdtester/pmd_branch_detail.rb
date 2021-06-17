@@ -10,6 +10,8 @@ module PmdTester
     attr_accessor :branch_last_sha
     attr_accessor :branch_last_message
     attr_accessor :branch_name
+    # Start of the regression report
+    attr_accessor :timestamp
     # The branch's execution time on all standard projects
     attr_accessor :execution_time
     attr_accessor :jdk_version
@@ -26,6 +28,7 @@ module PmdTester
       @branch_name = branch_name
       branch_filename = PmdBranchDetail.branch_filename(branch_name)
       @base_branch_dir = "target/reports/#{branch_filename}" unless @branch_name.nil?
+      @timestamp = Time.now
       @execution_time = 0
       # the result of command 'java -version' is going to stderr
       @jdk_version = Cmd.stderr_of('java -version')
@@ -42,11 +45,13 @@ module PmdTester
         details.branch_last_sha = hash['branch_last_sha']
         details.branch_last_message = hash['branch_last_message']
         details.branch_name = hash['branch_name']
+        details.timestamp = hash['timestamp']
         details.execution_time = hash['execution_time']
         details.jdk_version = hash['jdk_version']
         details.language = hash['language']
         details.pull_request = hash['pull_request']
       else
+        details.timestamp = Time.now
         details.jdk_version = ''
         details.language = ''
         logger&.warn "#{details.path_to_save_file} doesn't exist!"
@@ -58,6 +63,7 @@ module PmdTester
       hash = { branch_last_sha: @branch_last_sha,
                branch_last_message: @branch_last_message,
                branch_name: @branch_name,
+               timestamp: @timestamp,
                execution_time: @execution_time,
                jdk_version: @jdk_version,
                language: @language,

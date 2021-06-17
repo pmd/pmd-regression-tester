@@ -2,6 +2,7 @@
     "branch_last_sha":"test sha",
     "branch_last_message":"test message",
     "branch_name":"patch_branch",
+    "timestamp":"foo2",
     "execution_time":121.123,
     "jdk_version":"test version",
     "language":"test language",
