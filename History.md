@@ -4,6 +4,8 @@
 
 ## Fixed Issues
 
+*   [#91](https://github.com/pmd/pmd-regression-tester/pull/91): Filter baseline based on patch config
+
 ## External Contributions
 
 # 1.1.2 / 2021-04-20
