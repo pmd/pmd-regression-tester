@@ -33,6 +33,10 @@ module PmdTester
       rule_refs
     end
 
+    def calculate_filter_set
+      output_filter_set(ALL_CATEGORIES)
+    end
+
     def output_filter_set(rule_refs)
       if rule_refs == ALL_CATEGORIES
         if @options.mode == Options::ONLINE
