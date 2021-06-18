@@ -28,7 +28,7 @@ module PmdTester
           # Don't download whole history
           # Note we don't use --single-branch, because the repo is downloaded
           # once but may be used with several tags.
-          clone_cmd = "git clone #{project.connection} #{path} --depth 1"
+          clone_cmd = "git clone --no-single-branch --depth 1 #{project.connection} #{path}"
 
           Cmd.execute(clone_cmd)
         end

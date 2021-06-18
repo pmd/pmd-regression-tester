@@ -38,7 +38,8 @@ class TestProjectBuilder < Test::Unit::TestCase
 
   def expect_git_clone(name, url, revision)
     File.stubs(:exist?).with("target/repositories/#{name}").returns(false).once
-    PmdTester::Cmd.stubs(:execute).with("git clone #{url} target/repositories/#{name} --depth 1").once
+    PmdTester::Cmd.stubs(:execute).with('git clone --no-single-branch --depth 1' \
+                                        " #{url} target/repositories/#{name}").once
     Dir.stubs(:chdir).with("target/repositories/#{name}").yields.once
     PmdTester::Cmd.stubs(:execute).with("git checkout #{revision}; git reset --hard #{revision}").once
   end
