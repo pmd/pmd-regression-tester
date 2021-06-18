@@ -57,7 +57,8 @@ $(document).ready(function () {
             viewTotal: true,
             cascadePanes: true,
             columns: [0, 1, 3],
-            order: ['Rule', 'Location (click row to expand)', 'Type']
+            order: ['Rule', 'Location (click row to expand)', 'Type'],
+            threshold: 1 // always show filters in search pane (default: 0.6)
         },
         // scrollCollapse: true,
         // paging: false,

@@ -4,6 +4,8 @@
 
 ## Fixed Issues
 
+*   [#71](https://github.com/pmd/pmd-regression-tester/issues/71): Include full PMD report
+
 ## External Contributions
 
 # 1.1.2 / 2021-04-20

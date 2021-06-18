@@ -60,16 +60,31 @@ module PmdTester
       # copy original pmd reports
       copy_file("#{root}/base_pmd_report.xml", project.report_diff.base_report.file)
       copy_file("#{root}/patch_pmd_report.xml", project.report_diff.patch_report.file)
+      # render full pmd reports
+      write_file("#{root}/base_pmd_report.html",
+                 render_liquid('project_pmd_report.html', pmd_report_liquid_env(project, BASE)))
+      write_file("#{root}/base_data.js", dump_violations_json(project, BASE))
+      write_file("#{root}/patch_pmd_report.html",
+                 render_liquid('project_pmd_report.html', pmd_report_liquid_env(project, PATCH)))
+      write_file("#{root}/patch_data.js", dump_violations_json(project, PATCH))
     end
 
-    def dump_violations_json(project)
+    def dump_violations_json(project, branch = 'diff')
+      violations_by_file = if branch == BASE
+                             project.report_diff.base_report.violations_by_file.to_h
+                           elsif branch == PATCH
+                             project.report_diff.patch_report.violations_by_file.to_h
+                           else
+                             project.report_diff.violation_diffs_by_file
+                           end
+
       h = {
         'source_link_base' => project.webview_url,
         'source_link_template' => link_template(project),
-        **violations_to_hash(project)
+        **violations_to_hash(project, violations_by_file, branch == 'diff')
       }
 
-      project_data = JSON.fast_generate(h)
+      project_data = JSON.fast_generate(h, indent: '    ', object_nl: "\n", array_nl: "\n")
       "let project = #{project_data}"
     end
 
@@ -82,6 +97,34 @@ module PmdTester
       else
         logger&.warn "File #{source_file} not found"
       end
+    end
+
+    def pmd_report_liquid_env(project, branch)
+      report = if branch == BASE
+                 project.report_diff.base_report
+               else
+                 project.report_diff.patch_report
+               end
+      {
+        'project_name' => project.name,
+        'branch' => branch,
+        'report' => report_to_h(project, report)
+      }
+    end
+
+    def report_to_h(project, report)
+      {
+        'violation_counts' => report.violations_by_file.total_size,
+        'error_counts' => report.errors_by_file.total_size,
+        'configerror_counts' => report.configerrors_by_rule.values.flatten.length,
+
+        'execution_time' => PmdReportDetail.convert_seconds(report.exec_time),
+        'timestamp' => report.timestamp,
+
+        'rules' => report.rule_summaries,
+        'errors' => report.errors_by_file.all_values.map { |e| error_to_hash(e, project) },
+        'configerrors' => report.configerrors_by_rule.values.flatten.map { |e| configerror_to_hash(e) }
+      }
     end
   end
 end

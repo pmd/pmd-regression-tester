@@ -16,6 +16,8 @@ class TestProjectDiffReport < Test::Unit::TestCase
 
   EXPECTED_REPORT_PATH =
     'test/resources/html_report_builder/expected_diff_report_index.html'
+  EXPECTED_FULL_BASE_HTML_REPORT = 'test/resources/project_diff_report/expected_full_base.html'
+  EXPECTED_FULL_PATCH_HTML_REPORT = 'test/resources/project_diff_report/expected_full_patch.html'
   EXPECTED_EMPTY_REPORT_PATH =
     'test/resources/html_report_builder/expected_empty_diff_report.html'
 
@@ -38,7 +40,13 @@ class TestProjectDiffReport < Test::Unit::TestCase
     assert_file_equals(EXPECTED_REPORT_PATH, "#{actual_report_path}/index.html")
     assert_file_exists("#{actual_report_path}/project_data.js")
     assert_file_exists("#{actual_report_path}/base_pmd_report.xml")
+    assert_file_exists("#{actual_report_path}/base_data.js")
+    assert_file_exists("#{actual_report_path}/base_pmd_report.html")
+    assert_file_equals(EXPECTED_FULL_BASE_HTML_REPORT, "#{actual_report_path}/base_pmd_report.html")
     assert_file_exists("#{actual_report_path}/patch_pmd_report.xml")
+    assert_file_exists("#{actual_report_path}/patch_data.js")
+    assert_file_exists("#{actual_report_path}/patch_pmd_report.html")
+    assert_file_equals(EXPECTED_FULL_PATCH_HTML_REPORT, "#{actual_report_path}/patch_pmd_report.html")
   end
 
   def test_report_diffs_empty
