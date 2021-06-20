@@ -49,7 +49,7 @@ class ManualIntegrationTests < Test::Unit::TestCase
 
     # errors might have been caused in the baseline for other rules (only visible in the stacktrace)
     # hence they might appear as removed
-    assert_equal(2, @summary[:errors][:removed], 'found removed errors')
+    assert_equal(0, @summary[:errors][:removed], 'found removed errors')
     assert_equal(0, @summary[:errors][:changed], 'found changed errors')
     assert_equal(0, @summary[:errors][:new], 'found new errors')
     assert_equal(0, @summary[:configerrors][:changed], 'found changed configerrors')
@@ -84,7 +84,7 @@ class ManualIntegrationTests < Test::Unit::TestCase
 
     # errors might have been caused in the baseline for other rules (only visible in the stacktrace)
     # hence they might appear as removed
-    assert_equal(2, @summary[:errors][:removed], 'found removed errors')
+    assert_equal(0, @summary[:errors][:removed], 'found removed errors')
     assert_equal(0, @summary[:errors][:changed], 'found changed errors')
     assert_equal(0, @summary[:errors][:new], 'found new errors')
     assert_equal(0, @summary[:configerrors][:changed], 'found changed configerrors')
