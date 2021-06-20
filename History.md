@@ -1,4 +1,4 @@
-# 1.2.0 / ????-??-??
+# 1.2.0 / 2021-06-20
 
 ## New and Noteworthy
 
@@ -9,8 +9,6 @@
 *   [#71](https://github.com/pmd/pmd-regression-tester/issues/71): Include full PMD report
 *   [#89](https://github.com/pmd/pmd-regression-tester/pull/89): Make it possible to select a subpath of cloned directory
 *   [#91](https://github.com/pmd/pmd-regression-tester/pull/91): Filter baseline based on patch config
-
-## External Contributions
 
 # 1.1.2 / 2021-04-20
 
