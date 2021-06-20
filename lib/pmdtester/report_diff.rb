@@ -57,19 +57,37 @@ module PmdTester
                 :configerrors_by_rule,
                 :exec_time,
                 :timestamp,
-                :infos_by_rule
+                :file
 
     def initialize(report_document: nil,
+                   file: '',
                    exec_time: 0,
                    timestamp: '0')
       initialize_empty
       initialize_with_report_document report_document unless report_document.nil?
       @exec_time = exec_time
       @timestamp = timestamp
+      @file = file
     end
 
     def self.empty
       new
+    end
+
+    def rule_summaries
+      summary = {}
+      @violations_by_file.each_value do |violation|
+        unless summary.key?(violation.rule_name)
+          summary[violation.rule_name] = {
+            'name' => violation.rule_name,
+            'info_url' => violation.info_url,
+            'count' => 0
+          }
+        end
+        summary[violation.rule_name]['count'] += 1
+      end
+
+      summary.values
     end
 
     private
@@ -78,7 +96,6 @@ module PmdTester
       @violations_by_file = report_document.violations
       @errors_by_file = report_document.errors
       @configerrors_by_rule = report_document.configerrors
-      @infos_by_rule = report_document.infos_by_rules
 
       PmdTester.logger.debug("Loaded #{@violations_by_file.total_size} violations " \
                              "in #{@violations_by_file.num_files} files")
@@ -91,7 +108,6 @@ module PmdTester
       @violations_by_file = CollectionByFile.new
       @errors_by_file = CollectionByFile.new
       @configerrors_by_rule = {}
-      @infos_by_rule = {}
     end
   end
 
@@ -122,7 +138,7 @@ module PmdTester
       @error_diffs_by_file = {}
       @configerror_diffs_by_rule = {}
 
-      @rule_infos_union = base_report.infos_by_rule.dup
+      @rule_infos_union = {}
       @base_report = base_report
       @patch_report = patch_report
 

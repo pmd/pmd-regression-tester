@@ -27,3 +27,6 @@ Metrics/ClassLength:
 Metrics/BlockLength:
   Exclude:
     - 'lib/pmdtester/parsers/options.rb'
+
+Metrics/ModuleLength:
+  CountAsOne: ['array', 'hash']

@@ -25,6 +25,23 @@ module PmdTester
       }
     end
 
+    def violations_to_hash(project, violations_by_file, is_diff)
+      filename_index = []
+      all_vs = []
+      violations_by_file.each do |file, vs|
+        file_ref = filename_index.size
+        filename_index.push(project.get_local_path(file))
+        vs.each do |v|
+          all_vs.push(make_violation_hash(file_ref, v, is_diff))
+        end
+      end
+
+      {
+        'file_index' => filename_index,
+        'violations' => all_vs
+      }
+    end
+
     def errors_to_h(project)
       errors = project.report_diff.error_diffs_by_file.values.flatten
       errors.map { |e| error_to_hash(e, project) }
@@ -35,53 +52,9 @@ module PmdTester
       configerrors.map { |e| configerror_to_hash(e) }
     end
 
-    def violations_to_hash(project)
-      filename_index = []
-      all_vs = []
-      project.report_diff.violation_diffs_by_file.each do |file, vs|
-        file_ref = filename_index.size
-        filename_index.push(project.get_local_path(file))
-        vs.each do |v|
-          all_vs.push(make_violation_hash(file_ref, v))
-        end
-      end
-
-      {
-        'file_index' => filename_index,
-        'violations' => all_vs
-      }
-    end
-
     def link_template(project)
       l_str = project.type == 'git' ? 'L' : 'l'
       "#{project.webview_url}/{file}##{l_str}{line}"
-    end
-
-    def violation_type(violation)
-      if violation.changed?
-        '~'
-      elsif violation.branch == 'patch'
-        '+'
-      else
-        '-'
-      end
-    end
-
-    def make_violation_hash(file_ref, violation)
-      h = {
-        't' => violation_type(violation),
-        'l' => violation.line,
-        'f' => file_ref,
-        'r' => violation.rule_name,
-        'm' => violation.changed? ? diff_fragments(violation) : violation.message
-      }
-      h['ol'] = violation.old_line if violation.changed? && violation.line != violation.old_line
-      h
-    end
-
-    def diff_fragments(violation)
-      diff = Differ.diff_by_word(violation.message, violation.old_message)
-      diff.format_as(:html)
     end
 
     def error_to_hash(error, project)
@@ -121,6 +94,35 @@ module PmdTester
       else
         'added'
       end
+    end
+
+    private
+
+    def violation_type(violation)
+      if violation.changed?
+        '~'
+      elsif violation.branch == PATCH
+        '+'
+      else
+        '-'
+      end
+    end
+
+    def make_violation_hash(file_ref, violation, is_diff = TRUE)
+      h = {
+        't' => is_diff ? violation_type(violation) : '+',
+        'l' => violation.line,
+        'f' => file_ref,
+        'r' => violation.rule_name,
+        'm' => is_diff && violation.changed? ? diff_fragments(violation) : violation.message
+      }
+      h['ol'] = violation.old_line if is_diff && violation.changed? && violation.line != violation.old_line
+      h
+    end
+
+    def diff_fragments(violation)
+      diff = Differ.diff_by_word(violation.message, violation.old_message)
+      diff.format_as(:html)
     end
   end
 end

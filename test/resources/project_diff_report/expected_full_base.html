@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Diff report for spring-framework</title>
+    <title>PMD Report for spring-framework</title>
 
     <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css" href="../css/datatables.min.css"/>
@@ -14,12 +14,12 @@
     <script src="../js/datatables.min.js"></script>
     <script src="../js/code-snippets.js"></script>
     <!-- This is generated -->
-    <script src="./project_data.js"></script>
+    <script src="./base_data.js"></script>
 
 </head>
 <body>
 <div class="section">
-    <h1>PMD Regression Tester Diff Report for spring-framework</h1>
+    <h1>PMD Report for spring-framework</h1>
 </div>
 <div class="section">
     <h2>Summary</h2>
@@ -29,8 +29,6 @@
             <tr>
                 <th></th>
                 <th>Base</th>
-                <th>Patch</th>
-                <th>Difference</th>
             </tr>
             </thead>
             <tbody>
@@ -38,62 +36,26 @@
                 <td class="item"><a href="#section-violations">Violations</a>
                 </td>
                 <td class="base">6</td>
-                <td class="patch">10</td>
-                <td class="diff">
-                    
-<span class="pill badge-pill badge-secondary added">+5</span>
-<span class="pill badge-pill badge-secondary removed">-1</span>
-
-<span class="pill badge-pill badge-secondary changed">~2</span>
-
-
-                </td>
             </tr>
             <tr>
                 <td class="item"><a href="#section-errors">Errors</a></td>
                 <td class="base">1</td>
-                <td class="patch">1</td>
-                <td class="diff">
-                    
-<span class="pill badge-pill badge-secondary added">+0</span>
-<span class="pill badge-pill badge-secondary removed">-0</span>
-
-<span class="pill badge-pill badge-secondary changed">~1</span>
-
-
-                </td>
             </tr>
             <tr>
                 <td class="item"><a href="#section-configerrors">ConfigErrors</a></td>
                 <td class="base">1</td>
-                <td class="patch">2</td>
-                <td class="diff">
-
-<span class="pill badge-pill badge-secondary added">+1</span>
-<span class="pill badge-pill badge-secondary removed">-0</span>
-
-<span class="pill badge-pill badge-secondary changed">~0</span>
-
-
-                </td>
             </tr>
             <tr>
                 <td class="item">Execution time</td>
                 <td class="base">00:02:01</td>
-                <td class="patch">00:01:05</td>
-                <td class="diff">00:00:56</td>
             </tr>
             <tr>
                 <td class="item">Timestamp</td>
                 <td class="base">base time stamp</td>
-                <td class="patch">patch time stamp</td>
-                <td class="diff"></td>
             </tr>
             <tr>
                 <td class="item">Full Report</td>
-                <td class="base"><a href="base_pmd_report.html">Base PMD Report</a></td>
-                <td class="patch"><a href="patch_pmd_report.html">Patch PMD Report</a></td>
-                <td class="diff"></td>
+                <td class="base"><a href="base_pmd_report.xml">base_pmd_report.xml</a></td>
             </tr>
             </tbody>
         </table>
@@ -112,10 +74,6 @@
                 <tr>
                     <th>Rule</th>
                     <th>Base</th>
-                    <th>Patch</th>
-                    <th>Added</th>
-                    <th>Changed</th>
-                    <th>Removed</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -129,10 +87,6 @@
                         <span class="external-link-secondary"><a class="rulelink" href="http://pmd.sourceforge.net/snapshot/pmd_rules_java_design.html#classwithonlyprivateconstructorsshouldbefinal" target="_blank" rel="noopener noreferrer">[doc]</a></span>
                     </td>
                     <td class="basecount">1</td>
-                    <td class="patchcount">2</td>
-                    <td class="added" data-count="1">1</td>
-                    <td class="changed" data-count="0">0</td>
-                    <td class="removed" data-count="0">0</td>
                 </tr>
                 
                 <tr id="rule-summary-FieldDeclarationsShouldBeAtStartOfClass">
@@ -141,10 +95,6 @@
                         <span class="external-link-secondary"><a class="rulelink" href="http://pmd.sourceforge.net/snapshot/pmd_rules_java_codestyle.html#fielddeclarationsshouldbeatstartofclass" target="_blank" rel="noopener noreferrer">[doc]</a></span>
                     </td>
                     <td class="basecount">2</td>
-                    <td class="patchcount">4</td>
-                    <td class="added" data-count="3">3</td>
-                    <td class="changed" data-count="0">0</td>
-                    <td class="removed" data-count="1">1</td>
                 </tr>
                 
                 <tr id="rule-summary-GodClass">
@@ -153,10 +103,6 @@
                         <span class="external-link-secondary"><a class="rulelink" href="http://pmd.sourceforge.net/snapshot/pmd_rules_java_design.html#godclass" target="_blank" rel="noopener noreferrer">[doc]</a></span>
                     </td>
                     <td class="basecount">1</td>
-                    <td class="patchcount">1</td>
-                    <td class="added" data-count="0">0</td>
-                    <td class="changed" data-count="1">1</td>
-                    <td class="removed" data-count="0">0</td>
                 </tr>
                 
                 <tr id="rule-summary-SomeRule">
@@ -165,10 +111,6 @@
                         <span class="external-link-secondary"><a class="rulelink" href="http://pmd.sourceforge.net/snapshot/pmd_rules_java_design.html#somerule" target="_blank" rel="noopener noreferrer">[doc]</a></span>
                     </td>
                     <td class="basecount">1</td>
-                    <td class="patchcount">2</td>
-                    <td class="added" data-count="1">1</td>
-                    <td class="changed" data-count="1">1</td>
-                    <td class="removed" data-count="0">0</td>
                 </tr>
                 
                 <tr id="rule-summary-UncommentedEmptyConstructor">
@@ -177,10 +119,6 @@
                         <span class="external-link-secondary"><a class="rulelink" href="http://pmd.sourceforge.net/snapshot/pmd_rules_java_documentation.html#uncommentedemptyconstructor" target="_blank" rel="noopener noreferrer">[doc]</a></span>
                     </td>
                     <td class="basecount">1</td>
-                    <td class="patchcount">1</td>
-                    <td class="added" data-count="0">0</td>
-                    <td class="changed" data-count="0">0</td>
-                    <td class="removed" data-count="0">0</td>
                 </tr>
                 
                 </tbody>
@@ -224,7 +162,7 @@
                 </thead>
                 <tbody>
                 
-                <tr id="error-1" class="accordion-toggle error-row changed" data-toggle="collapse" data-target="#error-1-expanded">
+                <tr id="error-1" class="accordion-toggle error-row" data-toggle="collapse" data-target="#error-1-expanded">
                     <td><a href="https://github.com/spring-projects/spring-framework/tree/v5.0.6.RELEASE/spring-aop/src/main/java/org/springframework/aop/TrueMethodMatcher.java"  target="_blank" rel="noopener noreferrer">TrueMethodMatcher.java</a></td>
                     <td>This is an artificial error message.</td>
                 </tr>
@@ -254,12 +192,11 @@ Was expecting one of:
 	at net.sourceforge.pmd.lang.java.ast.JavaParser.<span class="stack-trace-method">generateParseException</span>(JavaParser.java:11697)
 	at net.sourceforge.pmd.lang.java.ast.JavaParser.<span class="stack-trace-method">jj_consume_token</span>(JavaParser.java:11581)
 	at net.sourceforge.pmd.lang.java.ast.JavaParser.<span class="stack-trace-method">CompilationUnit</span>(JavaParser.java:323)
-	at net.sourceforge.pmd.lang.java.AbstractJavaParser.<span class="stack-trace-method">parse</span>(AbstractJavaParser.java:57)
+	at net.sourceforge.pmd.lang.java.AbstractJavaParser.<span class="stack-trace-method">parse</span>(AbstractJavaParser.java:58)
 	at net.sourceforge.pmd.SourceCodeProcessor.<span class="stack-trace-method">parse</span>(SourceCodeProcessor.java:111)
 	at net.sourceforge.pmd.SourceCodeProcessor.<span class="stack-trace-method">processSource</span>(SourceCodeProcessor.java:175)
 	at net.sourceforge.pmd.SourceCodeProcessor.<span class="stack-trace-method">processSourceCode</span>(SourceCodeProcessor.java:96)
 	... 9 more
-
                                 </pre>
                             </div>
                         </div>
@@ -288,10 +225,12 @@ Was expecting one of:
                  </tr>
                 </thead>
                 <tbody>
-                <tr class="configerror-row added">
-                    <td>NewRule</td>
-                    <td>Property method_name not defined</td>
+                
+                <tr class="configerror-row">
+                    <td>LoosePackageCoupling</td>
+                    <td>No packages or classes specified</td>
                 </tr>
+                
                 </tbody>
             </table>
         </div>

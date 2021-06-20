@@ -8,14 +8,12 @@ module PmdTester
     attr_reader :violations
     attr_reader :errors
     attr_reader :configerrors
-    attr_reader :infos_by_rules
 
     def initialize(branch_name, working_dir, filter_set = nil)
       @violations = CollectionByFile.new
       @errors = CollectionByFile.new
       @configerrors = Hash.new { |hash, key| hash[key] = [] }
 
-      @infos_by_rules = {}
       @current_violations = []
       @current_violation = nil
       @current_error = nil

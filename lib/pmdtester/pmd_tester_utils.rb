@@ -29,6 +29,7 @@ module PmdTester
       parser.parse_file(report_file) if File.exist?(report_file)
       Report.new(
         report_document: doc,
+        file: report_file,
 
         timestamp: report_details.timestamp,
         exec_time: report_details.execution_time

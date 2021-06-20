@@ -58,3 +58,4 @@ resources/js/popper.min.js
 resources/js/project-report.js
 resources/project_diff_report.html
 resources/project_index.html
+resources/project_pmd_report.html
