@@ -1,16 +1,17 @@
 <?xml version="1.0"?>
 
 <projectlist xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xsi:noNamespaceSchemaLocation="projectlist_1_1_0.xsd">
+xsi:noNamespaceSchemaLocation="projectlist_1_2_0.xsd">
   <description>Standard Projects</description>
 
   <project>
     <name>checkstyle</name>
     <type>git</type>
     <connection>https://github.com/checkstyle/checkstyle</connection>
+    <tag>checkstyle-8.10</tag>
     <exclude-pattern>**/src/test/resources-noncompilable/**/*</exclude-pattern>
     <exclude-pattern>**/src/test/resources/**/*</exclude-pattern>
-    <build-command>mvn test-compile</build-command>
+    <build-command>mvn test-compile -B</build-command>
     <auxclasspath-command><![CDATA[#!/usr/bin/env bash
 echo -n "$(pwd)/target/classes:"
         ]]></auxclasspath-command>

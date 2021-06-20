@@ -11,7 +11,7 @@ class TestSummaryReportBuilder < Test::Unit::TestCase
   end
 
   def test_summary_report_builder
-    projects = PmdTester::ProjectsParser.new.parse('test/resources/project-list.xml')
+    projects = PmdTester::ProjectsParser.new.parse('test/resources/summary_report_builder/project-list.xml')
 
     base_path = 'target/reports/base_branch'
     FileUtils.mkdir_p(base_path)
@@ -27,7 +27,7 @@ class TestSummaryReportBuilder < Test::Unit::TestCase
   end
 
   def test_summary_report_builder_with_filter
-    projects = PmdTester::ProjectsParser.new.parse('test/resources/project-list.xml')
+    projects = PmdTester::ProjectsParser.new.parse('test/resources/summary_report_builder/project-list.xml')
 
     base_path = 'target/reports/base_branch'
     FileUtils.mkdir_p(base_path)

@@ -11,10 +11,8 @@ class TestProjectBuilder < Test::Unit::TestCase
   end
 
   def test_clone
-    expect_clone('checkstyle', 'git', 'https://github.com/checkstyle/checkstyle',
-                 'git checkout master; git reset --hard master')
-    expect_clone('spring-framework', 'git', 'https://github.com/spring-projects/spring-framework',
-                 'git checkout v5.0.6.RELEASE; git reset --hard v5.0.6.RELEASE')
+    expect_git_clone('checkstyle', 'https://github.com/checkstyle/checkstyle', 'checkstyle-8.10')
+    expect_git_clone('spring-framework', 'https://github.com/spring-projects/spring-framework', 'v5.0.6.RELEASE')
 
     project_builder = PmdTester::ProjectBuilder.new(@projects)
     project_builder.clone_projects
@@ -26,7 +24,7 @@ class TestProjectBuilder < Test::Unit::TestCase
        .returns('target/repositories/checkstyle')
        .returns('target/repositories/spring-framework')
        .returns('target/repositories/spring-framework')
-    expect_build('checkstyle', 'mvn test-compile',
+    expect_build('checkstyle', 'mvn test-compile -B',
                  "#!/usr/bin/env bash\necho -n \"\$(pwd)/target/classes:\"\n        ")
     expect_build('spring-framework')
     project_builder = PmdTester::ProjectBuilder.new(@projects)
@@ -38,11 +36,12 @@ class TestProjectBuilder < Test::Unit::TestCase
 
   private
 
-  def expect_clone(name, type, url, reset_cmd)
+  def expect_git_clone(name, url, revision)
     File.stubs(:exist?).with("target/repositories/#{name}").returns(false).once
-    PmdTester::Cmd.stubs(:execute).with("#{type} clone #{url} target/repositories/#{name}").once
+    PmdTester::Cmd.stubs(:execute).with('git clone --no-single-branch --depth 1' \
+                                        " #{url} target/repositories/#{name}").once
     Dir.stubs(:chdir).with("target/repositories/#{name}").yields.once
-    PmdTester::Cmd.stubs(:execute).with(reset_cmd).once
+    PmdTester::Cmd.stubs(:execute).with("git checkout #{revision}; git reset --hard #{revision}").once
   end
 
   def expect_build(name, build_cmd = nil, auxclasspath_cmd = nil)

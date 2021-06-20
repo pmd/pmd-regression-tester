@@ -25,7 +25,7 @@ class TestProjectDiffReport < Test::Unit::TestCase
 
   def test_diff_report_builder
     # Project name: spring-framework
-    project = PmdTester::ProjectsParser.new.parse('test/resources/project-list.xml')[2]
+    project = PmdTester::ProjectsParser.new.parse('test/resources/project_diff_report/project-list.xml')[2]
 
     actual_report_path = "target/reports/diff/#{project.name}"
 
@@ -39,7 +39,7 @@ class TestProjectDiffReport < Test::Unit::TestCase
   end
 
   def test_report_diffs_empty
-    project = PmdTester::ProjectsParser.new.parse('test/resources/project-list.xml')[1]
+    project = PmdTester::ProjectsParser.new.parse('test/resources/project_diff_report/project-list.xml')[1]
     project.report_diff = PmdTester::ReportDiff.new(base_report: PmdTester::Report.empty,
                                                     patch_report: PmdTester::Report.empty)
 

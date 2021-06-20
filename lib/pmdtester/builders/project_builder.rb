@@ -17,11 +17,19 @@ module PmdTester
 
       @projects.each do |project|
         logger.info "Start cloning #{project.name} repository"
-        path = project.local_source_path
-        clone_cmd = "#{project.type} clone #{project.connection} #{path}"
+        path = project.clone_root_path
+
         if File.exist?(path)
           logger.warn "Skipping clone, project path #{path} already exists"
         else
+          raise "Unsupported project type '#{project.type}' - only git is supported" unless project.type == 'git'
+
+          # git:
+          # Don't download whole history
+          # Note we don't use --single-branch, because the repo is downloaded
+          # once but may be used with several tags.
+          clone_cmd = "git clone --no-single-branch --depth 1 #{project.connection} #{path}"
+
           Cmd.execute(clone_cmd)
         end
 
@@ -38,7 +46,7 @@ module PmdTester
       logger.info 'Building projects started'
 
       @projects.each do |project|
-        path = project.local_source_path
+        path = project.clone_root_path
         Dir.chdir(path) do
           progress_logger = SimpleProgressLogger.new("building #{project.name} in #{path}")
           progress_logger.start
@@ -87,12 +95,9 @@ module PmdTester
     end
 
     def execute_reset_cmd(type, tag)
-      case type
-      when 'git'
-        reset_cmd = "git checkout #{tag}; git reset --hard #{tag}"
-      when 'hg'
-        reset_cmd = "hg up #{tag}"
-      end
+      raise "Unsupported project type '#{type}' - only git is supported" unless type == 'git'
+
+      reset_cmd = "git checkout #{tag}; git reset --hard #{tag}"
 
       Cmd.execute(reset_cmd)
     end

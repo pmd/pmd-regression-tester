@@ -11,7 +11,8 @@ class IntegrationTestPmdReportBuilder < Test::Unit::TestCase
 
   def test_build
     argv = %w[-r target/repositories/pmd -b master -p origin/pmd/7.0.x
-              -c test/resources/pmd7-config.xml -l test/resources/project-test.xml
+              -c test/resources/integration_test_pmd_report_builder/pmd7-config.xml
+              -l test/resources/integration_test_pmd_report_builder/project-test.xml
               --error-recovery --debug]
     options = PmdTester::Options.new(argv)
     projects = ProjectsParser.new.parse(options.project_list)

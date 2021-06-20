@@ -2,7 +2,11 @@
 
 ## New and Noteworthy
 
+*   Support for Mercurial is removed. The only SCM supported in the project-list.xml is "git".
+
 ## Fixed Issues
+
+*   [#89](https://github.com/pmd/pmd-regression-tester/pull/89): Make it possible to select a subpath of cloned directory
 
 ## External Contributions
 

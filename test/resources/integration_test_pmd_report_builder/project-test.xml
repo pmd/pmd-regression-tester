@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <projectlist xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xsi:noNamespaceSchemaLocation="projectlist_1_1_0.xsd">
+xsi:noNamespaceSchemaLocation="projectlist_1_2_0.xsd">
   <description>Standard Projects</description>
 
   <project>
@@ -19,8 +19,8 @@ fi
 
 set -e
 
-mvn clean test-compile
-mvn dependency:build-classpath -DincludeScope=test -Dmdep.outputFile=classpath.txt
+mvn clean test-compile -B
+mvn dependency:build-classpath -DincludeScope=test -Dmdep.outputFile=classpath.txt -B
 ]]></build-command>
     <auxclasspath-command>echo -n "$(pwd)/target/classes:$(pwd)/target/test-classes:"; cat classpath.txt</auxclasspath-command>
   </project>
