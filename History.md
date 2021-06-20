@@ -1,3 +1,11 @@
+# 1.2.1 / ????-??-??
+
+## New and Noteworthy
+
+## Fixed Issues
+
+## External Contributions
+
 # 1.2.0 / 2021-06-20
 
 ## New and Noteworthy
