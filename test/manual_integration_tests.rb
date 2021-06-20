@@ -60,7 +60,7 @@ class ManualIntegrationTests < Test::Unit::TestCase
 
     assert_equal("This changeset changes 0 violations,\n" \
                  "introduces 0 new violations, 0 new errors and 0 new configuration errors,\n" \
-                 'removes 268 violations, 2 errors and 2 configuration errors.',
+                 'removes 268 violations, 0 errors and 2 configuration errors.',
                  create_summary_message)
 
     assert_file_equals("#{PATCHES_PATH}/expected_patch_config_1.xml", 'target/reports/diff/patch_config.xml')
@@ -95,7 +95,7 @@ class ManualIntegrationTests < Test::Unit::TestCase
 
     assert_equal("This changeset changes 0 violations,\n" \
                  "introduces 0 new violations, 0 new errors and 0 new configuration errors,\n" \
-                 'removes 0 violations, 2 errors and 2 configuration errors.',
+                 'removes 0 violations, 0 errors and 2 configuration errors.',
                  create_summary_message)
 
     assert_file_equals("#{PATCHES_PATH}/expected_patch_config_2.xml", 'target/reports/diff/patch_config.xml')
