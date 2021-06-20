@@ -59,6 +59,7 @@ module PmdTester
         @options.patch_config = "#{baseline_path}/config.xml"
       else
         logger.info "Using config #{@options.patch_config} which might differ from baseline"
+        RuleSetBuilder.new(@options).calculate_filter_set if @options.filter_with_patch_config
       end
 
       patch_branch_details = create_pmd_report(config: @options.patch_config, branch: @options.patch_branch)

@@ -104,4 +104,16 @@ class TestRuleSetBuilder < Test::Unit::TestCase
     actual = File.read(RuleSetBuilder::PATH_TO_DYNAMIC_CONFIG)
     assert_equal(expected, actual)
   end
+
+  def test_filter_ruleset_based_on_patch_config
+    options = Options.new(['--mode', 'online',
+                           '--patch-config', "#{PATH_TO_TEST_RESOURCES}/patch-ruleset.xml",
+                           '--patch-branch', 'test_filter_ruleset_based_on_patch_branch',
+                           '--base-branch', 'main',
+                           '--local-git-repo', 'target/repositories/pmd',
+                           '--debug'])
+    RuleSetBuilder.new(options).calculate_filter_set
+
+    assert_equal(Set['performance.xml/ConsecutiveLiteralAppends'], options.filter_set)
+  end
 end

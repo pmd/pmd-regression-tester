@@ -7,6 +7,7 @@
 ## Fixed Issues
 
 *   [#89](https://github.com/pmd/pmd-regression-tester/pull/89): Make it possible to select a subpath of cloned directory
+*   [#91](https://github.com/pmd/pmd-regression-tester/pull/91): Filter baseline based on patch config
 
 ## External Contributions
 
