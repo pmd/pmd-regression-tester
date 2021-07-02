@@ -6,6 +6,10 @@ require 'test_helper'
 class TestRunner < Test::Unit::TestCase
   def setup
     `rake clean`
+
+    pmd_repo_path = 'target/repositories/pmd'
+    clone_cmd = "git clone --no-single-branch --depth 1 https://github.com/pmd/pmd #{pmd_repo_path}"
+    `#{clone_cmd}` unless Dir.exist?(pmd_repo_path)
   end
 
   include PmdTester
