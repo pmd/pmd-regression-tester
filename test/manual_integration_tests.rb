@@ -241,11 +241,16 @@ class ManualIntegrationTests < Test::Unit::TestCase
     assert_path_exist('target/reports/master/checkstyle/config.xml')
     assert_path_exist('target/reports/master/checkstyle/report_info.json')
     assert_path_exist('target/reports/master/checkstyle/pmd_report.xml')
-    assert(File.size('target/reports/master/checkstyle/pmd_report.xml') > 20 * 1024 * 1024)
+    assert(File.size('target/reports/master/checkstyle/pmd_report.xml') > 50 * 1024 * 1024)
+
+    assert_path_exist('target/reports/master/openjdk-11/config.xml')
+    assert_path_exist('target/reports/master/openjdk-11/report_info.json')
+    assert_path_exist('target/reports/master/openjdk-11/pmd_report.xml')
+    assert(File.size('target/reports/master/openjdk-11/pmd_report.xml') > 100 * 1024 * 1024)
 
     assert_path_exist('target/reports/master/spring-framework/config.xml')
     assert_path_exist('target/reports/master/spring-framework/report_info.json')
     assert_path_exist('target/reports/master/spring-framework/pmd_report.xml')
-    assert(File.size('target/reports/master/spring-framework/pmd_report.xml') > 130 * 1024 * 1024)
+    assert(File.size('target/reports/master/spring-framework/pmd_report.xml') > 150 * 1024 * 1024)
   end
 end
