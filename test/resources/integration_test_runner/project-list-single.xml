@@ -8,7 +8,8 @@ xsi:noNamespaceSchemaLocation="projectlist_1_2_0.xsd">
     <name>checkstyle</name>
     <type>git</type>
     <connection>https://github.com/checkstyle/checkstyle</connection>
-    <tag>checkstyle-8.10</tag>
+    <tag>checkstyle-9.1</tag>
+
     <exclude-pattern>.*/target/test-classes/com/puppycrawl/tools/checkstyle/.*</exclude-pattern>
     <exclude-pattern>.*/target/generated-sources/.*</exclude-pattern>
 
@@ -19,7 +20,11 @@ fi
 
 set -e
 
-mvn clean test-compile -B
+# Make sure to use java11. This is already installed by build.sh
+export JAVA_HOME=${HOME}/openjdk11
+export PATH=$JAVA_HOME/bin:$PATH
+
+mvn test-compile -B
 mvn dependency:build-classpath -DincludeScope=test -Dmdep.outputFile=classpath.txt -B
 ]]></build-command>
     <auxclasspath-command>echo -n "$(pwd)/target/classes:$(pwd)/target/test-classes:"; cat classpath.txt</auxclasspath-command>
@@ -30,6 +35,6 @@ mvn dependency:build-classpath -DincludeScope=test -Dmdep.outputFile=classpath.t
     <name>pmd</name>
     <type>git</type>
     <connection>https://github.com/pmd/pmd</connection>
-    <tag>pmd_releases/6.7.0</tag> <!-- this is already the correct checkout to speed up repeated integration tests -->
+    <tag>pmd_releases/6.41.0</tag> <!-- this is already the correct checkout to speed up repeated integration tests -->
   </project>
 </projectlist>
