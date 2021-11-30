@@ -1,6 +1,10 @@
 name: manual-integration-tests
 
-on: workflow_dispatch
+on:
+  schedule:
+    # build it monthly: At 08:30 on day-of-month 1.
+    - cron:  '30 8 1 * *'
+  workflow_dispatch:
 
 jobs:
   build:
