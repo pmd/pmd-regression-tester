@@ -83,23 +83,23 @@ class ManualIntegrationTests < Test::Unit::TestCase
           "#{@summary}\n#############################\n"
     assert_equal(0, @summary[:violations][:changed], 'found changed violations')
     assert_equal(0, @summary[:violations][:new], 'found new violations')
-    # There are no violations, that have been removed for AvoidMessageDigestField
-    assert_equal(0, @summary[:violations][:removed], 'found removed violations')
+    # There are 22 violations, that have been removed for AvoidMessageDigestField (project openjdk-11)
+    assert_equal(22, @summary[:violations][:removed], 'found removed violations')
 
     # errors might have been caused in the baseline for other rules (only visible in the stacktrace)
     # hence they might appear as removed
-    assert_equal(0, @summary[:errors][:removed], 'found removed errors')
+    assert_equal(1, @summary[:errors][:removed], 'found removed errors')
     assert_equal(0, @summary[:errors][:changed], 'found changed errors')
     assert_equal(0, @summary[:errors][:new], 'found new errors')
     assert_equal(0, @summary[:configerrors][:changed], 'found changed configerrors')
     assert_equal(0, @summary[:configerrors][:new], 'found new configerrors')
     # Only the rule AvoidMessageDigestField and all other rules from bestpractices have been executed, so the
-    # configerrors about LoosePackageCoupling (Design) are gone
-    assert_equal(1 + 1, @summary[:configerrors][:removed], 'found removed configerrors')
+    # configerrors about LoosePackageCoupling are gone, one for each project
+    assert_equal(1 + 1 + 1, @summary[:configerrors][:removed], 'found removed configerrors')
 
     assert_equal("This changeset changes 0 violations,\n" \
                  "introduces 0 new violations, 0 new errors and 0 new configuration errors,\n" \
-                 'removes 0 violations, 0 errors and 2 configuration errors.',
+                 'removes 22 violations, 1 errors and 3 configuration errors.',
                  create_summary_message)
 
     assert_file_equals("#{PATCHES_PATH}/expected_patch_config_2.xml", 'target/reports/diff/patch_config.xml')
