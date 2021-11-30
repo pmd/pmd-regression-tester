@@ -165,7 +165,7 @@ class ManualIntegrationTests < Test::Unit::TestCase
             '--html-flag',
             '--error-recovery']
     begin
-      ENV['LANG'] = 'C.UTF-8'
+      ENV['LANG'] = 'en_US.UTF-8'
       @summary = PmdTester::Runner.new(argv).run
     rescue StandardError => e
       raise MiniTest::Assertion, "Running pmdtester failed: #{e.inspect}"
@@ -189,13 +189,17 @@ class ManualIntegrationTests < Test::Unit::TestCase
             '--baseline-download-url', 'https://pmd-code.org/pmd-regression-tester/',
             '--debug']
     begin
-      ENV['LANG'] = 'C.UTF-8'
+      ENV['LANG'] = 'en_US.UTF-8'
       @summary = PmdTester::Runner.new(argv).run
     rescue StandardError => e
       raise MiniTest::Assertion, "Running pmdtester failed: #{e.inspect}"
     end
   end
 
+  #
+  # This is the same message as in
+  # https://github.com/pmd/pmd/blob/master/Dangerfile
+  #
   def create_summary_message
     'This changeset ' \
       "changes #{@summary[:violations][:changed]} violations,\n" \
@@ -229,7 +233,7 @@ class ManualIntegrationTests < Test::Unit::TestCase
       system("git branch -D #{local_branch}")
       system("git branch #{local_branch} #{base_branch}")
       system("git checkout #{local_branch}")
-      system("git am --committer-date-is-author-date #{absolute_patch_file}")
+      system("git am --committer-date-is-author-date --no-gpg-sign #{absolute_patch_file}")
     end
   end
 
