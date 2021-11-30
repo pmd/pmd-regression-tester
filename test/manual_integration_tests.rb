@@ -45,22 +45,26 @@ class ManualIntegrationTests < Test::Unit::TestCase
     assert_equal(0, @summary[:violations][:changed], 'found changed violations')
     assert_equal(0, @summary[:violations][:new], 'found new violations')
     # These are the artificially created false-negatives for AbstractClassWithoutAbstractMethod rule
-    assert_equal(34 + 234, @summary[:violations][:removed], 'found removed violations')
+    # checkstyle: 203 violations
+    # spring-framework: 280 violations
+    # openjdk11: 29 violations
+    # -> total = 512
+    assert_equal(203 + 280 + 29, @summary[:violations][:removed], 'found removed violations')
 
     # errors might have been caused in the baseline for other rules (only visible in the stacktrace)
     # hence they might appear as removed
-    assert_equal(0, @summary[:errors][:removed], 'found removed errors')
+    assert_equal(1, @summary[:errors][:removed], 'found removed errors')
     assert_equal(0, @summary[:errors][:changed], 'found changed errors')
     assert_equal(0, @summary[:errors][:new], 'found new errors')
     assert_equal(0, @summary[:configerrors][:changed], 'found changed configerrors')
     assert_equal(0, @summary[:configerrors][:new], 'found new configerrors')
     # Only the rule AbstractClassWithoutAbtractMethod has been executed, so the
-    # configerrors about LoosePackageCoupling are gone
-    assert_equal(1 + 1, @summary[:configerrors][:removed], 'found removed configerrors')
+    # configerrors about LoosePackageCoupling are gone, one for each project
+    assert_equal(1 + 1 + 1, @summary[:configerrors][:removed], 'found removed configerrors')
 
     assert_equal("This changeset changes 0 violations,\n" \
                  "introduces 0 new violations, 0 new errors and 0 new configuration errors,\n" \
-                 'removes 268 violations, 0 errors and 2 configuration errors.',
+                 'removes 512 violations, 1 errors and 3 configuration errors.',
                  create_summary_message)
 
     assert_file_equals("#{PATCHES_PATH}/expected_patch_config_1.xml", 'target/reports/diff/patch_config.xml')
