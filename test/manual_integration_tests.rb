@@ -45,7 +45,11 @@ class ManualIntegrationTests < Test::Unit::TestCase
     assert_equal(0, @summary[:violations][:changed], 'found changed violations')
     assert_equal(0, @summary[:violations][:new], 'found new violations')
     # These are the artificially created false-negatives for AbstractClassWithoutAbstractMethod rule
-    assert_equal(34 + 234, @summary[:violations][:removed], 'found removed violations')
+    # checkstyle: 203 violations
+    # spring-framework: 280 violations
+    # openjdk11: 29 violations
+    # -> total = 512
+    assert_equal(203 + 280 + 29, @summary[:violations][:removed], 'found removed violations')
 
     # errors might have been caused in the baseline for other rules (only visible in the stacktrace)
     # hence they might appear as removed
@@ -55,12 +59,12 @@ class ManualIntegrationTests < Test::Unit::TestCase
     assert_equal(0, @summary[:configerrors][:changed], 'found changed configerrors')
     assert_equal(0, @summary[:configerrors][:new], 'found new configerrors')
     # Only the rule AbstractClassWithoutAbtractMethod has been executed, so the
-    # configerrors about LoosePackageCoupling are gone
-    assert_equal(1 + 1, @summary[:configerrors][:removed], 'found removed configerrors')
+    # configerrors about LoosePackageCoupling are gone, one for each project
+    assert_equal(1 + 1 + 1, @summary[:configerrors][:removed], 'found removed configerrors')
 
     assert_equal("This changeset changes 0 violations,\n" \
                  "introduces 0 new violations, 0 new errors and 0 new configuration errors,\n" \
-                 'removes 268 violations, 0 errors and 2 configuration errors.',
+                 'removes 512 violations, 1 errors and 3 configuration errors.',
                  create_summary_message)
 
     assert_file_equals("#{PATCHES_PATH}/expected_patch_config_1.xml", 'target/reports/diff/patch_config.xml')
@@ -79,8 +83,8 @@ class ManualIntegrationTests < Test::Unit::TestCase
           "#{@summary}\n#############################\n"
     assert_equal(0, @summary[:violations][:changed], 'found changed violations')
     assert_equal(0, @summary[:violations][:new], 'found new violations')
-    # There are no violations, that have been removed for AvoidMessageDigestField
-    assert_equal(0, @summary[:violations][:removed], 'found removed violations')
+    # There are 22 violations, that have been removed for AvoidMessageDigestField (project openjdk-11)
+    assert_equal(22, @summary[:violations][:removed], 'found removed violations')
 
     # errors might have been caused in the baseline for other rules (only visible in the stacktrace)
     # hence they might appear as removed
@@ -90,12 +94,12 @@ class ManualIntegrationTests < Test::Unit::TestCase
     assert_equal(0, @summary[:configerrors][:changed], 'found changed configerrors')
     assert_equal(0, @summary[:configerrors][:new], 'found new configerrors')
     # Only the rule AvoidMessageDigestField and all other rules from bestpractices have been executed, so the
-    # configerrors about LoosePackageCoupling (Design) are gone
-    assert_equal(1 + 1, @summary[:configerrors][:removed], 'found removed configerrors')
+    # configerrors about LoosePackageCoupling are gone, one for each project
+    assert_equal(1 + 1 + 1, @summary[:configerrors][:removed], 'found removed configerrors')
 
     assert_equal("This changeset changes 0 violations,\n" \
                  "introduces 0 new violations, 0 new errors and 0 new configuration errors,\n" \
-                 'removes 0 violations, 0 errors and 2 configuration errors.',
+                 'removes 22 violations, 1 errors and 3 configuration errors.',
                  create_summary_message)
 
     assert_file_equals("#{PATCHES_PATH}/expected_patch_config_2.xml", 'target/reports/diff/patch_config.xml')
@@ -161,7 +165,7 @@ class ManualIntegrationTests < Test::Unit::TestCase
             '--html-flag',
             '--error-recovery']
     begin
-      ENV['LANG'] = 'C.UTF-8'
+      ENV['LANG'] = 'en_US.UTF-8'
       @summary = PmdTester::Runner.new(argv).run
     rescue StandardError => e
       raise MiniTest::Assertion, "Running pmdtester failed: #{e.inspect}"
@@ -185,13 +189,17 @@ class ManualIntegrationTests < Test::Unit::TestCase
             '--baseline-download-url', 'https://pmd-code.org/pmd-regression-tester/',
             '--debug']
     begin
-      ENV['LANG'] = 'C.UTF-8'
+      ENV['LANG'] = 'en_US.UTF-8'
       @summary = PmdTester::Runner.new(argv).run
     rescue StandardError => e
       raise MiniTest::Assertion, "Running pmdtester failed: #{e.inspect}"
     end
   end
 
+  #
+  # This is the same message as in
+  # https://github.com/pmd/pmd/blob/master/Dangerfile
+  #
   def create_summary_message
     'This changeset ' \
       "changes #{@summary[:violations][:changed]} violations,\n" \
@@ -225,7 +233,7 @@ class ManualIntegrationTests < Test::Unit::TestCase
       system("git branch -D #{local_branch}")
       system("git branch #{local_branch} #{base_branch}")
       system("git checkout #{local_branch}")
-      system("git am --committer-date-is-author-date #{absolute_patch_file}")
+      system("git am --committer-date-is-author-date --no-gpg-sign #{absolute_patch_file}")
     end
   end
 
@@ -233,11 +241,16 @@ class ManualIntegrationTests < Test::Unit::TestCase
     assert_path_exist('target/reports/master/checkstyle/config.xml')
     assert_path_exist('target/reports/master/checkstyle/report_info.json')
     assert_path_exist('target/reports/master/checkstyle/pmd_report.xml')
-    assert(File.size('target/reports/master/checkstyle/pmd_report.xml') > 20 * 1024 * 1024)
+    assert(File.size('target/reports/master/checkstyle/pmd_report.xml') > 50 * 1024 * 1024)
+
+    assert_path_exist('target/reports/master/openjdk-11/config.xml')
+    assert_path_exist('target/reports/master/openjdk-11/report_info.json')
+    assert_path_exist('target/reports/master/openjdk-11/pmd_report.xml')
+    assert(File.size('target/reports/master/openjdk-11/pmd_report.xml') > 100 * 1024 * 1024)
 
     assert_path_exist('target/reports/master/spring-framework/config.xml')
     assert_path_exist('target/reports/master/spring-framework/report_info.json')
     assert_path_exist('target/reports/master/spring-framework/pmd_report.xml')
-    assert(File.size('target/reports/master/spring-framework/pmd_report.xml') > 130 * 1024 * 1024)
+    assert(File.size('target/reports/master/spring-framework/pmd_report.xml') > 150 * 1024 * 1024)
   end
 end

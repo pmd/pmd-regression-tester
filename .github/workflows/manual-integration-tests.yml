@@ -1,6 +1,10 @@
 name: manual-integration-tests
 
-on: workflow_dispatch
+on:
+  schedule:
+    # build it monthly: At 08:30 on day-of-month 1.
+    - cron:  '30 8 1 * *'
+  workflow_dispatch:
 
 jobs:
   build:
@@ -15,9 +19,9 @@ jobs:
           ~/.cache
           vendor/bundle
           target/repositories
-        key: ${{ runner.os }}-${{ hashFiles('pmdtester.gemspec') }}
+        key: v1-${{ runner.os }}-${{ hashFiles('pmdtester.gemspec') }}
         restore-keys: |
-          ${{ runner.os }}-
+          v1-${{ runner.os }}-
     - name: Set up Ruby 2.7
       uses: ruby/setup-ruby@v1
       with:

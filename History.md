@@ -4,6 +4,8 @@
 
 ## Fixed Issues
 
+*   [#96](https://github.com/pmd/pmd-regression-tester/issues/96): Fix failing integration tests
+
 ## External Contributions
 
 # 1.2.0 / 2021-06-20
