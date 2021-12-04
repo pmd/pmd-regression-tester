@@ -4,6 +4,7 @@
 
 ## Fixed Issues
 
+*   [#94](https://github.com/pmd/pmd-regression-tester/issues/94): Improve code snippet preview
 *   [#96](https://github.com/pmd/pmd-regression-tester/issues/96): Fix failing integration tests
 
 ## External Contributions
