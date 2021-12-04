@@ -4,6 +4,7 @@
 
 ## Fixed Issues
 
+*   [#86](https://github.com/pmd/pmd-regression-tester/issues/86): Uncaught TypeError: violation is undefined
 *   [#96](https://github.com/pmd/pmd-regression-tester/issues/96): Fix failing integration tests
 
 ## External Contributions

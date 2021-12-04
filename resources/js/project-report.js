@@ -118,7 +118,7 @@ $(document).ready(function () {
         },
     });
 
-    $('#violationsTable tbody').on('click', 'tr', function() {
+    $('#violationsTable tbody').on('click', 'tr[role=row]', function() {
         var tr = $(this).closest('tr');
         var row = table.row( tr );
 
