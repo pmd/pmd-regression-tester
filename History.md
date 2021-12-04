@@ -4,6 +4,7 @@
 
 ## Fixed Issues
 
+*   [#95](https://github.com/pmd/pmd-regression-tester/issues/95): Add length menu for datatable to allow configurable page size
 *   [#96](https://github.com/pmd/pmd-regression-tester/issues/96): Fix failing integration tests
 
 ## External Contributions

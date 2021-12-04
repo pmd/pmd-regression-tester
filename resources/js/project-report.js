@@ -52,7 +52,7 @@ $(document).ready(function () {
         ],
         deferRender: true,
         // scrollY: "6000px",
-        dom: 'Pfrtip', // Search Panes, filtering input, processing display element, table, table information summary, pagination control
+        dom: 'Pfrtipl', // Search Panes, filtering input, processing display element, table, table information summary, pagination control, length changing input control
         searchPanes: {
             viewTotal: true,
             cascadePanes: true,
@@ -113,6 +113,7 @@ $(document).ready(function () {
             },
         ],
         displayLength: 25,
+        lengthMenu: [ [10, 20, 25, 50, 100, -1], [10, 20, 25, 50, 100, "All"] ],
         rowCallback(row, data, index) {
             $(row).addClass(cssClass[data.t]);
         },
