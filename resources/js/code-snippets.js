@@ -47,24 +47,41 @@
             deleteCount = lines.length - (2 * contextLines) + 1;
             lines.splice(2 * contextLines - 1, deleteCount); // delete lines after
 
+            let table = document.createElement('table');
+            table.classList.add('code-snippet');
+            let tableBody = document.createElement('tbody');
+            table.appendChild(tableBody);
             // now we have just the lines which will be displayed
             lines.forEach(line => {
                 start++;
-                let lineElt = document.createElement("code");
+                let tableRow = document.createElement('tr');
                 if (start === violationLineNumber) {
-                    lineElt.classList.add("highlight");
+                    tableRow.classList.add("highlight");
                 }
-                // createTextNode escapes special chars
-                lineElt.appendChild(document.createTextNode(formatLineNumber(start) + nbsp + line));
-                lineElt.appendChild(document.createElement("br"));
 
-                container.appendChild(lineElt); // append to the container
+                let lineNumberColumn = document.createElement('td');
+                lineNumberColumn.classList.add('line-number');
+                tableRow.appendChild(lineNumberColumn);
+                let lineNumberElement = document.createElement('code');
+                lineNumberColumn.appendChild(lineNumberElement);
+                lineNumberElement.setAttribute('data-line-number', formatLineNumber(start));
+
+                let codeColumn = document.createElement('td');
+                tableRow.appendChild(codeColumn);
+                let codeElement = document.createElement("code");
+                codeColumn.appendChild(codeElement);
+                // createTextNode escapes special chars
+                codeElement.appendChild(document.createTextNode(line));
+
+                tableBody.appendChild(tableRow); // append row to the table
             });
+            container.appendChild(table);
         });
-        oReq.open("GET", requestUrl);
-        oReq.send();
 
         container.innerHTML = "<samp>fetching...</samp>";
+
+        oReq.open("GET", requestUrl);
+        oReq.send();
     }
 
     window.pmd_code_snippets = {
