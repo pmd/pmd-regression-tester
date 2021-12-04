@@ -26,7 +26,7 @@
         return prefix + number;
     }
 
-    function fetchSnippet(document, container, url, line, weburl) {
+    function fetchSnippet(document, container, url, violationLineNumber, weburl) {
         var weburl, requestUrl, oReq;
 
         requestUrl = url.replace(/github.com/, "raw.githubusercontent.com");
@@ -40,7 +40,7 @@
             container.innerHTML = '<p><a href="' + weburl + '" target="_blank" rel="noopener noreferrer">' + weburl + '</a></p>';
 
             lines = this.responseText.split(/\r\n|\n/);
-            start = line - contextLines;
+            start = violationLineNumber - contextLines;
             if (start > 0) {
                 lines.splice(0, start); // remove lines before
             }
@@ -51,7 +51,7 @@
             lines.forEach(line => {
                 start++;
                 let lineElt = document.createElement("code");
-                if (start === line) {
+                if (start === violationLineNumber) {
                     lineElt.classList.add("highlight");
                 }
                 // createTextNode escapes special chars
