@@ -34,12 +34,17 @@
 
         oReq = new XMLHttpRequest();
         oReq.addEventListener("load", function() {
-            let lines, start, deleteCount;
+            let lines, start, deleteCount, lineSeparator;
 
             // we'll append stuff in the loop below
             container.innerHTML = '<p><a href="' + weburl + '" target="_blank" rel="noopener noreferrer">' + weburl + '</a></p>';
 
-            lines = this.responseText.split(/\r\n|\n/);
+            if (this.responseText.indexOf('\r\n') >= 0) {
+                lineSeparator = '\r\n';
+            } else {
+                lineSeparator = '\n';
+            }
+            lines = this.responseText.split(lineSeparator);
             start = violationLineNumber - contextLines;
             if (start > 0) {
                 lines.splice(0, start); // remove lines before
@@ -76,6 +81,17 @@
                 tableBody.appendChild(tableRow); // append row to the table
             });
             container.appendChild(table);
+
+            if (navigator.clipboard) {
+                let copyButton = document.createElement('button');
+                copyButton.classList.add('btn-clipboard');
+                copyButton.setAttribute('title', 'Copy to clipboard');
+                copyButton.appendChild(document.createTextNode('copy'));
+                copyButton.onclick = function() {
+                    navigator.clipboard.writeText(lines.join(lineSeparator));
+                }
+                container.appendChild(copyButton);
+            }
         });
 
         container.innerHTML = "<samp>fetching...</samp>";
