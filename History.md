@@ -4,6 +4,7 @@
 
 ## Fixed Issues
 
+*   [#93](https://github.com/pmd/pmd-regression-tester/issues/93): Line numbers > 1000 are not displayed correctly
 *   [#96](https://github.com/pmd/pmd-regression-tester/issues/96): Fix failing integration tests
 
 ## External Contributions
