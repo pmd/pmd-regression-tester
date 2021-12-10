@@ -97,11 +97,12 @@ module PmdTester
     def generate_pmd_report(project)
       error_recovery_options = @error_recovery ? 'PMD_JAVA_OPTS="-Dpmd.error_recovery -ea" ' : ''
       run_path = "#{saved_distro_path(@pmd_branch_details.branch_last_sha)}/bin/run.sh"
+      fail_on_violation = should_use_long_cli_options ? '--fail-on-violation false' : '-failOnViolation false'
       pmd_cmd = "#{error_recovery_options}" \
                 "#{run_path} pmd -d #{project.local_source_path} -f xml " \
                 "-R #{project.get_config_path(@pmd_branch_name)} " \
                 "-r #{project.get_pmd_report_path(@pmd_branch_name)} " \
-                "-failOnViolation false -t #{@threads} " \
+                "#{fail_on_violation} -t #{@threads} " \
                 "#{project.auxclasspath}"
       start_time = Time.now
       if File.exist?(project.get_pmd_report_path(@pmd_branch_name))
@@ -193,6 +194,17 @@ module PmdTester
 
     def wd_has_dirty_git_changes
       !Cmd.execute('git status --porcelain').empty?
+    end
+
+    def should_use_long_cli_options
+      logger.debug "PMD Version: #{@pmd_version}"
+      m = /(\d+)\.(\d+)\.(\d+).*/.match(@pmd_version)
+      major = m[1]
+      minor = m[2]
+      patch = m[3]
+      result = major.to_i >= 6 && minor.to_i >= 41
+      logger.debug " major: #{major} minor: #{minor} patch: #{patch} => use long cli options: #{result}"
+      result
     end
   end
 end
