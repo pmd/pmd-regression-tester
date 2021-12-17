@@ -10,8 +10,24 @@ code {
   font-size: 13pt;
   white-space: pre;
 }
-code.highlight {
+code.highlight, tr.highlight {
   background-color: yellow;
+}
+table.code-snippet > tbody > tr > td {
+  padding: 0px;
+  border: none;
+}
+table.code-snippet > tbody > tr > td.line-number > code:before {
+  content: attr(data-line-number);
+}
+.btn-clipboard {
+  margin-top: 1rem;
+  display: block;
+  padding: .25rem .5rem;
+  color: #0d6efd;
+  background-color: #fff;
+  border: 1px solid;
+  border-radius: .25rem;
 }
 a {
   text-decoration: none;

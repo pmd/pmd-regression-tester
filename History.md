@@ -2,6 +2,10 @@
 
 ## New and Noteworthy
 
+## Enhancements
+
+*   [#94](https://github.com/pmd/pmd-regression-tester/issues/94): Improve code snippet preview
+
 ## Fixed Issues
 
 *   [#86](https://github.com/pmd/pmd-regression-tester/issues/86): Uncaught TypeError: violation is undefined

@@ -26,7 +26,7 @@
         return prefix + number;
     }
 
-    function fetchSnippet(document, container, url, line, weburl) {
+    function fetchSnippet(document, container, url, violationLineNumber, weburl) {
         var weburl, requestUrl, oReq;
 
         requestUrl = url.replace(/github.com/, "raw.githubusercontent.com");
@@ -34,37 +34,70 @@
 
         oReq = new XMLHttpRequest();
         oReq.addEventListener("load", function() {
-            let lines, start, deleteCount;
+            let lines, start, deleteCount, lineSeparator;
 
             // we'll append stuff in the loop below
             container.innerHTML = '<p><a href="' + weburl + '" target="_blank" rel="noopener noreferrer">' + weburl + '</a></p>';
 
-            lines = this.responseText.split(/\r\n|\n/);
-            start = line - contextLines;
+            if (this.responseText.indexOf('\r\n') >= 0) {
+                lineSeparator = '\r\n';
+            } else {
+                lineSeparator = '\n';
+            }
+            lines = this.responseText.split(lineSeparator);
+            start = violationLineNumber - contextLines;
             if (start > 0) {
                 lines.splice(0, start); // remove lines before
             }
             deleteCount = lines.length - (2 * contextLines) + 1;
             lines.splice(2 * contextLines - 1, deleteCount); // delete lines after
 
+            let table = document.createElement('table');
+            table.classList.add('code-snippet');
+            let tableBody = document.createElement('tbody');
+            table.appendChild(tableBody);
             // now we have just the lines which will be displayed
             lines.forEach(line => {
                 start++;
-                let lineElt = document.createElement("code");
-                if (start === line) {
-                    lineElt.classList.add("highlight");
+                let tableRow = document.createElement('tr');
+                if (start === violationLineNumber) {
+                    tableRow.classList.add("highlight");
                 }
-                // createTextNode escapes special chars
-                lineElt.appendChild(document.createTextNode(formatLineNumber(start) + nbsp + line));
-                lineElt.appendChild(document.createElement("br"));
 
-                container.appendChild(lineElt); // append to the container
+                let lineNumberColumn = document.createElement('td');
+                lineNumberColumn.classList.add('line-number');
+                tableRow.appendChild(lineNumberColumn);
+                let lineNumberElement = document.createElement('code');
+                lineNumberColumn.appendChild(lineNumberElement);
+                lineNumberElement.setAttribute('data-line-number', formatLineNumber(start));
+
+                let codeColumn = document.createElement('td');
+                tableRow.appendChild(codeColumn);
+                let codeElement = document.createElement("code");
+                codeColumn.appendChild(codeElement);
+                // createTextNode escapes special chars
+                codeElement.appendChild(document.createTextNode(line));
+
+                tableBody.appendChild(tableRow); // append row to the table
             });
+            container.appendChild(table);
+
+            if (navigator.clipboard) {
+                let copyButton = document.createElement('button');
+                copyButton.classList.add('btn-clipboard');
+                copyButton.setAttribute('title', 'Copy to clipboard');
+                copyButton.appendChild(document.createTextNode('copy'));
+                copyButton.onclick = function() {
+                    navigator.clipboard.writeText(lines.join(lineSeparator));
+                }
+                container.appendChild(copyButton);
+            }
         });
-        oReq.open("GET", requestUrl);
-        oReq.send();
 
         container.innerHTML = "<samp>fetching...</samp>";
+
+        oReq.open("GET", requestUrl);
+        oReq.send();
     }
 
     window.pmd_code_snippets = {
