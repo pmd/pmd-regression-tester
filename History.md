@@ -5,6 +5,7 @@
 ## Enhancements
 
 *   [#94](https://github.com/pmd/pmd-regression-tester/issues/94): Improve code snippet preview
+*   [#95](https://github.com/pmd/pmd-regression-tester/issues/95): Add length menu for datatable to allow configurable page size
 
 ## Fixed Issues
 
