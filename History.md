@@ -1,6 +1,4 @@
-# 1.2.1 / ????-??-??
-
-## New and Noteworthy
+# 1.3.0 / 2021-12-17
 
 ## Enhancements
 
@@ -12,8 +10,6 @@
 *   [#86](https://github.com/pmd/pmd-regression-tester/issues/86): Uncaught TypeError: violation is undefined
 *   [#93](https://github.com/pmd/pmd-regression-tester/issues/93): Line numbers > 1000 are not displayed correctly
 *   [#96](https://github.com/pmd/pmd-regression-tester/issues/96): Fix failing integration tests
-
-## External Contributions
 
 # 1.2.0 / 2021-06-20
 
