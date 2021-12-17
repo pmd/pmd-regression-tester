@@ -198,13 +198,7 @@ module PmdTester
 
     def should_use_long_cli_options
       logger.debug "PMD Version: #{@pmd_version}"
-      m = /(\d+)\.(\d+)\.(\d+).*/.match(@pmd_version)
-      major = m[1]
-      minor = m[2]
-      patch = m[3]
-      result = major.to_i >= 6 && minor.to_i >= 41
-      logger.debug " major: #{major} minor: #{minor} patch: #{patch} => use long cli options: #{result}"
-      result
+      Semver.compare(@pmd_version, '6.41.0') >= 0
     end
   end
 end
