@@ -15,11 +15,11 @@
 
     // returns text, not html
     function formatLineNumber(number) {
-        let prefix;
+        let prefix = '';
         if (number < 10) {
-            prefix =  nbsp.repeat(3);
+            prefix = nbsp.repeat(3);
         } else if (number < 100) {
-            prefix =  nbsp.repeat(2);
+            prefix = nbsp.repeat(2);
         } else if (number < 1000) {
             prefix = nbsp;
         }
