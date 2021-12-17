@@ -44,6 +44,7 @@ lib/pmdtester/project.rb
 lib/pmdtester/report_diff.rb
 lib/pmdtester/resource_locator.rb
 lib/pmdtester/runner.rb
+lib/pmdtester/semver.rb
 pmdtester.gemspec
 resources/_includes/diff_pill_row.html
 resources/css/bootstrap.min.css
