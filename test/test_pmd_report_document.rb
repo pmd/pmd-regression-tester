@@ -30,7 +30,7 @@ class TestPmdReportDocument < Test::Unit::TestCase
   end
 
   def test_filter_set_single_rule
-    filter_set = Set['codestyle.xml/FieldDeclarationsShouldBeAtStartOfClass']
+    filter_set = Set['java/codestyle.xml/FieldDeclarationsShouldBeAtStartOfClass']
     doc = PmdReportDocument.new('base', 'SHOULD_BE_REPLACED', filter_set)
     parser = Nokogiri::XML::SAX::Parser.new(doc)
     parser.parse(File.open('test/resources/pmd_report_document/test_document.xml'))

@@ -45,7 +45,7 @@ class TestSummaryReportBuilder < Test::Unit::TestCase
 
     branch = PmdTester::PmdBranchDetail.load('base_branch', nil)
     patch = PmdTester::PmdBranchDetail.load('patch_branch', nil)
-    build_html_reports(projects, branch, patch, Set['bestpractices.xml/AbstractClassWithoutAbstractMethod'])
+    build_html_reports(projects, branch, patch, Set['java/bestpractices.xml/AbstractClassWithoutAbstractMethod'])
 
     assert_file_equals('test/resources/summary_report_builder/expected_filtered_index.html',
                        'target/reports/diff/index.html')

@@ -33,8 +33,11 @@ module PmdTester
     def run_local_mode
       logger.info "Mode: #{@options.mode}"
       get_projects(@options.project_list) unless @options.nil?
-      run_required = RuleSetBuilder.new(@options).build? if @options.auto_config_flag
-      return unless run_required
+      if @options.auto_config_flag
+        run_required = RuleSetBuilder.new(@options).build?
+        logger.debug "Run required: #{run_required}"
+        return unless run_required
+      end
 
       base_branch_details = create_pmd_report(config: @options.base_config, branch: @options.base_branch)
       patch_branch_details = create_pmd_report(config: @options.patch_config, branch: @options.patch_branch)
