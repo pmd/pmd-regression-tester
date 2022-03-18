@@ -126,21 +126,10 @@ module PmdTester
       categories = Set[]
       rules = Set[]
       filenames.each do |filename|
-        match_data = check_single_filename(filename)
+        matched = check_single_filename(filename, categories, rules)
+        regression_test_required = true if matched
 
-        unless match_data.nil?
-          if match_data.size == 3
-            categories.add("#{match_data[1]}/#{match_data[2]}.xml")
-            regression_test_required = true
-          elsif match_data.size == 4
-            rules.add("#{match_data[1]}/#{match_data[2]}.xml/#{match_data[3]}")
-            regression_test_required = true
-          else
-            logger.warn "Could not determine changed category/rule from file #{filename}"
-          end
-        end
-
-        next unless match_data.nil?
+        next if matched
 
         logger.debug "Change in file #{filename} doesn't match specific rule/category - enable all rules"
         regression_test_required = true
@@ -151,14 +140,26 @@ module PmdTester
       [regression_test_required, categories, rules]
     end
 
-    def check_single_filename(filename)
+    def check_single_filename(filename, categories, rules)
       logger.debug "Checking #{filename}"
+
       # matches Java-based rule implementations
       match_data = %r{.+/src/main/java/.+/lang/([^/]+)/rule/([^/]+)/([^/]+)Rule.java}.match(filename)
+      unless match_data.nil?
+        logger.debug "Matches: #{match_data.inspect}"
+        rules.add("#{match_data[1]}/#{match_data[2]}.xml/#{match_data[3]}")
+        return true
+      end
+
       # matches xpath rules
-      match_data = %r{.+/src/main/resources/category/([^/]+)/([^/]+).xml}.match(filename) if match_data.nil?
-      logger.debug "Matches: #{match_data.inspect}"
-      match_data
+      match_data = %r{.+/src/main/resources/category/([^/]+)/([^/]+).xml}.match(filename)
+      unless match_data.nil?
+        logger.debug "Matches: #{match_data.inspect}"
+        categories.add("#{match_data[1]}/#{match_data[2]}.xml")
+        return true
+      end
+
+      false
     end
 
     def diff_filenames(languages)
