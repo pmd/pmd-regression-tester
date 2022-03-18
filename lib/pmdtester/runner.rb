@@ -54,6 +54,7 @@ module PmdTester
       get_projects(project_list)
 
       if @options.auto_config_flag
+        logger.info 'Autogenerating a dynamic ruleset based on source changes'
         return unless RuleSetBuilder.new(@options).build?
       elsif @options.patch_config == Options::DEFAULT_CONFIG_PATH
         # patch branch build pmd reports with same configuration as base branch

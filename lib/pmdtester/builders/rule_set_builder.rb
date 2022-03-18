@@ -51,15 +51,15 @@ module PmdTester
             @options.filter_set.add(ref)
           end
 
-          logger.debug "Using filter based on patch config #{@options.patch_config}: " \
+          logger.info "Using filter based on patch config #{@options.patch_config}: " \
                        "#{@options.filter_set}"
         else
           # if `rule_refs` is empty, then no filter can be used when comparing to the baseline
-          logger.debug 'No filter when comparing patch to baseline'
+          logger.info 'No filter when comparing patch to baseline'
           @options.filter_set = nil
         end
       else
-        logger.debug "Filter is now #{rule_refs}"
+        logger.info "Filter is now #{rule_refs}"
         @options.filter_set = rule_refs
       end
     end
@@ -131,7 +131,7 @@ module PmdTester
 
         next if matched
 
-        logger.debug "Change in file #{filename} doesn't match specific rule/category - enable all rules"
+        logger.info "Change in file #{filename} doesn't match specific rule/category - enable all rules"
         regression_test_required = true
         categories.clear
         rules.clear
