@@ -33,8 +33,11 @@ module PmdTester
     def run_local_mode
       logger.info "Mode: #{@options.mode}"
       get_projects(@options.project_list) unless @options.nil?
-      rule_sets = RuleSetBuilder.new(@options).build if @options.auto_config_flag
-      return if rule_sets&.empty?
+      if @options.auto_config_flag
+        run_required = RuleSetBuilder.new(@options).build?
+        logger.debug "Run required: #{run_required}"
+        return unless run_required
+      end
 
       base_branch_details = create_pmd_report(config: @options.base_config, branch: @options.base_branch)
       patch_branch_details = create_pmd_report(config: @options.patch_config, branch: @options.patch_branch)
@@ -51,7 +54,8 @@ module PmdTester
       get_projects(project_list)
 
       if @options.auto_config_flag
-        return if RuleSetBuilder.new(@options).build.empty?
+        logger.info 'Autogenerating a dynamic ruleset based on source changes'
+        return unless RuleSetBuilder.new(@options).build?
       elsif @options.patch_config == Options::DEFAULT_CONFIG_PATH
         # patch branch build pmd reports with same configuration as base branch
         # if not specified otherwise. This allows to use a different config (e.g. less rules)

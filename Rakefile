@@ -19,18 +19,23 @@ hoe = Hoe.spec 'pmdtester' do
   developer 'Clément Fournier', 'clement.fournier76@gmail.com'
 
   self.clean_globs = %w[target/reports/**/* target/test/**/* target/dynamic-config.xml Gemfile.lock]
-  self.extra_deps += [['nokogiri', '>= 1.11.0.rc4'], ['slop', '~> 4.6'], ['differ', '~> 0.1'],
-                      ['rufus-scheduler', '~> 3.5'], ['logger-colors', '~> 1.0'],
-                      ['liquid', '>= 4.0']]
+  self.extra_deps += [
+    ['nokogiri',        '~> 1.13'],
+    ['slop',            '~> 4.6'],
+    ['differ',          '~> 0.1'],
+    ['rufus-scheduler', '~> 3.8'],
+    ['logger-colors',   '~> 1.0'],
+    ['liquid',          '~> 5.2']
+  ]
   self.extra_dev_deps += [
     ['hoe-bundler',   '~> 1.5'],
     ['hoe-git',       '~> 1.6'],
     ['minitest',      '~> 5.10'],
     ['mocha',         '~> 1.5'],
     # use the same version of rubocop as codacy
-    ['rubocop',       '~> 0.81'],
-    ['test-unit',     '~> 3.2'],
-    ['rdoc',          ['>= 4.0', '< 7']]
+    ['rubocop',       '~> 0.93'],
+    ['test-unit',     '~> 3.5'],
+    ['rdoc',          '~> 6.4']
   ]
   spec_extras[:required_ruby_version] = '>= 2.7'
 

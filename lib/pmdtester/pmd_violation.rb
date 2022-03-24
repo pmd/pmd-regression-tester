@@ -27,7 +27,7 @@ module PmdTester
     #   </xs:simpleContent>
     # </xs:complexType>
 
-    attr_reader :fname, :info_url, :line, :old_line, :old_message, :rule_name, :ruleset_name
+    attr_reader :fname, :info_url, :line, :old_line, :old_message, :rule_name, :ruleset_name, :language
     attr_accessor :message
 
     # rubocop:disable Metrics/ParameterLists
@@ -42,6 +42,8 @@ module PmdTester
       @rule_name = rule_name
 
       @ruleset_name = ruleset_name
+
+      @language = determine_language_from_info_url
 
       @changed = false
       @old_message = nil
@@ -101,6 +103,14 @@ module PmdTester
         'branch' => branch,
         'changed' => changed?
       }
+    end
+
+    private
+
+    def determine_language_from_info_url
+      # @info_url is e.g. http://pmd.sourceforge.net/snapshot/pmd_rules_java_codestyle.html#fielddeclarationsshouldbeatstartofclass
+      m = @info_url.match(/pmd_rules_(\w+)_/)
+      m[1]
     end
   end
 end

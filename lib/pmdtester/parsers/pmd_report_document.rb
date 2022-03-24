@@ -92,7 +92,7 @@ module PmdTester
       ruleset_attr = violation.ruleset_name.delete(' ').downcase! << '.xml'
       return true if @filter_set.include?(ruleset_attr)
 
-      rule_ref = "#{ruleset_attr}/#{violation.rule_name}"
+      rule_ref = "#{violation.language}/#{ruleset_attr}/#{violation.rule_name}"
 
       @filter_set.include?(rule_ref)
     end

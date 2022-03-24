@@ -40,7 +40,7 @@ class TestDiffBuilder < Test::Unit::TestCase
   def test_violation_diffs_with_filter
     base_report_path = 'test/resources/diff_builder/test_violation_diffs_base.xml'
     patch_report_path = 'test/resources/diff_builder/test_violation_diffs_patch.xml'
-    filter_set = Set['codestyle.xml/FieldDeclarationsShouldBeAtStartOfClass']
+    filter_set = Set['java/codestyle.xml/FieldDeclarationsShouldBeAtStartOfClass']
     diffs_report = build_report_diff(base_report_path, patch_report_path,
                                      BASE_REPORT_INFO_PATH, PATCH_REPORT_INFO_PATH,
                                      filter_set)
