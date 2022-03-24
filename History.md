@@ -1,14 +1,8 @@
-# 1.3.1-SNAPSHOT / ????-??-??
-
-## New and Noteworthy
+# 1.4.0 / 2022-03-24
 
 ## Enhancements
 
 *   [#103](https://github.com/pmd/pmd-regression-tester/pull/103): Support other languages besides java
-
-## Fixed Issues
-
-## External Contributions
 
 # 1.3.0 / 2021-12-17
 
