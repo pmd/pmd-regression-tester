@@ -182,7 +182,7 @@ class ManualIntegrationTests < Test::Unit::TestCase
             '--list-of-project', "#{PMD_REPO_PATH}/.ci/files/project-list.xml",
             '--base-branch', base_branch_name,
             '--patch-branch', 'HEAD',
-            '--patch-config', "#{PMD_REPO_PATH}/.ci/files/all-java.xml",
+            '--patch-config', "#{PMD_REPO_PATH}/.ci/files/all-regression-rules.xml",
             '--mode', 'online',
             '--auto-gen-config',
             '--error-recovery',
