@@ -4,6 +4,8 @@
 
 ## Enhancements
 
+*   [#103](https://github.com/pmd/pmd-regression-tester/pull/103): Support other languages besides java
+
 ## Fixed Issues
 
 ## External Contributions
