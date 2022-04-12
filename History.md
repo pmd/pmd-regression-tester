@@ -1,14 +1,8 @@
-# 1.4.1-SNAPSHOT / ????-??-??
-
-## New and Noteworthy
-
-## Enhancements
+# 1.4.1 / 2022-04-12
 
 ## Fixed Issues
 
 * [#104](https://github.com/pmd/pmd-regression-tester/issues/104): Baseline filtering is not working anymore
-
-## External Contributions
 
 # 1.4.0 / 2022-03-24
 
