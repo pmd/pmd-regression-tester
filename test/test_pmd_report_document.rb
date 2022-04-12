@@ -19,7 +19,7 @@ class TestPmdReportDocument < Test::Unit::TestCase
   end
 
   def test_filter_set
-    filter_set = Set['documentation.xml']
+    filter_set = Set['java/documentation.xml']
     doc = PmdReportDocument.new('base', 'SHOULD_BE_REPLACED', filter_set)
     parser = Nokogiri::XML::SAX::Parser.new(doc)
     parser.parse(File.open('test/resources/pmd_report_document/test_document.xml'))
