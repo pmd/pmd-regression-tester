@@ -160,7 +160,7 @@ class ManualIntegrationTests < Test::Unit::TestCase
     argv = ['--mode', 'single',
             '--local-git-repo', PMD_REPO_PATH,
             '--patch-branch', 'master',
-            '--patch-config', "#{PMD_REPO_PATH}/.ci/files/all-java.xml",
+            '--patch-config', "#{PMD_REPO_PATH}/.ci/files/all-regression-rules.xml",
             '--list-of-project', "#{PMD_REPO_PATH}/.ci/files/project-list.xml",
             '--html-flag',
             '--error-recovery']

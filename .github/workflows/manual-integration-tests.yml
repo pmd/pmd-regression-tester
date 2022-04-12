@@ -19,9 +19,9 @@ jobs:
           ~/.cache
           vendor/bundle
           target/repositories
-        key: v1-${{ runner.os }}-${{ hashFiles('pmdtester.gemspec') }}
+        key: v2-${{ runner.os }}-${{ hashFiles('pmdtester.gemspec') }}
         restore-keys: |
-          v1-${{ runner.os }}-
+          v2-${{ runner.os }}-
     - name: Set up Ruby 2.7
       uses: ruby/setup-ruby@v1
       with:
