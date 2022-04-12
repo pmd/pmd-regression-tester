@@ -53,7 +53,7 @@ class ManualIntegrationTests < Test::Unit::TestCase
 
     # errors might have been caused in the baseline for other rules (only visible in the stacktrace)
     # hence they might appear as removed
-    
+
     # project "apex-link" has 2 errors, since we only executed java rules, 2 errors are removed
     assert_equal(2, @summary[:errors][:removed], 'found removed errors')
     assert_equal(0, @summary[:errors][:changed], 'found changed errors')
