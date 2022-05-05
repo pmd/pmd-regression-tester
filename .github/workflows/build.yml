@@ -15,6 +15,7 @@ on:
 
 jobs:
   build:
+    timeout-minutes: 120
     runs-on: ubuntu-latest
     continue-on-error: false
     if: ${{ !contains(github.event.head_commit.message, '[skip ci]') }}
