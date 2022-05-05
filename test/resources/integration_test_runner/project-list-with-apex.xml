@@ -46,12 +46,8 @@ mvn dependency:build-classpath -DincludeScope=test -Dmdep.outputFile=classpath.t
   <project>
     <name>Schedul-o-matic-9000</name>
     <type>git</type>
-    <connection>https://github.com/pmd/Schedul-o-matic-9000</connection>
-    <!-- 
     <connection>https://github.com/SalesforceLabs/Schedul-o-matic-9000</connection>
-    Note: using forked repo from pmd, as original repo doesn't have any useful tags/branches
-    -->
-    <tag>pmd-regression-test</tag>
+    <tag>6b1229ba43b38931fbbab5924bc9b9611d19a786</tag>
   </project>
 
 </projectlist>
