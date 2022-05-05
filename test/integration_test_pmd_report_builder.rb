@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'test_helper'
+require 'etc'
 
 # Integration test for PmdTester::PmdReportBuilder
 class IntegrationTestPmdReportBuilder < Test::Unit::TestCase
@@ -10,10 +11,15 @@ class IntegrationTestPmdReportBuilder < Test::Unit::TestCase
   end
 
   def test_build
-    argv = %w[-r target/repositories/pmd -b master -p origin/pmd/7.0.x
-              -c test/resources/integration_test_pmd_report_builder/pmd7-config.xml
-              -l test/resources/integration_test_pmd_report_builder/project-test.xml
-              --error-recovery --debug]
+    argv = ['-r', 'target/repositories/pmd',
+            '-b', 'master',
+            '-p', 'origin/pmd/7.0.x',
+            '-c', 'test/resources/integration_test_pmd_report_builder/pmd7-config.xml',
+            '-l', 'test/resources/integration_test_pmd_report_builder/project-test.xml',
+            '--error-recovery',
+            '--debug',
+            '--threads', Etc.nprocessors.to_s]
+
     options = PmdTester::Options.new(argv)
     projects = ProjectsParser.new.parse(options.project_list)
 

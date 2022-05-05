@@ -4,6 +4,7 @@ require 'test_helper'
 require 'pmdtester'
 require 'time'
 require 'logger'
+require 'etc'
 
 #
 # Test cases that execeute pmd regression tester like we use it in the Danger integration
@@ -169,7 +170,8 @@ class ManualIntegrationTests < Test::Unit::TestCase
             '--patch-config', "#{PMD_REPO_PATH}/.ci/files/all-regression-rules.xml",
             '--list-of-project', "#{PMD_REPO_PATH}/.ci/files/project-list.xml",
             '--html-flag',
-            '--error-recovery']
+            '--error-recovery',
+            '--threads', Etc.nprocessors.to_s]
     begin
       ENV['LANG'] = 'en_US.UTF-8'
       @summary = PmdTester::Runner.new(argv).run
@@ -193,7 +195,8 @@ class ManualIntegrationTests < Test::Unit::TestCase
             '--auto-gen-config',
             '--error-recovery',
             '--baseline-download-url', 'https://pmd-code.org/pmd-regression-tester/',
-            '--debug']
+            '--debug',
+            '--threads', Etc.nprocessors.to_s]
     begin
       ENV['LANG'] = 'en_US.UTF-8'
       @summary = PmdTester::Runner.new(argv).run

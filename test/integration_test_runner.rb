@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'test_helper'
+require 'etc'
 
 class IntegrationTestRunner < Test::Unit::TestCase
   def setup
@@ -9,7 +10,8 @@ class IntegrationTestRunner < Test::Unit::TestCase
 
   def test_local_mode
     argv = '-r target/repositories/pmd -b pmd_releases/6.41.0 -bc config/design.xml' \
-              ' -p master -pc config/design.xml -l test/resources/integration_test_runner/project-test.xml'
+              ' -p master -pc config/design.xml -l test/resources/integration_test_runner/project-test.xml' \
+              ' --threads ' + Etc.nprocessors.to_s
 
     system("bundle exec bin/pmdtester #{argv}")
 
@@ -32,7 +34,8 @@ class IntegrationTestRunner < Test::Unit::TestCase
   def test_single_mode
     argv = '-r target/repositories/pmd -m single' \
               ' -p pmd_releases/6.41.0 -pc config/design.xml' \
-              ' -l test/resources/integration_test_runner/project-list-single.xml'
+              ' -l test/resources/integration_test_runner/project-list-single.xml' \
+              ' --threads ' + Etc.nprocessors.to_s
 
     system("bundle exec bin/pmdtester #{argv}")
 
@@ -51,7 +54,8 @@ class IntegrationTestRunner < Test::Unit::TestCase
     argv = '-r target/repositories/pmd -m single' \
               ' -p pmd_releases/6.41.0 -pc config/design.xml' \
               ' -l test/resources/integration_test_runner/project-list-single.xml' \
-              ' -f'
+              ' -f' \
+              ' --threads ' + Etc.nprocessors.to_s
 
     system("bundle exec bin/pmdtester #{argv}")
 
@@ -69,7 +73,8 @@ class IntegrationTestRunner < Test::Unit::TestCase
     # https://pmd-code.org/pmd-regression-tester/test_branch_2-baseline.zip
     base_branch = 'test_branch_2'
     argv = "-r target/repositories/pmd -m online -b #{base_branch} -p pmd_releases/6.41.0 " \
-        '--baseline-download-url https://pmd-code.org/pmd-regression-tester/'
+        '--baseline-download-url https://pmd-code.org/pmd-regression-tester/' \
+        ' --threads ' + Etc.nprocessors.to_s
 
     system("bundle exec bin/pmdtester #{argv}")
 
@@ -95,7 +100,8 @@ class IntegrationTestRunner < Test::Unit::TestCase
            '--patch-config test/resources/integration_test_runner/patch-config.xml '\
            '--list-of-project test/resources/integration_test_runner/project-list.xml '\
            '--auto-gen-config ' \
-           '--baseline-download-url https://pmd-code.org/pmd-regression-tester/'
+           '--baseline-download-url https://pmd-code.org/pmd-regression-tester/' \
+           ' --threads ' + Etc.nprocessors.to_s
 
     system("bundle exec bin/pmdtester #{argv}")
 
@@ -122,7 +128,8 @@ class IntegrationTestRunner < Test::Unit::TestCase
            '--list-of-project test/resources/integration_test_runner/project-list-with-apex.xml '\
            '--auto-gen-config ' \
            '--filter-with-patch-config ' \
-           '--baseline-download-url https://pmd-code.org/pmd-regression-tester/'
+           '--baseline-download-url https://pmd-code.org/pmd-regression-tester/' \
+           ' --threads ' + Etc.nprocessors.to_s
 
     system("bundle exec bin/pmdtester #{argv}")
 
