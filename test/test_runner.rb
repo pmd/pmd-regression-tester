@@ -4,6 +4,8 @@ require 'test_helper'
 
 # Unit test class for PmdTester::Runner
 class TestRunner < Test::Unit::TestCase
+  include PmdTester
+
   def setup
     `rake clean`
 
@@ -11,8 +13,6 @@ class TestRunner < Test::Unit::TestCase
     clone_cmd = "git clone --no-single-branch --depth 1 https://github.com/pmd/pmd #{pmd_repo_path}"
     `#{clone_cmd}` unless Dir.exist?(pmd_repo_path)
   end
-
-  include PmdTester
 
   def run_runner(argv)
     runner = Runner.new(argv)
@@ -25,7 +25,7 @@ class TestRunner < Test::Unit::TestCase
     PmdReportBuilder.any_instance.stubs(:build)
                     .returns(PmdBranchDetail.new('test_branch')).once
     FileUtils.expects(:cp).with(project_list_path, target_project_list_path).once
-    Project.any_instance.stubs(:build_report_diff).twice
+    Project.any_instance.stubs(:compute_report_diff).twice
     SummaryReportBuilder.any_instance.stubs(:write_all_projects).once
 
     argv = %w[-r target/repositories/pmd -p pmd_releases/6.1.0
@@ -58,7 +58,7 @@ class TestRunner < Test::Unit::TestCase
                     .once
     report_builder_mock.stubs(:build).returns(PmdBranchDetail.new('test_branch')).once
     FileUtils.expects(:cp).with(anything, anything).once
-    Project.any_instance.stubs(:build_report_diff).twice
+    Project.any_instance.stubs(:compute_report_diff).twice
     SummaryReportBuilder.any_instance.stubs(:write_all_projects).once
 
     argv = %w[-r target/repositories/pmd -p pmd_releases/6.1.0
@@ -69,7 +69,7 @@ class TestRunner < Test::Unit::TestCase
 
   def test_local_mode
     PmdReportBuilder.any_instance.stubs(:build).returns(PmdBranchDetail.new('some_branch')).twice
-    Project.any_instance.stubs(:build_report_diff).twice
+    Project.any_instance.stubs(:compute_report_diff).twice
     SummaryReportBuilder.any_instance.stubs(:write_all_projects).once
 
     argv = %w[-r target/repositories/pmd -b master -bc config/design.xml -p pmd_releases/6.1.0
@@ -87,7 +87,7 @@ class TestRunner < Test::Unit::TestCase
                     .returns(report_builder_mock)
                     .twice
     report_builder_mock.stubs(:build).returns(PmdBranchDetail.new('some_branch')).twice
-    Project.any_instance.stubs(:build_report_diff).twice
+    Project.any_instance.stubs(:compute_report_diff).twice
     SummaryReportBuilder.any_instance.stubs(:write_all_projects).once
 
     argv = %w[-r target/repositories/pmd -b master -bc config/design.xml -p pmd_releases/6.1.0
@@ -104,8 +104,8 @@ class TestRunner < Test::Unit::TestCase
     File.stubs(:new).with('target/reports/diff/index.html', anything).returns.once
 
     Dir.stubs(:chdir).with('target/reports').yields.once
-    Cmd.stubs(:execute).with('wget --timestamping https://sourceforge.net/projects/pmd/files/pmd-regression-tester/master-baseline.zip').once
-    Cmd.stubs(:execute).with('unzip -qo master-baseline.zip').once
+    Cmd.stubs(:execute_successfully).with('wget --timestamping https://sourceforge.net/projects/pmd/files/pmd-regression-tester/master-baseline.zip').once
+    Cmd.stubs(:execute_successfully).with('unzip -qo master-baseline.zip').once
     ProjectsParser.any_instance.stubs(:parse)
                   .with('target/reports/master/project-list.xml')
                   .returns([]).once
@@ -120,7 +120,7 @@ class TestRunner < Test::Unit::TestCase
   def test_online_mode_multithreading
     FileUtils.stubs(:mkdir_p).with('target/reports').at_most_once
     Dir.stubs(:chdir).with('target/reports').yields.once
-    Cmd.stubs(:execute).twice
+    Cmd.stubs(:execute_successfully).twice
     ProjectsParser.any_instance.stubs(:parse)
                   .with('target/reports/master/project-list.xml')
                   .returns([]).once

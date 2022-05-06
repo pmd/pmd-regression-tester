@@ -52,9 +52,9 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     FileUtils.touch "target/repositories/pmd/pmd-dist/target/pmd-bin-#{@pmd_version}.zip"
 
     record_expectations('sha1abc', 'sha1abc', false)
-    PmdTester::Cmd.stubs(:execute).with("unzip -qo pmd-dist/target/pmd-bin-#{@pmd_version}.zip" \
+    PmdTester::Cmd.stubs(:execute_successfully).with("unzip -qo pmd-dist/target/pmd-bin-#{@pmd_version}.zip" \
       ' -d pmd-dist/target/exploded').once
-    PmdTester::Cmd.stubs(:execute).with("mv pmd-dist/target/exploded/pmd-bin-#{@pmd_version}" \
+    PmdTester::Cmd.stubs(:execute_successfully).with("mv pmd-dist/target/exploded/pmd-bin-#{@pmd_version}" \
       " #{Dir.getwd}/target/pmd-bin-#{@pmd_version}-master-sha1abc").once
     record_expectations_after_build
 
@@ -71,12 +71,12 @@ class TestPmdReportBuilder < Test::Unit::TestCase
 
     # PMD binary does not exist yet this time...
     record_expectations('sha1abc', 'sha1abc', false)
-    PmdTester::Cmd.stubs(:execute).with('./mvnw clean package -Dmaven.test.skip=true' \
+    PmdTester::Cmd.stubs(:execute_successfully).with('./mvnw clean package -Dmaven.test.skip=true' \
                   ' -Dmaven.javadoc.skip=true -Dmaven.source.skip=true' \
                   ' -Dcheckstyle.skip=true -Dpmd.skip=true -T1C -B').once
-    PmdTester::Cmd.stubs(:execute).with("unzip -qo pmd-dist/target/pmd-bin-#{@pmd_version}.zip" \
+    PmdTester::Cmd.stubs(:execute_successfully).with("unzip -qo pmd-dist/target/pmd-bin-#{@pmd_version}.zip" \
                   ' -d pmd-dist/target/exploded').once
-    PmdTester::Cmd.stubs(:execute).with("mv pmd-dist/target/exploded/pmd-bin-#{@pmd_version}" \
+    PmdTester::Cmd.stubs(:execute_successfully).with("mv pmd-dist/target/exploded/pmd-bin-#{@pmd_version}" \
                   " #{Dir.getwd}/target/pmd-bin-#{@pmd_version}-master-sha1abc").once
     record_expectations_after_build
 
@@ -167,42 +167,69 @@ class TestPmdReportBuilder < Test::Unit::TestCase
       .build
   end
 
+  #
+  # Continue even if PMD exits with a unsuccessful exit code
+  # Verify that stdout/stderr files are created
+  #
+  def test_build_failing
+    project_list = 'test/resources/pmd_report_builder/project-list.xml'
+    projects = PmdTester::ProjectsParser.new.parse(project_list)
+    assert_equal(1, projects.size)
+    argv = %w[-r target/repositories/pmd -b master -p pmd_releases/6.1.0
+              -c config/design.xml --debug --error-recovery -l]
+    argv.push project_list
+    options = PmdTester::Options.new(argv)
+
+    projects[0].auxclasspath = 'extra:dirs'
+    record_expectations('sha1abc', 'sha1abc', true)
+    record_expectations_after_build
+    record_expectations_project_build('sha1abc', true, false, false, 1)
+
+    PmdTester::PmdReportBuilder
+      .new(projects, options, options.base_config, options.base_branch)
+      .build
+  end
+
   private
 
-  def record_expectations_project_build(sha1, error = false, long_cli_options = false, no_progress_bar = false)
+  def record_expectations_project_build(sha1, error = false, long_cli_options = false,
+                                        no_progress_bar = false, exit_status = 0)
     PmdTester::ProjectBuilder.any_instance.stubs(:clone_projects).once
     PmdTester::ProjectBuilder.any_instance.stubs(:build_projects).once
     PmdTester::SimpleProgressLogger.any_instance.stubs(:start).once
     PmdTester::SimpleProgressLogger.any_instance.stubs(:stop).once
     error_prefix = error ? 'PMD_JAVA_OPTS="-Dpmd.error_recovery -ea" ' : ''
     distro_path = "#{Dir.getwd}/target/pmd-bin-#{@pmd_version}-master-#{sha1}"
-    fail_on_violation = long_cli_options ? '--fail-on-violation false' : '-failOnViolation false'
-    auxclasspath = long_cli_options ? '--aux-classpath extra:dirs' : '-auxclasspath extra:dirs'
+    process_status = mock
+    process_status.expects(:exitstatus).returns(exit_status).once
     PmdTester::Cmd.stubs(:execute)
                   .with("#{error_prefix}" \
                         "#{distro_path}/bin/run.sh " \
                         'pmd -d target/repositories/checkstyle -f xml ' \
                         '-R target/reports/master/checkstyle/config.xml ' \
                         '-r target/reports/master/checkstyle/pmd_report.xml ' \
-                        "#{fail_on_violation} -t 1 " \
-                        "#{auxclasspath}" \
-                        "#{no_progress_bar ? ' --no-progress' : ''}").once
-    PmdTester::PmdReportDetail.any_instance.stubs(:save).once
+                        "#{long_cli_options ? '--fail-on-violation false' : '-failOnViolation false'} -t 1 " \
+                        "#{long_cli_options ? '--aux-classpath extra:dirs' : '-auxclasspath extra:dirs'}" \
+                        "#{no_progress_bar ? ' --no-progress' : ''}",
+                        'target/reports/master/checkstyle').once
+                  .returns(process_status)
+                  .once
+    PmdTester::PmdReportDetail.stubs(:create).once.with { |params| params[:exit_code] == exit_status }
   end
 
   def record_expectations(sha1_head, sha1_base, zip_file_exists)
-    PmdTester::Cmd.stubs(:execute).with('git rev-parse master^{commit}').returns(sha1_base).once
+    PmdTester::Cmd.stubs(:execute_successfully).with('git rev-parse master^{commit}').returns(sha1_base).once
     # inside checkout_build_branch
-    PmdTester::Cmd.stubs(:execute).with('git checkout master')
+    PmdTester::Cmd.stubs(:execute_successfully).with('git checkout master')
                   .returns('checked out branch master').once
-    PmdTester::Cmd.stubs(:execute).with('./mvnw -q -Dexec.executable="echo" ' \
+    PmdTester::Cmd.stubs(:execute_successfully).with('./mvnw -q -Dexec.executable="echo" ' \
                   "-Dexec.args='${project.version}' " \
                   '--non-recursive org.codehaus.mojo:exec-maven-plugin:1.5.0:exec')
                   .returns(@pmd_version).at_least(1).at_most(2)
-    PmdTester::Cmd.stubs(:execute).with('git status --porcelain').returns('').once
+    PmdTester::Cmd.stubs(:execute_successfully).with('git status --porcelain').returns('').once
 
     # back into get_pmd_binary_file
-    PmdTester::Cmd.stubs(:execute).with('git rev-parse HEAD^{commit}').returns(sha1_head).once
+    PmdTester::Cmd.stubs(:execute_successfully).with('git rev-parse HEAD^{commit}').returns(sha1_head).once
     # PMD binary might not exist yet...
     distro_path = "target/pmd-bin-#{@pmd_version}-master-#{sha1_base}"
     if zip_file_exists
@@ -213,7 +240,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
   end
 
   def record_expectations_after_build
-    PmdTester::Cmd.stubs(:execute).with('git log -1 --pretty=%B').returns('the commit message').once
+    PmdTester::Cmd.stubs(:execute_successfully).with('git log -1 --pretty=%B').returns('the commit message').once
     PmdTester::PmdBranchDetail.any_instance.stubs(:save).once
     FileUtils.stubs(:cp).with('config/design.xml', 'target/reports/master/config.xml').once
   end

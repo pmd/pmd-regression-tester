@@ -123,6 +123,9 @@ module PmdTester
                                            get_report_info_path(base_branch),
                                            get_report_info_path(patch_branch),
                                            filter_set)
+
+      report_diff.base_report.report_folder = get_project_target_dir(base_branch)
+      report_diff.patch_report.report_folder = get_project_target_dir(patch_branch)
     end
   end
 end

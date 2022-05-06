@@ -176,7 +176,7 @@ module PmdTester
 
         # We only need to support git here, since PMD's repo is using git.
         diff_cmd = "git diff --name-only #{base}..#{patch} #{filepath_filter}"
-        filenames = Cmd.execute(diff_cmd)
+        filenames = Cmd.execute_successfully(diff_cmd)
       end
       filenames.split("\n")
     end

@@ -38,10 +38,10 @@ class TestProjectBuilder < Test::Unit::TestCase
 
   def expect_git_clone(name, url, revision)
     File.stubs(:exist?).with("target/repositories/#{name}").returns(false).once
-    PmdTester::Cmd.stubs(:execute).with('git clone --no-single-branch --depth 1' \
+    PmdTester::Cmd.stubs(:execute_successfully).with('git clone --no-single-branch --depth 1' \
                                         " #{url} target/repositories/#{name}").once
     Dir.stubs(:chdir).with("target/repositories/#{name}").yields.once
-    PmdTester::Cmd.stubs(:execute).with("git checkout #{revision}; git reset --hard #{revision}").once
+    PmdTester::Cmd.stubs(:execute_successfully).with("git checkout #{revision}; git reset --hard #{revision}").once
   end
 
   def expect_build(name, build_cmd = nil, auxclasspath_cmd = nil)
@@ -62,7 +62,7 @@ class TestProjectBuilder < Test::Unit::TestCase
     build_cmd_mock.stubs(:write).with(build_cmd).once
     build_cmd_mock.stubs(:close).once
     build_cmd_mock.stubs(:unlink).once
-    PmdTester::Cmd.stubs(:execute)
+    PmdTester::Cmd.stubs(:execute_successfully)
                   .with(regexp_matches(/sh -xe build-cmd-script/)).once
   end
 
@@ -71,7 +71,7 @@ class TestProjectBuilder < Test::Unit::TestCase
     auxclasspath_cmd_mock.stubs(:write).with(auxclasspath_cmd).once
     auxclasspath_cmd_mock.stubs(:close).once
     auxclasspath_cmd_mock.stubs(:unlink).once
-    PmdTester::Cmd.stubs(:execute)
+    PmdTester::Cmd.stubs(:execute_successfully)
                   .with(regexp_matches(%r{/usr/bin/env bash auxclasspath-cmd-script}))
                   .returns('the-aux').once
   end

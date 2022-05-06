@@ -5,6 +5,7 @@
 ## Enhancements
 
 * [#108](https://github.com/pmd/pmd-regression-tester/issues/108): Disable progress bar for PMD 7
+* [#109](https://github.com/pmd/pmd-regression-tester/issues/109): Make stdout/stderr and exit code available
 
 ## Fixed Issues
 

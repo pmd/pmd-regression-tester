@@ -21,6 +21,9 @@ module PmdTester
         'base_timestamp' => rdiff.base_report.timestamp,
         'patch_timestamp' => rdiff.patch_report.timestamp,
 
+        'base_exit_code' => rdiff.base_report.exit_code,
+        'patch_exit_code' => rdiff.patch_report.exit_code,
+
         'rule_diffs' => rdiff.rule_summaries
       }
     end
