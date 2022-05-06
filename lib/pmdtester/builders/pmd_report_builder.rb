@@ -105,14 +105,16 @@ module PmdTester
                 "#{fail_on_violation} -t #{@threads} " \
                 "#{project.auxclasspath}"
       start_time = Time.now
+      exit_code = nil
       if File.exist?(project.get_pmd_report_path(@pmd_branch_name))
         logger.warn "#{@pmd_branch_name}: Skipping PMD run - report " \
                     "#{project.get_pmd_report_path(@pmd_branch_name)} already exists"
       else
-        Cmd.execute(pmd_cmd)
+        _stdout, _stderr, status = Cmd.execute(pmd_cmd)
+        exit_code = status.exitstatus
       end
       end_time = Time.now
-      [end_time - start_time, end_time]
+      [end_time - start_time, end_time, exit_code]
     end
 
     def generate_config_for(project)
@@ -139,12 +141,12 @@ module PmdTester
         progress_logger = SimpleProgressLogger.new("generating #{project.name}'s PMD report")
         progress_logger.start
         generate_config_for(project)
-        execution_time, end_time = generate_pmd_report(project)
+        execution_time, end_time, exit_code = generate_pmd_report(project)
         progress_logger.stop
         sum_time += execution_time
 
-        report_details = PmdReportDetail.new(execution_time: execution_time, timestamp: end_time)
-        report_details.save(project.get_report_info_path(@pmd_branch_name))
+        PmdReportDetail.create(execution_time: execution_time, timestamp: end_time,
+                               exit_code: exit_code, report_info_path: project.get_report_info_path(@pmd_branch_name))
         logger.info "#{project.name}'s PMD report was generated successfully"
       end
 
