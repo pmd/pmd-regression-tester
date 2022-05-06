@@ -4,6 +4,12 @@ module PmdTester
   # Utility to deal with semantic versions
   class Semver
     def self.compare(version_a, version_b)
+      result = internal_compare(version_a, version_b)
+      PmdTester.logger.debug "  result: #{result}"
+      result
+    end
+
+    private_class_method def self.internal_compare(version_a, version_b)
       PmdTester.logger.debug "Comparing #{version_a} <=> #{version_b}"
       m = /(\d+)\.(\d+)\.(\d+)(.*)/.match(version_a)
       a_major = m[1].to_i

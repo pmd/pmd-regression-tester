@@ -94,7 +94,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     argv.push project_list
     options = PmdTester::Options.new(argv)
 
-    projects[0].auxclasspath = '-auxclasspath extra:dirs'
+    projects[0].auxclasspath = 'extra:dirs'
     record_expectations('sha1abc', 'sha1abc', true)
     record_expectations_after_build
     record_expectations_project_build('sha1abc')
@@ -117,7 +117,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     argv.push project_list
     options = PmdTester::Options.new(argv)
 
-    projects[0].auxclasspath = '-auxclasspath extra:dirs'
+    projects[0].auxclasspath = 'extra:dirs'
     record_expectations('sha1abc', 'sha1abc', true)
     record_expectations_after_build
     record_expectations_project_build('sha1abc', true)
@@ -137,7 +137,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     argv.push project_list
     options = PmdTester::Options.new(argv)
 
-    projects[0].auxclasspath = '-auxclasspath extra:dirs'
+    projects[0].auxclasspath = 'extra:dirs'
     record_expectations('sha1abc', 'sha1abc', true)
     record_expectations_after_build
     record_expectations_project_build('sha1abc', true, true)
@@ -157,6 +157,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     error_prefix = error ? 'PMD_JAVA_OPTS="-Dpmd.error_recovery -ea" ' : ''
     distro_path = "#{Dir.getwd}/target/pmd-bin-#{@pmd_version}-master-#{sha1}"
     fail_on_violation = long_cli_options ? '--fail-on-violation false' : '-failOnViolation false'
+    auxclasspath = long_cli_options ? '--aux-classpath extra:dirs' : '-auxclasspath extra:dirs'
     PmdTester::Cmd.stubs(:execute)
                   .with("#{error_prefix}" \
                         "#{distro_path}/bin/run.sh " \
@@ -164,7 +165,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
                         '-R target/reports/master/checkstyle/config.xml ' \
                         '-r target/reports/master/checkstyle/pmd_report.xml ' \
                         "#{fail_on_violation} -t 1 " \
-                        '-auxclasspath extra:dirs').once
+                        "#{auxclasspath}").once
     PmdTester::PmdReportDetail.any_instance.stubs(:save).once
   end
 
