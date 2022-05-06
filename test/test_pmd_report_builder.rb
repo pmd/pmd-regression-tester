@@ -189,8 +189,9 @@ class TestPmdReportBuilder < Test::Unit::TestCase
                         '-R target/reports/master/checkstyle/config.xml ' \
                         '-r target/reports/master/checkstyle/pmd_report.xml ' \
                         "#{fail_on_violation} -t 1 " \
-                        '-auxclasspath extra:dirs')
-                  .returns(['test stdout', 'test stderr', process_status])
+                        '-auxclasspath extra:dirs',
+                        'target/reports/master/checkstyle')
+                  .returns(process_status)
                   .once
     PmdTester::PmdReportDetail.stubs(:create).once.with { |params| params[:exit_code] == exit_status }
   end

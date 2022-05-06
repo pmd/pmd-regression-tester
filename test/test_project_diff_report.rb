@@ -6,6 +6,10 @@ require 'test_helper'
 class TestProjectDiffReport < Test::Unit::TestCase
   include PmdTester::PmdTesterUtils
   include TestUtils
+
+  BASE_REPORT_FOLDER = 'test/resources/html_report_builder/base'
+  PATCH_REPORT_FOLDER = 'test/resources/html_report_builder/patch'
+
   BASE_PMD_REPORT_PATH =
     'test/resources/html_report_builder/test_html_report_builder_base.xml'
   PATCH_PMD_REPORT_PATH =
@@ -33,6 +37,8 @@ class TestProjectDiffReport < Test::Unit::TestCase
 
     project.report_diff = build_report_diff(BASE_PMD_REPORT_PATH, PATCH_PMD_REPORT_PATH,
                                             BASE_REPORT_INFO_PATH, PATCH_REPORT_INFO_PATH)
+    project.report_diff.base_report.report_folder = BASE_REPORT_FOLDER
+    project.report_diff.patch_report.report_folder = PATCH_REPORT_FOLDER
 
     PmdTester::LiquidProjectRenderer.new.write_project_index(project, actual_report_path)
 
@@ -42,10 +48,14 @@ class TestProjectDiffReport < Test::Unit::TestCase
     assert_file_exists("#{actual_report_path}/base_pmd_report.xml")
     assert_file_exists("#{actual_report_path}/base_data.js")
     assert_file_exists("#{actual_report_path}/base_pmd_report.html")
+    assert_file_exists("#{actual_report_path}/base_stdout.txt")
+    assert_file_exists("#{actual_report_path}/base_stderr.txt")
     assert_file_equals(EXPECTED_FULL_BASE_HTML_REPORT, "#{actual_report_path}/base_pmd_report.html")
     assert_file_exists("#{actual_report_path}/patch_pmd_report.xml")
     assert_file_exists("#{actual_report_path}/patch_data.js")
     assert_file_exists("#{actual_report_path}/patch_pmd_report.html")
+    assert_file_exists("#{actual_report_path}/patch_stdout.txt")
+    assert_file_exists("#{actual_report_path}/patch_stderr.txt")
     assert_file_equals(EXPECTED_FULL_PATCH_HTML_REPORT, "#{actual_report_path}/patch_pmd_report.html")
   end
 

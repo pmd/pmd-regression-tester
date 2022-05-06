@@ -6,6 +6,16 @@ require 'test_helper'
 class TestCmd < Test::Unit::TestCase
   include PmdTester
 
+  def setup
+    @tempdir = 'test-TestCmd-temp'
+    Dir.mkdir @tempdir unless Dir.exist?(@tempdir)
+  end
+
+  def teardown
+    Dir.each_child(@tempdir) { |x| File.unlink("#{@tempdir}/#{x}") }
+    Dir.rmdir(@tempdir)
+  end
+
   def test_get_stdout
     stdout = Cmd.execute_successfully('echo Hello, World!')
     assert_equal('Hello, World!', stdout)
@@ -22,9 +32,10 @@ class TestCmd < Test::Unit::TestCase
   end
 
   def test_failing_cmd
-    stdout, stderr, status = Cmd.execute('echo Hello; echo World >&2; exit 5')
-    assert_equal('Hello', stdout)
-    assert_equal('World', stderr)
+    status = Cmd.execute('echo Hello; echo World >&2; exit 5', @tempdir)
+
+    assert_equal("Hello\n", File.read("#{@tempdir}/stdout.txt"))
+    assert_equal("World\n", File.read("#{@tempdir}/stderr.txt"))
     assert_equal(5, status.exitstatus)
   end
 

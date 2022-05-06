@@ -60,6 +60,11 @@ module PmdTester
       # copy original pmd reports
       copy_file("#{root}/base_pmd_report.xml", project.report_diff.base_report.file)
       copy_file("#{root}/patch_pmd_report.xml", project.report_diff.patch_report.file)
+      # copy stdout and stderr outputs
+      copy_file("#{root}/base_stdout.txt", "#{project.report_diff.base_report.report_folder}/stdout.txt")
+      copy_file("#{root}/base_stderr.txt", "#{project.report_diff.base_report.report_folder}/stderr.txt")
+      copy_file("#{root}/patch_stdout.txt", "#{project.report_diff.patch_report.report_folder}/stdout.txt")
+      copy_file("#{root}/patch_stderr.txt", "#{project.report_diff.patch_report.report_folder}/stderr.txt")
       # render full pmd reports
       write_file("#{root}/base_pmd_report.html",
                  render_liquid('project_pmd_report.html', pmd_report_liquid_env(project, BASE)))

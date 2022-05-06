@@ -60,6 +60,8 @@ module PmdTester
                 :exit_code,
                 :file
 
+    attr_accessor :report_folder
+
     def initialize(report_document: nil,
                    file: '',
                    exec_time: 0,
@@ -111,6 +113,7 @@ module PmdTester
       @violations_by_file = CollectionByFile.new
       @errors_by_file = CollectionByFile.new
       @configerrors_by_rule = {}
+      @report_folder = ''
     end
   end
 

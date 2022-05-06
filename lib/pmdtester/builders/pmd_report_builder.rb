@@ -110,7 +110,7 @@ module PmdTester
         logger.warn "#{@pmd_branch_name}: Skipping PMD run - report " \
                     "#{project.get_pmd_report_path(@pmd_branch_name)} already exists"
       else
-        _stdout, _stderr, status = Cmd.execute(pmd_cmd)
+        status = Cmd.execute(pmd_cmd, project.get_project_target_dir(@pmd_branch_name))
         exit_code = status.exitstatus
       end
       end_time = Time.now

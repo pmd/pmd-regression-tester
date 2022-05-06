@@ -7,9 +7,23 @@ module PmdTester
   class Cmd
     extend PmdTester
 
-    def self.execute(cmd)
+    #
+    # Executes the given command and returns the process status.
+    # stdout and stderr are written to the files "stdout.txt" and "stderr.txt"
+    # in path.
+    #
+    def self.execute(cmd, path)
       stdout, stderr, status = internal_execute(cmd)
-      [stdout, stderr, status]
+
+      file = File.new("#{path}/stdout.txt", 'w')
+      file.puts stdout
+      file.close
+
+      file = File.new("#{path}/stderr.txt", 'w')
+      file.puts stderr
+      file.close
+
+      status
     end
 
     def self.execute_successfully(cmd)
