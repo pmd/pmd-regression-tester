@@ -4,6 +4,8 @@
 
 ## Enhancements
 
+* [#109](https://github.com/pmd/pmd-regression-tester/issues/109): Make stdout/stderr and exit code available
+
 ## Fixed Issues
 
 ## External Contributions
