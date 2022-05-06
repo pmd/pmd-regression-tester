@@ -1,6 +1,4 @@
-# 1.4.2-SNAPSHOT / ????-??-??
-
-## New and Noteworthy
+# 1.5.0 / 2022-05-06
 
 ## Enhancements
 
@@ -10,8 +8,6 @@
 ## Fixed Issues
 
 * [#107](https://github.com/pmd/pmd-regression-tester/issues/107): Deprecated command line options is used: `-auxclasspath`
-
-## External Contributions
 
 # 1.4.1 / 2022-04-12
 
