@@ -4,6 +4,8 @@
 
 ## Enhancements
 
+* [#108](https://github.com/pmd/pmd-regression-tester/issues/108): Disable progress bar for PMD 7
+
 ## Fixed Issues
 
 ## External Contributions
