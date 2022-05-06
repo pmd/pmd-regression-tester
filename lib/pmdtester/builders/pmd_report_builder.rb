@@ -25,7 +25,7 @@ module PmdTester
     def get_pmd_binary_file
       logger.info "#{@pmd_branch_name}: Start packaging PMD"
       Dir.chdir(@local_git_repo) do
-        build_branch_sha = Cmd.execute("git rev-parse #{@pmd_branch_name}^{commit}")
+        build_branch_sha = Cmd.execute_successfully("git rev-parse #{@pmd_branch_name}^{commit}")
 
         checkout_build_branch # needs a clean working tree, otherwise fails
 
@@ -70,28 +70,28 @@ module PmdTester
                       ' -Dcheckstyle.skip=true' \
                       ' -Dpmd.skip=true' \
                       ' -T1C -B'
-        Cmd.execute(package_cmd)
+        Cmd.execute_successfully(package_cmd)
       end
 
       logger.info "#{@pmd_branch_name}: Extracting the zip"
-      Cmd.execute("unzip -qo #{pmd_dist_target} -d pmd-dist/target/exploded")
-      Cmd.execute("mv pmd-dist/target/exploded/pmd-bin-#{@pmd_version} #{into_dir}")
+      Cmd.execute_successfully("unzip -qo #{pmd_dist_target} -d pmd-dist/target/exploded")
+      Cmd.execute_successfully("mv pmd-dist/target/exploded/pmd-bin-#{@pmd_version} #{into_dir}")
     end
 
     def determine_pmd_version
       version_cmd = "./mvnw -q -Dexec.executable=\"echo\" -Dexec.args='${project.version}' " \
                     '--non-recursive org.codehaus.mojo:exec-maven-plugin:1.5.0:exec'
-      Cmd.execute(version_cmd)
+      Cmd.execute_successfully(version_cmd)
     end
 
     def get_last_commit_sha
       get_last_commit_sha_cmd = 'git rev-parse HEAD^{commit}'
-      Cmd.execute(get_last_commit_sha_cmd)
+      Cmd.execute_successfully(get_last_commit_sha_cmd)
     end
 
     def get_last_commit_message
       get_last_commit_message_cmd = 'git log -1 --pretty=%B'
-      Cmd.execute(get_last_commit_message_cmd)
+      Cmd.execute_successfully(get_last_commit_message_cmd)
     end
 
     def generate_pmd_report(project)
@@ -167,7 +167,7 @@ module PmdTester
     def checkout_build_branch
       logger.info "#{@pmd_branch_name}: Checking out the branch"
       # note that this would fail if the tree is dirty
-      Cmd.execute("git checkout #{@pmd_branch_name}")
+      Cmd.execute_successfully("git checkout #{@pmd_branch_name}")
 
       # determine the version
       @pmd_version = determine_pmd_version
@@ -193,7 +193,7 @@ module PmdTester
     end
 
     def wd_has_dirty_git_changes
-      !Cmd.execute('git status --porcelain').empty?
+      !Cmd.execute_successfully('git status --porcelain').empty?
     end
 
     def should_use_long_cli_options

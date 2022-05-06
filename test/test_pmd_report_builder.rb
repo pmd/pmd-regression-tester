@@ -52,9 +52,9 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     FileUtils.touch "target/repositories/pmd/pmd-dist/target/pmd-bin-#{@pmd_version}.zip"
 
     record_expectations('sha1abc', 'sha1abc', false)
-    PmdTester::Cmd.stubs(:execute).with("unzip -qo pmd-dist/target/pmd-bin-#{@pmd_version}.zip" \
+    PmdTester::Cmd.stubs(:execute_successfully).with("unzip -qo pmd-dist/target/pmd-bin-#{@pmd_version}.zip" \
       ' -d pmd-dist/target/exploded').once
-    PmdTester::Cmd.stubs(:execute).with("mv pmd-dist/target/exploded/pmd-bin-#{@pmd_version}" \
+    PmdTester::Cmd.stubs(:execute_successfully).with("mv pmd-dist/target/exploded/pmd-bin-#{@pmd_version}" \
       " #{Dir.getwd}/target/pmd-bin-#{@pmd_version}-master-sha1abc").once
     record_expectations_after_build
 
@@ -71,12 +71,12 @@ class TestPmdReportBuilder < Test::Unit::TestCase
 
     # PMD binary does not exist yet this time...
     record_expectations('sha1abc', 'sha1abc', false)
-    PmdTester::Cmd.stubs(:execute).with('./mvnw clean package -Dmaven.test.skip=true' \
+    PmdTester::Cmd.stubs(:execute_successfully).with('./mvnw clean package -Dmaven.test.skip=true' \
                   ' -Dmaven.javadoc.skip=true -Dmaven.source.skip=true' \
                   ' -Dcheckstyle.skip=true -Dpmd.skip=true -T1C -B').once
-    PmdTester::Cmd.stubs(:execute).with("unzip -qo pmd-dist/target/pmd-bin-#{@pmd_version}.zip" \
+    PmdTester::Cmd.stubs(:execute_successfully).with("unzip -qo pmd-dist/target/pmd-bin-#{@pmd_version}.zip" \
                   ' -d pmd-dist/target/exploded').once
-    PmdTester::Cmd.stubs(:execute).with("mv pmd-dist/target/exploded/pmd-bin-#{@pmd_version}" \
+    PmdTester::Cmd.stubs(:execute_successfully).with("mv pmd-dist/target/exploded/pmd-bin-#{@pmd_version}" \
                   " #{Dir.getwd}/target/pmd-bin-#{@pmd_version}-master-sha1abc").once
     record_expectations_after_build
 
@@ -169,18 +169,18 @@ class TestPmdReportBuilder < Test::Unit::TestCase
   end
 
   def record_expectations(sha1_head, sha1_base, zip_file_exists)
-    PmdTester::Cmd.stubs(:execute).with('git rev-parse master^{commit}').returns(sha1_base).once
+    PmdTester::Cmd.stubs(:execute_successfully).with('git rev-parse master^{commit}').returns(sha1_base).once
     # inside checkout_build_branch
-    PmdTester::Cmd.stubs(:execute).with('git checkout master')
+    PmdTester::Cmd.stubs(:execute_successfully).with('git checkout master')
                   .returns('checked out branch master').once
-    PmdTester::Cmd.stubs(:execute).with('./mvnw -q -Dexec.executable="echo" ' \
+    PmdTester::Cmd.stubs(:execute_successfully).with('./mvnw -q -Dexec.executable="echo" ' \
                   "-Dexec.args='${project.version}' " \
                   '--non-recursive org.codehaus.mojo:exec-maven-plugin:1.5.0:exec')
                   .returns(@pmd_version).at_least(1).at_most(2)
-    PmdTester::Cmd.stubs(:execute).with('git status --porcelain').returns('').once
+    PmdTester::Cmd.stubs(:execute_successfully).with('git status --porcelain').returns('').once
 
     # back into get_pmd_binary_file
-    PmdTester::Cmd.stubs(:execute).with('git rev-parse HEAD^{commit}').returns(sha1_head).once
+    PmdTester::Cmd.stubs(:execute_successfully).with('git rev-parse HEAD^{commit}').returns(sha1_head).once
     # PMD binary might not exist yet...
     distro_path = "target/pmd-bin-#{@pmd_version}-master-#{sha1_base}"
     if zip_file_exists
@@ -191,7 +191,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
   end
 
   def record_expectations_after_build
-    PmdTester::Cmd.stubs(:execute).with('git log -1 --pretty=%B').returns('the commit message').once
+    PmdTester::Cmd.stubs(:execute_successfully).with('git log -1 --pretty=%B').returns('the commit message').once
     PmdTester::PmdBranchDetail.any_instance.stubs(:save).once
     FileUtils.stubs(:cp).with('config/design.xml', 'target/reports/master/config.xml').once
   end

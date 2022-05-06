@@ -7,17 +7,17 @@ class TestCmd < Test::Unit::TestCase
   include PmdTester
 
   def test_get_stdout
-    stdout = Cmd.execute('echo Hello, World!')
+    stdout = Cmd.execute_successfully('echo Hello, World!')
     assert_equal('Hello, World!', stdout)
   end
 
   def test_invalid_cmd(cmd)
     expected_msg = "#{CmdException::COMMON_MSG} '#{cmd}'"
     begin
-      Cmd.execute(cmd)
+      Cmd.execute_successfully(cmd)
     rescue CmdException => e
       assert_equal(cmd, e.cmd)
-      assert_equal(expected_msg, e.message)
+      assert(e.message.start_with?(expected_msg))
     end
   end
 

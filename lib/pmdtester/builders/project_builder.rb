@@ -30,7 +30,7 @@ module PmdTester
           # once but may be used with several tags.
           clone_cmd = "git clone --no-single-branch --depth 1 #{project.connection} #{path}"
 
-          Cmd.execute(clone_cmd)
+          Cmd.execute_successfully(clone_cmd)
         end
 
         Dir.chdir(path) do
@@ -87,7 +87,7 @@ module PmdTester
         if command.start_with?('#!')
           shell = command.lines[0].chomp[2..] # remove leading "#!"
         end
-        stdout = Cmd.execute("#{shell} #{script.path}")
+        stdout = Cmd.execute_successfully("#{shell} #{script.path}")
       ensure
         script.unlink
       end
@@ -99,7 +99,7 @@ module PmdTester
 
       reset_cmd = "git checkout #{tag}; git reset --hard #{tag}"
 
-      Cmd.execute(reset_cmd)
+      Cmd.execute_successfully(reset_cmd)
     end
   end
 end

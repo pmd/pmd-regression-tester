@@ -28,7 +28,7 @@ class TestRuleSetBuilder < Test::Unit::TestCase
     end
     options.expects(:mode).returns('local').at_most_once
     builder = RuleSetBuilder.new(options)
-    Cmd.expects(:execute).returns(diff_filenames)
+    Cmd.expects(:execute_successfully).returns(diff_filenames)
     builder.build?
   end
 
