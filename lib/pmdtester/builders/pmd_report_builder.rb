@@ -98,12 +98,13 @@ module PmdTester
       error_recovery_options = @error_recovery ? 'PMD_JAVA_OPTS="-Dpmd.error_recovery -ea" ' : ''
       run_path = "#{saved_distro_path(@pmd_branch_details.branch_last_sha)}/bin/run.sh"
       fail_on_violation = should_use_long_cli_options ? '--fail-on-violation false' : '-failOnViolation false'
+      auxclasspath_option = create_auxclasspath_option(project)
       pmd_cmd = "#{error_recovery_options}" \
                 "#{run_path} pmd -d #{project.local_source_path} -f xml " \
                 "-R #{project.get_config_path(@pmd_branch_name)} " \
                 "-r #{project.get_pmd_report_path(@pmd_branch_name)} " \
                 "#{fail_on_violation} -t #{@threads} " \
-                "#{project.auxclasspath}"
+                "#{auxclasspath_option}"
       start_time = Time.now
       if File.exist?(project.get_pmd_report_path(@pmd_branch_name))
         logger.warn "#{@pmd_branch_name}: Skipping PMD run - report " \
@@ -199,6 +200,15 @@ module PmdTester
     def should_use_long_cli_options
       logger.debug "PMD Version: #{@pmd_version}"
       Semver.compare(@pmd_version, '6.41.0') >= 0
+    end
+
+    def create_auxclasspath_option(project)
+      auxclasspath_option = ''
+      unless project.auxclasspath.empty?
+        auxclasspath_option = should_use_long_cli_options ? '--aux-classpath ' : '-auxclasspath '
+        auxclasspath_option += project.auxclasspath
+      end
+      auxclasspath_option
     end
   end
 end

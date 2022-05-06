@@ -30,7 +30,7 @@ class TestProjectBuilder < Test::Unit::TestCase
     project_builder = PmdTester::ProjectBuilder.new(@projects)
     project_builder.build_projects
 
-    assert_equal('-auxclasspath the-aux', @projects[0].auxclasspath)
+    assert_equal('the-aux', @projects[0].auxclasspath)
     assert_equal('', @projects[1].auxclasspath)
   end
 

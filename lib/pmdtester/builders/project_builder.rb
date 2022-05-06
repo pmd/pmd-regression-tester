@@ -71,7 +71,7 @@ module PmdTester
       if project.auxclasspath_command
         logger.debug "Executing auxclasspath-command: #{project.auxclasspath_command}"
         auxclasspath = run_as_script(Dir.getwd, project.auxclasspath_command)
-        project.auxclasspath = "-auxclasspath #{auxclasspath}"
+        project.auxclasspath = auxclasspath
       else
         project.auxclasspath = ''
       end

@@ -6,6 +6,8 @@
 
 ## Fixed Issues
 
+* [#107](https://github.com/pmd/pmd-regression-tester/issues/107): Deprecated command line options is used: `-auxclasspath`
+
 ## External Contributions
 
 # 1.4.1 / 2022-04-12
