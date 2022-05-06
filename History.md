@@ -4,6 +4,8 @@
 
 ## Enhancements
 
+* [#108](https://github.com/pmd/pmd-regression-tester/issues/108): Disable progress bar for PMD 7
+
 ## Fixed Issues
 
 * [#107](https://github.com/pmd/pmd-regression-tester/issues/107): Deprecated command line options is used: `-auxclasspath`

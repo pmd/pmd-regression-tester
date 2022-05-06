@@ -104,7 +104,8 @@ module PmdTester
                 "-R #{project.get_config_path(@pmd_branch_name)} " \
                 "-r #{project.get_pmd_report_path(@pmd_branch_name)} " \
                 "#{fail_on_violation} -t #{@threads} " \
-                "#{auxclasspath_option}"
+                "#{auxclasspath_option}" \
+                "#{pmd7? ? ' --no-progress' : ''}"
       start_time = Time.now
       if File.exist?(project.get_pmd_report_path(@pmd_branch_name))
         logger.warn "#{@pmd_branch_name}: Skipping PMD run - report " \
@@ -209,6 +210,10 @@ module PmdTester
         auxclasspath_option += project.auxclasspath
       end
       auxclasspath_option
+    end
+
+    def pmd7?
+      Semver.compare(@pmd_version, '7.0.0-SNAPSHOT') >= 0
     end
   end
 end

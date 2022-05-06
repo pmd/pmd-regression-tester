@@ -147,9 +147,29 @@ class TestPmdReportBuilder < Test::Unit::TestCase
       .build
   end
 
+  def test_build_pmd7
+    @pmd_version = '7.0.0-SNAPSHOT'
+    project_list = 'test/resources/pmd_report_builder/project-list.xml'
+    projects = PmdTester::ProjectsParser.new.parse(project_list)
+    assert_equal(1, projects.size)
+    argv = %w[-r target/repositories/pmd -b master -p pmd_releases/6.1.0
+              -c config/design.xml --debug --error-recovery -l]
+    argv.push project_list
+    options = PmdTester::Options.new(argv)
+
+    projects[0].auxclasspath = 'extra:dirs'
+    record_expectations('sha1abc', 'sha1abc', true)
+    record_expectations_after_build
+    record_expectations_project_build('sha1abc', true, true, true)
+
+    PmdTester::PmdReportBuilder
+      .new(projects, options, options.base_config, options.base_branch)
+      .build
+  end
+
   private
 
-  def record_expectations_project_build(sha1, error = false, long_cli_options = false)
+  def record_expectations_project_build(sha1, error = false, long_cli_options = false, no_progress_bar = false)
     PmdTester::ProjectBuilder.any_instance.stubs(:clone_projects).once
     PmdTester::ProjectBuilder.any_instance.stubs(:build_projects).once
     PmdTester::SimpleProgressLogger.any_instance.stubs(:start).once
@@ -165,7 +185,8 @@ class TestPmdReportBuilder < Test::Unit::TestCase
                         '-R target/reports/master/checkstyle/config.xml ' \
                         '-r target/reports/master/checkstyle/pmd_report.xml ' \
                         "#{fail_on_violation} -t 1 " \
-                        "#{auxclasspath}").once
+                        "#{auxclasspath}" \
+                        "#{no_progress_bar ? ' --no-progress' : ''}").once
     PmdTester::PmdReportDetail.any_instance.stubs(:save).once
   end
 
