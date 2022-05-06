@@ -32,7 +32,8 @@ module PmdTester
         file: report_file,
 
         timestamp: report_details.timestamp,
-        exec_time: report_details.execution_time
+        exec_time: report_details.execution_time,
+        exit_code: report_details.exit_code
       )
     end
 

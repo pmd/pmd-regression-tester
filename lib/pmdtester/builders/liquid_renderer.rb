@@ -120,6 +120,7 @@ module PmdTester
 
         'execution_time' => PmdReportDetail.convert_seconds(report.exec_time),
         'timestamp' => report.timestamp,
+        'exit_code' => report.exit_code,
 
         'rules' => report.rule_summaries,
         'errors' => report.errors_by_file.all_values.map { |e| error_to_hash(e, project) },
