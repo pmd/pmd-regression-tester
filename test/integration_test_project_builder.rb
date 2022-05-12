@@ -19,10 +19,17 @@ class IntegrationTestProjectBuilder < Test::Unit::TestCase
     project_builder.clone_projects
 
     assert_path_exist('target/repositories/Schedul-o-matic-9000/.git/HEAD')
-    assert_file_content_equals('6b1229ba43b38931fbbab5924bc9b9611d19a786',
+    assert_file_content_equals('refs/heads/fetched/6b1229ba43b38931fbbab5924bc9b9611d19a786',
                                'target/repositories/Schedul-o-matic-9000/.git/HEAD')
+    assert_file_content_equals('6b1229ba43b38931fbbab5924bc9b9611d19a786',
+                               'target/repositories/Schedul-o-matic-9000/.git/refs/heads/fetched/' \
+                               '6b1229ba43b38931fbbab5924bc9b9611d19a786')
+
     assert_path_exist('target/repositories/fflib-apex-common/.git/HEAD')
-    assert_file_content_equals('7e0891efb86d23de62811af56d87d0959082a322',
+    assert_file_content_equals('refs/heads/fetched/7e0891efb86d23de62811af56d87d0959082a322',
                                'target/repositories/fflib-apex-common/.git/HEAD')
-  end
+    assert_file_content_equals('7e0891efb86d23de62811af56d87d0959082a322',
+                               'target/repositories/fflib-apex-common/.git/refs/heads/fetched/' \
+                               '7e0891efb86d23de62811af56d87d0959082a322')
+   end
 end

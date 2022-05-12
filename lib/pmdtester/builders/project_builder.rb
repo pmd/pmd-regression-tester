@@ -30,9 +30,17 @@ module PmdTester
         end
 
         Dir.chdir(path) do
-          # this should work with tags, branch names and (full-length) hashes
+          # this works with tags, branch names and (full-length) hashes
+          # first move to a different (temporary) branch, in case we are already on the branch that we want to update
+          Cmd.execute_successfully('git checkout -b fetched/temp')
+          # fetches any new commits. Could also be a tag.
           Cmd.execute_successfully("git fetch --depth 1 origin #{project.tag}")
-          Cmd.execute_successfully("git checkout #{project.tag}; git reset --hard #{project.tag}")
+          # update the branch to work on based on the new fetch. Creates a new branch if it doesn't exist already
+          Cmd.execute_successfully("git branch --force fetched/#{project.tag} FETCH_HEAD")
+          # checkout the updated branch
+          Cmd.execute_successfully("git checkout fetched/#{project.tag}")
+          # remove the temporary branch
+          Cmd.execute_successfully('git branch -D fetched/temp')
         end
         logger.info "Cloning #{project.name} completed"
       end

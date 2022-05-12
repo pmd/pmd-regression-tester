@@ -52,8 +52,11 @@ class TestProjectBuilder < Test::Unit::TestCase
     PmdTester::Cmd.stubs(:execute_successfully).with('git clone --single-branch --depth 1' \
                                         " #{url} target/repositories/#{name}").once
     Dir.stubs(:chdir).with("target/repositories/#{name}").yields.once
+    PmdTester::Cmd.stubs(:execute_successfully).with('git checkout -b fetched/temp').once
     PmdTester::Cmd.stubs(:execute_successfully).with("git fetch --depth 1 origin #{revision}").once
-    PmdTester::Cmd.stubs(:execute_successfully).with("git checkout #{revision}; git reset --hard #{revision}").once
+    PmdTester::Cmd.stubs(:execute_successfully).with("git branch --force fetched/#{revision} FETCH_HEAD").once
+    PmdTester::Cmd.stubs(:execute_successfully).with("git checkout fetched/#{revision}").once
+    PmdTester::Cmd.stubs(:execute_successfully).with('git branch -D fetched/temp').once
   end
 
   def expect_build(name, build_cmd = nil, auxclasspath_cmd = nil)
