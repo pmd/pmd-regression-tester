@@ -10,11 +10,14 @@ class TestProjectsParser < Test::Unit::TestCase
   end
 
   def test_project_parser_checkstyle
-    expected_exclude_pattern =
-      %w[**/src/test/resources-noncompilable/**/* **/src/test/resources/**/*]
+    expected_exclude_pattern = Array['.*/target/test-classes/com/puppycrawl/tools/checkstyle/.*',
+                                     '.*/target/generated-sources/.*',
+                                     '.*/src/test/resources-noncompilable/com/puppycrawl/tools/checkstyle/javaparser/' \
+                                     'InputJavaParserNoFreezeOnDeeplyNestedLambdas.java']
+
     assert_equal(expected_exclude_pattern, @projects[0].exclude_patterns)
-    assert_equal('https://github.com/checkstyle/checkstyle/tree/checkstyle-8.10', @projects[0].webview_url)
-    assert_equal('checkstyle-8.10', @projects[0].tag)
+    assert_equal('https://github.com/checkstyle/checkstyle/tree/checkstyle-9.1', @projects[0].webview_url)
+    assert_equal('checkstyle-9.1', @projects[0].tag)
     assert_equal('mvn test-compile -B', @projects[0].build_command)
     assert_equal('echo -n "$(pwd)/target/classes:"', @projects[0].auxclasspath_command)
   end
@@ -35,9 +38,9 @@ class TestProjectsParser < Test::Unit::TestCase
     assert_equal('spring-framework', @projects[2].name)
     assert_equal('git', @projects[2].type)
     assert_equal('https://github.com/spring-projects/spring-framework', @projects[2].connection)
-    assert_equal('https://github.com/spring-projects/spring-framework/tree/v5.0.6.RELEASE',
+    assert_equal('https://github.com/spring-projects/spring-framework/tree/v5.3.13',
                  @projects[2].webview_url)
-    assert_equal('v5.0.6.RELEASE', @projects[2].tag)
+    assert_equal('v5.3.13', @projects[2].tag)
     assert_empty(@projects[2].exclude_patterns)
     assert_nil(@projects[2].build_command)
     assert_nil(@projects[2].auxclasspath_command)

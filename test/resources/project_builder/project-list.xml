@@ -8,9 +8,10 @@ xsi:noNamespaceSchemaLocation="projectlist_1_2_0.xsd">
     <name>checkstyle</name>
     <type>git</type>
     <connection>https://github.com/checkstyle/checkstyle</connection>
-    <tag>checkstyle-8.10</tag>
-    <exclude-pattern>**/src/test/resources-noncompilable/**/*</exclude-pattern>
-    <exclude-pattern>**/src/test/resources/**/*</exclude-pattern>
+    <tag>checkstyle-9.1</tag>
+    <exclude-pattern>.*/target/test-classes/com/puppycrawl/tools/checkstyle/.*</exclude-pattern>
+    <exclude-pattern>.*/target/generated-sources/.*</exclude-pattern>
+    <exclude-pattern>.*/src/test/resources-noncompilable/com/puppycrawl/tools/checkstyle/javaparser/InputJavaParserNoFreezeOnDeeplyNestedLambdas.java</exclude-pattern>
     <build-command>mvn test-compile -B</build-command>
     <auxclasspath-command><![CDATA[#!/usr/bin/env bash
 echo -n "$(pwd)/target/classes:"
@@ -21,8 +22,8 @@ echo -n "$(pwd)/target/classes:"
     <name>spring-framework</name>
     <type>git</type>
     <connection>https://github.com/spring-projects/spring-framework</connection>
-    <webview-url>https://github.com/spring-projects/spring-framework/tree/v5.0.6.RELEASE</webview-url>
-    <tag>v5.0.6.RELEASE</tag>
+    <webview-url>https://github.com/spring-projects/spring-framework/tree/v5.3.13</webview-url>
+    <tag>v5.3.13</tag>
   </project>
 
 </projectlist>

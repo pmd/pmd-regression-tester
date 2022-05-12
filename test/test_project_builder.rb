@@ -11,8 +11,8 @@ class TestProjectBuilder < Test::Unit::TestCase
   end
 
   def test_clone
-    expect_git_clone('checkstyle', 'https://github.com/checkstyle/checkstyle', 'checkstyle-8.10')
-    expect_git_clone('spring-framework', 'https://github.com/spring-projects/spring-framework', 'v5.0.6.RELEASE')
+    expect_git_clone('checkstyle', 'https://github.com/checkstyle/checkstyle', 'checkstyle-9.1')
+    expect_git_clone('spring-framework', 'https://github.com/spring-projects/spring-framework', 'v5.3.13')
 
     project_builder = PmdTester::ProjectBuilder.new(@projects)
     project_builder.clone_projects

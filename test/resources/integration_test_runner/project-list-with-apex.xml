@@ -12,6 +12,7 @@ xsi:noNamespaceSchemaLocation="projectlist_1_2_0.xsd">
 
     <exclude-pattern>.*/target/test-classes/com/puppycrawl/tools/checkstyle/.*</exclude-pattern>
     <exclude-pattern>.*/target/generated-sources/.*</exclude-pattern>
+    <exclude-pattern>.*/src/test/resources-noncompilable/com/puppycrawl/tools/checkstyle/javaparser/InputJavaParserNoFreezeOnDeeplyNestedLambdas.java</exclude-pattern>
 
     <build-command><![CDATA[#!/usr/bin/env bash
 if test -e classpath.txt; then
@@ -37,7 +38,7 @@ mvn dependency:build-classpath -DincludeScope=test -Dmdep.outputFile=classpath.t
     <name>spring-framework</name>
     <type>git</type>
     <connection>https://github.com/spring-projects/spring-framework</connection>
-    <tag>v5.0.6.RELEASE</tag>
+    <tag>v5.3.13</tag>
   </project>
 -->
 

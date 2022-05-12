@@ -72,6 +72,7 @@ are suggested.
     <rule ref="category/java/documentation.xml/UncommentedEmptyConstructor" deprecated="true"/>
     <rule ref="category/java/documentation.xml/UncommentedEmptyMethodBody" deprecated="true"/>
 
-    <exclude-pattern>**/src/test/resources-noncompilable/**/*</exclude-pattern>
-    <exclude-pattern>**/src/test/resources/**/*</exclude-pattern>
+    <exclude-pattern>.*/target/test-classes/com/puppycrawl/tools/checkstyle/.*</exclude-pattern>
+    <exclude-pattern>.*/target/generated-sources/.*</exclude-pattern>
+    <exclude-pattern>.*/src/test/resources-noncompilable/com/puppycrawl/tools/checkstyle/javaparser/InputJavaParserNoFreezeOnDeeplyNestedLambdas.java</exclude-pattern>
 </ruleset>
