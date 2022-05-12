@@ -18,6 +18,17 @@ class TestProjectBuilder < Test::Unit::TestCase
     project_builder.clone_projects
   end
 
+  def test_clone_with_commit_sha1
+    expect_git_clone('Schedul-o-matic-9000', 'https://github.com/SalesforceLabs/Schedul-o-matic-9000',
+                     '6b1229ba43b38931fbbab5924bc9b9611d19a786')
+    expect_git_clone('fflib-apex-common', 'https://github.com/apex-enterprise-patterns/fflib-apex-common',
+                     '7e0891efb86d23de62811af56d87d0959082a322')
+
+    projects = PmdTester::ProjectsParser.new.parse('test/resources/project_builder/project-list_commit_sha1.xml')
+    project_builder = PmdTester::ProjectBuilder.new(projects)
+    project_builder.clone_projects
+  end
+
   def test_build
     Dir.stubs(:getwd)
        .returns('target/repositories/checkstyle')
@@ -38,10 +49,14 @@ class TestProjectBuilder < Test::Unit::TestCase
 
   def expect_git_clone(name, url, revision)
     File.stubs(:exist?).with("target/repositories/#{name}").returns(false).once
-    PmdTester::Cmd.stubs(:execute_successfully).with('git clone --no-single-branch --depth 1' \
+    PmdTester::Cmd.stubs(:execute_successfully).with('git clone --single-branch --depth 1' \
                                         " #{url} target/repositories/#{name}").once
     Dir.stubs(:chdir).with("target/repositories/#{name}").yields.once
-    PmdTester::Cmd.stubs(:execute_successfully).with("git checkout #{revision}; git reset --hard #{revision}").once
+    PmdTester::Cmd.stubs(:execute_successfully).with('git checkout -b fetched/temp').once
+    PmdTester::Cmd.stubs(:execute_successfully).with("git fetch --depth 1 origin #{revision}").once
+    PmdTester::Cmd.stubs(:execute_successfully).with("git branch --force fetched/#{revision} FETCH_HEAD").once
+    PmdTester::Cmd.stubs(:execute_successfully).with("git checkout fetched/#{revision}").once
+    PmdTester::Cmd.stubs(:execute_successfully).with('git branch -D fetched/temp').once
   end
 
   def expect_build(name, build_cmd = nil, auxclasspath_cmd = nil)

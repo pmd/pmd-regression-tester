@@ -6,6 +6,8 @@
 
 ## Fixed Issues
 
+* [#106](https://github.com/pmd/pmd-regression-tester/issues/106): git clone/checkout fails when using commit sha1 as tag
+
 ## External Contributions
 
 # 1.5.0 / 2022-05-06

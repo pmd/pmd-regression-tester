@@ -19,22 +19,28 @@ module PmdTester
         logger.info "Start cloning #{project.name} repository"
         path = project.clone_root_path
 
+        raise "Unsupported project type '#{project.type}' - only git is supported" unless project.type == 'git'
+
         if File.exist?(path)
           logger.warn "Skipping clone, project path #{path} already exists"
         else
-          raise "Unsupported project type '#{project.type}' - only git is supported" unless project.type == 'git'
-
-          # git:
-          # Don't download whole history
-          # Note we don't use --single-branch, because the repo is downloaded
-          # once but may be used with several tags.
-          clone_cmd = "git clone --no-single-branch --depth 1 #{project.connection} #{path}"
-
+          # Don't download whole history. This just fetches HEAD, the correct ref is fetched below.
+          clone_cmd = "git clone --single-branch --depth 1 #{project.connection} #{path}"
           Cmd.execute_successfully(clone_cmd)
         end
 
         Dir.chdir(path) do
-          execute_reset_cmd(project.type, project.tag)
+          # this works with tags, branch names and (full-length) hashes
+          # first move to a different (temporary) branch, in case we are already on the branch that we want to update
+          Cmd.execute_successfully('git checkout -b fetched/temp')
+          # fetches any new commits. Could also be a tag.
+          Cmd.execute_successfully("git fetch --depth 1 origin #{project.tag}")
+          # update the branch to work on based on the new fetch. Creates a new branch if it doesn't exist already
+          Cmd.execute_successfully("git branch --force fetched/#{project.tag} FETCH_HEAD")
+          # checkout the updated branch
+          Cmd.execute_successfully("git checkout fetched/#{project.tag}")
+          # remove the temporary branch
+          Cmd.execute_successfully('git branch -D fetched/temp')
         end
         logger.info "Cloning #{project.name} completed"
       end
@@ -92,14 +98,6 @@ module PmdTester
         script.unlink
       end
       stdout
-    end
-
-    def execute_reset_cmd(type, tag)
-      raise "Unsupported project type '#{type}' - only git is supported" unless type == 'git'
-
-      reset_cmd = "git checkout #{tag}; git reset --hard #{tag}"
-
-      Cmd.execute_successfully(reset_cmd)
     end
   end
 end

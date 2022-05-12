@@ -17,6 +17,11 @@ module TestUtils
     assert_equal(expected_file, actual_file, actual_path)
   end
 
+  def assert_file_content_equals(expected_content, actual_path)
+    actual_content = normalize_text(File.open(actual_path).read)
+    assert_equal(expected_content, actual_content, actual_path)
+  end
+
   def assert_file_exists(path)
     assert File.exist?(path)
   end
