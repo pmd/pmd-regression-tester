@@ -31,5 +31,5 @@ class IntegrationTestProjectBuilder < Test::Unit::TestCase
     assert_file_content_equals('7e0891efb86d23de62811af56d87d0959082a322',
                                'target/repositories/fflib-apex-common/.git/refs/heads/fetched/' \
                                '7e0891efb86d23de62811af56d87d0959082a322')
-   end
+  end
 end
