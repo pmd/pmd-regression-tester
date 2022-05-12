@@ -31,8 +31,8 @@ module PmdTester
 
         Dir.chdir(path) do
           # this should work with tags, branch names and (full-length) hashes
-          Cmd.execute_successfully("git fetch --depth 1 origin #{tag}")
-          Cmd.execute_successfully("git checkout #{tag}; git reset --hard #{tag}")
+          Cmd.execute_successfully("git fetch --depth 1 origin #{project.tag}")
+          Cmd.execute_successfully("git checkout #{project.tag}; git reset --hard #{project.tag}")
         end
         logger.info "Cloning #{project.name} completed"
       end
