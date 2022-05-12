@@ -19,9 +19,7 @@ module PmdTester
         logger.info "Start cloning #{project.name} repository"
         path = project.clone_root_path
 
-        unless project.type == 'git'
-          raise "Unsupported project type '#{project.type}' - only git is supported"
-        end
+        raise "Unsupported project type '#{project.type}' - only git is supported" unless project.type == 'git'
 
         if File.exist?(path)
           logger.warn "Skipping clone, project path #{path} already exists"
@@ -95,4 +93,3 @@ module PmdTester
     end
   end
 end
-
