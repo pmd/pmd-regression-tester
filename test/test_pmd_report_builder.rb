@@ -97,7 +97,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     projects[0].auxclasspath = 'extra:dirs'
     record_expectations('sha1abc', 'sha1abc', true)
     record_expectations_after_build
-    record_expectations_project_build('sha1abc')
+    record_expectations_project_build(sha1: 'sha1abc')
 
     PmdTester::PmdReportBuilder
       .new(projects, options, options.base_config, options.base_branch)
@@ -120,7 +120,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     projects[0].auxclasspath = 'extra:dirs'
     record_expectations('sha1abc', 'sha1abc', true)
     record_expectations_after_build
-    record_expectations_project_build('sha1abc', true)
+    record_expectations_project_build(sha1: 'sha1abc', error: true)
 
     PmdTester::PmdReportBuilder
       .new(projects, options, options.base_config, options.base_branch)
@@ -140,7 +140,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     projects[0].auxclasspath = 'extra:dirs'
     record_expectations('sha1abc', 'sha1abc', true)
     record_expectations_after_build
-    record_expectations_project_build('sha1abc', true, true)
+    record_expectations_project_build(sha1: 'sha1abc', error: true, long_cli_options: true)
 
     PmdTester::PmdReportBuilder
       .new(projects, options, options.base_config, options.base_branch)
@@ -160,7 +160,8 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     projects[0].auxclasspath = 'extra:dirs'
     record_expectations('sha1abc', 'sha1abc', true)
     record_expectations_after_build
-    record_expectations_project_build('sha1abc', true, true, true)
+    record_expectations_project_build(sha1: 'sha1abc', error: true, long_cli_options: true,
+                                      no_progress_bar: true, base_cmd: 'pmd analyze')
 
     PmdTester::PmdReportBuilder
       .new(projects, options, options.base_config, options.base_branch)
@@ -183,7 +184,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     projects[0].auxclasspath = 'extra:dirs'
     record_expectations('sha1abc', 'sha1abc', true)
     record_expectations_after_build
-    record_expectations_project_build('sha1abc', true, false, false, 1)
+    record_expectations_project_build(sha1: 'sha1abc', error: true, exit_status: 1)
 
     PmdTester::PmdReportBuilder
       .new(projects, options, options.base_config, options.base_branch)
@@ -192,8 +193,8 @@ class TestPmdReportBuilder < Test::Unit::TestCase
 
   private
 
-  def record_expectations_project_build(sha1, error = false, long_cli_options = false,
-                                        no_progress_bar = false, exit_status = 0)
+  def record_expectations_project_build(sha1:, error: false, long_cli_options: false,
+                                        no_progress_bar: false, exit_status: 0, base_cmd: 'run.sh pmd')
     PmdTester::ProjectBuilder.any_instance.stubs(:clone_projects).once
     PmdTester::ProjectBuilder.any_instance.stubs(:build_projects).once
     PmdTester::SimpleProgressLogger.any_instance.stubs(:start).once
@@ -204,8 +205,8 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     process_status.expects(:exitstatus).returns(exit_status).once
     PmdTester::Cmd.stubs(:execute)
                   .with("#{error_prefix}" \
-                        "#{distro_path}/bin/run.sh " \
-                        'pmd -d target/repositories/checkstyle -f xml ' \
+                        "#{distro_path}/bin/#{base_cmd} " \
+                        '-d target/repositories/checkstyle -f xml ' \
                         '-R target/reports/master/checkstyle/config.xml ' \
                         '-r target/reports/master/checkstyle/pmd_report.xml ' \
                         "#{long_cli_options ? '--fail-on-violation false' : '-failOnViolation false'} -t 1 " \

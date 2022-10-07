@@ -30,3 +30,6 @@ Metrics/BlockLength:
 
 Metrics/ModuleLength:
   CountAsOne: ['array', 'hash']
+
+Metrics/ParameterLists:
+  CountKeywordArgs: false

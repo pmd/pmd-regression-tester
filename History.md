@@ -4,6 +4,8 @@
 
 ## Enhancements
 
+* [#114](https://github.com/pmd/pmd-regression-tester/pull/114): Support new PMD 7 CLI interface
+
 ## Fixed Issues
 
 ## External Contributions
