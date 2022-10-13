@@ -149,6 +149,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
 
   def test_build_pmd7
     @pmd_version = '7.0.0-SNAPSHOT'
+    sha1 = 'sha1abc'
     project_list = 'test/resources/pmd_report_builder/project-list.xml'
     projects = PmdTester::ProjectsParser.new.parse(project_list)
     assert_equal(1, projects.size)
@@ -158,14 +159,19 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     options = PmdTester::Options.new(argv)
 
     projects[0].auxclasspath = 'extra:dirs'
-    record_expectations('sha1abc', 'sha1abc', true)
+    record_expectations(sha1, sha1, true)
     record_expectations_after_build
-    record_expectations_project_build(sha1: 'sha1abc', error: true, long_cli_options: true,
+    record_expectations_project_build(sha1: sha1, error: true, long_cli_options: true,
                                       no_progress_bar: true, base_cmd: 'pmd analyze')
 
-    PmdTester::PmdReportBuilder
-      .new(projects, options, options.base_config, options.base_branch)
-      .build
+    pmd_cli_cmd = prepare_pmd_dist_dir(version: @pmd_version, sha1: sha1)
+    begin
+      PmdTester::PmdReportBuilder
+        .new(projects, options, options.base_config, options.base_branch)
+        .build
+    ensure
+      cleanup_pmd_dist_dir(base_dir: pmd_cli_cmd)
+    end
   end
 
   #
@@ -244,5 +250,19 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     PmdTester::Cmd.stubs(:execute_successfully).with('git log -1 --pretty=%B').returns('the commit message').once
     PmdTester::PmdBranchDetail.any_instance.stubs(:save).once
     FileUtils.stubs(:cp).with('config/design.xml', 'target/reports/master/config.xml').once
+  end
+
+  # Creates a fake pmd script file as .../bin/pmd.
+  # This is used in the new PMD 7 CLI interface
+  def prepare_pmd_dist_dir(version:, sha1:)
+    pmd_cli_cmd = "#{Dir.getwd}/target/pmd-bin-#{version}-master-#{sha1}/bin"
+    FileUtils.mkdir_p(pmd_cli_cmd)
+    File.new("#{pmd_cli_cmd}/pmd", 'w')
+    pmd_cli_cmd
+  end
+
+  def cleanup_pmd_dist_dir(base_dir:)
+    File.unlink("#{base_dir}/pmd")
+    Dir.rmdir(base_dir)
   end
 end

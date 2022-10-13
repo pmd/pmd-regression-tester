@@ -96,11 +96,10 @@ module PmdTester
 
     def generate_pmd_report(project)
       error_recovery_options = @error_recovery ? 'PMD_JAVA_OPTS="-Dpmd.error_recovery -ea" ' : ''
-      run_path = "#{saved_distro_path(@pmd_branch_details.branch_last_sha)}/bin/#{pmd7? ? 'pmd analyze' : 'run.sh pmd'}"
       fail_on_violation = should_use_long_cli_options? ? '--fail-on-violation false' : '-failOnViolation false'
       auxclasspath_option = create_auxclasspath_option(project)
       pmd_cmd = "#{error_recovery_options}" \
-                "#{run_path} -d #{project.local_source_path} -f xml " \
+                "#{determine_run_path} -d #{project.local_source_path} -f xml " \
                 "-R #{project.get_config_path(@pmd_branch_name)} " \
                 "-r #{project.get_pmd_report_path(@pmd_branch_name)} " \
                 "#{fail_on_violation} -t #{@threads} " \
@@ -216,6 +215,17 @@ module PmdTester
 
     def pmd7?
       Semver.compare(@pmd_version, '7.0.0-SNAPSHOT') >= 0
+    end
+
+    def determine_run_path
+      run_path = "#{saved_distro_path(@pmd_branch_details.branch_last_sha)}/bin"
+      run_path = if File.exist?("#{run_path}/pmd")
+                   # New PMD 7 CLI script (pmd/pmd#4059)
+                   "#{run_path}/pmd analyze"
+                 else
+                   "#{run_path}/run.sh pmd"
+                 end
+      run_path
     end
   end
 end
