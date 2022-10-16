@@ -96,11 +96,10 @@ module PmdTester
 
     def generate_pmd_report(project)
       error_recovery_options = @error_recovery ? 'PMD_JAVA_OPTS="-Dpmd.error_recovery -ea" ' : ''
-      run_path = "#{saved_distro_path(@pmd_branch_details.branch_last_sha)}/bin/run.sh"
-      fail_on_violation = should_use_long_cli_options ? '--fail-on-violation false' : '-failOnViolation false'
+      fail_on_violation = should_use_long_cli_options? ? '--fail-on-violation false' : '-failOnViolation false'
       auxclasspath_option = create_auxclasspath_option(project)
       pmd_cmd = "#{error_recovery_options}" \
-                "#{run_path} pmd -d #{project.local_source_path} -f xml " \
+                "#{determine_run_path} -d #{project.local_source_path} -f xml " \
                 "-R #{project.get_config_path(@pmd_branch_name)} " \
                 "-r #{project.get_pmd_report_path(@pmd_branch_name)} " \
                 "#{fail_on_violation} -t #{@threads} " \
@@ -149,7 +148,7 @@ module PmdTester
 
         PmdReportDetail.create(execution_time: execution_time, timestamp: end_time,
                                exit_code: exit_code, report_info_path: project.get_report_info_path(@pmd_branch_name))
-        logger.info "#{project.name}'s PMD report was generated successfully"
+        logger.info "#{project.name}'s PMD report was generated successfully (exit code: #{exit_code})"
       end
 
       @pmd_branch_details.execution_time = sum_time
@@ -200,7 +199,7 @@ module PmdTester
       !Cmd.execute_successfully('git status --porcelain').empty?
     end
 
-    def should_use_long_cli_options
+    def should_use_long_cli_options?
       logger.debug "PMD Version: #{@pmd_version}"
       Semver.compare(@pmd_version, '6.41.0') >= 0
     end
@@ -208,7 +207,7 @@ module PmdTester
     def create_auxclasspath_option(project)
       auxclasspath_option = ''
       unless project.auxclasspath.empty?
-        auxclasspath_option = should_use_long_cli_options ? '--aux-classpath ' : '-auxclasspath '
+        auxclasspath_option = should_use_long_cli_options? ? '--aux-classpath ' : '-auxclasspath '
         auxclasspath_option += project.auxclasspath
       end
       auxclasspath_option
@@ -216,6 +215,17 @@ module PmdTester
 
     def pmd7?
       Semver.compare(@pmd_version, '7.0.0-SNAPSHOT') >= 0
+    end
+
+    def determine_run_path
+      run_path = "#{saved_distro_path(@pmd_branch_details.branch_last_sha)}/bin"
+      run_path = if File.exist?("#{run_path}/pmd")
+                   # New PMD 7 CLI script (pmd/pmd#4059)
+                   "#{run_path}/pmd check"
+                 else
+                   "#{run_path}/run.sh pmd"
+                 end
+      run_path
     end
   end
 end
