@@ -162,7 +162,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     record_expectations(sha1, sha1, true)
     record_expectations_after_build
     record_expectations_project_build(sha1: sha1, error: true, long_cli_options: true,
-                                      no_progress_bar: true, base_cmd: 'pmd analyze')
+                                      no_progress_bar: true, base_cmd: 'pmd check')
 
     pmd_cli_cmd = prepare_pmd_dist_dir(version: @pmd_version, sha1: sha1)
     begin

@@ -221,7 +221,7 @@ module PmdTester
       run_path = "#{saved_distro_path(@pmd_branch_details.branch_last_sha)}/bin"
       run_path = if File.exist?("#{run_path}/pmd")
                    # New PMD 7 CLI script (pmd/pmd#4059)
-                   "#{run_path}/pmd analyze"
+                   "#{run_path}/pmd check"
                  else
                    "#{run_path}/run.sh pmd"
                  end
