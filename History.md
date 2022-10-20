@@ -1,14 +1,8 @@
-# 1.5.2-SNAPSHOT / ????-??-??
-
-## New and Noteworthy
+# 1.5.2 / 2022-10-20
 
 ## Enhancements
 
 * [#114](https://github.com/pmd/pmd-regression-tester/pull/114): Support new PMD 7 CLI interface
-
-## Fixed Issues
-
-## External Contributions
 
 # 1.5.1 / 2022-05-12
 
