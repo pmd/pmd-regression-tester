@@ -63,12 +63,12 @@ class ManualIntegrationTests < Test::Unit::TestCase
     assert_equal(0, @summary[:configerrors][:new], 'found new configerrors')
     # Only the rule AbstractClassWithoutAbtractMethod has been executed, so the
     # configerrors about LoosePackageCoupling are gone, one for each project
-    # we now have 6 projects in total (3 java, 3 apex)
-    assert_equal(6, @summary[:configerrors][:removed], 'found removed configerrors')
+    # we now have 7 projects in total (4 java, 3 apex)
+    assert_equal(7, @summary[:configerrors][:removed], 'found removed configerrors')
 
     assert_equal("This changeset changes 0 violations,\n" \
                  "introduces 0 new violations, 0 new errors and 0 new configuration errors,\n" \
-                 'removes 512 violations, 2 errors and 6 configuration errors.',
+                 'removes 512 violations, 2 errors and 7 configuration errors.',
                  create_summary_message)
 
     assert_file_equals("#{PATCHES_PATH}/expected_patch_config_1.xml", 'target/reports/diff/patch_config.xml')
@@ -101,12 +101,12 @@ class ManualIntegrationTests < Test::Unit::TestCase
     assert_equal(0, @summary[:configerrors][:new], 'found new configerrors')
     # Only the rule AvoidMessageDigestField and all other rules from bestpractices have been executed, so the
     # configerrors about LoosePackageCoupling are gone, one for each project
-    # we now have 6 projects in total (3 java, 3 apex)
-    assert_equal(6, @summary[:configerrors][:removed], 'found removed configerrors')
+    # we now have 7 projects in total (4 java, 3 apex)
+    assert_equal(7, @summary[:configerrors][:removed], 'found removed configerrors')
 
     assert_equal("This changeset changes 0 violations,\n" \
                  "introduces 0 new violations, 0 new errors and 0 new configuration errors,\n" \
-                 'removes 22 violations, 2 errors and 6 configuration errors.',
+                 'removes 22 violations, 2 errors and 7 configuration errors.',
                  create_summary_message)
 
     assert_file_equals("#{PATCHES_PATH}/expected_patch_config_2.xml", 'target/reports/diff/patch_config.xml')

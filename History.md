@@ -6,6 +6,8 @@
 
 ## Fixed Issues
 
+* [#115](https://github.com/pmd/pmd-regression-tester/pull/115): Fix manual integration tests
+
 ## External Contributions
 
 # 1.5.2 / 2022-10-20
