@@ -7,6 +7,7 @@
 ## Fixed Issues
 
 * [#115](https://github.com/pmd/pmd-regression-tester/pull/115): Fix manual integration tests
+* [#116](https://github.com/pmd/pmd-regression-tester/issues/116): Relative paths in pmd report result in missing code snippets
 
 ## External Contributions
 
