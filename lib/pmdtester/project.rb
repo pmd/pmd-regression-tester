@@ -60,17 +60,19 @@ module PmdTester
     # Change the file path from 'LOCAL_DIR/SOURCE_CODE_PATH' to
     # 'WEB_VIEW_URL/SOURCE_CODE_PATH'
     def get_webview_url(file_path)
-      file_path.gsub(%r{/#{clone_root_path}}, @webview_url)
+      file_path.gsub(%r{^#{clone_root_path}/}, "#{@webview_url}/")
     end
 
     # Change the file path from 'LOCAL_DIR/SOURCE_CODE_PATH' to
     # 'PROJECT_NAME/SOURCE_CODE_PATH'
     def get_path_inside_project(file_path)
-      file_path.gsub(%r{/#{clone_root_path}}, @name)
+      file_path.gsub(%r{^#{clone_root_path}/}, "#{@name}/")
     end
 
+    # Change the file path from 'LOCAL_DIR/SOURCE_CODE_PATH' to
+    # 'SOURCE_CODE_PATH'
     def get_local_path(file_path)
-      file_path.sub(%r{/#{clone_root_path}/}, '')
+      file_path.sub(%r{^#{clone_root_path}/}, '')
     end
 
     def get_pmd_report_path(branch_name)

@@ -41,11 +41,11 @@ module PmdTester
     end
 
     def characters(string)
-      @cur_text << remove_work_dir!(string)
+      @cur_text << string
     end
 
     def cdata_block(string)
-      @cur_text << remove_work_dir!(string)
+      @cur_text << string
     end
 
     def end_element(name)
@@ -76,11 +76,12 @@ module PmdTester
     # Modifies the string in place and returns it
     # (this is what sub! does, except it returns nil if no replacement occurred)
     def remove_work_dir!(str)
-      str.sub!(/#{@working_dir}/, '')
+      str.sub!(%r{#{@working_dir}/}, '')
       str
     end
 
     def finish_text!
+      remove_work_dir!(@cur_text)
       res = @cur_text.strip!.dup.freeze
       @cur_text.clear
       res
