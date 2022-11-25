@@ -21,17 +21,17 @@ hoe = Hoe.spec 'pmdtester' do
   self.clean_globs = %w[target/reports/**/* target/test/**/* target/dynamic-config.xml Gemfile.lock]
   self.extra_deps += [
     ['nokogiri',        '~> 1.13'],
-    ['slop',            '~> 4.6'],
+    ['slop',            '~> 4.9'],
     ['differ',          '~> 0.1'],
     ['rufus-scheduler', '~> 3.8'],
     ['logger-colors',   '~> 1.0'],
-    ['liquid',          '~> 5.2']
+    ['liquid',          '~> 5.4']
   ]
   self.extra_dev_deps += [
     ['hoe-bundler',   '~> 1.5'],
     ['hoe-git',       '~> 1.6'],
-    ['minitest',      '~> 5.10'],
-    ['mocha',         '~> 1.5'],
+    ['minitest',      '~> 5.16'],
+    ['mocha',         '~> 1.16'],
     # use the same version of rubocop as codacy
     ['rubocop',       '~> 0.93'],
     ['test-unit',     '~> 3.5'],
