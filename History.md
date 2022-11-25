@@ -1,15 +1,9 @@
-# 1.5.3-SNAPSHOT / ????-??-??
-
-## New and Noteworthy
-
-## Enhancements
+# 1.5.3 / 2022-11-25
 
 ## Fixed Issues
 
 * [#115](https://github.com/pmd/pmd-regression-tester/pull/115): Fix manual integration tests
 * [#116](https://github.com/pmd/pmd-regression-tester/issues/116): Relative paths in pmd report result in missing code snippets
-
-## External Contributions
 
 # 1.5.2 / 2022-10-20
 
