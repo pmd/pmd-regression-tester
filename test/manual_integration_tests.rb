@@ -46,11 +46,11 @@ class ManualIntegrationTests < Test::Unit::TestCase
     assert_equal(0, @summary[:violations][:changed], 'found changed violations')
     assert_equal(0, @summary[:violations][:new], 'found new violations')
     # These are the artificially created false-negatives for AbstractClassWithoutAbstractMethod rule
-    # checkstyle: 203 violations
+    # checkstyle: 204 violations
     # spring-framework: 280 violations
     # openjdk11: 29 violations
-    # -> total = 512
-    assert_equal(203 + 280 + 29, @summary[:violations][:removed], 'found removed violations')
+    # -> total = 513
+    assert_equal(204 + 280 + 29, @summary[:violations][:removed], 'found removed violations')
 
     # errors might have been caused in the baseline for other rules (only visible in the stacktrace)
     # hence they might appear as removed
@@ -68,7 +68,7 @@ class ManualIntegrationTests < Test::Unit::TestCase
 
     assert_equal("This changeset changes 0 violations,\n" \
                  "introduces 0 new violations, 0 new errors and 0 new configuration errors,\n" \
-                 'removes 512 violations, 2 errors and 7 configuration errors.',
+                 'removes 513 violations, 2 errors and 7 configuration errors.',
                  create_summary_message)
 
     assert_file_equals("#{PATCHES_PATH}/expected_patch_config_1.xml", 'target/reports/diff/patch_config.xml')
@@ -179,6 +179,7 @@ class ManualIntegrationTests < Test::Unit::TestCase
       raise MiniTest::Assertion, "Running pmdtester failed: #{e.inspect}"
     end
 
+    print "#############################: test_case_5_create_baseline\n"
     assert_path_not_exist('target/reports/diff')
     assert_master_baseline
   end
