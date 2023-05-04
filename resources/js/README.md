@@ -17,4 +17,4 @@
 ## DataTables
 
 * https://datatables.net/download
-* Complete package: https://datatables.net/download/#bs4/dt-1.13.4/kt-2.9.0/r-2.4.1/rg-1.3.1/sc-2.1.1/sb-1.4.2/sp-2.1.2/sl-1.6.2
+* Complete package: https://datatables.net/download/#bs5/dt-1.13.4/kt-2.9.0/r-2.4.1/rg-1.3.1/sc-2.1.1/sb-1.4.2/sp-2.1.2/sl-1.6.2
