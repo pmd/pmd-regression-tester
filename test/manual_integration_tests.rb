@@ -231,7 +231,7 @@ class ManualIntegrationTests < Test::Unit::TestCase
       system('git config user.email "andreas.dangel+pmd-bot@adangel.org"')
       system('git config user.name "PMD CI (pmd-bot)"')
       # remove any already existing binary to force a rebuild
-      FileUtils.rm Dir.glob('pmd-dist/target/pmd-bin-*.zip')
+      FileUtils.rm Dir.glob('pmd-dist/target/pmd-*.zip')
     end
   end
 
