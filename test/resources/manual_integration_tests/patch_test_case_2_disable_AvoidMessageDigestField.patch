@@ -1,6 +1,6 @@
-From 8db783f7f0bdb7b4c9dd7a7bd19f6c7bf0bc4f06 Mon Sep 17 00:00:00 2001
+From 1614ba4af8a0869f7bbc7b8dca60f1d7802218cc Mon Sep 17 00:00:00 2001
 From: Andreas Dangel <andreas.dangel@pmd-code.org>
-Date: Thu, 14 Jan 2021 18:59:31 +0100
+Date: Thu, 4 May 2023 19:54:59 +0200
 Subject: [PATCH] test case 2 - single xpath rule changed
 
 The rule AvoidMessageDigestField is disabled
@@ -15,34 +15,33 @@ the baseline.
  2 files changed, 4 insertions(+), 1 deletion(-)
 
 diff --git a/pmd-java/src/main/resources/category/java/bestpractices.xml b/pmd-java/src/main/resources/category/java/bestpractices.xml
-index 59e5e56c72..c29a13748e 100644
+index 728ab98c9b..836428d33e 100644
 --- a/pmd-java/src/main/resources/category/java/bestpractices.xml
 +++ b/pmd-java/src/main/resources/category/java/bestpractices.xml
-@@ -140,7 +140,7 @@ public class Foo {
+@@ -147,7 +147,7 @@ public class Foo {
              <property name="xpath">
                  <value>
                      <![CDATA[
--//FieldDeclaration[pmd-java:typeIs('java.security.MessageDigest')]
-+//FieldDeclaration[pmd-java:typeIs('java.security.MessageDigestFoo')]
+-//FieldDeclaration/ClassOrInterfaceType[pmd-java:typeIs('java.security.MessageDigest')]
++//FieldDeclaration/ClassOrInterfaceType[pmd-java:typeIs('java.security.MessageDigestFoo')]
  ]]>
                  </value>
              </property>
 diff --git a/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/rule/bestpractices/AvoidMessageDigestFieldTest.java b/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/rule/bestpractices/AvoidMessageDigestFieldTest.java
-index 37d37625e7..ef3c8aa5c6 100644
+index df4543674d..f5c87e6705 100644
 --- a/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/rule/bestpractices/AvoidMessageDigestFieldTest.java
 +++ b/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/rule/bestpractices/AvoidMessageDigestFieldTest.java
 @@ -4,8 +4,11 @@
  
  package net.sourceforge.pmd.lang.java.rule.bestpractices;
  
-+import org.junit.Ignore;
++import org.junit.jupiter.api.Disabled;
 +
  import net.sourceforge.pmd.testframework.PmdRuleTst;
  
-+@Ignore
- public class AvoidMessageDigestFieldTest extends PmdRuleTst {
++@Disabled
+ class AvoidMessageDigestFieldTest extends PmdRuleTst {
      // no additional unit tests
  }
 -- 
-2.29.2
-
+2.39.2

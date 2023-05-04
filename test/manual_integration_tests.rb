@@ -115,7 +115,7 @@ class ManualIntegrationTests < Test::Unit::TestCase
 
   def test_case_3_change_in_core
     checkout_pmd_branch
-    prepare_patch_branch('patch_test_case_3_modify_PMD.patch', 'test-case-3')
+    prepare_patch_branch('patch_test_case_3_modify_pmd-core.patch', 'test-case-3')
 
     run_pmd_tester
 
