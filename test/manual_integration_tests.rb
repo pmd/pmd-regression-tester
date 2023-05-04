@@ -46,29 +46,29 @@ class ManualIntegrationTests < Test::Unit::TestCase
     assert_equal(0, @summary[:violations][:changed], 'found changed violations')
     assert_equal(0, @summary[:violations][:new], 'found new violations')
     # These are the artificially created false-negatives for AbstractClassWithoutAbstractMethod rule
-    # checkstyle: 204 violations
+    # checkstyle: 195 violations
     # spring-framework: 280 violations
     # openjdk11: 29 violations
-    # -> total = 513
-    assert_equal(204 + 280 + 29, @summary[:violations][:removed], 'found removed violations')
+    # -> total = 504
+    assert_equal(195 + 280 + 29, @summary[:violations][:removed], 'found removed violations')
 
     # errors might have been caused in the baseline for other rules (only visible in the stacktrace)
     # hence they might appear as removed
 
     # project "apex-link" has 2 errors, since we only executed java rules, 2 errors are removed
-    assert_equal(2, @summary[:errors][:removed], 'found removed errors')
-    assert_equal(0, @summary[:errors][:changed], 'found changed errors')
+    # project "checkstyle" has 10 errors removed and 11 changed
+    # project "openjdk-11" has 1 error changed
+    # project "spring-framework" has 1 error removed
+    assert_equal(13, @summary[:errors][:removed], 'found removed errors')
+    assert_equal(12, @summary[:errors][:changed], 'found changed errors')
     assert_equal(0, @summary[:errors][:new], 'found new errors')
     assert_equal(0, @summary[:configerrors][:changed], 'found changed configerrors')
     assert_equal(0, @summary[:configerrors][:new], 'found new configerrors')
-    # Only the rule AbstractClassWithoutAbtractMethod has been executed, so the
-    # configerrors about LoosePackageCoupling are gone, one for each project
-    # we now have 7 projects in total (4 java, 3 apex)
-    assert_equal(7, @summary[:configerrors][:removed], 'found removed configerrors')
+    assert_equal(0, @summary[:configerrors][:removed], 'found removed configerrors')
 
     assert_equal("This changeset changes 0 violations,\n" \
                  "introduces 0 new violations, 0 new errors and 0 new configuration errors,\n" \
-                 'removes 513 violations, 2 errors and 7 configuration errors.',
+                 'removes 504 violations, 13 errors and 0 configuration errors.',
                  create_summary_message)
 
     assert_file_equals("#{PATCHES_PATH}/expected_patch_config_1.xml", 'target/reports/diff/patch_config.xml')
