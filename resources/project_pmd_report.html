@@ -134,7 +134,7 @@
                 </thead>
                 <tbody>
                 {% for error in report.errors %}
-                <tr id="error-{{forloop.index}}" class="accordion-toggle error-row" data-toggle="collapse" data-target="#error-{{forloop.index}}-expanded">
+                <tr id="error-{{forloop.index}}" data-bs-toggle="collapse" data-bs-target="#error-{{forloop.index}}-expanded">
                     <td><a href="{{error.file_url}}"  target="_blank" rel="noopener noreferrer">{{error.short_filename}}</a></td>
                     <td>{{error.short_message | escape | replace: error.filename, "<span class='meta-var'>$FILE</span>" }}</td>
                 </tr>

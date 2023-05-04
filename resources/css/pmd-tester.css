@@ -84,16 +84,19 @@ div.section-content {
 /* Rule summary table */
 
 table.dataTable > tbody > tr.added,
+#error-table tr.added,
 #rule-summary td.added {
   background-color: #af8;
 }
 
 table.dataTable > tbody > tr.removed,
+#error-table tr.removed,
 #rule-summary td.removed {
   background-color: #fca;
 }
 
 table.dataTable > tbody > tr.changed,
+#error-table tr.changed,
 #rule-summary td.changed {
   background-color: #fef7bc;
 }
