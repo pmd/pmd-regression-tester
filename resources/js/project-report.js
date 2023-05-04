@@ -119,8 +119,17 @@ $(document).ready(function () {
         },
     });
 
-    $('#violationsTable tbody').on('click', 'tr[role=row]', function() {
-        var tr = $(this).closest('tr');
+    $('#violationsTable tbody').on('click', 'tr', function() {
+        // the event handler might be executed on "tr" elements in sub tables, such as
+        // code snippets or it might be a child-row (a tr, whose previous sibling has class dt-hasChild)
+        if (!this.parentElement.parentElement.id  === 'violationsTable') {
+            return;
+        }
+        if (this.previousElementSibling !== null && this.previousElementSibling.classList.contains('dt-hasChild')) {
+            return;
+        }
+
+        var tr = $(this);
         var row = table.row( tr );
 
         if ( row.child.isShown() ) {
