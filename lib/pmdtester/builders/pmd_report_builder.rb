@@ -70,6 +70,7 @@ module PmdTester
                       ' -Dcheckstyle.skip=true' \
                       ' -Dpmd.skip=true' \
                       ' -T1C -B'
+        logger.debug "#{@pmd_branch_name}: maven command: #{package_cmd}"
         Cmd.execute_successfully(package_cmd)
       end
 
