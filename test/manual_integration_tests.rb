@@ -248,39 +248,19 @@ class ManualIntegrationTests < Test::Unit::TestCase
   end
 
   def assert_master_baseline
-    assert_path_exist('target/reports/master/checkstyle/config.xml')
-    assert_path_exist('target/reports/master/checkstyle/report_info.json')
-    assert_path_exist('target/reports/master/checkstyle/pmd_report.xml')
-    assert(File.size('target/reports/master/checkstyle/pmd_report.xml') > 40 * 1024 * 1024)
+    assert_master_baseline_project('checkstyle', 40 * 1024 * 1024)
+    assert_master_baseline_project('openjdk-11', 80 * 1024 * 1024)
+    assert_master_baseline_project('spring-framework', 100 * 1024 * 1024)
+    assert_master_baseline_project('java-regression-tests', 100 * 1024)
+    assert_master_baseline_project('apex-link', 10 * 1024)
+    assert_master_baseline_project('fflib-apex-common', 400 * 1024)
+    assert_master_baseline_project('Schedul-o-matic-9000', 20 * 1024)
+  end
 
-    assert_path_exist('target/reports/master/openjdk-11/config.xml')
-    assert_path_exist('target/reports/master/openjdk-11/report_info.json')
-    assert_path_exist('target/reports/master/openjdk-11/pmd_report.xml')
-    assert(File.size('target/reports/master/openjdk-11/pmd_report.xml') > 80 * 1024 * 1024)
-
-    assert_path_exist('target/reports/master/spring-framework/config.xml')
-    assert_path_exist('target/reports/master/spring-framework/report_info.json')
-    assert_path_exist('target/reports/master/spring-framework/pmd_report.xml')
-    assert(File.size('target/reports/master/spring-framework/pmd_report.xml') > 100 * 1024 * 1024)
-
-    assert_path_exist('target/reports/master/java-regression-tests/config.xml')
-    assert_path_exist('target/reports/master/java-regression-tests/report_info.json')
-    assert_path_exist('target/reports/master/java-regression-tests/pmd_report.xml')
-    assert(File.size('target/reports/master/java-regression-tests/pmd_report.xml') > 100 * 1024)
-
-    assert_path_exist('target/reports/master/apex-link/config.xml')
-    assert_path_exist('target/reports/master/apex-link/report_info.json')
-    assert_path_exist('target/reports/master/apex-link/pmd_report.xml')
-    assert(File.size('target/reports/master/apex-link/pmd_report.xml') > 10 * 1024)
-
-    assert_path_exist('target/reports/master/fflib-apex-common/config.xml')
-    assert_path_exist('target/reports/master/fflib-apex-common/report_info.json')
-    assert_path_exist('target/reports/master/fflib-apex-common/pmd_report.xml')
-    assert(File.size('target/reports/master/fflib-apex-common/pmd_report.xml') > 400 * 1024)
-
-    assert_path_exist('target/reports/master/Schedul-o-matic-9000/config.xml')
-    assert_path_exist('target/reports/master/Schedul-o-matic-9000/report_info.json')
-    assert_path_exist('target/reports/master/Schedul-o-matic-9000/pmd_report.xml')
-    assert(File.size('target/reports/master/Schedul-o-matic-9000/pmd_report.xml') > 20 * 1024)
+  def assert_master_baseline_project(project_name, report_size_in_bytes)
+    assert_path_exist("target/reports/master/#{project_name}/config.xml")
+    assert_path_exist("target/reports/master/#{project_name}/report_info.json")
+    assert_path_exist("target/reports/master/#{project_name}/pmd_report.xml")
+    assert(File.size("target/reports/master/#{project_name}/pmd_report.xml") > report_size_in_bytes)
   end
 end
