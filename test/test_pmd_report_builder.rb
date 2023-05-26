@@ -14,8 +14,10 @@ class TestPmdReportBuilder < Test::Unit::TestCase
   def teardown
     pmd_repo = 'target/repositories/pmd'
     # pre-built PMD binary
-    pmd_binary = "#{pmd_repo}/pmd-dist/target/pmd-bin-#{@pmd_version}.zip"
-    File.unlink pmd_binary if File.exist? pmd_binary
+    ["#{pmd_repo}/pmd-dist/target/pmd-bin-#{@pmd_version}.zip",
+     "#{pmd_repo}/pmd-dist/target/pmd-dist-#{@pmd_version}-bin.zip"].each do |pmd_binary|
+      File.unlink pmd_binary if File.exist? pmd_binary
+    end
 
     # only deleting empty directories in order to leave pmd_repo intact
     # for local dev environment, where a local pmd clone might already exist
@@ -30,7 +32,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
               -c config/design.xml -l test/resources/pmd_report_builder/project-test.xml]
     options = PmdTester::Options.new(argv)
 
-    record_expectations('sha1abc', 'sha1abc', true)
+    record_expectations(sha1_head: 'sha1abc', sha1_base: 'sha1abc', zip_file_exists: true)
     record_expectations_after_build
 
     PmdTester::PmdReportBuilder
@@ -51,8 +53,30 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     FileUtils.mkdir_p 'target/repositories/pmd/pmd-dist/target'
     FileUtils.touch "target/repositories/pmd/pmd-dist/target/pmd-bin-#{@pmd_version}.zip"
 
-    record_expectations('sha1abc', 'sha1abc', false)
+    record_expectations(sha1_head: 'sha1abc', sha1_base: 'sha1abc', zip_file_exists: false)
     PmdTester::Cmd.stubs(:execute_successfully).with("unzip -qo pmd-dist/target/pmd-bin-#{@pmd_version}.zip" \
+      ' -d pmd-dist/target/exploded').once
+    PmdTester::Cmd.stubs(:execute_successfully).with("mv pmd-dist/target/exploded/pmd-bin-#{@pmd_version}" \
+      " #{Dir.getwd}/target/pmd-bin-#{@pmd_version}-master-sha1abc").once
+    record_expectations_after_build
+
+    PmdTester::PmdReportBuilder
+      .new(projects, options, options.base_config, options.base_branch)
+      .build
+  end
+
+  # with PMD7, the dist bin file is called pmd-dist/target/pmd-dist-7.0.0-bin-SNAPSHOT.zip
+  def test_build_skip_ci_pmd7
+    projects = []
+    argv = %w[-r target/repositories/pmd -b master -p pmd_releases/6.55.0
+              -c config/design.xml -l test/resources/pmd_report_builder/project-test.xml]
+    options = PmdTester::Options.new(argv)
+
+    FileUtils.mkdir_p 'target/repositories/pmd/pmd-dist/target'
+    FileUtils.touch "target/repositories/pmd/pmd-dist/target/pmd-dist-#{@pmd_version}-bin.zip"
+
+    record_expectations(sha1_head: 'sha1abc', sha1_base: 'sha1abc', zip_file_exists: false)
+    PmdTester::Cmd.stubs(:execute_successfully).with("unzip -qo pmd-dist/target/pmd-dist-#{@pmd_version}-bin.zip" \
       ' -d pmd-dist/target/exploded').once
     PmdTester::Cmd.stubs(:execute_successfully).with("mv pmd-dist/target/exploded/pmd-bin-#{@pmd_version}" \
       " #{Dir.getwd}/target/pmd-bin-#{@pmd_version}-master-sha1abc").once
@@ -70,11 +94,29 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     options = PmdTester::Options.new(argv)
 
     # PMD binary does not exist yet this time...
-    record_expectations('sha1abc', 'sha1abc', false)
-    PmdTester::Cmd.stubs(:execute_successfully).with('./mvnw clean package -Dmaven.test.skip=true' \
-                  ' -Dmaven.javadoc.skip=true -Dmaven.source.skip=true' \
-                  ' -Dcheckstyle.skip=true -Dpmd.skip=true -T1C -B').once
+    record_expectations(sha1_head: 'sha1abc', sha1_base: 'sha1abc', zip_file_exists: false)
+    stub_pmd_build_maven(binary_name: "pmd-bin-#{@pmd_version}.zip")
     PmdTester::Cmd.stubs(:execute_successfully).with("unzip -qo pmd-dist/target/pmd-bin-#{@pmd_version}.zip" \
+                  ' -d pmd-dist/target/exploded').once
+    PmdTester::Cmd.stubs(:execute_successfully).with("mv pmd-dist/target/exploded/pmd-bin-#{@pmd_version}" \
+                  " #{Dir.getwd}/target/pmd-bin-#{@pmd_version}-master-sha1abc").once
+    record_expectations_after_build
+
+    PmdTester::PmdReportBuilder
+      .new(projects, options, options.base_config, options.base_branch)
+      .build
+  end
+
+  def test_build_normal_pmd7
+    projects = []
+    argv = %w[-r target/repositories/pmd -b master -p pmd_releases/6.1.0
+              -c config/design.xml -l test/resources/pmd_report_builder/project-test.xml]
+    options = PmdTester::Options.new(argv)
+
+    # PMD binary does not exist yet this time...
+    record_expectations(sha1_head: 'sha1abc', sha1_base: 'sha1abc', zip_file_exists: false)
+    stub_pmd_build_maven(binary_name: "pmd-dist-#{@pmd_version}-bin.zip")
+    PmdTester::Cmd.stubs(:execute_successfully).with("unzip -qo pmd-dist/target/pmd-dist-#{@pmd_version}-bin.zip" \
                   ' -d pmd-dist/target/exploded').once
     PmdTester::Cmd.stubs(:execute_successfully).with("mv pmd-dist/target/exploded/pmd-bin-#{@pmd_version}" \
                   " #{Dir.getwd}/target/pmd-bin-#{@pmd_version}-master-sha1abc").once
@@ -95,7 +137,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     options = PmdTester::Options.new(argv)
 
     projects[0].auxclasspath = 'extra:dirs'
-    record_expectations('sha1abc', 'sha1abc', true)
+    record_expectations(sha1_head: 'sha1abc', sha1_base: 'sha1abc', zip_file_exists: true)
     record_expectations_after_build
     record_expectations_project_build(sha1: 'sha1abc')
 
@@ -118,7 +160,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     options = PmdTester::Options.new(argv)
 
     projects[0].auxclasspath = 'extra:dirs'
-    record_expectations('sha1abc', 'sha1abc', true)
+    record_expectations(sha1_head: 'sha1abc', sha1_base: 'sha1abc', zip_file_exists: true)
     record_expectations_after_build
     record_expectations_project_build(sha1: 'sha1abc', error: true)
 
@@ -138,7 +180,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     options = PmdTester::Options.new(argv)
 
     projects[0].auxclasspath = 'extra:dirs'
-    record_expectations('sha1abc', 'sha1abc', true)
+    record_expectations(sha1_head: 'sha1abc', sha1_base: 'sha1abc', zip_file_exists: true)
     record_expectations_after_build
     record_expectations_project_build(sha1: 'sha1abc', error: true, long_cli_options: true)
 
@@ -159,7 +201,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     options = PmdTester::Options.new(argv)
 
     projects[0].auxclasspath = 'extra:dirs'
-    record_expectations(sha1, sha1, true)
+    record_expectations(sha1_head: sha1, sha1_base: sha1, zip_file_exists: true)
     record_expectations_after_build
     record_expectations_project_build(sha1: sha1, error: true, long_cli_options: true,
                                       no_progress_bar: true, base_cmd: 'pmd check')
@@ -188,7 +230,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     options = PmdTester::Options.new(argv)
 
     projects[0].auxclasspath = 'extra:dirs'
-    record_expectations('sha1abc', 'sha1abc', true)
+    record_expectations(sha1_head: 'sha1abc', sha1_base: 'sha1abc', zip_file_exists: true)
     record_expectations_after_build
     record_expectations_project_build(sha1: 'sha1abc', error: true, exit_status: 1)
 
@@ -224,7 +266,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     PmdTester::PmdReportDetail.stubs(:create).once.with { |params| params[:exit_code] == exit_status }
   end
 
-  def record_expectations(sha1_head, sha1_base, zip_file_exists)
+  def record_expectations(sha1_head:, sha1_base:, zip_file_exists:)
     PmdTester::Cmd.stubs(:execute_successfully).with('git rev-parse master^{commit}').returns(sha1_base).once
     # inside checkout_build_branch
     PmdTester::Cmd.stubs(:execute_successfully).with('git checkout master')
@@ -264,5 +306,19 @@ class TestPmdReportBuilder < Test::Unit::TestCase
   def cleanup_pmd_dist_dir(base_dir:)
     File.unlink("#{base_dir}/pmd")
     Dir.rmdir(base_dir)
+  end
+
+  def stub_pmd_build_maven(binary_name:)
+    PmdTester::Cmd.stubs(:execute_successfully).with do |cmd|
+      if cmd == './mvnw clean package -Dmaven.test.skip=true' \
+                  ' -Dmaven.javadoc.skip=true -Dmaven.source.skip=true' \
+                  ' -Dcheckstyle.skip=true -Dpmd.skip=true -T1C -B'
+        FileUtils.mkdir_p 'pmd-dist/target'
+        FileUtils.touch "pmd-dist/target/#{binary_name}"
+        true
+      else
+        false
+      end
+    end.once
   end
 end

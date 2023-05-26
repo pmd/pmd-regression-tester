@@ -53,9 +53,7 @@ module PmdTester
     def build_pmd(into_dir:)
       # in CI there might have been a build performed already. In that case
       # we reuse the build result, otherwise we build PMD freshly
-      pmd_dist_target = "pmd-dist/target/pmd-bin-#{@pmd_version}.zip"
-      binary_exists = File.exist?(pmd_dist_target)
-      logger.debug "#{@pmd_branch_name}: Does the file #{pmd_dist_target} exist? #{binary_exists} (cwd: #{Dir.getwd})"
+      pmd_dist_target, binary_exists = find_pmd_dist_target
       if binary_exists
         # that's a warning, because we don't know, whether this build really
         # belongs to the current branch or whether it's from a previous branch.
@@ -71,6 +69,13 @@ module PmdTester
                       ' -Dpmd.skip=true' \
                       ' -T1C -B'
         Cmd.execute_successfully(package_cmd)
+
+        pmd_dist_target, binary_exists = find_pmd_dist_target
+        unless binary_exists
+          logger.error "#{@pmd_branch_name}: Dist zip not found at #{pmd_dist_target}!"
+          raise "No Dist zip found at #{pmd_dist_target}"
+        end
+
       end
 
       logger.info "#{@pmd_branch_name}: Extracting the zip"
@@ -226,6 +231,18 @@ module PmdTester
                    "#{run_path}/run.sh pmd"
                  end
       run_path
+    end
+
+    def find_pmd_dist_target
+      pmd_dist_target = "pmd-dist/target/pmd-bin-#{@pmd_version}.zip"
+      binary_exists = File.exist?(pmd_dist_target)
+      logger.debug "#{@pmd_branch_name}: Does the file #{pmd_dist_target} exist? #{binary_exists} (cwd: #{Dir.getwd})"
+      unless binary_exists
+        pmd_dist_target = "pmd-dist/target/pmd-dist-#{@pmd_version}-bin.zip"
+        binary_exists = File.exist?(pmd_dist_target)
+        logger.debug "#{@pmd_branch_name}: Does the file #{pmd_dist_target} exist? #{binary_exists} (cwd: #{Dir.getwd})"
+      end
+      [pmd_dist_target, binary_exists]
     end
   end
 end
