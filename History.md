@@ -3,6 +3,7 @@
 ## New and Noteworthy
 
 ## Enhancements
+* [#118](https://github.com/pmd/pmd-regression-tester/pull/118): Update js libraries
 
 ## Fixed Issues
 
