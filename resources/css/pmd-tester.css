@@ -83,15 +83,21 @@ div.section-content {
 
 /* Rule summary table */
 
-tr.added, #rule-summary td.added {
+table.dataTable > tbody > tr.added,
+#error-table tr.added,
+#rule-summary td.added {
   background-color: #af8;
 }
 
-tr.removed, #rule-summary td.removed {
+table.dataTable > tbody > tr.removed,
+#error-table tr.removed,
+#rule-summary td.removed {
   background-color: #fca;
 }
 
-tr.changed, #rule-summary td.changed {
+table.dataTable > tbody > tr.changed,
+#error-table tr.changed,
+#rule-summary td.changed {
   background-color: #fef7bc;
 }
 
@@ -125,15 +131,15 @@ div.collapsed-content-padder {
   border-radius: 50px
 }
 
-.pill.badge-pill.badge-secondary.removed {
+.badge.rounded-pill.badge-secondary.removed {
   background-color: indianred;
 }
 
-.pill.badge-pill.badge-secondary.added {
+.badge.rounded-pill.badge-secondary.added {
   background-color: mediumseagreen;
 }
 
-.pill.badge-pill.badge-secondary.changed {
+.badge.rounded-pill.badge-secondary.changed {
   background-color: #f6af60;
 }
 

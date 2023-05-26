@@ -3,6 +3,8 @@
 ## New and Noteworthy
 
 ## Enhancements
+* [#118](https://github.com/pmd/pmd-regression-tester/pull/118): Update js libraries
+* [#120](https://github.com/pmd/pmd-regression-tester/pull/120): Support new PMD 7 binary dist filename
 
 ## Fixed Issues
 
