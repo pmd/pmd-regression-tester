@@ -60,23 +60,12 @@ module PmdTester
         # In CI, that's not a problem, because the workspace is always fresh.
         logger.warn "#{@pmd_branch_name}: Reusing already existing #{pmd_dist_target}"
       else
-        logger.info "#{@pmd_branch_name}: Building PMD #{@pmd_version}..."
-        package_cmd = './mvnw clean package' \
-                      ' -Dmaven.test.skip=true' \
-                      ' -Dmaven.javadoc.skip=true' \
-                      ' -Dmaven.source.skip=true' \
-                      ' -Dcheckstyle.skip=true' \
-                      ' -Dpmd.skip=true' \
-                      ' -T1C -B'
-        logger.debug "#{@pmd_branch_name}: maven command: #{package_cmd}"
-        Cmd.execute_successfully(package_cmd)
-
+        build_pmd_with_maven
         pmd_dist_target, binary_exists = find_pmd_dist_target
         unless binary_exists
           logger.error "#{@pmd_branch_name}: Dist zip not found at #{pmd_dist_target}!"
           raise "No Dist zip found at #{pmd_dist_target}"
         end
-
       end
 
       logger.info "#{@pmd_branch_name}: Extracting the zip"
@@ -244,6 +233,19 @@ module PmdTester
         logger.debug "#{@pmd_branch_name}: Does the file #{pmd_dist_target} exist? #{binary_exists} (cwd: #{Dir.getwd})"
       end
       [pmd_dist_target, binary_exists]
+    end
+
+    def build_pmd_with_maven
+      logger.info "#{@pmd_branch_name}: Building PMD #{@pmd_version}..."
+      package_cmd = './mvnw clean package' \
+                    ' -Dmaven.test.skip=true' \
+                    ' -Dmaven.javadoc.skip=true' \
+                    ' -Dmaven.source.skip=true' \
+                    ' -Dcheckstyle.skip=true' \
+                    ' -Dpmd.skip=true' \
+                    ' -T1C -B'
+      logger.debug "#{@pmd_branch_name}: maven command: #{package_cmd}"
+      Cmd.execute_successfully(package_cmd)
     end
   end
 end
