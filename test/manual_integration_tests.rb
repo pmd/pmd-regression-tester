@@ -55,20 +55,25 @@ class ManualIntegrationTests < Test::Unit::TestCase
     # errors might have been caused in the baseline for other rules (only visible in the stacktrace)
     # hence they might appear as removed
 
-    # project "apex-link" has 2 errors, since we only executed java rules, 2 errors are removed
-    # project "checkstyle" has 10 errors removed and 11 changed
-    # project "openjdk-11" has 1 error changed
+    # project "apex-link" has 2 errors removed, since we only executed java rules
+    # project "checkstyle" has 10 errors removed and 1 changed
+    # project "openjdk-11" has 0 error removed or changed
     # project "spring-framework" has 1 error removed
+    # each project has 1 config error removed (LoosePackageCoupling dysfunctional): in total 7 config errors removed
     assert_equal(13, @summary[:errors][:removed], 'found removed errors')
-    assert_equal(12, @summary[:errors][:changed], 'found changed errors')
+    # The stack overflow exception might vary in the beginning/end of the stack frames shown
+    # This stack overflow error is from checkstyle's InputIndentationLongConcatenatedString.java
+    # instead of assert_equal(0, @summary[:errors][:changed], 'found changed errors')
+    # allow 0 or 1 changed errors
+    assert @summary[:errors][:changed] <= 1
     assert_equal(0, @summary[:errors][:new], 'found new errors')
     assert_equal(0, @summary[:configerrors][:changed], 'found changed configerrors')
     assert_equal(0, @summary[:configerrors][:new], 'found new configerrors')
-    assert_equal(0, @summary[:configerrors][:removed], 'found removed configerrors')
+    assert_equal(7, @summary[:configerrors][:removed], 'found removed configerrors')
 
     assert_equal("This changeset changes 0 violations,\n" \
                  "introduces 0 new violations, 0 new errors and 0 new configuration errors,\n" \
-                 'removes 504 violations, 13 errors and 0 configuration errors.',
+                 'removes 504 violations, 13 errors and 7 configuration errors.',
                  create_summary_message)
 
     assert_file_equals("#{PATCHES_PATH}/expected_patch_config_1.xml", 'target/reports/diff/patch_config.xml')
@@ -93,20 +98,25 @@ class ManualIntegrationTests < Test::Unit::TestCase
     # errors might have been caused in the baseline for other rules (only visible in the stacktrace)
     # hence they might appear as removed
 
-    # project "apex-link" has 2 errors, since we only executed java rules, 2 errors are removed
-    # project "checkstyle" has 5 errors removed and 16 errors changed
-    # project "openjdk-11" has 1 error changed
+    # project "apex-link" has 2 errors removed, since we only executed java rules
+    # project "checkstyle" has 5 errors removed and 1 errors changed
+    # project "openjdk-11" has 0 error removed or changed
     # project "spring-framework" has 1 error removed
+    # each project has 1 config error removed (LoosePackageCoupling dysfunctional): in total 7 config errors removed
     assert_equal(8, @summary[:errors][:removed], 'found removed errors')
-    assert_equal(17, @summary[:errors][:changed], 'found changed errors')
+    # The stack overflow exception might vary in the beginning/end of the stack frames shown
+    # This stack overflow error is from checkstyle's InputIndentationLongConcatenatedString.java
+    # instead of assert_equal(0, @summary[:errors][:changed], 'found changed errors')
+    # allow 0 or 1 changed errors
+    assert @summary[:errors][:changed] <= 1
     assert_equal(0, @summary[:errors][:new], 'found new errors')
     assert_equal(0, @summary[:configerrors][:changed], 'found changed configerrors')
     assert_equal(0, @summary[:configerrors][:new], 'found new configerrors')
-    assert_equal(0, @summary[:configerrors][:removed], 'found removed configerrors')
+    assert_equal(7, @summary[:configerrors][:removed], 'found removed configerrors')
 
     assert_equal("This changeset changes 0 violations,\n" \
                  "introduces 0 new violations, 0 new errors and 0 new configuration errors,\n" \
-                 'removes 22 violations, 8 errors and 0 configuration errors.',
+                 'removes 22 violations, 8 errors and 7 configuration errors.',
                  create_summary_message)
 
     assert_file_equals("#{PATCHES_PATH}/expected_patch_config_2.xml", 'target/reports/diff/patch_config.xml')
@@ -125,7 +135,11 @@ class ManualIntegrationTests < Test::Unit::TestCase
     assert_equal(0, @summary[:violations][:new], 'found new violations')
     assert_equal(0, @summary[:violations][:removed], 'found removed violations')
     assert_equal(0, @summary[:errors][:removed], 'found removed errors')
-    assert_equal(0, @summary[:errors][:changed], 'found changed errors')
+    # The stack overflow exception might vary in the beginning/end of the stack frames shown
+    # This stack overflow error is from checkstyle's InputIndentationLongConcatenatedString.java
+    # instead of assert_equal(0, @summary[:errors][:changed], 'found changed errors')
+    # allow 0 or 1 changed errors
+    assert @summary[:errors][:changed] <= 1
     assert_equal(0, @summary[:errors][:new], 'found new errors')
     assert_equal(0, @summary[:configerrors][:changed], 'found changed configerrors')
     assert_equal(0, @summary[:configerrors][:new], 'found new configerrors')
