@@ -204,7 +204,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     record_expectations(sha1_head: sha1, sha1_base: sha1, zip_file_exists: true)
     record_expectations_after_build
     record_expectations_project_build(sha1: sha1, error: true, long_cli_options: true,
-                                      no_progress_bar: true, base_cmd: 'pmd check')
+                                      no_progress_bar: true, pmd7: true)
 
     pmd_cli_cmd = prepare_pmd_dist_dir(version: @pmd_version, sha1: sha1)
     begin
@@ -241,8 +241,23 @@ class TestPmdReportBuilder < Test::Unit::TestCase
 
   private
 
+  def determine_cli_cmd_and_options(pmd7:, long_cli_options:)
+    if pmd7
+      base_cmd = 'pmd check'
+      fail_on_violation = '--no-fail-on-violation'
+      auxclasspath_option = '--aux-classpath extra:dirs'
+    else
+      base_cmd = 'run.sh pmd'
+      fail_on_violation = long_cli_options ? '--fail-on-violation false' : '-failOnViolation false'
+      auxclasspath_option = long_cli_options ? '--aux-classpath extra:dirs' : '-auxclasspath extra:dirs'
+    end
+    [base_cmd, fail_on_violation, auxclasspath_option]
+  end
+
   def record_expectations_project_build(sha1:, error: false, long_cli_options: false,
-                                        no_progress_bar: false, exit_status: 0, base_cmd: 'run.sh pmd')
+                                        no_progress_bar: false, exit_status: 0, pmd7: false)
+    base_cmd, fail_on_violation, auxclasspath_option = determine_cli_cmd_and_options(pmd7: pmd7,
+                                                                                     long_cli_options: long_cli_options)
     PmdTester::ProjectBuilder.any_instance.stubs(:clone_projects).once
     PmdTester::ProjectBuilder.any_instance.stubs(:build_projects).once
     PmdTester::SimpleProgressLogger.any_instance.stubs(:start).once
@@ -257,8 +272,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
                         '-d target/repositories/checkstyle -f xml ' \
                         '-R target/reports/master/checkstyle/config.xml ' \
                         '-r target/reports/master/checkstyle/pmd_report.xml ' \
-                        "#{long_cli_options ? '--fail-on-violation false' : '-failOnViolation false'} -t 1 " \
-                        "#{long_cli_options ? '--aux-classpath extra:dirs' : '-auxclasspath extra:dirs'}" \
+                        "#{fail_on_violation} -t 1 #{auxclasspath_option}" \
                         "#{no_progress_bar ? ' --no-progress' : ''}",
                         'target/reports/master/checkstyle').once
                   .returns(process_status)

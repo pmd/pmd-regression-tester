@@ -91,7 +91,7 @@ module PmdTester
 
     def generate_pmd_report(project)
       error_recovery_options = @error_recovery ? 'PMD_JAVA_OPTS="-Dpmd.error_recovery -ea" ' : ''
-      fail_on_violation = should_use_long_cli_options? ? '--fail-on-violation false' : '-failOnViolation false'
+      fail_on_violation = create_failonviolation_option
       auxclasspath_option = create_auxclasspath_option(project)
       pmd_cmd = "#{error_recovery_options}" \
                 "#{determine_run_path} -d #{project.local_source_path} -f xml " \
@@ -206,6 +206,16 @@ module PmdTester
         auxclasspath_option += project.auxclasspath
       end
       auxclasspath_option
+    end
+
+    def create_failonviolation_option
+      if pmd7?
+        '--no-fail-on-violation'
+      elsif should_use_long_cli_options?
+        '--fail-on-violation false'
+      else
+        '-failOnViolation false'
+      end
     end
 
     def pmd7?
