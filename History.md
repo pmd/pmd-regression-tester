@@ -1,15 +1,10 @@
-# 1.5.4-SNAPSHOT / ????-??-??
-
-## New and Noteworthy
+# 1.5.4 / 2023-05-27
 
 ## Enhancements
+
 * [#118](https://github.com/pmd/pmd-regression-tester/pull/118): Update js libraries
 * [#119](https://github.com/pmd/pmd-regression-tester/pull/119): Update manual integration test for PMD 7
 * [#120](https://github.com/pmd/pmd-regression-tester/pull/120): Support new PMD 7 binary dist filename
-
-## Fixed Issues
-
-## External Contributions
 
 # 1.5.3 / 2022-11-25
 
