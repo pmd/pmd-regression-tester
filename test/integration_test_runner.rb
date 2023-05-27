@@ -69,22 +69,23 @@ class IntegrationTestRunner < Test::Unit::TestCase
   end
 
   def test_online_mode
-    # This test depends on the file test_branch_2-baseline.zip being available at:
-    # https://pmd-code.org/pmd-regression-tester/test_branch_2-baseline.zip
-    base_branch = 'test_branch_2'
-    argv = "-r target/repositories/pmd -m online -b #{base_branch} -p pmd_releases/6.41.0 " \
+    # This test depends on the file pmd_releases_7.0.0-rc1-baseline.zip being available at:
+    # https://pmd-code.org/pmd-regression-tester/pmd_releases_7.0.0-rc1-baseline.zip
+    base_branch = 'pmd_releases/7.0.0-rc1'
+    patch_branch = 'pmd_releases/7.0.0-rc2'
+    argv = "-r target/repositories/pmd -m online -b #{base_branch} -p #{patch_branch} " \
         '--baseline-download-url https://pmd-code.org/pmd-regression-tester/' \
         ' --threads ' + Etc.nprocessors.to_s
 
     system("bundle exec bin/pmdtester #{argv}")
 
-    assert_path_exist("target/reports/#{base_branch}-baseline.zip")
-    assert_path_exist("target/reports/#{base_branch}/checkstyle/pmd_report.xml")
-    assert_path_exist("target/reports/#{base_branch}/spring-framework/pmd_report.xml")
-    assert_path_exist('target/reports/pmd_releases_6.41.0/checkstyle/pmd_report.xml')
-    assert_path_exist('target/reports/pmd_releases_6.41.0/checkstyle/config.xml')
-    assert_path_exist('target/reports/pmd_releases_6.41.0/spring-framework/pmd_report.xml')
-    assert_path_exist('target/reports/pmd_releases_6.41.0/spring-framework/config.xml')
+    assert_path_exist("target/reports/#{base_branch.tr('/', '_')}-baseline.zip")
+    assert_path_exist("target/reports/#{base_branch.tr('/', '_')}/checkstyle/pmd_report.xml")
+    assert_path_exist("target/reports/#{base_branch.tr('/', '_')}/spring-framework/pmd_report.xml")
+    assert_path_exist("target/reports/#{patch_branch.tr('/', '_')}/checkstyle/pmd_report.xml")
+    assert_path_exist("target/reports/#{patch_branch.tr('/', '_')}/checkstyle/config.xml")
+    assert_path_exist("target/reports/#{patch_branch.tr('/', '_')}/spring-framework/pmd_report.xml")
+    assert_path_exist("target/reports/#{patch_branch.tr('/', '_')}/spring-framework/config.xml")
     assert_path_exist('target/reports/diff/checkstyle/index.html')
     assert_path_exist('target/reports/diff/spring-framework/index.html')
     assert_path_exist('target/reports/diff/index.html')

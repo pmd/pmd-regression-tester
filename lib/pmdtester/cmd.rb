@@ -30,6 +30,7 @@ module PmdTester
       stdout, stderr, status = internal_execute(cmd)
 
       unless status.success?
+        logger.error "Command failed: #{cmd}"
         logger.error stdout
         logger.error stderr
         raise CmdException.new(cmd, stdout, stderr, status)

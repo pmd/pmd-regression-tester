@@ -46,29 +46,34 @@ class ManualIntegrationTests < Test::Unit::TestCase
     assert_equal(0, @summary[:violations][:changed], 'found changed violations')
     assert_equal(0, @summary[:violations][:new], 'found new violations')
     # These are the artificially created false-negatives for AbstractClassWithoutAbstractMethod rule
-    # checkstyle: 204 violations
+    # checkstyle: 195 violations
     # spring-framework: 280 violations
     # openjdk11: 29 violations
-    # -> total = 513
-    assert_equal(204 + 280 + 29, @summary[:violations][:removed], 'found removed violations')
+    # -> total = 504
+    assert_equal(195 + 280 + 29, @summary[:violations][:removed], 'found removed violations')
 
     # errors might have been caused in the baseline for other rules (only visible in the stacktrace)
     # hence they might appear as removed
 
-    # project "apex-link" has 2 errors, since we only executed java rules, 2 errors are removed
-    assert_equal(2, @summary[:errors][:removed], 'found removed errors')
-    assert_equal(0, @summary[:errors][:changed], 'found changed errors')
+    # project "apex-link" has 2 errors removed, since we only executed java rules
+    # project "checkstyle" has 10 errors removed and 1 changed
+    # project "openjdk-11" has 0 error removed or changed
+    # project "spring-framework" has 1 error removed
+    # each project has 1 config error removed (LoosePackageCoupling dysfunctional): in total 7 config errors removed
+    assert_equal(13, @summary[:errors][:removed], 'found removed errors')
+    # The stack overflow exception might vary in the beginning/end of the stack frames shown
+    # This stack overflow error is from checkstyle's InputIndentationLongConcatenatedString.java
+    # instead of assert_equal(0, @summary[:errors][:changed], 'found changed errors')
+    # allow 0 or 1 changed errors
+    assert @summary[:errors][:changed] <= 1
     assert_equal(0, @summary[:errors][:new], 'found new errors')
     assert_equal(0, @summary[:configerrors][:changed], 'found changed configerrors')
     assert_equal(0, @summary[:configerrors][:new], 'found new configerrors')
-    # Only the rule AbstractClassWithoutAbtractMethod has been executed, so the
-    # configerrors about LoosePackageCoupling are gone, one for each project
-    # we now have 7 projects in total (4 java, 3 apex)
     assert_equal(7, @summary[:configerrors][:removed], 'found removed configerrors')
 
     assert_equal("This changeset changes 0 violations,\n" \
                  "introduces 0 new violations, 0 new errors and 0 new configuration errors,\n" \
-                 'removes 513 violations, 2 errors and 7 configuration errors.',
+                 'removes 504 violations, 13 errors and 7 configuration errors.',
                  create_summary_message)
 
     assert_file_equals("#{PATCHES_PATH}/expected_patch_config_1.xml", 'target/reports/diff/patch_config.xml')
@@ -93,20 +98,25 @@ class ManualIntegrationTests < Test::Unit::TestCase
     # errors might have been caused in the baseline for other rules (only visible in the stacktrace)
     # hence they might appear as removed
 
-    # project "apex-link" has 2 errors, since we only executed java rules, 2 errors are removed
-    assert_equal(2, @summary[:errors][:removed], 'found removed errors')
-    assert_equal(0, @summary[:errors][:changed], 'found changed errors')
+    # project "apex-link" has 2 errors removed, since we only executed java rules
+    # project "checkstyle" has 5 errors removed and 1 errors changed
+    # project "openjdk-11" has 0 error removed or changed
+    # project "spring-framework" has 1 error removed
+    # each project has 1 config error removed (LoosePackageCoupling dysfunctional): in total 7 config errors removed
+    assert_equal(8, @summary[:errors][:removed], 'found removed errors')
+    # The stack overflow exception might vary in the beginning/end of the stack frames shown
+    # This stack overflow error is from checkstyle's InputIndentationLongConcatenatedString.java
+    # instead of assert_equal(0, @summary[:errors][:changed], 'found changed errors')
+    # allow 0 or 1 changed errors
+    assert @summary[:errors][:changed] <= 1
     assert_equal(0, @summary[:errors][:new], 'found new errors')
     assert_equal(0, @summary[:configerrors][:changed], 'found changed configerrors')
     assert_equal(0, @summary[:configerrors][:new], 'found new configerrors')
-    # Only the rule AvoidMessageDigestField and all other rules from bestpractices have been executed, so the
-    # configerrors about LoosePackageCoupling are gone, one for each project
-    # we now have 7 projects in total (4 java, 3 apex)
     assert_equal(7, @summary[:configerrors][:removed], 'found removed configerrors')
 
     assert_equal("This changeset changes 0 violations,\n" \
                  "introduces 0 new violations, 0 new errors and 0 new configuration errors,\n" \
-                 'removes 22 violations, 2 errors and 7 configuration errors.',
+                 'removes 22 violations, 8 errors and 7 configuration errors.',
                  create_summary_message)
 
     assert_file_equals("#{PATCHES_PATH}/expected_patch_config_2.xml", 'target/reports/diff/patch_config.xml')
@@ -115,7 +125,7 @@ class ManualIntegrationTests < Test::Unit::TestCase
 
   def test_case_3_change_in_core
     checkout_pmd_branch
-    prepare_patch_branch('patch_test_case_3_modify_PMD.patch', 'test-case-3')
+    prepare_patch_branch('patch_test_case_3_modify_pmd-core.patch', 'test-case-3')
 
     run_pmd_tester
 
@@ -125,7 +135,11 @@ class ManualIntegrationTests < Test::Unit::TestCase
     assert_equal(0, @summary[:violations][:new], 'found new violations')
     assert_equal(0, @summary[:violations][:removed], 'found removed violations')
     assert_equal(0, @summary[:errors][:removed], 'found removed errors')
-    assert_equal(0, @summary[:errors][:changed], 'found changed errors')
+    # The stack overflow exception might vary in the beginning/end of the stack frames shown
+    # This stack overflow error is from checkstyle's InputIndentationLongConcatenatedString.java
+    # instead of assert_equal(0, @summary[:errors][:changed], 'found changed errors')
+    # allow 0 or 1 changed errors
+    assert @summary[:errors][:changed] <= 1
     assert_equal(0, @summary[:errors][:new], 'found new errors')
     assert_equal(0, @summary[:configerrors][:changed], 'found changed configerrors')
     assert_equal(0, @summary[:configerrors][:new], 'found new configerrors')
@@ -231,7 +245,7 @@ class ManualIntegrationTests < Test::Unit::TestCase
       system('git config user.email "andreas.dangel+pmd-bot@adangel.org"')
       system('git config user.name "PMD CI (pmd-bot)"')
       # remove any already existing binary to force a rebuild
-      FileUtils.rm Dir.glob('pmd-dist/target/pmd-bin-*.zip')
+      FileUtils.rm Dir.glob('pmd-dist/target/pmd-*.zip')
     end
   end
 
@@ -248,19 +262,19 @@ class ManualIntegrationTests < Test::Unit::TestCase
   end
 
   def assert_master_baseline
-    assert_path_exist('target/reports/master/checkstyle/config.xml')
-    assert_path_exist('target/reports/master/checkstyle/report_info.json')
-    assert_path_exist('target/reports/master/checkstyle/pmd_report.xml')
-    assert(File.size('target/reports/master/checkstyle/pmd_report.xml') > 50 * 1024 * 1024)
+    assert_master_baseline_project('checkstyle', 40 * 1024 * 1024)
+    assert_master_baseline_project('openjdk-11', 80 * 1024 * 1024)
+    assert_master_baseline_project('spring-framework', 100 * 1024 * 1024)
+    assert_master_baseline_project('java-regression-tests', 100 * 1024)
+    assert_master_baseline_project('apex-link', 10 * 1024)
+    assert_master_baseline_project('fflib-apex-common', 400 * 1024)
+    assert_master_baseline_project('Schedul-o-matic-9000', 20 * 1024)
+  end
 
-    assert_path_exist('target/reports/master/openjdk-11/config.xml')
-    assert_path_exist('target/reports/master/openjdk-11/report_info.json')
-    assert_path_exist('target/reports/master/openjdk-11/pmd_report.xml')
-    assert(File.size('target/reports/master/openjdk-11/pmd_report.xml') > 100 * 1024 * 1024)
-
-    assert_path_exist('target/reports/master/spring-framework/config.xml')
-    assert_path_exist('target/reports/master/spring-framework/report_info.json')
-    assert_path_exist('target/reports/master/spring-framework/pmd_report.xml')
-    assert(File.size('target/reports/master/spring-framework/pmd_report.xml') > 150 * 1024 * 1024)
+  def assert_master_baseline_project(project_name, report_size_in_bytes)
+    assert_path_exist("target/reports/master/#{project_name}/config.xml")
+    assert_path_exist("target/reports/master/#{project_name}/report_info.json")
+    assert_path_exist("target/reports/master/#{project_name}/pmd_report.xml")
+    assert(File.size("target/reports/master/#{project_name}/pmd_report.xml") > report_size_in_bytes)
   end
 end

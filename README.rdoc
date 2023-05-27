@@ -136,10 +136,10 @@ The tool creates the following folders:
   bundle exec pmdtester ... # run this to directly execute pmdtester from source
   
   Run a single test class, e.g.:
-  bundle exec ruby -I test test/test_diff_report_builder.rb
+  bundle exec ruby -I test test/test_project_diff_report.rb
   
   Run a single test, e.g.:
-  bundle exec ruby -I test test/test_diff_report_builder.rb -n test_diff_report_builder
+  bundle exec ruby -I test test/test_project_diff_report.rb -n test_diff_report_builder
 
 === Releasing
 

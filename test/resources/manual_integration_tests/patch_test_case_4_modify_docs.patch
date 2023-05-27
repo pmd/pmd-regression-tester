@@ -1,27 +1,27 @@
-From a3787300903ed6f721525e342f921e733c8a633f Mon Sep 17 00:00:00 2001
+From e1138cff3fff770e1b74688882e5bf09269b3a06 Mon Sep 17 00:00:00 2001
 From: Andreas Dangel <andreas.dangel@pmd-code.org>
-Date: Thu, 14 Jan 2021 19:53:13 +0100
+Date: Thu, 4 May 2023 20:00:52 +0200
 Subject: [PATCH] test case 4 - unrelated change
 
 This commit changes a file in /docs. This definitely doesn't
 change any code, so the regression tester should skip the
 execution.
 ---
- docs/index.md | 1 +
- 1 file changed, 1 insertion(+)
+ docs/index.md | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/docs/index.md b/docs/index.md
-index 55e9c9e5cd..0fa51ba7fd 100644
+index be951ab7f8..eb030aa757 100644
 --- a/docs/index.md
 +++ b/docs/index.md
-@@ -14,6 +14,7 @@ author: Jeff Jensen <jjensen@apache.org>, Andreas Dangel <andreas.dangel@adangel
+@@ -17,7 +17,7 @@ additional_js:
+  - js/shuffle.js
+ ---
  
+-
++<!-- some change in docs -->
  
+ ## 💡 Overview
  
-+
- {% unless site.output == "pdf" %}
- <script src="js/jquery.shuffle.min.js"></script>
- <script src="js/jquery.ba-throttle-debounce.min.js"></script>
 -- 
-2.29.2
-
+2.39.2
