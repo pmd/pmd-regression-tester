@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd xmlns="http://pmd.sourceforge.net/report/2.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://pmd.sourceforge.net/report/2.0.0 http://pmd.sourceforge.net/report_2_0_0.xsd"
+    version="6.3.0-SNAPSHOT" timestamp="2018-04-16T22:41:45.065">
+<file name="Same1.java">
+<violation beginline="402" endline="402" begincolumn="22" endcolumn="36" rule="CyclomaticComplexity" ruleset="Design" externalInfoUrl="https://docs.pmd-code.org/snapshot/pmd_rules_apex_design.html#cyclomaticcomplexity" priority="3">
+The method 'foo(List&lt;SObject&gt;, Map&lt;Id, SObject&gt;)' has a cyclomatic complexity of 19.
+</violation>
+</file>
+</file>
+</pmd>
