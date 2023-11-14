@@ -117,7 +117,7 @@ module PmdTester
         'l' => violation.line,
         'f' => file_ref,
         'r' => violation.rule_name,
-        'm' => create_violation_message(violation, is_diff)
+        'm' => create_violation_message(violation, is_diff && violation.changed?)
       }
       h['ol'] = violation.old_line if is_diff && violation.changed? && violation.line != violation.old_line
       h
@@ -132,8 +132,6 @@ module PmdTester
     end
 
     def escape_html(string)
-      return '' if string.nil?
-
       CGI.escapeHTML(string)
     end
   end
