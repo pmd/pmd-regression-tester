@@ -127,6 +127,7 @@ The tool creates the following folders:
   gem install pmdtester --pre
 
 == DEVELOPERS:
+
   git clone https://github.com/pmd/pmd-regression-tester.git
   cd pmd-regression-tester
   gem install bundler

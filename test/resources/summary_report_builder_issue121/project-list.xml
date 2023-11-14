@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+
+<projectlist xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:noNamespaceSchemaLocation="projectlist_1_2_0.xsd">
+  <description>Standard Projects</description>
+
+  <project>
+    <name>sample_project</name>
+    <type>git</type>
+    <connection>https://github.com/pmd/sample_project</connection>
+    <tag>main</tag>
+  </project>
+
+</projectlist>

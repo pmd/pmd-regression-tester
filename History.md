@@ -5,6 +5,7 @@
 ## Enhancements
 
 ## Fixed Issues
+* [#121](https://github.com/pmd/pmd-regression-tester/issues/121): Violation messages should be escaped for html
 
 ## External Contributions
 

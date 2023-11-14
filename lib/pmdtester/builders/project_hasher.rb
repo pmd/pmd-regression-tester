@@ -117,15 +117,22 @@ module PmdTester
         'l' => violation.line,
         'f' => file_ref,
         'r' => violation.rule_name,
-        'm' => is_diff && violation.changed? ? diff_fragments(violation) : violation.message
+        'm' => create_violation_message(violation, is_diff && violation.changed?)
       }
       h['ol'] = violation.old_line if is_diff && violation.changed? && violation.line != violation.old_line
       h
     end
 
-    def diff_fragments(violation)
-      diff = Differ.diff_by_word(violation.message, violation.old_message)
+    def create_violation_message(violation, is_diff)
+      return escape_html(violation.message) unless is_diff
+
+      diff = Differ.diff_by_word(escape_html(violation.message),
+                                 escape_html(violation.old_message))
       diff.format_as(:html)
+    end
+
+    def escape_html(string)
+      CGI.escapeHTML(string)
     end
   end
 end
