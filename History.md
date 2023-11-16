@@ -1,13 +1,7 @@
-# 1.5.5-SNAPSHOT / ????-??-??
-
-## New and Noteworthy
-
-## Enhancements
+# 1.5.5 / 2023-11-16
 
 ## Fixed Issues
 * [#121](https://github.com/pmd/pmd-regression-tester/issues/121): Violation messages should be escaped for html
-
-## External Contributions
 
 # 1.5.4 / 2023-05-27
 
