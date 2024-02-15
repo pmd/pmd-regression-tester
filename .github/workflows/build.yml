@@ -34,7 +34,7 @@ jobs:
     - name: Set up Ruby 3.3
       uses: ruby/setup-ruby@v1
       with:
-        version: 3.3
+        ruby-version: 3.3
     - name: Setup Environment
       shell: bash
       run: |
