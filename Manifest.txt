@@ -7,7 +7,6 @@
 .hoerc
 .rubocop.yml
 .rubocop_todo.yml
-.ruby-version
 Gemfile
 History.md
 LICENSE

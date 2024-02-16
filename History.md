@@ -3,6 +3,7 @@
 ## New and Noteworthy
 
 ## Enhancements
+* [#123](https://github.com/pmd/pmd-regression-tester/pull/123): Support ruby 3.3.0
 
 ## Fixed Issues
 

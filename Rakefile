@@ -18,22 +18,23 @@ hoe = Hoe.spec 'pmdtester' do
   developer 'Binguo Bao', 'djydewang@gmail.com'
   developer 'Clément Fournier', 'clement.fournier76@gmail.com'
 
-  self.clean_globs = %w[target/reports/**/* target/test/**/* target/dynamic-config.xml Gemfile.lock]
+  self.clean_globs = %w[target/reports/**/* target/test/**/* target/dynamic-config.xml]
   self.extra_deps += [
     ['nokogiri',        '~> 1.13'],
     ['slop',            '~> 4.9'],
     ['differ',          '~> 0.1'],
     ['rufus-scheduler', '~> 3.8'],
     ['logger-colors',   '~> 1.0'],
-    ['liquid',          '~> 5.4']
+    ['liquid',          '~> 5.4'],
+    ['base64',          '~> 0.2'],
+    ['bigdecimal',      '~> 3.1'],
   ]
   self.extra_dev_deps += [
     ['hoe-bundler',   '~> 1.5'],
     ['hoe-git',       '~> 1.6'],
     ['minitest',      '~> 5.16'],
     ['mocha',         '~> 1.16'],
-    # use the same version of rubocop as codacy
-    ['rubocop',       '~> 0.93'],
+    ['rubocop',       '~> 1.60'],
     ['test-unit',     '~> 3.5'],
     ['rdoc',          '~> 6.4']
   ]
@@ -43,7 +44,7 @@ hoe = Hoe.spec 'pmdtester' do
 end
 
 # Refers to
-# http://rubocop.readthedocs.io/en/latest/integration_with_other_tools/#rake-integration
+# https://docs.rubocop.org/rubocop/1.60/integration_with_other_tools.html#rake-integration
 RuboCop::RakeTask.new(:rubocop)
 
 # Run integration test cases
