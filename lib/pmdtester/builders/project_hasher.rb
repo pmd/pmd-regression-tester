@@ -35,7 +35,7 @@ module PmdTester
         file_ref = filename_index.size
         filename_index.push(project.get_local_path(file))
         vs.each do |v|
-          all_vs.push(make_violation_hash(file_ref, v, is_diff))
+          all_vs.push(make_violation_hash(file_ref, v, is_diff: is_diff))
         end
       end
 
@@ -111,7 +111,7 @@ module PmdTester
       end
     end
 
-    def make_violation_hash(file_ref, violation, is_diff = true)
+    def make_violation_hash(file_ref, violation, is_diff: true)
       h = {
         't' => is_diff ? violation_type(violation) : '+',
         'l' => violation.line,
