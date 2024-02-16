@@ -111,7 +111,7 @@ module PmdTester
       end
     end
 
-    def make_violation_hash(file_ref, violation, is_diff = TRUE)
+    def make_violation_hash(file_ref, violation, is_diff = true)
       h = {
         't' => is_diff ? violation_type(violation) : '+',
         'l' => violation.line,
