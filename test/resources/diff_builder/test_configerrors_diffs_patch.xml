@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pmd xmlns="http://pmd.sourceforge.net/report/2.0.0"
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-     xsi:schemaLocation="http://pmd.sourceforge.net/report/2.0.0 http://pmd.sourceforge.net/report_2_0_0.xsd"
+     xsi:schemaLocation="http://pmd.sourceforge.net/report/2.0.0 https://pmd.github.io/schema/report_2_0_0.xsd"
      version="6.3.0-SNAPSHOT" timestamp="2018-04-16T22:41:45.065">
   <configerror rule="RulePatch1" msg="Only appears in patch report." />
   <configerror rule="RuleBoth1" msg="It is the same in two reports." />

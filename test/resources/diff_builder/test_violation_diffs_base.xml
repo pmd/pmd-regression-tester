@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pmd xmlns="http://pmd.sourceforge.net/report/2.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://pmd.sourceforge.net/report/2.0.0 http://pmd.sourceforge.net/report_2_0_0.xsd"
+    xsi:schemaLocation="http://pmd.sourceforge.net/report/2.0.0 https://pmd.github.io/schema/report_2_0_0.xsd"
     version="6.3.0-SNAPSHOT" timestamp="2018-04-16T22:41:45.065">
 <file name="Same1.java">
 <violation beginline="7" endline="8" begincolumn="12" endcolumn="5" rule="UncommentedEmptyConstructor" ruleset="Documentation" class="Null" method="Null" externalInfoUrl="http://pmd.sourceforge.net/snapshot/pmd_rules_java_documentation.html#uncommentedemptyconstructor" priority="3">

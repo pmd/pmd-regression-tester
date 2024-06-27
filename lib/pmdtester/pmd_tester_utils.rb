@@ -19,7 +19,7 @@ module PmdTester
     end
 
     # Parse the +report_file+ to produce a +Report+.
-    # For the schema of xml reports, refer to http://pmd.sourceforge.net/report_2_0_0.xsd
+    # For the schema of xml reports, refer to https://pmd.github.io/schema/report_2_0_0.xsd
     def parse_pmd_report(report_file, branch, report_details, filter_set = nil)
       require 'nokogiri'
 
