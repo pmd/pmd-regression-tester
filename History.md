@@ -6,6 +6,7 @@
 * [#123](https://github.com/pmd/pmd-regression-tester/pull/123): Support ruby 3.3.0
 
 ## Fixed Issues
+* [#126](https://github.com/pmd/pmd-regression-tester/pull/126): Fix integration tests
 
 ## External Contributions
 
