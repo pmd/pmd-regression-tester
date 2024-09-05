@@ -37,7 +37,7 @@ module PmdTester
         logger.debug "#{@pmd_branch_name}: distro_path=#{distro_path}"
         if File.directory?(distro_path)
           logger.info "#{@pmd_branch_name}: Skipping packaging - saved version exists " \
-                      " in #{distro_path}"
+                      "in #{distro_path}"
         else
           build_pmd(into_dir: distro_path)
         end
@@ -174,7 +174,7 @@ module PmdTester
 
       # working dir is dirty....
       # we don't allow this because we need the SHA to address the zip file
-      logger.error "#{@pmd_branch_name}: Won\'t build without a clean working tree, " \
+      logger.error "#{@pmd_branch_name}: Won't build without a clean working tree, " \
                    'commit your changes'
     end
 
@@ -186,8 +186,8 @@ module PmdTester
     # e.g. <cwd>/pmd-bin-<version>-<branch>-<sha>
     def saved_distro_path(build_sha)
       "#{work_dir}/pmd-bin-#{@pmd_version}" \
-      "-#{PmdBranchDetail.branch_filename(@pmd_branch_name)}" \
-      "-#{build_sha}"
+        "-#{PmdBranchDetail.branch_filename(@pmd_branch_name)}" \
+        "-#{build_sha}"
     end
 
     def wd_has_dirty_git_changes
@@ -247,15 +247,15 @@ module PmdTester
 
     def build_pmd_with_maven
       logger.info "#{@pmd_branch_name}: Building PMD #{@pmd_version}..."
-      package_cmd = './mvnw clean package' \
-                    " -s #{ResourceLocator.resource('maven-settings.xml')} " \
-                    ' -Pfor-dokka-maven-plugin' \
-                    ' -Dmaven.test.skip=true' \
-                    ' -Dmaven.javadoc.skip=true' \
-                    ' -Dmaven.source.skip=true' \
-                    ' -Dcheckstyle.skip=true' \
-                    ' -Dpmd.skip=true' \
-                    ' -T1C -B'
+      package_cmd = './mvnw clean package ' \
+                    "-s #{ResourceLocator.resource('maven-settings.xml')} " \
+                    '-Pfor-dokka-maven-plugin ' \
+                    '-Dmaven.test.skip=true ' \
+                    '-Dmaven.javadoc.skip=true ' \
+                    '-Dmaven.source.skip=true ' \
+                    '-Dcheckstyle.skip=true ' \
+                    '-Dpmd.skip=true ' \
+                    '-T1C -B'
       logger.debug "#{@pmd_branch_name}: maven command: #{package_cmd}"
       Cmd.execute_successfully(package_cmd)
     end

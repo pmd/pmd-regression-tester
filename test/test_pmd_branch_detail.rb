@@ -5,7 +5,7 @@ require 'test_helper'
 # Unit test class for PmdTester::PmdBranchDetail
 class TestPmdBranchDetail < Test::Unit::TestCase
   def setup
-    @old_pr = ENV[PmdTester::PR_NUM_ENV_VAR]
+    @old_pr = ENV.fetch(PmdTester::PR_NUM_ENV_VAR, nil)
   end
 
   def cleanup
@@ -31,7 +31,7 @@ class TestPmdBranchDetail < Test::Unit::TestCase
     assert_equal('test time', details.execution_time)
     assert_equal(PmdTester::Cmd.stderr_of('java -version'), details.jdk_version)
     assert_not_empty(details.jdk_version)
-    assert_equal(ENV['LANG'], details.language)
+    assert_equal(ENV.fetch('LANG'), details.language)
     assert_not_empty(details.language)
     assert_equal('1234', details.pull_request)
   end

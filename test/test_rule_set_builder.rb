@@ -9,7 +9,7 @@ class TestRuleSetBuilder < Test::Unit::TestCase
 
   def cleanup
     filename = RuleSetBuilder::PATH_TO_DYNAMIC_CONFIG
-    File.delete(filename) if File.exist?(filename)
+    FileUtils.rm_rf filename
   end
 
   def mock_build(diff_filenames, filter_set = nil, patch_config = nil)

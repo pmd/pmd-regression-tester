@@ -9,6 +9,8 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     @pmd_version = '6.10.0-SNAPSHOT'
     # create a empty pmd repo directory
     FileUtils.mkdir_p 'target/repositories/pmd'
+    # remove any cached distro_patch
+    FileUtils.rm_rf "target/pmd-bin-#{@pmd_version}-master-sha1abc"
   end
 
   def teardown
@@ -16,7 +18,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     # pre-built PMD binary
     ["#{pmd_repo}/pmd-dist/target/pmd-bin-#{@pmd_version}.zip",
      "#{pmd_repo}/pmd-dist/target/pmd-dist-#{@pmd_version}-bin.zip"].each do |pmd_binary|
-      File.unlink pmd_binary if File.exist? pmd_binary
+      FileUtils.rm_f pmd_binary
     end
 
     # only deleting empty directories in order to leave pmd_repo intact
@@ -54,10 +56,14 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     FileUtils.touch "target/repositories/pmd/pmd-dist/target/pmd-bin-#{@pmd_version}.zip"
 
     record_expectations(sha1_head: 'sha1abc', sha1_base: 'sha1abc', zip_file_exists: false)
-    PmdTester::Cmd.stubs(:execute_successfully).with("unzip -qo pmd-dist/target/pmd-bin-#{@pmd_version}.zip" \
-      ' -d pmd-dist/target/exploded').once
-    PmdTester::Cmd.stubs(:execute_successfully).with("mv pmd-dist/target/exploded/pmd-bin-#{@pmd_version}" \
-      " #{Dir.getwd}/target/pmd-bin-#{@pmd_version}-master-sha1abc").once
+    PmdTester::Cmd.stubs(:execute_successfully).with(
+      "unzip -qo pmd-dist/target/pmd-bin-#{@pmd_version}.zip " \
+      '-d pmd-dist/target/exploded'
+    ).once
+    PmdTester::Cmd.stubs(:execute_successfully).with(
+      "mv pmd-dist/target/exploded/pmd-bin-#{@pmd_version} " \
+      "#{Dir.getwd}/target/pmd-bin-#{@pmd_version}-master-sha1abc"
+    ).once
     record_expectations_after_build
 
     PmdTester::PmdReportBuilder
@@ -69,17 +75,21 @@ class TestPmdReportBuilder < Test::Unit::TestCase
   def test_build_skip_ci_pmd7
     projects = []
     argv = %w[-r target/repositories/pmd -b master -p pmd_releases/6.55.0
-              -c config/design.xml -l test/resources/pmd_report_builder/project-test.xml]
+              -c config/design.xml -l test/resources/pmd_report_builder/project-test.xml -d]
     options = PmdTester::Options.new(argv)
 
     FileUtils.mkdir_p 'target/repositories/pmd/pmd-dist/target'
     FileUtils.touch "target/repositories/pmd/pmd-dist/target/pmd-dist-#{@pmd_version}-bin.zip"
 
     record_expectations(sha1_head: 'sha1abc', sha1_base: 'sha1abc', zip_file_exists: false)
-    PmdTester::Cmd.stubs(:execute_successfully).with("unzip -qo pmd-dist/target/pmd-dist-#{@pmd_version}-bin.zip" \
-      ' -d pmd-dist/target/exploded').once
-    PmdTester::Cmd.stubs(:execute_successfully).with("mv pmd-dist/target/exploded/pmd-bin-#{@pmd_version}" \
-      " #{Dir.getwd}/target/pmd-bin-#{@pmd_version}-master-sha1abc").once
+    PmdTester::Cmd.stubs(:execute_successfully).with(
+      "unzip -qo pmd-dist/target/pmd-dist-#{@pmd_version}-bin.zip " \
+      '-d pmd-dist/target/exploded'
+    ).once
+    PmdTester::Cmd.stubs(:execute_successfully).with(
+      "mv pmd-dist/target/exploded/pmd-bin-#{@pmd_version} " \
+      "#{Dir.getwd}/target/pmd-bin-#{@pmd_version}-master-sha1abc"
+    ).once
     record_expectations_after_build
 
     PmdTester::PmdReportBuilder
@@ -96,10 +106,14 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     # PMD binary does not exist yet this time...
     record_expectations(sha1_head: 'sha1abc', sha1_base: 'sha1abc', zip_file_exists: false)
     stub_pmd_build_maven(binary_name: "pmd-bin-#{@pmd_version}.zip")
-    PmdTester::Cmd.stubs(:execute_successfully).with("unzip -qo pmd-dist/target/pmd-bin-#{@pmd_version}.zip" \
-                  ' -d pmd-dist/target/exploded').once
-    PmdTester::Cmd.stubs(:execute_successfully).with("mv pmd-dist/target/exploded/pmd-bin-#{@pmd_version}" \
-                  " #{Dir.getwd}/target/pmd-bin-#{@pmd_version}-master-sha1abc").once
+    PmdTester::Cmd.stubs(:execute_successfully).with(
+      "unzip -qo pmd-dist/target/pmd-bin-#{@pmd_version}.zip " \
+      '-d pmd-dist/target/exploded'
+    ).once
+    PmdTester::Cmd.stubs(:execute_successfully).with(
+      "mv pmd-dist/target/exploded/pmd-bin-#{@pmd_version} " \
+      "#{Dir.getwd}/target/pmd-bin-#{@pmd_version}-master-sha1abc"
+    ).once
     record_expectations_after_build
 
     PmdTester::PmdReportBuilder
@@ -116,10 +130,14 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     # PMD binary does not exist yet this time...
     record_expectations(sha1_head: 'sha1abc', sha1_base: 'sha1abc', zip_file_exists: false)
     stub_pmd_build_maven(binary_name: "pmd-dist-#{@pmd_version}-bin.zip")
-    PmdTester::Cmd.stubs(:execute_successfully).with("unzip -qo pmd-dist/target/pmd-dist-#{@pmd_version}-bin.zip" \
-                  ' -d pmd-dist/target/exploded').once
-    PmdTester::Cmd.stubs(:execute_successfully).with("mv pmd-dist/target/exploded/pmd-bin-#{@pmd_version}" \
-                  " #{Dir.getwd}/target/pmd-bin-#{@pmd_version}-master-sha1abc").once
+    PmdTester::Cmd.stubs(:execute_successfully).with(
+      "unzip -qo pmd-dist/target/pmd-dist-#{@pmd_version}-bin.zip " \
+      '-d pmd-dist/target/exploded'
+    ).once
+    PmdTester::Cmd.stubs(:execute_successfully).with(
+      "mv pmd-dist/target/exploded/pmd-bin-#{@pmd_version} " \
+      "#{Dir.getwd}/target/pmd-bin-#{@pmd_version}-master-sha1abc"
+    ).once
     record_expectations_after_build
 
     PmdTester::PmdReportBuilder
@@ -285,10 +303,11 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     # inside checkout_build_branch
     PmdTester::Cmd.stubs(:execute_successfully).with('git checkout master')
                   .returns('checked out branch master').once
-    PmdTester::Cmd.stubs(:execute_successfully).with('./mvnw -q -Dexec.executable="echo" ' \
-                  "-Dexec.args='${project.version}' " \
-                  '--non-recursive org.codehaus.mojo:exec-maven-plugin:1.5.0:exec')
-                  .returns(@pmd_version).at_least(1).at_most(2)
+    PmdTester::Cmd.stubs(:execute_successfully).with(
+      './mvnw -q -Dexec.executable="echo" ' \
+      "-Dexec.args='${project.version}' " \
+      '--non-recursive org.codehaus.mojo:exec-maven-plugin:1.5.0:exec'
+    ).returns(@pmd_version).at_least(1).at_most(2)
     PmdTester::Cmd.stubs(:execute_successfully).with('git status --porcelain').returns('').once
 
     # back into get_pmd_binary_file
@@ -297,8 +316,8 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     distro_path = "target/pmd-bin-#{@pmd_version}-master-#{sha1_base}"
     if zip_file_exists
       FileUtils.mkdir_p(distro_path)
-    elsif File.exist?(distro_path)
-      Dir.rmdir(distro_path)
+    else
+      FileUtils.rm_f distro_path
     end
   end
 
@@ -325,11 +344,11 @@ class TestPmdReportBuilder < Test::Unit::TestCase
   def stub_pmd_build_maven(binary_name:)
     PmdTester::Cmd.stubs(:execute_successfully).with do |cmd|
       if cmd == './mvnw clean package ' \
-                  "-s #{PmdTester::ResourceLocator.resource('maven-settings.xml')} " \
-                  ' -Pfor-dokka-maven-plugin' \
-                  ' -Dmaven.test.skip=true' \
-                  ' -Dmaven.javadoc.skip=true -Dmaven.source.skip=true' \
-                  ' -Dcheckstyle.skip=true -Dpmd.skip=true -T1C -B'
+                "-s #{PmdTester::ResourceLocator.resource('maven-settings.xml')} " \
+                '-Pfor-dokka-maven-plugin ' \
+                '-Dmaven.test.skip=true ' \
+                '-Dmaven.javadoc.skip=true -Dmaven.source.skip=true ' \
+                '-Dcheckstyle.skip=true -Dpmd.skip=true -T1C -B'
         FileUtils.mkdir_p 'pmd-dist/target'
         FileUtils.touch "pmd-dist/target/#{binary_name}"
         true

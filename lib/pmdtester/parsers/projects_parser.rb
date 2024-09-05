@@ -13,11 +13,7 @@ module PmdTester
       errors = schema.validate(document)
       raise ProjectsParserException.new(errors), "Schema validate failed: In #{list_file}" unless errors.empty?
 
-      projects = []
-      document.xpath('//project').each do |project|
-        projects.push(Project.new(project))
-      end
-      projects
+      document.xpath('//project').map { |project| Project.new(project) }
     end
 
     def schema_file_path

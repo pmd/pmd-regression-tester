@@ -52,7 +52,7 @@ module PmdTester
           end
 
           logger.info "Using filter based on patch config #{@options.patch_config}: " \
-                       "#{@options.filter_set}"
+                      "#{@options.filter_set}"
         else
           # if `rule_refs` is empty, then no filter can be used when comparing to the baseline
           logger.info 'No filter when comparing patch to baseline'
@@ -90,7 +90,7 @@ module PmdTester
     def build_config_file(rule_refs)
       if rule_refs.empty?
         logger.debug 'All rules are used. Not generating a dynamic ruleset.'
-        logger.debug "Using the configured/default ruleset base_config=#{@options.base_config} "\
+        logger.debug "Using the configured/default ruleset base_config=#{@options.base_config} " \
                      "patch_config=#{@options.patch_config}"
         return
       end

@@ -36,7 +36,7 @@ class TestPmdReportDocument < Test::Unit::TestCase
     parser.parse(File.open('test/resources/pmd_report_document/test_document.xml'))
     assert_equal(4, doc.violations.total_size, 'wrong number of violations')
     assert_equal(3, doc.violations.num_files, 'wrong number of files')
-    first_file = 'target/repositories/spring-framework/spring-aop/src/main/java/'\
+    first_file = 'target/repositories/spring-framework/spring-aop/src/main/java/' \
                  'org/springframework/aop/ClassFilter.java'
     assert_equal(44, doc.violations[first_file][0].line)
   end
