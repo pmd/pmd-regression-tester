@@ -4,6 +4,7 @@
 
 ## Enhancements
 * [#123](https://github.com/pmd/pmd-regression-tester/pull/123): Support ruby 3.3.0
+* [#125](https://github.com/pmd/pmd-regression-tester/pull/125): Update rubocop configuration
 
 ## Fixed Issues
 * [#126](https://github.com/pmd/pmd-regression-tester/pull/126): Fix integration tests

@@ -8,7 +8,7 @@ class TestCmd < Test::Unit::TestCase
 
   def setup
     @tempdir = 'test-TestCmd-temp'
-    Dir.mkdir @tempdir unless Dir.exist?(@tempdir)
+    FileUtils.mkdir_p @tempdir
   end
 
   def teardown

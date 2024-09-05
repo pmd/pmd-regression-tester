@@ -7,7 +7,7 @@ module PmdTester
   class CollectionByFile
     def initialize
       # a hash of filename -> [list of items]
-      @hash = Hash.new([])
+      @hash = {}
       @total = 0
     end
 

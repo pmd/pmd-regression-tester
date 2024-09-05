@@ -230,7 +230,7 @@ class ManualIntegrationTests < Test::Unit::TestCase
       "introduces #{@summary[:violations][:new]} new violations, " \
       "#{@summary[:errors][:new]} new errors and " \
       "#{@summary[:configerrors][:new]} new configuration errors,\n" \
-      "removes #{@summary[:violations][:removed]} violations, "\
+      "removes #{@summary[:violations][:removed]} violations, " \
       "#{@summary[:errors][:removed]} errors and " \
       "#{@summary[:configerrors][:removed]} configuration errors."
   end

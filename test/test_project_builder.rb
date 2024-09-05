@@ -36,7 +36,7 @@ class TestProjectBuilder < Test::Unit::TestCase
        .returns('target/repositories/spring-framework')
        .returns('target/repositories/spring-framework')
     expect_build('checkstyle', 'mvn test-compile -B',
-                 "#!/usr/bin/env bash\necho -n \"\$(pwd)/target/classes:\"\n        ")
+                 "#!/usr/bin/env bash\necho -n \"$(pwd)/target/classes:\"\n        ")
     expect_build('spring-framework')
     project_builder = PmdTester::ProjectBuilder.new(@projects)
     project_builder.build_projects
@@ -49,8 +49,8 @@ class TestProjectBuilder < Test::Unit::TestCase
 
   def expect_git_clone(name, url, revision)
     File.stubs(:exist?).with("target/repositories/#{name}").returns(false).once
-    PmdTester::Cmd.stubs(:execute_successfully).with('git clone --single-branch --depth 1' \
-                                        " #{url} target/repositories/#{name}").once
+    PmdTester::Cmd.stubs(:execute_successfully).with('git clone --single-branch --depth 1 ' \
+                                                     "#{url} target/repositories/#{name}").once
     Dir.stubs(:chdir).with("target/repositories/#{name}").yields.once
     PmdTester::Cmd.stubs(:execute_successfully).with('git checkout -b fetched/temp').once
     PmdTester::Cmd.stubs(:execute_successfully).with("git fetch --depth 1 origin #{revision}").once

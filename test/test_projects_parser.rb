@@ -10,10 +10,10 @@ class TestProjectsParser < Test::Unit::TestCase
   end
 
   def test_project_parser_checkstyle
-    expected_exclude_pattern = Array['.*/target/test-classes/com/puppycrawl/tools/checkstyle/.*',
-                                     '.*/target/generated-sources/.*',
-                                     '.*/src/test/resources-noncompilable/com/puppycrawl/tools/checkstyle/javaparser/' \
-                                     'InputJavaParserNoFreezeOnDeeplyNestedLambdas.java']
+    expected_exclude_pattern = ['.*/target/test-classes/com/puppycrawl/tools/checkstyle/.*',
+                                '.*/target/generated-sources/.*',
+                                '.*/src/test/resources-noncompilable/com/puppycrawl/tools/checkstyle/javaparser/' \
+                                'InputJavaParserNoFreezeOnDeeplyNestedLambdas.java']
 
     assert_equal(expected_exclude_pattern, @projects[0].exclude_patterns)
     assert_equal('https://github.com/checkstyle/checkstyle/tree/checkstyle-9.1', @projects[0].webview_url)
@@ -53,11 +53,11 @@ class TestProjectsParser < Test::Unit::TestCase
     rescue PmdTester::ProjectsParserException => e
       assert_equal("Schema validate failed: In #{list_file}", e.message)
       assert_equal("10:0: ERROR: Element 'tag': This element is not expected. " \
-                       'Expected is ( connection ).', e.errors[0].to_s)
+                   'Expected is ( connection ).', e.errors[0].to_s)
       assert_equal("15:0: ERROR: Element 'connection': This element is not expected. " \
-                       'Expected is ( type ).', e.errors[1].to_s)
+                   'Expected is ( type ).', e.errors[1].to_s)
       assert_equal("20:0: ERROR: Element 'type': [facet 'enumeration'] " \
-                       "The value 'invalid type' is not an element of the set {'git'}.",
+                   "The value 'invalid type' is not an element of the set {'git'}.",
                    e.errors[2].to_s)
     end
   end

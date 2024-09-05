@@ -27,7 +27,7 @@ module PmdTester
 
     def clean
       clean_target = 'target/reports'
-      FileUtils.remove_dir(clean_target) if Dir.exist?(clean_target)
+      FileUtils.rm_rf(clean_target)
     end
 
     def run_local_mode

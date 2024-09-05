@@ -32,9 +32,9 @@ module PmdTester
       @execution_time = 0
       # the result of command 'java -version' is going to stderr
       @jdk_version = Cmd.stderr_of('java -version')
-      @language = ENV['LANG'] # the locale
+      @language = ENV.fetch('LANG') # the locale
 
-      prnum = ENV[PR_NUM_ENV_VAR]
+      prnum = ENV.fetch(PR_NUM_ENV_VAR, 'false')
       @pull_request = prnum == 'false' ? nil : prnum
     end
 

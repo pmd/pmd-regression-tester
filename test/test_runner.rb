@@ -149,7 +149,7 @@ class TestRunner < Test::Unit::TestCase
 
     # create a empty directory for PMD build to avoid building PMD during test
     fake_pmd_bin = 'target/pmd-bin-6.7.0-pmd_releases_6.7.0-b98bd0bb961d9f82437acccfe64923d992970310'
-    FileUtils.mkdir_p fake_pmd_bin unless Dir.exist?(fake_pmd_bin)
+    FileUtils.mkdir_p fake_pmd_bin
 
     begin
       argv = %w[-r target/repositories/pmd -m online -b master -p pmd_releases/6.7.0

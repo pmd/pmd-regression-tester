@@ -95,8 +95,9 @@ module PmdTester
                  'path to the file which contains the list of standard projects',
                  default: DEFAULT_LIST_PATH
         o.string '-m', '--mode', mode_message, default: 'local'
-        o.integer '-t', '--threads', 'Sets the number of threads used by PMD.' \
-              ' Set threads to 0 to disable multi-threading processing.', default: 1
+        o.integer '-t', '--threads',
+                  'Sets the number of threads used by PMD. Set threads to 0 to disable ' \
+                  'multi-threading processing.', default: 1
         o.bool '-f', '--html-flag',
                'whether to not generate the html diff report in single mode'
         o.bool '-a', '--auto-gen-config',
