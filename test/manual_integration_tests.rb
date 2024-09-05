@@ -49,18 +49,20 @@ class ManualIntegrationTests < Test::Unit::TestCase
     # checkstyle: 195 violations
     # spring-framework: 280 violations
     # openjdk11: 29 violations
-    # -> total = 504
-    assert_equal(195 + 280 + 29, @summary[:violations][:removed], 'found removed violations')
+    # java-regression-tests: 1 violation
+    # -> total = 505
+    assert_equal(195 + 280 + 29 + 1, @summary[:violations][:removed], 'found removed violations')
 
     # errors might have been caused in the baseline for other rules (only visible in the stacktrace)
     # hence they might appear as removed
 
     # project "apex-link" has 2 errors removed, since we only executed java rules
-    # project "checkstyle" has 10 errors removed and 1 changed
-    # project "openjdk-11" has 0 error removed or changed
-    # project "spring-framework" has 1 error removed
+    # project "checkstyle" has 0 errors removed and 1 changed
+    # project "openjdk-11" has 0 errors removed or changed
+    # project "spring-framework" has 0 errors removed or changed
+    # project "java-regression-tests" has 0 errors removed or changed
     # each project has 1 config error removed (LoosePackageCoupling dysfunctional): in total 7 config errors removed
-    assert_equal(13, @summary[:errors][:removed], 'found removed errors')
+    assert_equal(2, @summary[:errors][:removed], 'found removed errors')
     # The stack overflow exception might vary in the beginning/end of the stack frames shown
     # This stack overflow error is from checkstyle's InputIndentationLongConcatenatedString.java
     # instead of assert_equal(0, @summary[:errors][:changed], 'found changed errors')
@@ -73,7 +75,7 @@ class ManualIntegrationTests < Test::Unit::TestCase
 
     assert_equal("This changeset changes 0 violations,\n" \
                  "introduces 0 new violations, 0 new errors and 0 new configuration errors,\n" \
-                 'removes 504 violations, 13 errors and 7 configuration errors.',
+                 'removes 505 violations, 2 errors and 7 configuration errors.',
                  create_summary_message)
 
     assert_file_equals("#{PATCHES_PATH}/expected_patch_config_1.xml", 'target/reports/diff/patch_config.xml')
@@ -99,11 +101,11 @@ class ManualIntegrationTests < Test::Unit::TestCase
     # hence they might appear as removed
 
     # project "apex-link" has 2 errors removed, since we only executed java rules
-    # project "checkstyle" has 5 errors removed and 1 errors changed
-    # project "openjdk-11" has 0 error removed or changed
-    # project "spring-framework" has 1 error removed
+    # project "checkstyle" has 0 errors removed and 1 errors changed
+    # project "openjdk-11" has 0 errors removed or changed
+    # project "spring-framework" has 0 errors removed or changed
     # each project has 1 config error removed (LoosePackageCoupling dysfunctional): in total 7 config errors removed
-    assert_equal(8, @summary[:errors][:removed], 'found removed errors')
+    assert_equal(2, @summary[:errors][:removed], 'found removed errors')
     # The stack overflow exception might vary in the beginning/end of the stack frames shown
     # This stack overflow error is from checkstyle's InputIndentationLongConcatenatedString.java
     # instead of assert_equal(0, @summary[:errors][:changed], 'found changed errors')
@@ -116,7 +118,7 @@ class ManualIntegrationTests < Test::Unit::TestCase
 
     assert_equal("This changeset changes 0 violations,\n" \
                  "introduces 0 new violations, 0 new errors and 0 new configuration errors,\n" \
-                 'removes 22 violations, 8 errors and 7 configuration errors.',
+                 'removes 22 violations, 2 errors and 7 configuration errors.',
                  create_summary_message)
 
     assert_file_equals("#{PATCHES_PATH}/expected_patch_config_2.xml", 'target/reports/diff/patch_config.xml')

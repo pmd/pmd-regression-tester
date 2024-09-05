@@ -93,7 +93,7 @@ module PmdTester
 
       url = get_baseline_url(url_prefix, zip_filename)
       logger.info "Downloading baseline for branch #{branch_name} from #{url}"
-      wget_cmd = "wget --timestamping #{url}"
+      wget_cmd = "wget --no-verbose --timestamping #{url}"
       unzip_cmd = "unzip -qo #{zip_filename}"
 
       Dir.chdir(target_path) do

@@ -1,6 +1,6 @@
-From 478d9f3767a449aefa8fb211e4e11debd9d7a6b6 Mon Sep 17 00:00:00 2001
+From 311f91741d0b1f8e58561e61035e8e432074403c Mon Sep 17 00:00:00 2001
 From: Andreas Dangel <andreas.dangel@pmd-code.org>
-Date: Thu, 4 May 2023 19:58:47 +0200
+Date: Thu, 5 Sep 2024 14:56:46 +0200
 Subject: [PATCH] test case 3 - change in pmd-core
 
 This changes the class PMDVersion which will trigger a
@@ -10,7 +10,7 @@ complete reevaluation of all rules by the regression tester.
  1 file changed, 1 insertion(+)
 
 diff --git a/pmd-core/src/main/java/net/sourceforge/pmd/PMDVersion.java b/pmd-core/src/main/java/net/sourceforge/pmd/PMDVersion.java
-index 96565eca93..a9b134b4ff 100644
+index 19532bd99e..78f61a81cf 100644
 --- a/pmd-core/src/main/java/net/sourceforge/pmd/PMDVersion.java
 +++ b/pmd-core/src/main/java/net/sourceforge/pmd/PMDVersion.java
 @@ -2,6 +2,7 @@
@@ -22,4 +22,5 @@ index 96565eca93..a9b134b4ff 100644
  
  import java.io.IOException;
 -- 
-2.39.2
+2.45.2
+
