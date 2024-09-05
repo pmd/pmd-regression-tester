@@ -324,7 +324,10 @@ class TestPmdReportBuilder < Test::Unit::TestCase
 
   def stub_pmd_build_maven(binary_name:)
     PmdTester::Cmd.stubs(:execute_successfully).with do |cmd|
-      if cmd == './mvnw clean package -Dmaven.test.skip=true' \
+      if cmd == './mvnw clean package ' \
+                  "-s #{PmdTester::ResourceLocator.resource('maven-settings.xml')} " \
+                  ' -Pfor-dokka-maven-plugin' \
+                  ' -Dmaven.test.skip=true' \
                   ' -Dmaven.javadoc.skip=true -Dmaven.source.skip=true' \
                   ' -Dcheckstyle.skip=true -Dpmd.skip=true -T1C -B'
         FileUtils.mkdir_p 'pmd-dist/target'

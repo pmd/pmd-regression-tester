@@ -248,6 +248,8 @@ module PmdTester
     def build_pmd_with_maven
       logger.info "#{@pmd_branch_name}: Building PMD #{@pmd_version}..."
       package_cmd = './mvnw clean package' \
+                    " -s #{ResourceLocator.resource('maven-settings.xml')} " \
+                    ' -Pfor-dokka-maven-plugin' \
                     ' -Dmaven.test.skip=true' \
                     ' -Dmaven.javadoc.skip=true' \
                     ' -Dmaven.source.skip=true' \
