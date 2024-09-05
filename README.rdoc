@@ -136,8 +136,15 @@ The tool creates the following folders:
   bundle exec rake verify # run this command before commit your changes
   bundle exec pmdtester ... # run this to directly execute pmdtester from source
   
+  Run all unit tests:
+  bundle exec rake clean test
+
+  Run all integration tests:
+  bundle exec rake clean integration-test
+
   Run a single test class, e.g.:
   bundle exec ruby -I test test/test_project_diff_report.rb
+  bundle exec ruby -I test test/integration_test_runner.rb
   
   Run a single test, e.g.:
   bundle exec ruby -I test test/test_project_diff_report.rb -n test_diff_report_builder
