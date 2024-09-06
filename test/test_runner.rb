@@ -104,7 +104,7 @@ class TestRunner < Test::Unit::TestCase
     File.stubs(:new).with('target/reports/diff/index.html', anything).returns.once
 
     Dir.stubs(:chdir).with('target/reports').yields.once
-    Cmd.stubs(:execute_successfully).with('wget --timestamping https://sourceforge.net/projects/pmd/files/pmd-regression-tester/master-baseline.zip').once
+    Cmd.stubs(:execute_successfully).with('wget --no-verbose --timestamping https://sourceforge.net/projects/pmd/files/pmd-regression-tester/master-baseline.zip').once
     Cmd.stubs(:execute_successfully).with('unzip -qo master-baseline.zip').once
     ProjectsParser.any_instance.stubs(:parse)
                   .with('target/reports/master/project-list.xml')
