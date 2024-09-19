@@ -28,7 +28,7 @@ module PmdTester
       @type = project.at_xpath('type').text
       @connection = project.at_xpath('connection').text
 
-      @tag = project.at_xpath('tag')&.text || 'master'
+      @tag = project.at_xpath('tag')&.text || 'main'
 
       webview_url_element = project.at_xpath('webview-url')
       @webview_url = default_webview_url

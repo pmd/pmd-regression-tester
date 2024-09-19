@@ -7,12 +7,12 @@ class TestOptions < Test::Unit::TestCase
   include PmdTester
   def test_short_option
     command_line =
-      %w[-r /path/to/repo -b pmd_releases/6.2.0 -p master
+      %w[-r /path/to/repo -b pmd_releases/6.2.0 -p main
          -c config/all-java.xml -l config/project_list.txt -t 4]
     opts = Options.new(command_line)
     assert_equal('/path/to/repo', opts.local_git_repo)
     assert_equal('pmd_releases/6.2.0', opts.base_branch)
-    assert_equal('master', opts.patch_branch)
+    assert_equal('main', opts.patch_branch)
     assert_equal('config/all-java.xml', opts.config)
     assert_equal('config/project_list.txt', opts.project_list)
     assert_equal(4, opts.threads)
@@ -21,19 +21,19 @@ class TestOptions < Test::Unit::TestCase
   def test_long_option
     command_line =
       %w[--local-git-repo /path/to/repo --base-branch pmd_releases/6.2.0
-         --patch-branch master --config config/all-java.xml
+         --patch-branch main --config config/all-java.xml
          --list-of-project config/project_list.txt --threads 4]
     opts = Options.new(command_line)
     assert_equal('/path/to/repo', opts.local_git_repo)
     assert_equal('pmd_releases/6.2.0', opts.base_branch)
-    assert_equal('master', opts.patch_branch)
+    assert_equal('main', opts.patch_branch)
     assert_equal('config/all-java.xml', opts.config)
     assert_equal('config/project_list.txt', opts.project_list)
     assert_equal(4, opts.threads)
   end
 
   def test_default_value
-    command_line = %w[-r /path/to/repo -b pmd_releases/6.2.0 -p master]
+    command_line = %w[-r /path/to/repo -b pmd_releases/6.2.0 -p main]
     opts = Options.new(command_line)
     assert_equal(Options::DEFAULT_CONFIG_PATH, opts.base_config)
     assert_equal(Options::DEFAULT_CONFIG_PATH, opts.patch_config)
@@ -43,33 +43,33 @@ class TestOptions < Test::Unit::TestCase
   end
 
   def test_download_url_with_trailing_slash
-    command_line = %w[-r /path/to/repo -b pmd_releases/6.2.0 -p master --baseline-download-url https://example.com/]
+    command_line = %w[-r /path/to/repo -b pmd_releases/6.2.0 -p main --baseline-download-url https://example.com/]
     opts = Options.new(command_line)
     assert_equal('https://example.com/', opts.baseline_download_url_prefix)
   end
 
   def test_download_url_without_trailing_slash
-    command_line = %w[-r /path/to/repo -b pmd_releases/6.2.0 -p master --baseline-download-url https://example.com]
+    command_line = %w[-r /path/to/repo -b pmd_releases/6.2.0 -p main --baseline-download-url https://example.com]
     opts = Options.new(command_line)
     assert_equal('https://example.com/', opts.baseline_download_url_prefix)
   end
 
   def test_enable_error_recovery
-    command_line = %w[-r /path/to/repo -b pmd_releases/6.2.0 -p master --error-recovery]
+    command_line = %w[-r /path/to/repo -b pmd_releases/6.2.0 -p main --error-recovery]
     opts = Options.new(command_line)
     assert_true(opts.error_recovery)
   end
 
   def test_single_mode
     command_line =
-      %w[-r /path/to/repo -p master -pc config.xml -l list.xml -f -m single]
+      %w[-r /path/to/repo -p main -pc config.xml -l list.xml -f -m single]
     opts = Options.new(command_line)
     assert_equal(true, opts.html_flag)
   end
 
   def test_invalid_mode
     argv =
-      %w[-r /path/to/repo -b pmd_releases/6.2.0 -p master
+      %w[-r /path/to/repo -b pmd_releases/6.2.0 -p main
          -c config/all-java.xml -l config/project_list.txt -m invalid_mode]
     begin
       Options.new(argv)
