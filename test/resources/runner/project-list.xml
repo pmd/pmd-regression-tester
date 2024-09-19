@@ -8,6 +8,7 @@ xsi:noNamespaceSchemaLocation="projectlist_1_1_0.xsd">
     <name>checkstyle</name>
     <type>git</type>
     <connection>https://github.com/checkstyle/checkstyle</connection>
+    <tag>master</tag>
     <exclude-pattern>.*/target/test-classes/com/puppycrawl/tools/checkstyle/.*</exclude-pattern>
     <exclude-pattern>.*/target/generated-sources/.*</exclude-pattern>
     <exclude-pattern>.*/src/test/resources-noncompilable/com/puppycrawl/tools/checkstyle/javaparser/InputJavaParserNoFreezeOnDeeplyNestedLambdas.java</exclude-pattern>

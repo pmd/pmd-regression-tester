@@ -25,9 +25,12 @@ module PmdTester
     def get_pmd_binary_file
       logger.info "#{@pmd_branch_name}: Start packaging PMD"
       Dir.chdir(@local_git_repo) do
-        build_branch_sha = Cmd.execute_successfully("git rev-parse #{@pmd_branch_name}^{commit}")
-
         checkout_build_branch # needs a clean working tree, otherwise fails
+
+        # first checkout the build branch - that might create a local branch from remote, if
+        # a local branch doesn't exist yet. The following "git rev-parse" command only works
+        # for local branches.
+        build_branch_sha = Cmd.execute_successfully("git rev-parse #{@pmd_branch_name}^{commit}")
 
         raise "Wrong branch #{get_last_commit_sha}" unless build_branch_sha == get_last_commit_sha
 

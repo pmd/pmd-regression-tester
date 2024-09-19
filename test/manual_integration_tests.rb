@@ -15,7 +15,7 @@ require 'etc'
 # pmd regression tester is always called in online mode, comparing the pull request against
 # the latest baseline.
 #
-# Test case 5 is creating a new baseline from master.
+# Test case 5 is creating a new baseline from main.
 #
 # The test file is deliberately called "manual_integration_tests" so that it is not picked
 # up by "bundle exec rake integration-test". It has to be run manually via
@@ -182,7 +182,7 @@ class ManualIntegrationTests < Test::Unit::TestCase
     checkout_pmd_branch
     argv = ['--mode', 'single',
             '--local-git-repo', PMD_REPO_PATH,
-            '--patch-branch', 'master',
+            '--patch-branch', 'main',
             '--patch-config', "#{PMD_REPO_PATH}/.ci/files/all-regression-rules.xml",
             '--list-of-project', "#{PMD_REPO_PATH}/.ci/files/project-list.xml",
             '--html-flag',
@@ -197,12 +197,12 @@ class ManualIntegrationTests < Test::Unit::TestCase
 
     print "#############################: test_case_5_create_baseline\n"
     assert_path_not_exist('target/reports/diff')
-    assert_master_baseline
+    assert_main_baseline
   end
 
   private
 
-  def run_pmd_tester(base_branch_name = 'master')
+  def run_pmd_tester(base_branch_name = 'main')
     argv = ['--local-git-repo', PMD_REPO_PATH,
             '--list-of-project', "#{PMD_REPO_PATH}/.ci/files/project-list.xml",
             '--base-branch', base_branch_name,
@@ -224,7 +224,7 @@ class ManualIntegrationTests < Test::Unit::TestCase
 
   #
   # This is the same message as in
-  # https://github.com/pmd/pmd/blob/master/Dangerfile
+  # https://github.com/pmd/pmd/blob/main/Dangerfile
   #
   def create_summary_message
     'This changeset ' \
@@ -237,7 +237,7 @@ class ManualIntegrationTests < Test::Unit::TestCase
       "#{@summary[:configerrors][:removed]} configuration errors."
   end
 
-  def checkout_pmd_branch(branch = 'master')
+  def checkout_pmd_branch(branch = 'main')
     system("git clone https://github.com/pmd/pmd #{PMD_REPO_PATH}") unless File.directory?(PMD_REPO_PATH)
     Dir.chdir(PMD_REPO_PATH) do
       system('git fetch --all')
@@ -251,7 +251,7 @@ class ManualIntegrationTests < Test::Unit::TestCase
     end
   end
 
-  def prepare_patch_branch(patch_file, local_branch, base_branch = 'master')
+  def prepare_patch_branch(patch_file, local_branch, base_branch = 'main')
     absolute_patch_file = File.absolute_path("#{PATCHES_PATH}/#{patch_file}")
     assert_path_exist(absolute_patch_file)
 
@@ -263,20 +263,20 @@ class ManualIntegrationTests < Test::Unit::TestCase
     end
   end
 
-  def assert_master_baseline
-    assert_master_baseline_project('checkstyle', 40 * 1024 * 1024)
-    assert_master_baseline_project('openjdk-11', 80 * 1024 * 1024)
-    assert_master_baseline_project('spring-framework', 100 * 1024 * 1024)
-    assert_master_baseline_project('java-regression-tests', 100 * 1024)
-    assert_master_baseline_project('apex-link', 10 * 1024)
-    assert_master_baseline_project('fflib-apex-common', 400 * 1024)
-    assert_master_baseline_project('Schedul-o-matic-9000', 20 * 1024)
+  def assert_main_baseline
+    assert_main_baseline_project('checkstyle', 40 * 1024 * 1024)
+    assert_main_baseline_project('openjdk-11', 80 * 1024 * 1024)
+    assert_main_baseline_project('spring-framework', 100 * 1024 * 1024)
+    assert_main_baseline_project('java-regression-tests', 100 * 1024)
+    assert_main_baseline_project('apex-link', 10 * 1024)
+    assert_main_baseline_project('fflib-apex-common', 400 * 1024)
+    assert_main_baseline_project('Schedul-o-matic-9000', 20 * 1024)
   end
 
-  def assert_master_baseline_project(project_name, report_size_in_bytes)
-    assert_path_exist("target/reports/master/#{project_name}/config.xml")
-    assert_path_exist("target/reports/master/#{project_name}/report_info.json")
-    assert_path_exist("target/reports/master/#{project_name}/pmd_report.xml")
-    assert(File.size("target/reports/master/#{project_name}/pmd_report.xml") > report_size_in_bytes)
+  def assert_main_baseline_project(project_name, report_size_in_bytes)
+    assert_path_exist("target/reports/main/#{project_name}/config.xml")
+    assert_path_exist("target/reports/main/#{project_name}/report_info.json")
+    assert_path_exist("target/reports/main/#{project_name}/pmd_report.xml")
+    assert(File.size("target/reports/main/#{project_name}/pmd_report.xml") > report_size_in_bytes)
   end
 end

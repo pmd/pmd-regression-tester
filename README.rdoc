@@ -4,7 +4,7 @@ home  :: https://pmd.github.io
 code  :: https://github.com/pmd/pmd-regression-tester
 bugs  :: https://github.com/pmd/pmd-regression-tester/issues
 
-build-status :: {<img src="https://github.com/pmd/pmd-regression-tester/workflows/build/badge.svg?branch=master" alt="Build Status" />}[https://github.com/pmd/pmd-regression-tester/actions?query=workflow%3Abuild]
+build-status :: {<img src="https://github.com/pmd/pmd-regression-tester/workflows/build/badge.svg?branch=main" alt="Build Status" />}[https://github.com/pmd/pmd-regression-tester/actions?query=workflow%3Abuild]
 
 gem-version :: {<img src="https://badge.fury.io/rb/pmdtester.svg" alt="Gem Version" />}[https://rubygems.org/gems/pmdtester]
 
@@ -29,9 +29,9 @@ on a list of standard projects(Spring Framework, Hibernate, Solr, etc.)
     -l, --list-of-project       path to the file which contains the list of standard projects
     -m, --mode                          the mode of the tool: 'local', 'online' or 'single'
           single: Set this option to 'single' if your patch branch contains changes
-            for any option that can't work on master/base branch
+            for any option that can't work on main/base branch
           online: Set this option to 'online' if you want to download
-            the PMD report of master/base branch rather than generating it locally
+            the PMD report of main/base branch rather than generating it locally
           local: Default option is 'local', PMD reports for the base and patch branches are generated locally.
 
     -t, --threads               Sets the number of threads used by PMD. Set threads to 0 to disable multi-threading processing.
@@ -49,7 +49,7 @@ on a list of standard projects(Spring Framework, Hibernate, Solr, etc.)
 
 ==== Run local mode
 
-  pmdtester -b master -p YOUR_DEVELOPMENT_BRANCH -r PATH_TO_LOCAL_PMD_REPO -a
+  pmdtester -b main -p YOUR_DEVELOPMENT_BRANCH -r PATH_TO_LOCAL_PMD_REPO -a
 
 ==== Run single mode
 
@@ -57,7 +57,7 @@ on a list of standard projects(Spring Framework, Hibernate, Solr, etc.)
 
 ==== Run online mode
 
-  pmdtester -b master -p YOUR_DEVELOPMENT_BRANCH -r PATH_TO_LOCAL_PMD_REPO -m online -a
+  pmdtester -b main -p YOUR_DEVELOPMENT_BRANCH -r PATH_TO_LOCAL_PMD_REPO -m online -a
 
 === Output
 The tool creates the following folders:
@@ -159,7 +159,7 @@ The tool creates the following folders:
 * Update History.md and lib/pmdtester.rb for the next development version,
   run again "bundle exec rake verify"
 * Commit ("Prepare next development version x.y.z-SNAPSHOT").
-* Push to master.
+* Push to main.
 * Push the tag. Github Actions will build and publish the new gem
 * A github release is automatically created, verify it on https://github.com/pmd/pmd-regression-tester/releases
 * To make pmd's main CI use the new version (in [pmd/pmd](https://github.com/pmd/pmd/)), go to the root directory and run `bundle lock --update`. Commit these changes. 

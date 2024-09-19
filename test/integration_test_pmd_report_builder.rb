@@ -10,17 +10,17 @@ class IntegrationTestPmdReportBuilder < Test::Unit::TestCase
     `rake clean`
   end
 
-  # Tests whether we can build successfully PMD from the sources of the master branch.
-  # The master branch should always be buildable by the regression tester. For older
+  # Tests whether we can build successfully PMD from the sources of the main branch.
+  # The main branch should always be buildable by the regression tester. For older
   # versions, we can rely on baselines.
   #
   # Note 1: Although a base branch is configured here, this is not used. Only the patch
   # branch is built.
   # Note 2: We use a limited set of projects and rules, to make the test faster.
-  def test_build_master_branch
+  def test_build_main_branch
     argv = ['-r', 'target/repositories/pmd',
             '-b', 'pmd_releases/6.55.0',
-            '-p', 'master',
+            '-p', 'main',
             '-c', 'test/resources/integration_test_pmd_report_builder/pmd7-config.xml',
             '-l', 'test/resources/integration_test_pmd_report_builder/project-test.xml',
             '--error-recovery',
@@ -34,6 +34,6 @@ class IntegrationTestPmdReportBuilder < Test::Unit::TestCase
     builder.build
 
     assert_equal(0, $CHILD_STATUS.exitstatus)
-    assert_path_exist('target/reports/master/checkstyle/pmd_report.xml')
+    assert_path_exist('target/reports/main/checkstyle/pmd_report.xml')
   end
 end

@@ -2,6 +2,17 @@
 
 ## New and Noteworthy
 
+#### New Git default branch - "main"
+
+We are joining the Git community and updating "master" to "main". Using the term "master" for the main
+development branch can be offensive to some people. Existing versions of Git have been always capable of
+working with any branch name and since 2.28.0 (July 2020) the default initial branch is configurable
+(`init.defaultBranch`). Since October 2020, the default branch for new repositories on GitHub
+is "main". Finally, PMD will also use this new name for the main branch in all our own repositories.
+
+Note: The regression tester will also use branch `main` by default now for fetching repositories from the list of
+projects. You might need to add `<tag>master</tag>` for some projects.
+
 ## Enhancements
 * [#123](https://github.com/pmd/pmd-regression-tester/pull/123): Support ruby 3.3.0
 * [#125](https://github.com/pmd/pmd-regression-tester/pull/125): Update rubocop configuration

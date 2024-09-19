@@ -72,7 +72,7 @@ class TestRunner < Test::Unit::TestCase
     Project.any_instance.stubs(:compute_report_diff).twice
     SummaryReportBuilder.any_instance.stubs(:write_all_projects).once
 
-    argv = %w[-r target/repositories/pmd -b master -bc config/design.xml -p pmd_releases/6.1.0
+    argv = %w[-r target/repositories/pmd -b main -bc config/design.xml -p pmd_releases/6.1.0
               -pc config/design.xml -l test/resources/runner/project-test.xml]
     summarized_results = run_runner(argv)
     assert_summarized_diffs(summarized_results)
@@ -90,7 +90,7 @@ class TestRunner < Test::Unit::TestCase
     Project.any_instance.stubs(:compute_report_diff).twice
     SummaryReportBuilder.any_instance.stubs(:write_all_projects).once
 
-    argv = %w[-r target/repositories/pmd -b master -bc config/design.xml -p pmd_releases/6.1.0
+    argv = %w[-r target/repositories/pmd -b main -bc config/design.xml -p pmd_releases/6.1.0
               -pc config/design.xml -l test/resources/runner/project-test.xml -t 5]
     summarized_results = run_runner(argv)
     assert_summarized_diffs(summarized_results)
@@ -104,15 +104,15 @@ class TestRunner < Test::Unit::TestCase
     File.stubs(:new).with('target/reports/diff/index.html', anything).returns.once
 
     Dir.stubs(:chdir).with('target/reports').yields.once
-    Cmd.stubs(:execute_successfully).with('wget --no-verbose --timestamping https://sourceforge.net/projects/pmd/files/pmd-regression-tester/master-baseline.zip').once
-    Cmd.stubs(:execute_successfully).with('unzip -qo master-baseline.zip').once
+    Cmd.stubs(:execute_successfully).with('wget --no-verbose --timestamping https://sourceforge.net/projects/pmd/files/pmd-regression-tester/main-baseline.zip').once
+    Cmd.stubs(:execute_successfully).with('unzip -qo main-baseline.zip').once
     ProjectsParser.any_instance.stubs(:parse)
-                  .with('target/reports/master/project-list.xml')
+                  .with('target/reports/main/project-list.xml')
                   .returns([]).once
 
     PmdReportBuilder.any_instance.stubs(:build).returns(PmdBranchDetail.new('test_branch')).once
 
-    argv = %w[-r target/repositories/pmd -m online -b master -p pmd_releases/6.7.0]
+    argv = %w[-r target/repositories/pmd -m online -b main -p pmd_releases/6.7.0]
     summarized_results = run_runner(argv)
     assert_summarized_diffs(summarized_results)
   end
@@ -122,7 +122,7 @@ class TestRunner < Test::Unit::TestCase
     Dir.stubs(:chdir).with('target/reports').yields.once
     Cmd.stubs(:execute_successfully).twice
     ProjectsParser.any_instance.stubs(:parse)
-                  .with('target/reports/master/project-list.xml')
+                  .with('target/reports/main/project-list.xml')
                   .returns([]).once
 
     report_builder_mock = mock
@@ -135,7 +135,7 @@ class TestRunner < Test::Unit::TestCase
     report_builder_mock.stubs(:build).returns(PmdBranchDetail.new('some_branch')).once
     SummaryReportBuilder.any_instance.stubs(:write_all_projects).once
 
-    argv = %w[-r target/repositories/pmd -m online -b master -p pmd_releases/6.7.0 -t 3]
+    argv = %w[-r target/repositories/pmd -m online -b main -p pmd_releases/6.7.0 -t 3]
     summarized_results = run_runner(argv)
     assert_summarized_diffs(summarized_results)
   end
@@ -143,7 +143,7 @@ class TestRunner < Test::Unit::TestCase
   def test_online_mode_keep_reports_second_run_filtering
     FileUtils.mkdir_p 'target/reports/pmd_releases_6.7.0/checkstyle'
     # placing the baseline zip here avoid downloading it during test run - and we can craft it for the test
-    FileUtils.cp 'test/resources/runner/master-baseline.zip', 'target/reports'
+    FileUtils.cp 'test/resources/runner/main-baseline.zip', 'target/reports'
     # placing the report here avoids running PMD again - and we can craft it for the test
     FileUtils.cp 'test/resources/runner/pmd_report.xml', 'target/reports/pmd_releases_6.7.0/checkstyle/pmd_report.xml'
 
@@ -152,7 +152,7 @@ class TestRunner < Test::Unit::TestCase
     FileUtils.mkdir_p fake_pmd_bin
 
     begin
-      argv = %w[-r target/repositories/pmd -m online -b master -p pmd_releases/6.7.0
+      argv = %w[-r target/repositories/pmd -m online -b main -p pmd_releases/6.7.0
                 --list-of-project test/resources/runner/project-list.xml
                 --keep-reports --filter-with-patch-config
                 --patch-config test/resources/runner/patch-config.xml]

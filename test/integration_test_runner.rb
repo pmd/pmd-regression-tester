@@ -10,14 +10,14 @@ class IntegrationTestRunner < Test::Unit::TestCase
 
   def test_local_mode
     argv = '-r target/repositories/pmd -b pmd_releases/6.41.0 -bc config/design.xml ' \
-           '-p master -pc config/design.xml -l test/resources/integration_test_runner/project-test.xml ' \
+           '-p main -pc config/design.xml -l test/resources/integration_test_runner/project-test.xml ' \
            '--threads ' + Etc.nprocessors.to_s
 
     system("bundle exec bin/pmdtester #{argv}")
 
     assert_equal(0, $CHILD_STATUS.exitstatus)
-    assert_path_exist('target/reports/master/checkstyle/pmd_report.xml')
-    assert_path_exist('target/reports/master/pmd/pmd_report.xml')
+    assert_path_exist('target/reports/main/checkstyle/pmd_report.xml')
+    assert_path_exist('target/reports/main/pmd/pmd_report.xml')
     assert_path_exist('target/reports/pmd_releases_6.41.0/checkstyle/pmd_report.xml')
     assert_path_exist('target/reports/pmd_releases_6.41.0/checkstyle/config.xml')
     assert_path_exist('target/reports/pmd_releases_6.41.0/pmd/pmd_report.xml')

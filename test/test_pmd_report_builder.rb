@@ -10,7 +10,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     # create a empty pmd repo directory
     FileUtils.mkdir_p 'target/repositories/pmd'
     # remove any cached distro_patch
-    FileUtils.rm_rf "target/pmd-bin-#{@pmd_version}-master-sha1abc"
+    FileUtils.rm_rf "target/pmd-bin-#{@pmd_version}-main-sha1abc"
   end
 
   def teardown
@@ -30,7 +30,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
 
   def test_build_skip
     projects = []
-    argv = %w[-r target/repositories/pmd -b master -p pmd_releases/6.1.0
+    argv = %w[-r target/repositories/pmd -b main -p pmd_releases/6.1.0
               -c config/design.xml -l test/resources/pmd_report_builder/project-test.xml]
     options = PmdTester::Options.new(argv)
 
@@ -43,12 +43,12 @@ class TestPmdReportBuilder < Test::Unit::TestCase
   end
 
   # In CI, there is no previous existing distro that can be reused,
-  # that means target/pmd-bin-6.10.0-SNAPSHOT-master-sha1abc does not
+  # that means target/pmd-bin-6.10.0-SNAPSHOT-main-sha1abc does not
   # exist. However, pmd-dist/target/pmd-bin-6.10.0-SNAPSHOT.zip exists
   # from a previous build and should be reused.
   def test_build_skip_ci
     projects = []
-    argv = %w[-r target/repositories/pmd -b master -p pmd_releases/6.1.0
+    argv = %w[-r target/repositories/pmd -b main -p pmd_releases/6.1.0
               -c config/design.xml -l test/resources/pmd_report_builder/project-test.xml]
     options = PmdTester::Options.new(argv)
 
@@ -62,7 +62,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     ).once
     PmdTester::Cmd.stubs(:execute_successfully).with(
       "mv pmd-dist/target/exploded/pmd-bin-#{@pmd_version} " \
-      "#{Dir.getwd}/target/pmd-bin-#{@pmd_version}-master-sha1abc"
+      "#{Dir.getwd}/target/pmd-bin-#{@pmd_version}-main-sha1abc"
     ).once
     record_expectations_after_build
 
@@ -74,7 +74,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
   # with PMD7, the dist bin file is called pmd-dist/target/pmd-dist-7.0.0-bin-SNAPSHOT.zip
   def test_build_skip_ci_pmd7
     projects = []
-    argv = %w[-r target/repositories/pmd -b master -p pmd_releases/6.55.0
+    argv = %w[-r target/repositories/pmd -b main -p pmd_releases/6.55.0
               -c config/design.xml -l test/resources/pmd_report_builder/project-test.xml -d]
     options = PmdTester::Options.new(argv)
 
@@ -88,7 +88,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     ).once
     PmdTester::Cmd.stubs(:execute_successfully).with(
       "mv pmd-dist/target/exploded/pmd-bin-#{@pmd_version} " \
-      "#{Dir.getwd}/target/pmd-bin-#{@pmd_version}-master-sha1abc"
+      "#{Dir.getwd}/target/pmd-bin-#{@pmd_version}-main-sha1abc"
     ).once
     record_expectations_after_build
 
@@ -99,7 +99,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
 
   def test_build_normal
     projects = []
-    argv = %w[-r target/repositories/pmd -b master -p pmd_releases/6.1.0
+    argv = %w[-r target/repositories/pmd -b main -p pmd_releases/6.1.0
               -c config/design.xml -l test/resources/pmd_report_builder/project-test.xml]
     options = PmdTester::Options.new(argv)
 
@@ -112,7 +112,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     ).once
     PmdTester::Cmd.stubs(:execute_successfully).with(
       "mv pmd-dist/target/exploded/pmd-bin-#{@pmd_version} " \
-      "#{Dir.getwd}/target/pmd-bin-#{@pmd_version}-master-sha1abc"
+      "#{Dir.getwd}/target/pmd-bin-#{@pmd_version}-main-sha1abc"
     ).once
     record_expectations_after_build
 
@@ -123,7 +123,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
 
   def test_build_normal_pmd7
     projects = []
-    argv = %w[-r target/repositories/pmd -b master -p pmd_releases/6.1.0
+    argv = %w[-r target/repositories/pmd -b main -p pmd_releases/6.1.0
               -c config/design.xml -l test/resources/pmd_report_builder/project-test.xml]
     options = PmdTester::Options.new(argv)
 
@@ -136,7 +136,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     ).once
     PmdTester::Cmd.stubs(:execute_successfully).with(
       "mv pmd-dist/target/exploded/pmd-bin-#{@pmd_version} " \
-      "#{Dir.getwd}/target/pmd-bin-#{@pmd_version}-master-sha1abc"
+      "#{Dir.getwd}/target/pmd-bin-#{@pmd_version}-main-sha1abc"
     ).once
     record_expectations_after_build
 
@@ -149,7 +149,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     project_list = 'test/resources/pmd_report_builder/project-list.xml'
     projects = PmdTester::ProjectsParser.new.parse(project_list)
     assert_equal(1, projects.size)
-    argv = %w[-r target/repositories/pmd -b master -p pmd_releases/6.1.0
+    argv = %w[-r target/repositories/pmd -b main -p pmd_releases/6.1.0
               -c config/design.xml --debug -l]
     argv.push project_list
     options = PmdTester::Options.new(argv)
@@ -164,7 +164,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
       .build
 
     expected = File.read('test/resources/pmd_report_builder/expected-config.xml')
-    actual = File.read('target/reports/master/checkstyle/config.xml')
+    actual = File.read('target/reports/main/checkstyle/config.xml')
     assert_equal(expected, actual)
   end
 
@@ -172,7 +172,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     project_list = 'test/resources/pmd_report_builder/project-list.xml'
     projects = PmdTester::ProjectsParser.new.parse(project_list)
     assert_equal(1, projects.size)
-    argv = %w[-r target/repositories/pmd -b master -p pmd_releases/6.1.0
+    argv = %w[-r target/repositories/pmd -b main -p pmd_releases/6.1.0
               -c config/design.xml --debug --error-recovery -l]
     argv.push project_list
     options = PmdTester::Options.new(argv)
@@ -192,7 +192,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     project_list = 'test/resources/pmd_report_builder/project-list.xml'
     projects = PmdTester::ProjectsParser.new.parse(project_list)
     assert_equal(1, projects.size)
-    argv = %w[-r target/repositories/pmd -b master -p pmd_releases/6.1.0
+    argv = %w[-r target/repositories/pmd -b main -p pmd_releases/6.1.0
               -c config/design.xml --debug --error-recovery -l]
     argv.push project_list
     options = PmdTester::Options.new(argv)
@@ -213,7 +213,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     project_list = 'test/resources/pmd_report_builder/project-list.xml'
     projects = PmdTester::ProjectsParser.new.parse(project_list)
     assert_equal(1, projects.size)
-    argv = %w[-r target/repositories/pmd -b master -p pmd_releases/6.1.0
+    argv = %w[-r target/repositories/pmd -b main -p pmd_releases/6.1.0
               -c config/design.xml --debug --error-recovery -l]
     argv.push project_list
     options = PmdTester::Options.new(argv)
@@ -242,7 +242,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     project_list = 'test/resources/pmd_report_builder/project-list.xml'
     projects = PmdTester::ProjectsParser.new.parse(project_list)
     assert_equal(1, projects.size)
-    argv = %w[-r target/repositories/pmd -b master -p pmd_releases/6.1.0
+    argv = %w[-r target/repositories/pmd -b main -p pmd_releases/6.1.0
               -c config/design.xml --debug --error-recovery -l]
     argv.push project_list
     options = PmdTester::Options.new(argv)
@@ -281,28 +281,28 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     PmdTester::SimpleProgressLogger.any_instance.stubs(:start).once
     PmdTester::SimpleProgressLogger.any_instance.stubs(:stop).once
     error_prefix = error ? 'PMD_JAVA_OPTS="-Dpmd.error_recovery -ea" ' : ''
-    distro_path = "#{Dir.getwd}/target/pmd-bin-#{@pmd_version}-master-#{sha1}"
+    distro_path = "#{Dir.getwd}/target/pmd-bin-#{@pmd_version}-main-#{sha1}"
     process_status = mock
     process_status.expects(:exitstatus).returns(exit_status).once
     PmdTester::Cmd.stubs(:execute)
                   .with("#{error_prefix}" \
                         "#{distro_path}/bin/#{base_cmd} " \
                         '-d target/repositories/checkstyle -f xml ' \
-                        '-R target/reports/master/checkstyle/config.xml ' \
-                        '-r target/reports/master/checkstyle/pmd_report.xml ' \
+                        '-R target/reports/main/checkstyle/config.xml ' \
+                        '-r target/reports/main/checkstyle/pmd_report.xml ' \
                         "#{fail_on_violation} -t 1 #{auxclasspath_option}" \
                         "#{no_progress_bar ? ' --no-progress' : ''}",
-                        'target/reports/master/checkstyle').once
+                        'target/reports/main/checkstyle').once
                   .returns(process_status)
                   .once
     PmdTester::PmdReportDetail.stubs(:create).once.with { |params| params[:exit_code] == exit_status }
   end
 
   def record_expectations(sha1_head:, sha1_base:, zip_file_exists:)
-    PmdTester::Cmd.stubs(:execute_successfully).with('git rev-parse master^{commit}').returns(sha1_base).once
+    PmdTester::Cmd.stubs(:execute_successfully).with('git rev-parse main^{commit}').returns(sha1_base).once
     # inside checkout_build_branch
-    PmdTester::Cmd.stubs(:execute_successfully).with('git checkout master')
-                  .returns('checked out branch master').once
+    PmdTester::Cmd.stubs(:execute_successfully).with('git checkout main')
+                  .returns('checked out branch main').once
     PmdTester::Cmd.stubs(:execute_successfully).with(
       './mvnw -q -Dexec.executable="echo" ' \
       "-Dexec.args='${project.version}' " \
@@ -313,7 +313,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     # back into get_pmd_binary_file
     PmdTester::Cmd.stubs(:execute_successfully).with('git rev-parse HEAD^{commit}').returns(sha1_head).once
     # PMD binary might not exist yet...
-    distro_path = "target/pmd-bin-#{@pmd_version}-master-#{sha1_base}"
+    distro_path = "target/pmd-bin-#{@pmd_version}-main-#{sha1_base}"
     if zip_file_exists
       FileUtils.mkdir_p(distro_path)
     else
@@ -324,13 +324,13 @@ class TestPmdReportBuilder < Test::Unit::TestCase
   def record_expectations_after_build
     PmdTester::Cmd.stubs(:execute_successfully).with('git log -1 --pretty=%B').returns('the commit message').once
     PmdTester::PmdBranchDetail.any_instance.stubs(:save).once
-    FileUtils.stubs(:cp).with('config/design.xml', 'target/reports/master/config.xml').once
+    FileUtils.stubs(:cp).with('config/design.xml', 'target/reports/main/config.xml').once
   end
 
   # Creates a fake pmd script file as .../bin/pmd.
   # This is used in the new PMD 7 CLI interface
   def prepare_pmd_dist_dir(version:, sha1:)
-    pmd_cli_cmd = "#{Dir.getwd}/target/pmd-bin-#{version}-master-#{sha1}/bin"
+    pmd_cli_cmd = "#{Dir.getwd}/target/pmd-bin-#{version}-main-#{sha1}/bin"
     FileUtils.mkdir_p(pmd_cli_cmd)
     File.new("#{pmd_cli_cmd}/pmd", 'w')
     pmd_cli_cmd
