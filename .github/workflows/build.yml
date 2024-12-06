@@ -25,6 +25,7 @@ jobs:
         path: |
           ~/.m2/repository
           ~/.cache
+          ~/.gradle
           vendor/bundle
           target/repositories
         key: v3-${{ runner.os }}-${{ hashFiles('pmdtester.gemspec') }}
