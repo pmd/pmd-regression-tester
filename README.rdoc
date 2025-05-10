@@ -101,26 +101,31 @@ The tool creates the following folders:
 
 == REQUIREMENTS:
 
-* Ruby 2.7 or higher
+* Ruby 3.3 or higher
 
 === Runtime dependency
 
-  nokogiri ~> 1.13
-  slop ~> 4.6
+  nokogiri ~> 1.18
+  slop ~> 4.10
   differ ~> 0.1
-  rufus-scheduler ~> 3.8
+  rufus-scheduler ~> 3.9
   logger-colors ~> 1.0
-  liquid ~> 5.2
+  liquid ~> 5.8
+  base64 ~> 0.2
+  bigdecimal ~> 3.1
+  logger ~> 1.6
 
 === Development dependency
 
+  hoe ~> 4.2
   hoe-bundler ~> 1.5
   hoe-git ~> 1.6
-  minitest ~> 5.10
-  mocha ~> 1.5
-  rubocop ~> 0.93
-  test-unit ~> 3.5
-  rdoc ~> 6.4
+  minitest ~> 5.25
+  mocha ~> 2.7
+  rubocop ~> 1.74
+  test-unit ~> 3.6
+  rdoc ~> 6.12
+  rake ~> 13.2
 
 == INSTALL:
 
