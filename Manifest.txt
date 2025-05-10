@@ -1,8 +1,6 @@
-.ci/build.sh
-.ci/inc/fetch_ci_scripts.bash
-.ci/manual-integration-tests.sh
 .github/workflows/build.yml
 .github/workflows/manual-integration-tests.yml
+.github/workflows/publish-release.yml
 .gitignore
 .hoerc
 .rubocop.yml
