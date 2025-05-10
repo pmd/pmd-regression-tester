@@ -1,0 +1,140 @@
+name: Publish Release
+
+on:
+  workflow_run:
+    workflows: [Build]
+    types:
+      - completed
+    branches:
+      - '**'
+
+permissions:
+  contents: read # to fetch code (actions/checkout)
+
+env:
+  LANG: 'en_US.UTF-8'
+
+jobs:
+  check-version:
+    # only run in the official pmd/pmd-regression-tester repo, where we have access to the secrets and not on forks
+    # and only run for _successful_ push workflow runs on tags "releases/**".
+    if: ${{ github.repository == 'pmd/pmd-regression-tester'
+      && contains(fromJSON('["push", "workflow_dispatch"]'), github.event.workflow_run.event)
+      && github.event.workflow_run.head_branch != 'main'
+      && github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        shell: bash
+    outputs:
+      VERSION: ${{ steps.version.outputs.VERSION }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_branch }}
+      - name: Set up Ruby 3.3
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.3
+      - name: Install dependencies (bundler)
+        run: |
+          # bundler should already be installed
+          bundle --version
+          bundle config set --local path vendor/bundle
+          bundle install
+      - name: Determine Version
+        id: version
+        env:
+          REF: ${{ github.event.workflow_run.head_branch }}
+        run: |
+          if ! git show-ref --exists "refs/tags/$REF"; then
+            echo "::error ::Tag $REF does not exist, aborting."
+            exit 1
+          fi
+          
+          VERSION="$(bundle exec ruby -I. -e 'require "lib/pmdtester"; print PmdTester::VERSION;')"
+          echo "Determined VERSION=$VERSION"
+          if [[ "$VERSION" = *-SNAPSHOT ]]; then
+            echo "::error ::VERSION=$VERSION is a snapshot version, aborting."
+            exit 1
+          fi
+          echo "VERSION=$VERSION" >> "$GITHUB_OUTPUT"
+      - name: Add Job Summary
+        env:
+          WORKFLOW_RUN_DISPLAY_TITLE: ${{ github.event.workflow_run.display_title }}
+          WORKFLOW_RUN_NAME: ${{ github.event.workflow_run.name }}
+          WORKFLOW_RUN_NUMBER: ${{ github.event.workflow_run.run_number }}
+          WORKFLOW_RUN_HTML_URL: ${{ github.event.workflow_run.html_url }}
+          VERSION: ${{ steps.version.outputs.VERSION }}
+          TAG: ${{ github.event.workflow_run.head_branch }}
+        run: |
+          echo "### Run Info" >> "${GITHUB_STEP_SUMMARY}"
+          echo "Building Version: ${VERSION}" >> "${GITHUB_STEP_SUMMARY}"
+          echo "" >> "${GITHUB_STEP_SUMMARY}"
+          echo "Tag: ${TAG}" >> "${GITHUB_STEP_SUMMARY}"
+          echo "" >> "${GITHUB_STEP_SUMMARY}"
+          echo "Called by [${WORKFLOW_RUN_DISPLAY_TITLE} (${WORKFLOW_RUN_NAME} #${WORKFLOW_RUN_NUMBER})](${WORKFLOW_RUN_HTML_URL})" >> "${GITHUB_STEP_SUMMARY}"
+          echo "" >> "${GITHUB_STEP_SUMMARY}"
+
+  publish-to-rubygems:
+    needs: check-version
+    # use environment rubygems, where secrets are configured for GEM_HOST_API_KEY
+    environment:
+      name: rubygems
+      url: https://rubygems.org/gems/pmdtester
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # to create a release (via gh cli)
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Set up Ruby 3.3
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.3
+      - name: Install dependencies (bundler)
+        run: |
+          # bundler should already be installed
+          bundle --version
+          bundle config set --local path vendor/bundle
+          bundle install
+      - name: Build with rake
+        run: |
+          bundle exec rake check_manifest
+          bundle exec rake rubocop
+          bundle exec rake clean test
+      - name: Build Package
+        run: |
+          bundle exec rake install_gem
+      - name: Publish to rubygems
+        env:
+          GEM_HOST_API_KEY: ${{ secrets.GEM_HOST_API_KEY }}
+        run: |
+          gem build pmdtester.gemspec
+          gempkgfile="$(echo pmdtester-*.gem)"
+          gem push "${gempkgfile}"
+      - name: Create GitHub Release
+        env:
+          # Token required for GH CLI:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG_NAME: ${{ github.event.workflow_run.head_branch }}
+          VERSION: ${{ needs.check-version.outputs.VERSION }}
+        run: |
+          # extract the release notes
+          RELEASE_NAME="${VERSION}"
+          BEGIN_LINE=$(grep -n "^# " History.md|head -1|cut -d ":" -f 1)
+          BEGIN_LINE=$((BEGIN_LINE + 1))
+          END_LINE=$(grep -n "^# " History.md|head -2|tail -1|cut -d ":" -f 1)
+          END_LINE=$((END_LINE - 1))
+          RELEASE_BODY="$(head -$END_LINE History.md | tail -$((END_LINE - BEGIN_LINE)))"
+          echo "${RELEASE_BODY}" > release_notes.md
+
+          gempkgfile="$(echo pmdtester-*.gem)"
+
+          gh release create "$TAG_NAME" "${gempkgfile}" \
+              --verify-tag \
+              --notes-file release_notes.md \
+              --title "$RELEASE_NAME"
