@@ -21,6 +21,7 @@ projects. You might need to add `<tag>master</tag>` for some projects.
 * [#126](https://github.com/pmd/pmd-regression-tester/pull/126): Fix integration tests
 * [#127](https://github.com/pmd/pmd-regression-tester/pull/127): Fix manual integration tests
 * [#129](https://github.com/pmd/pmd-regression-tester/pull/129): Update manual integration tests
+* [#131](https://github.com/pmd/pmd-regression-tester/pull/131): Refactor GitHub Actions Workflows
 
 ## External Contributions
 
