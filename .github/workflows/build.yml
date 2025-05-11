@@ -1,57 +1,75 @@
-name: build
+name: Build
 
 on:
+  pull_request:
+  merge_group:
   push:
     branches:
-      - main
-    tags:
       - '**'
-  pull_request:
+      # don't run on dependabot branches. Dependabot will create pull requests, which will then be run instead
+      - '!dependabot/**'
+  workflow_dispatch:
   schedule:
     # build it monthly: At 04:30 on day-of-month 1.
     - cron:  '30 4 1 * *'
-  workflow_dispatch:
+
+# if another commit is added to the same branch or PR (same github.ref),
+# then cancel already running jobs and start a new build.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read # to fetch code (actions/checkout)
+
+env:
+  LANG: 'en_US.UTF-8'
 
 jobs:
-  build:
-    timeout-minutes: 120
+  compile:
     runs-on: ubuntu-latest
-    continue-on-error: false
-    if: ${{ !contains(github.event.head_commit.message, '[skip ci]') }}
+    timeout-minutes: 120
+    defaults:
+      run:
+        shell: bash
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/cache@v4
-      with:
-        path: |
-          ~/.m2/repository
-          ~/.cache
-          ~/.gradle
-          vendor/bundle
-          target/repositories
-        key: v3-${{ runner.os }}-${{ hashFiles('pmdtester.gemspec') }}
-        restore-keys: |
-          v3-${{ runner.os }}-
-    - name: Set up Ruby 3.3
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: 3.3
-    - name: Setup Environment
-      shell: bash
-      run: |
-        echo "LANG=en_US.UTF-8" >> $GITHUB_ENV
-        echo "MAVEN_OPTS=-Dmaven.wagon.httpconnectionManager.ttlSeconds=180 -Dmaven.wagon.http.retryHandler.count=3" >> $GITHUB_ENV
-        echo "PMD_CI_SCRIPTS_URL=https://raw.githubusercontent.com/pmd/build-tools/main/scripts" >> $GITHUB_ENV
-    - name: Check Environment
-      shell: bash
-      run: |
-        f=check-environment.sh; \
-        mkdir -p .ci && \
-        ( [ -e .ci/$f ] || curl -sSL "${PMD_CI_SCRIPTS_URL}/$f" > ".ci/$f" ) && \
-        chmod 755 .ci/$f && \
-        .ci/$f
-    - name: Build
-      run: .ci/build.sh
-      shell: bash
-      env:
-        PMD_CI_SECRET_PASSPHRASE: ${{ secrets.PMD_CI_SECRET_PASSPHRASE }}
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '11'
+      - name: Prepare HOME/openjdk11
+        run: ln -sfn "${JAVA_HOME_11_X64}" "${HOME}/openjdk11"
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.m2/repository
+            ~/.cache
+            ~/.gradle
+            vendor/bundle
+            target/repositories
+          key: v4-${{ runner.os }}-${{ hashFiles('pmdtester.gemspec') }}
+          restore-keys: |
+            v4-${{ runner.os }}-
+      - name: Set up Ruby 3.3
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.3
+      - name: Install dependencies (bundler)
+        run: |
+          # bundler should already be installed
+          bundle --version
+          bundle config set --local path vendor/bundle
+          bundle install
+      - name: Build with rake
+        run: |
+          bundle exec rake check_manifest
+          bundle exec rake rubocop
+          bundle exec rake clean test
+      - name: Run Integration Tests
+        run: |
+          bundle exec rake clean integration-test
+      - name: Build Package
+        run: |
+          bundle exec rake install_gem
+          bundle exec pmdtester -h
