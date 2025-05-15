@@ -23,6 +23,7 @@ projects. You might need to add `<tag>master</tag>` for some projects.
 * [#129](https://github.com/pmd/pmd-regression-tester/pull/129): Update manual integration tests
 * [#131](https://github.com/pmd/pmd-regression-tester/pull/131): Refactor GitHub Actions Workflows
 * [#132](https://github.com/pmd/pmd-regression-tester/pull/132): Fix manual integration test - Update expected_patch_config_3.xml: no more plsql exclusion
+* [#133](https://github.com/pmd/pmd-regression-tester/pull/133): \[ci] Make build a reuseable workflow
 
 ## External Contributions
 
