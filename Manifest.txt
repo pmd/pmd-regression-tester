@@ -1,3 +1,6 @@
+.github/workflows/build-pr.yml
+.github/workflows/build-release.yml
+.github/workflows/build-snapshot.yml
 .github/workflows/build.yml
 .github/workflows/manual-integration-tests.yml
 .github/workflows/publish-release.yml
