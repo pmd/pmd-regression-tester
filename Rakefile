@@ -34,7 +34,7 @@ hoe = Hoe.spec 'pmdtester' do
     ['hoe-git',       '~> 1.6'],
     ['minitest',      '~> 5.16'],
     ['mocha',         '~> 1.16'],
-    ['rubocop',       '~> 1.60'],
+    ['rubocop',       '~> 1.79'],
     ['test-unit',     '~> 3.5'],
     ['rdoc',          '~> 6.4'],
     # Pin rake to 13.1.0, which is still compatible with hoe. See https://github.com/seattlerb/hoe/pull/118
