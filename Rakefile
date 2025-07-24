@@ -26,9 +26,9 @@ hoe = Hoe.spec 'pmdtester' do
     ['rufus-scheduler', '~> 3.9'],
     ['logger-colors',   '~> 1.0'],
     ['liquid',          '~> 5.8'],
-    ['base64',          '~> 0.2'],
-    ['bigdecimal',      '~> 3.1'],
-    ['logger',          '~> 1.6']
+    ['base64',          '~> 0.3'],
+    ['bigdecimal',      '~> 3.2'],
+    ['logger',          '~> 1.7']
   ]
   self.extra_dev_deps += [
     ['hoe-bundler',   '~> 1.5'],
@@ -36,9 +36,9 @@ hoe = Hoe.spec 'pmdtester' do
     ['minitest',      '~> 5.25'],
     ['mocha',         '~> 2.7'],
     ['rubocop',       '~> 1.79'],
-    ['test-unit',     '~> 3.6'],
+    ['test-unit',     '~> 3.7'],
     ['rdoc',          '~> 6.12'],
-    ['rake',          '~> 13.2'],
+    ['rake',          '~> 13.3'],
     ['hoe',           '~> 4.2'],
   ]
   spec_extras[:required_ruby_version] = '>= 3.3'

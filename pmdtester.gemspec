@@ -21,7 +21,7 @@ Gem::Specification.new do |s|
   s.licenses = ["BSD-2-Clause".freeze]
   s.rdoc_options = ["--main".freeze, "README.rdoc".freeze]
   s.required_ruby_version = Gem::Requirement.new(">= 3.3".freeze)
-  s.rubygems_version = "3.5.22".freeze
+  s.rubygems_version = "3.6.2".freeze
   s.summary = "A regression testing tool ensure that new problems and unexpected behaviors will not be introduced to PMD project after fixing an issue , and new rules can work as expected.".freeze
 
   s.specification_version = 4
@@ -32,17 +32,17 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency(%q<rufus-scheduler>.freeze, ["~> 3.9".freeze])
   s.add_runtime_dependency(%q<logger-colors>.freeze, ["~> 1.0".freeze])
   s.add_runtime_dependency(%q<liquid>.freeze, ["~> 5.8".freeze])
-  s.add_runtime_dependency(%q<base64>.freeze, ["~> 0.2".freeze])
-  s.add_runtime_dependency(%q<bigdecimal>.freeze, ["~> 3.1".freeze])
-  s.add_runtime_dependency(%q<logger>.freeze, ["~> 1.6".freeze])
+  s.add_runtime_dependency(%q<base64>.freeze, ["~> 0.3".freeze])
+  s.add_runtime_dependency(%q<bigdecimal>.freeze, ["~> 3.2".freeze])
+  s.add_runtime_dependency(%q<logger>.freeze, ["~> 1.7".freeze])
   s.add_development_dependency(%q<hoe-bundler>.freeze, ["~> 1.5".freeze])
   s.add_development_dependency(%q<hoe-git>.freeze, ["~> 1.6".freeze])
   s.add_development_dependency(%q<minitest>.freeze, ["~> 5.25".freeze])
   s.add_development_dependency(%q<mocha>.freeze, ["~> 2.7".freeze])
   s.add_development_dependency(%q<rubocop>.freeze, ["~> 1.79".freeze])
-  s.add_development_dependency(%q<test-unit>.freeze, ["~> 3.6".freeze])
+  s.add_development_dependency(%q<test-unit>.freeze, ["~> 3.7".freeze])
   s.add_development_dependency(%q<rdoc>.freeze, ["~> 6.12".freeze])
-  s.add_development_dependency(%q<rake>.freeze, ["~> 13.2".freeze])
+  s.add_development_dependency(%q<rake>.freeze, ["~> 13.3".freeze])
   s.add_development_dependency(%q<hoe>.freeze, ["~> 4.2".freeze])
 end
 
