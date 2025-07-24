@@ -154,7 +154,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
 
     # PMD binary does not exist yet this time...
     record_expectations(sha1_head: 'sha1abc', sha1_base: 'sha1abc', zip_file_exists: false)
-    stub_pmd_build_maven_new_pmd7_build()
+    stub_pmd_build_maven_new_pmd7_build
     PmdTester::Cmd.stubs(:execute_successfully).with(
       "unzip -qo pmd-dist/target/pmd-dist-#{@pmd_version}-bin.zip " \
       '-d pmd-dist/target/exploded'
@@ -316,7 +316,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
                         '-R target/reports/main/checkstyle/config.xml ' \
                         '-r target/reports/main/checkstyle/pmd_report.xml ' \
                         "#{fail_on_violation} -t 1 #{auxclasspath_option}" \
-                        "#{no_progress_bar ? ' --no-progress' : ''}",
+                        "#{' --no-progress' if no_progress_bar}",
                         'target/reports/main/checkstyle').once
                   .returns(process_status)
                   .once
@@ -383,7 +383,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     end.once
   end
 
-  def stub_pmd_build_maven_new_pmd7_build()
+  def stub_pmd_build_maven_new_pmd7_build
     PmdTester::Cmd.stubs(:execute_successfully).with do |cmd|
       if cmd == './mvnw clean package ' \
                 '-PfastSkip ' \
