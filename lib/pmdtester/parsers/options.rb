@@ -10,6 +10,7 @@ module PmdTester
   # command line options
   class Options
     include PmdTester
+
     ANY = 'any'
     LOCAL = 'local'
     ONLINE = 'online'

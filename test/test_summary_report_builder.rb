@@ -6,6 +6,7 @@ require 'test_helper'
 class TestSummaryReportBuilder < Test::Unit::TestCase
   include TestUtils
   include PmdTester::PmdTesterUtils
+
   def setup
     `rake clean`
   end

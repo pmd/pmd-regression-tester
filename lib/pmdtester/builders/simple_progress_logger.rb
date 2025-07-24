@@ -6,6 +6,7 @@ module PmdTester
   # Helper class that provides a simple progress logging
   class SimpleProgressLogger
     include PmdTester
+
     def initialize(task_name)
       @task_name = task_name
     end

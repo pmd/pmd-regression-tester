@@ -102,7 +102,7 @@ module PmdTester
                 "-r #{project.get_pmd_report_path(@pmd_branch_name)} " \
                 "#{fail_on_violation} -t #{@threads} " \
                 "#{auxclasspath_option}" \
-                "#{pmd7? ? ' --no-progress' : ''}"
+                "#{' --no-progress' if pmd7?}"
       start_time = Time.now
       exit_code = nil
       if File.exist?(project.get_pmd_report_path(@pmd_branch_name))
@@ -173,7 +173,7 @@ module PmdTester
       # determine the version
       @pmd_version = determine_pmd_version
 
-      return unless wd_has_dirty_git_changes
+      return unless wd_has_dirty_git_changes?
 
       # working dir is dirty....
       # we don't allow this because we need the SHA to address the zip file
@@ -193,7 +193,7 @@ module PmdTester
         "-#{build_sha}"
     end
 
-    def wd_has_dirty_git_changes
+    def wd_has_dirty_git_changes?
       !Cmd.execute_successfully('git status --porcelain').empty?
     end
 

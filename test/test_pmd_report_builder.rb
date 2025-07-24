@@ -291,7 +291,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
                         '-R target/reports/main/checkstyle/config.xml ' \
                         '-r target/reports/main/checkstyle/pmd_report.xml ' \
                         "#{fail_on_violation} -t 1 #{auxclasspath_option}" \
-                        "#{no_progress_bar ? ' --no-progress' : ''}",
+                        "#{' --no-progress' if no_progress_bar}",
                         'target/reports/main/checkstyle').once
                   .returns(process_status)
                   .once
