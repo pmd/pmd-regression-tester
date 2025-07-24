@@ -20,27 +20,28 @@ hoe = Hoe.spec 'pmdtester' do
 
   self.clean_globs = %w[target/reports/**/* target/test/**/* target/dynamic-config.xml]
   self.extra_deps += [
-    ['nokogiri',        '~> 1.13'],
-    ['slop',            '~> 4.9'],
+    ['nokogiri',        '~> 1.18'],
+    ['slop',            '~> 4.10'],
     ['differ',          '~> 0.1'],
-    ['rufus-scheduler', '~> 3.8'],
+    ['rufus-scheduler', '~> 3.9'],
     ['logger-colors',   '~> 1.0'],
-    ['liquid',          '~> 5.4'],
-    ['base64',          '~> 0.2'],
-    ['bigdecimal',      '~> 3.1'],
+    ['liquid',          '~> 5.8'],
+    ['base64',          '~> 0.3'],
+    ['bigdecimal',      '~> 3.2'],
+    ['logger',          '~> 1.7']
   ]
   self.extra_dev_deps += [
     ['hoe-bundler',   '~> 1.5'],
     ['hoe-git',       '~> 1.6'],
-    ['minitest',      '~> 5.16'],
-    ['mocha',         '~> 1.16'],
-    ['rubocop',       '~> 1.60'],
-    ['test-unit',     '~> 3.5'],
-    ['rdoc',          '~> 6.4'],
-    # Pin rake to 13.1.0, which is still compatible with hoe. See https://github.com/seattlerb/hoe/pull/118
-    ['rake',          '13.1.0']
+    ['minitest',      '~> 5.25'],
+    ['mocha',         '~> 2.7'],
+    ['rubocop',       '~> 1.79'],
+    ['test-unit',     '~> 3.7'],
+    ['rdoc',          '~> 6.12'],
+    ['rake',          '~> 13.3'],
+    ['hoe',           '~> 4.2'],
   ]
-  spec_extras[:required_ruby_version] = '>= 2.7'
+  spec_extras[:required_ruby_version] = '>= 3.3'
 
   license 'BSD-2-Clause'
 end
