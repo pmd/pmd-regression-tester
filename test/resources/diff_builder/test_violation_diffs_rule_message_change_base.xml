@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd xmlns="http://pmd.sourceforge.net/report/2.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://pmd.sourceforge.net/report/2.0.0 https://pmd.github.io/schema/report_2_0_0.xsd"
+    version="6.3.0-SNAPSHOT" timestamp="2018-04-16T22:41:45.065">
+<file name="File1.java">
+<violation beginline="7" endline="8" begincolumn="1" endcolumn="2" rule="GenericNaming" ruleset="Codestyle" class="Null" method="Null" externalInfoUrl="http://pmd.sourceforge.net/snapshot/pmd_rules_java_codestyle.html#genericnaming" priority="3">
+  Same message for the two violations on the same line.
+</violation>
+<violation beginline="7" endline="8" begincolumn="1" endcolumn="2" rule="GenericNaming" ruleset="Codestyle" class="Null" method="Null" externalInfoUrl="http://pmd.sourceforge.net/snapshot/pmd_rules_java_codestyle.html#genericnaming" priority="3">
+  Same message for the two violations on the same line.
+</violation>
+</file>
+</pmd>
