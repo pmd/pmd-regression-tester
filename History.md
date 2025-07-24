@@ -1,8 +1,8 @@
-# 1.5.6-SNAPSHOT / ????-??-??
+# 1.6.0-SNAPSHOT / ????-??-??
 
 ## New and Noteworthy
 
-#### New Git default branch - "main"
+### New Git default branch - "main"
 
 We are joining the Git community and updating "master" to "main". Using the term "master" for the main
 development branch can be offensive to some people. Existing versions of Git have been always capable of
@@ -12,6 +12,10 @@ is "main". Finally, PMD will also use this new name for the main branch in all o
 
 Note: The regression tester will also use branch `main` by default now for fetching repositories from the list of
 projects. You might need to add `<tag>master</tag>` for some projects.
+
+### Required Ruby version
+
+With this version, Ruby 3.3 or higher is required.
 
 ## Enhancements
 * [#123](https://github.com/pmd/pmd-regression-tester/pull/123): Support ruby 3.3.0
@@ -27,6 +31,7 @@ projects. You might need to add `<tag>master</tag>` for some projects.
 * [#136](https://github.com/pmd/pmd-regression-tester/pull/136): Fix integration tests - missing pmd-core:jar:tests
 
 ## Dependency Updates
+* [#130](https://github.com/pmd/pmd-regression-tester/pull/130): Update gems and required ruby version
 * [#135](https://github.com/pmd/pmd-regression-tester/pull/135): Bump rubocop 1.79
 
 ## External Contributions
