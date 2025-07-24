@@ -31,6 +31,7 @@ With this version, Ruby 3.3 or higher is required.
 * [#136](https://github.com/pmd/pmd-regression-tester/pull/136): Fix integration tests - missing pmd-core:jar:tests
 
 ## Dependency Updates
+* [#130](https://github.com/pmd/pmd-regression-tester/pull/130): Update gems and required ruby version
 * [#135](https://github.com/pmd/pmd-regression-tester/pull/135): Bump rubocop 1.79
 
 ## External Contributions
