@@ -5,6 +5,7 @@ require 'test_helper'
 # Unit test class for PmdTester::PmdReportDetail
 class TestPmdReportDetail < Test::Unit::TestCase
   include PmdTester
+
   def test_save_and_load
     dir = 'target/reports/test_branch'
     FileUtils.mkdir(dir) unless File.directory?(dir)

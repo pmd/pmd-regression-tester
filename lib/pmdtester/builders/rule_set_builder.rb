@@ -9,6 +9,7 @@ module PmdTester
   # Attention: we only consider java rulesets now.
   class RuleSetBuilder
     include PmdTester
+
     PATH_TO_DYNAMIC_CONFIG = 'target/dynamic-config.xml'
     NO_RULES_CHANGED_MESSAGE = 'No regression tested rules have been changed!'
 
@@ -126,7 +127,7 @@ module PmdTester
       categories = Set[]
       rules = Set[]
       filenames.each do |filename|
-        matched = check_single_filename(filename, categories, rules)
+        matched = check_single_filename?(filename, categories, rules)
         regression_test_required = true if matched
 
         next if matched
@@ -140,7 +141,7 @@ module PmdTester
       [regression_test_required, categories, rules]
     end
 
-    def check_single_filename(filename, categories, rules)
+    def check_single_filename?(filename, categories, rules)
       logger.debug "Checking #{filename}"
 
       # matches Java-based rule implementations

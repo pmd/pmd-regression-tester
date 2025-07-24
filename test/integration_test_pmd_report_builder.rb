@@ -6,6 +6,7 @@ require 'etc'
 # Integration test for PmdTester::PmdReportBuilder
 class IntegrationTestPmdReportBuilder < Test::Unit::TestCase
   include PmdTester
+
   def setup
     `rake clean`
   end

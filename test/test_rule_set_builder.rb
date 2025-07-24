@@ -12,7 +12,7 @@ class TestRuleSetBuilder < Test::Unit::TestCase
     FileUtils.rm_rf filename
   end
 
-  def mock_build(diff_filenames, filter_set = nil, patch_config = nil)
+  def mock_build?(diff_filenames, filter_set = nil, patch_config = nil)
     options = mock
     options.expects(:patch_config).returns(Options::DEFAULT_CONFIG_PATH)
     options.expects(:local_git_repo).returns('.')
@@ -38,8 +38,8 @@ class TestRuleSetBuilder < Test::Unit::TestCase
       pmd-java/src/main/java/net/sourceforge/pmd/lang/java/rule/codestyle/UnnecessaryReturnValueRule.java
       pmd-java/src/main/java/net/sourceforge/pmd/lang/java/rule/codestyle/UnnecessaryConstructorRule.java
     DOC
-    mock_build(diff_filenames, Set['java/design.xml/NcssCount', 'java/codestyle.xml/UnnecessaryReturnValue',
-                                   'java/codestyle.xml/UnnecessaryConstructor'])
+    mock_build?(diff_filenames, Set['java/design.xml/NcssCount', 'java/codestyle.xml/UnnecessaryReturnValue',
+                                    'java/codestyle.xml/UnnecessaryConstructor'])
 
     expected = File.read("#{PATH_TO_TEST_RESOURCES}/expected-design-codestyle.xml")
     actual = File.read(RuleSetBuilder::PATH_TO_DYNAMIC_CONFIG)
@@ -53,7 +53,7 @@ class TestRuleSetBuilder < Test::Unit::TestCase
       pmd-java/src/main/java/net/sourceforge/pmd/lang/java/rule/codestyle/UnnecessaryConstructorRule.java
       pmd-core/src/main/java/net/sourceforge/pmd/lang/rule/xpath/SaxonXPathRuleQuery.java
     DOC
-    mock_build(diff_filenames, nil, "#{PATH_TO_TEST_RESOURCES}/patch-ruleset.xml")
+    mock_build?(diff_filenames, nil, "#{PATH_TO_TEST_RESOURCES}/patch-ruleset.xml")
 
     assert(!File.exist?(RuleSetBuilder::PATH_TO_DYNAMIC_CONFIG),
            "File #{RuleSetBuilder::PATH_TO_DYNAMIC_CONFIG} must not exist")
@@ -66,7 +66,7 @@ class TestRuleSetBuilder < Test::Unit::TestCase
       pmd-java/src/main/java/net/sourceforge/pmd/lang/java/rule/codestyle/UnnecessaryConstructorRule.java
       pmd-core/src/main/java/net/sourceforge/pmd/lang/rule/xpath/SaxonXPathRuleQuery.java
     DOC
-    mock_build(diff_filenames, nil, "#{PATH_TO_TEST_RESOURCES}/patch-ruleset.xml")
+    mock_build?(diff_filenames, nil, "#{PATH_TO_TEST_RESOURCES}/patch-ruleset.xml")
 
     assert(!File.exist?(RuleSetBuilder::PATH_TO_DYNAMIC_CONFIG),
            "File #{RuleSetBuilder::PATH_TO_DYNAMIC_CONFIG} must not exist")
@@ -76,7 +76,7 @@ class TestRuleSetBuilder < Test::Unit::TestCase
     diff_filenames = <<~DOC
       pmd-java/src/main/java/net/sourceforge/pmd/lang/java/rule/design/NcssCountRule.java
     DOC
-    mock_build(diff_filenames, Set['java/design.xml/NcssCount'])
+    mock_build?(diff_filenames, Set['java/design.xml/NcssCount'])
 
     expected = File.read("#{PATH_TO_TEST_RESOURCES}/expected-ncsscount.xml")
     actual = File.read(RuleSetBuilder::PATH_TO_DYNAMIC_CONFIG)
@@ -88,7 +88,7 @@ class TestRuleSetBuilder < Test::Unit::TestCase
       pmd-java/src/main/java/net/sourceforge/pmd/lang/java/rule/design/NcssCountRule.java
       pmd-java/src/main/resources/category/java/codestyle.xml
     DOC
-    mock_build(diff_filenames, Set['java/design.xml/NcssCount', 'java/codestyle.xml'])
+    mock_build?(diff_filenames, Set['java/design.xml/NcssCount', 'java/codestyle.xml'])
 
     expected = <<~DOC
       <?xml version="1.0" encoding="UTF-8"?>
@@ -107,7 +107,7 @@ class TestRuleSetBuilder < Test::Unit::TestCase
       pmd-java/src/main/java/net/sourceforge/pmd/lang/java/rule/design/NcssCountRule.java
       pmd-java/src/main/resources/category/java/design.xml
     DOC
-    mock_build(diff_filenames, Set['java/design.xml'])
+    mock_build?(diff_filenames, Set['java/design.xml'])
 
     expected = <<~DOC
       <?xml version="1.0" encoding="UTF-8"?>
@@ -137,7 +137,7 @@ class TestRuleSetBuilder < Test::Unit::TestCase
     diff_filenames = <<~DOC
       pmd-apex/src/main/java/net/sourceforge/pmd/lang/apex/rule/bestpractices/AvoidGlobalModifierRule.java
     DOC
-    mock_build(diff_filenames, Set['apex/bestpractices.xml/AvoidGlobalModifier'])
+    mock_build?(diff_filenames, Set['apex/bestpractices.xml/AvoidGlobalModifier'])
 
     expected = <<~DOC
       <?xml version="1.0" encoding="UTF-8"?>
@@ -154,7 +154,7 @@ class TestRuleSetBuilder < Test::Unit::TestCase
     diff_filenames = <<~DOC
       pmd-apex/src/main/resources/category/apex/codestyle.xml
     DOC
-    mock_build(diff_filenames, Set['apex/codestyle.xml'])
+    mock_build?(diff_filenames, Set['apex/codestyle.xml'])
 
     expected = <<~DOC
       <?xml version="1.0" encoding="UTF-8"?>
@@ -171,7 +171,7 @@ class TestRuleSetBuilder < Test::Unit::TestCase
     diff_filenames = <<~DOC
       pmd-salesforce/pmd-apex/src/main/resources/category/apex/codestyle.xml
     DOC
-    mock_build(diff_filenames, Set['apex/codestyle.xml'])
+    mock_build?(diff_filenames, Set['apex/codestyle.xml'])
 
     expected = <<~DOC
       <?xml version="1.0" encoding="UTF-8"?>
@@ -189,7 +189,7 @@ class TestRuleSetBuilder < Test::Unit::TestCase
       pmd-apex/src/main/java/net/sourceforge/pmd/lang/apex/rule/bestpractices/AvoidGlobalModifierRule.java
       pmd-apex/src/main/resources/category/apex/codestyle.xml
     DOC
-    mock_build(diff_filenames, Set['apex/bestpractices.xml/AvoidGlobalModifier', 'apex/codestyle.xml'])
+    mock_build?(diff_filenames, Set['apex/bestpractices.xml/AvoidGlobalModifier', 'apex/codestyle.xml'])
 
     expected = <<~DOC
       <?xml version="1.0" encoding="UTF-8"?>
@@ -210,8 +210,8 @@ class TestRuleSetBuilder < Test::Unit::TestCase
       pmd-java/src/main/java/net/sourceforge/pmd/lang/java/rule/design/NcssCountRule.java
       pmd-java/src/main/resources/category/java/codestyle.xml
     DOC
-    mock_build(diff_filenames, Set['apex/bestpractices.xml/AvoidGlobalModifier', 'apex/codestyle.xml',
-                                   'java/design.xml/NcssCount', 'java/codestyle.xml'])
+    mock_build?(diff_filenames, Set['apex/bestpractices.xml/AvoidGlobalModifier', 'apex/codestyle.xml',
+                                    'java/design.xml/NcssCount', 'java/codestyle.xml'])
 
     expected = <<~DOC
       <?xml version="1.0" encoding="UTF-8"?>

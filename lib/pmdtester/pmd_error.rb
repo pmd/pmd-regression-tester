@@ -5,6 +5,7 @@ module PmdTester
   # and which Pmd branch the 'error' is from
   class PmdError
     include PmdTester
+
     # The pmd branch type, 'base' or 'patch'
     attr_reader :branch
 

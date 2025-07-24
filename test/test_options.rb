@@ -5,6 +5,7 @@ require 'test_helper'
 # Unit test for PmdTester::Options
 class TestOptions < Test::Unit::TestCase
   include PmdTester
+
   def test_short_option
     command_line =
       %w[-r /path/to/repo -b pmd_releases/6.2.0 -p main
