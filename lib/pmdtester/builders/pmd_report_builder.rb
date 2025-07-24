@@ -251,24 +251,24 @@ module PmdTester
     def build_pmd_with_maven
       logger.info "#{@pmd_branch_name}: Building PMD #{@pmd_version}..."
 
-      if Semver.compare(@pmd_version, '7.14.0') >= 0
-        # build command since PMD migrated to central portal
-        package_cmd = './mvnw clean package ' \
-                      '-PfastSkip ' \
-                      '-DskipTests ' \
-                      '-T1C -B'
-      else
-        # build command for older PMD versions
-        package_cmd = './mvnw clean package ' \
-                      "-s #{ResourceLocator.resource('maven-settings.xml')} " \
-                      '-Pfor-dokka-maven-plugin ' \
-                      '-Dmaven.test.skip=true ' \
-                      '-Dmaven.javadoc.skip=true ' \
-                      '-Dmaven.source.skip=true ' \
-                      '-Dcheckstyle.skip=true ' \
-                      '-Dpmd.skip=true ' \
-                      '-T1C -B'
-      end
+      package_cmd = if Semver.compare(@pmd_version, '7.14.0') >= 0
+                      # build command since PMD migrated to central portal
+                      './mvnw clean package ' \
+                        '-PfastSkip ' \
+                        '-DskipTests ' \
+                        '-T1C -B'
+                    else
+                      # build command for older PMD versions
+                      './mvnw clean package ' \
+                        "-s #{ResourceLocator.resource('maven-settings.xml')} " \
+                        '-Pfor-dokka-maven-plugin ' \
+                        '-Dmaven.test.skip=true ' \
+                        '-Dmaven.javadoc.skip=true ' \
+                        '-Dmaven.source.skip=true ' \
+                        '-Dcheckstyle.skip=true ' \
+                        '-Dpmd.skip=true ' \
+                        '-T1C -B'
+                    end
 
       logger.debug "#{@pmd_branch_name}: maven command: #{package_cmd}"
       Cmd.execute_successfully(package_cmd)
