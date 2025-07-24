@@ -105,7 +105,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
 
     # PMD binary does not exist yet this time...
     record_expectations(sha1_head: 'sha1abc', sha1_base: 'sha1abc', zip_file_exists: false)
-    stub_pmd_build_maven(binary_name: "pmd-bin-#{@pmd_version}.zip")
+    stub_pmd_build_maven(binary_name: "pmd-bin-#{@pmd_version}.zip") # file is pmd-bin-...
     PmdTester::Cmd.stubs(:execute_successfully).with(
       "unzip -qo pmd-dist/target/pmd-bin-#{@pmd_version}.zip " \
       '-d pmd-dist/target/exploded'
@@ -129,7 +129,32 @@ class TestPmdReportBuilder < Test::Unit::TestCase
 
     # PMD binary does not exist yet this time...
     record_expectations(sha1_head: 'sha1abc', sha1_base: 'sha1abc', zip_file_exists: false)
-    stub_pmd_build_maven(binary_name: "pmd-dist-#{@pmd_version}-bin.zip")
+    stub_pmd_build_maven(binary_name: "pmd-dist-#{@pmd_version}-bin.zip") # file is pmd-dist-...
+    PmdTester::Cmd.stubs(:execute_successfully).with(
+      "unzip -qo pmd-dist/target/pmd-dist-#{@pmd_version}-bin.zip " \
+      '-d pmd-dist/target/exploded'
+    ).once
+    PmdTester::Cmd.stubs(:execute_successfully).with(
+      "mv pmd-dist/target/exploded/pmd-bin-#{@pmd_version} " \
+      "#{Dir.getwd}/target/pmd-bin-#{@pmd_version}-main-sha1abc"
+    ).once
+    record_expectations_after_build
+
+    PmdTester::PmdReportBuilder
+      .new(projects, options, options.base_config, options.base_branch)
+      .build
+  end
+
+  def test_build_normal_pmd7_new_build
+    @pmd_version = '7.14.0'
+    projects = []
+    argv = %w[-r target/repositories/pmd -b main -p pmd_releases/7.14.0
+              -c config/design.xml -l test/resources/pmd_report_builder/project-test.xml]
+    options = PmdTester::Options.new(argv)
+
+    # PMD binary does not exist yet this time...
+    record_expectations(sha1_head: 'sha1abc', sha1_base: 'sha1abc', zip_file_exists: false)
+    stub_pmd_build_maven_new_pmd7_build()
     PmdTester::Cmd.stubs(:execute_successfully).with(
       "unzip -qo pmd-dist/target/pmd-dist-#{@pmd_version}-bin.zip " \
       '-d pmd-dist/target/exploded'
@@ -351,6 +376,21 @@ class TestPmdReportBuilder < Test::Unit::TestCase
                 '-Dcheckstyle.skip=true -Dpmd.skip=true -T1C -B'
         FileUtils.mkdir_p 'pmd-dist/target'
         FileUtils.touch "pmd-dist/target/#{binary_name}"
+        true
+      else
+        false
+      end
+    end.once
+  end
+
+  def stub_pmd_build_maven_new_pmd7_build()
+    PmdTester::Cmd.stubs(:execute_successfully).with do |cmd|
+      if cmd == './mvnw clean package ' \
+                '-PfastSkip ' \
+                '-DskipTests ' \
+                '-T1C -B'
+        FileUtils.mkdir_p 'pmd-dist/target'
+        FileUtils.touch "pmd-dist/target/pmd-dist-#{@pmd_version}-bin.zip"
         true
       else
         false
