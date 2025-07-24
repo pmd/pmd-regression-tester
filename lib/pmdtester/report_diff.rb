@@ -211,7 +211,7 @@ module PmdTester
       # Values are lists of violations/errors
       diffs = base_hash.to_h.merge(patch_hash.to_h) do |_key, base_value, patch_value|
         # make the difference of values
-        (base_value | patch_value) - (base_value & patch_value)
+        (base_value + patch_value) - (base_value & patch_value)
       end
 
       diffs.delete_if do |_key, value|

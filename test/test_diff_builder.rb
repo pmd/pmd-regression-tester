@@ -38,6 +38,24 @@ class TestDiffBuilder < Test::Unit::TestCase
     # assert_equal('00:00:56', diffs_report.diff_execution_time)
   end
 
+  def test_violation_diffs_rule_message_change
+    base_report_path = 'test/resources/diff_builder/test_violation_diffs_rule_message_change_base.xml'
+    patch_report_path = 'test/resources/diff_builder/test_violation_diffs_rule_message_change_patch.xml'
+    diffs_report = build_report_diff(base_report_path, patch_report_path,
+                                     BASE_REPORT_INFO_PATH, PATCH_REPORT_INFO_PATH)
+    violation_diffs = diffs_report.violation_diffs_by_file
+    keys = violation_diffs.keys
+
+    assert_counters_empty(diffs_report.error_counts)
+    assert_counters_eq(diffs_report.violation_counts,
+                       base_total: 2, patch_total: 2, changed_total: 4)
+    assert_changes_eq(diffs_report.violation_counts,
+                      removed: 2, added: 2, changed: 0)
+
+    assert_equal('File1.java', keys[0])
+    assert_equal(4, violation_diffs[keys[0]].size)
+  end
+
   def test_violation_diffs_with_filter
     base_report_path = 'test/resources/diff_builder/test_violation_diffs_base.xml'
     patch_report_path = 'test/resources/diff_builder/test_violation_diffs_patch.xml'
