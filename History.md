@@ -1,3 +1,15 @@
+# 1.6.1-SNAPSHOT / ????-??-??
+
+## New and Noteworthy
+
+## Enhancements
+
+## Fixed Issues
+
+## Dependency Updates
+
+## External Contributions
+
 # 1.6.0 / 2025-07-25
 
 ## New and Noteworthy
