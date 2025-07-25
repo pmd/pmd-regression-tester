@@ -91,6 +91,9 @@ jobs:
       run:
         shell: bash
     steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_branch }}
       - name: Set up Ruby 3.3
         uses: ruby/setup-ruby@v1
         with:
@@ -135,6 +138,7 @@ jobs:
           gempkgfile="$(echo pmdtester-*.gem)"
 
           gh release create "$TAG_NAME" "${gempkgfile}" \
+              --repo pmd/pmd-regression-tester \
               --verify-tag \
               --notes-file release_notes.md \
               --title "$RELEASE_NAME"
