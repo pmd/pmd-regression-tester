@@ -5,6 +5,7 @@
 ## Enhancements
 
 ## Fixed Issues
+* [#139](https://github.com/pmd/pmd-regression-tester/pull/139): chore: CI Improvements
 
 ## Dependency Updates
 
