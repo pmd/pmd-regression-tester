@@ -6,9 +6,10 @@
 
 ## Fixed Issues
 * [#124](https://github.com/pmd/pmd-regression-tester/issues/124): With `--auto-gen-config` invalid rule references might be generated
-* [#139](https://github.com/pmd/pmd-regression-tester/pull/139): chore: CI Improvements
+* [#138](https://github.com/pmd/pmd-regression-tester/pull/138): chore(ci): Fix public-release workflow
+* [#139](https://github.com/pmd/pmd-regression-tester/pull/139): chore(ci): CI Improvements
 
-## Merge pull requests
+## Merged pull requests
 * [#141](https://github.com/pmd/pmd-regression-tester/pull/141): Fix #124: If an abstract rule is changed, run all rules - [UncleOwen](https://github.com/UncleOwen) (@UncleOwen)
 
 ## Dependency Updates
