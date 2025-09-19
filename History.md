@@ -5,6 +5,7 @@
 ## Enhancements
 
 ## Fixed Issues
+* [#138](https://github.com/pmd/pmd-regression-tester/pull/138): \[ci] Fix public-release workflow
 
 ## Dependency Updates
 
