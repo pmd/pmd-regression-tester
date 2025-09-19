@@ -146,7 +146,7 @@ module PmdTester
 
       # matches Java-based rule implementations
       match_data = %r{.+/src/main/java/.+/lang/([^/]+)/rule/([^/]+)/([^/]+)Rule.java}.match(filename)
-      unless match_data.nil?
+      unless match_data.nil? || match_data[3].start_with?('Abstract')
         logger.debug "Matches: #{match_data.inspect}"
         rules.add("#{match_data[1]}/#{match_data[2]}.xml/#{match_data[3]}")
         return true

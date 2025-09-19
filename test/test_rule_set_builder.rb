@@ -46,6 +46,16 @@ class TestRuleSetBuilder < Test::Unit::TestCase
     assert_equal(expected, actual)
   end
 
+  def test_build_all_rulesets_config_abstract_rule_changed
+    diff_filenames = <<~DOC
+      pmd-java/src/main/java/net/sourceforge/pmd/lang/java/rule/internal/AbstractJavaRulechainRule.java
+    DOC
+    mock_build?(diff_filenames, nil, "#{PATH_TO_TEST_RESOURCES}/patch-ruleset.xml")
+
+    assert(!File.exist?(RuleSetBuilder::PATH_TO_DYNAMIC_CONFIG),
+           "File #{RuleSetBuilder::PATH_TO_DYNAMIC_CONFIG} must not exist")
+  end
+
   def test_build_all_rulesets_config
     diff_filenames = <<~DOC
       pmd-apex/src/main/java/net/sourceforge/pmd/lang/apex/rule/bestpractices/AvoidGlobalModifierRule.java
