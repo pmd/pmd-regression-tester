@@ -1,3 +1,10 @@
+# 1.6.2 / ????-??-??
+## New and Noteworthy
+## Enhancements
+## Fixed Issues
+## Merged pull requests
+## Dependency Updates
+
 # 1.6.1 / 2025-09-19
 
 ## Fixed Issues
