@@ -15,7 +15,7 @@ class TestRuleSetBuilder < Test::Unit::TestCase
   def mock_build?(diff_filenames, filter_set = nil, patch_config = nil)
     options = mock
     options.expects(:patch_config).returns(Options::DEFAULT_CONFIG_PATH)
-    options.expects(:local_git_repo).returns('.')
+    options.expects(:local_git_repo).returns("#{PATH_TO_TEST_RESOURCES}/partial-pmd-repo").twice
     options.expects(:base_branch).returns('base_branch')
     options.expects(:patch_branch).returns('patch_branch')
     options.expects(:filter_set=).with(filter_set)
@@ -46,9 +46,23 @@ class TestRuleSetBuilder < Test::Unit::TestCase
     assert_equal(expected, actual)
   end
 
-  def test_build_all_rulesets_config_abstract_rule_changed
+  def test_build_all_rulesets_config_internal_abstract_class_changed
+    # AbstractJavaRulechainRule is not a rule but an abstract base class for real rules. It lives
+    # in an internal package. "internal" is not a valid ruleset category.
     diff_filenames = <<~DOC
       pmd-java/src/main/java/net/sourceforge/pmd/lang/java/rule/internal/AbstractJavaRulechainRule.java
+    DOC
+    mock_build?(diff_filenames, nil, "#{PATH_TO_TEST_RESOURCES}/patch-ruleset.xml")
+
+    assert(!File.exist?(RuleSetBuilder::PATH_TO_DYNAMIC_CONFIG),
+           "File #{RuleSetBuilder::PATH_TO_DYNAMIC_CONFIG} must not exist")
+  end
+
+  def test_build_all_rulesets_config_abstract_class_changed
+    # AbstractNamingConventionRule is not a rule despite its name, it an abstract base class for real rules.
+    # It lives in a normal category package. "codestyle" is a valid ruleset category.
+    diff_filenames = <<~DOC
+      pmd-java/src/main/java/net/sourceforge/pmd/lang/java/rule/codestyle/AbstractNamingConventionRule.java
     DOC
     mock_build?(diff_filenames, nil, "#{PATH_TO_TEST_RESOURCES}/patch-ruleset.xml")
 
@@ -89,6 +103,17 @@ class TestRuleSetBuilder < Test::Unit::TestCase
     mock_build?(diff_filenames, Set['java/design.xml/NcssCount'])
 
     expected = File.read("#{PATH_TO_TEST_RESOURCES}/expected-ncsscount.xml")
+    actual = File.read(RuleSetBuilder::PATH_TO_DYNAMIC_CONFIG)
+    assert_equal(expected, actual)
+  end
+
+  def test_filter_ruleset_single_rule_named_abstract
+    diff_filenames = <<~DOC
+      pmd-java/src/main/java/net/sourceforge/pmd/lang/java/rule/bestpractices/AbstractClassWithoutAbstractMethodRule.java
+    DOC
+    mock_build?(diff_filenames, Set['java/bestpractices.xml/AbstractClassWithoutAbstractMethod'])
+
+    expected = File.read("#{PATH_TO_TEST_RESOURCES}/expected-abstractclasswithoutabstractmethod.xml")
     actual = File.read(RuleSetBuilder::PATH_TO_DYNAMIC_CONFIG)
     assert_equal(expected, actual)
   end
