@@ -3,6 +3,7 @@
 ## Enhancements
 ## Fixed Issues
 ## Merged pull requests
+* [#143](https://github.com/pmd/pmd-regression-tester/pull/143): chore(ci): Use java 17 as default - [Andreas Dangel](https://github.com/adangel) (@adangel)
 ## Dependency Updates
 
 # 1.6.1 / 2025-09-19
