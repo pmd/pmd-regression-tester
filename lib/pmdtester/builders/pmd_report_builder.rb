@@ -250,16 +250,18 @@ module PmdTester
 
     def build_pmd_with_maven
       logger.info "#{@pmd_branch_name}: Building PMD #{@pmd_version}..."
+      extra_java_home = nil
 
       package_cmd = if Semver.compare(@pmd_version, '7.14.0') >= 0
                       # build command since PMD migrated to central portal
-                      './mvnw clean package ' \
+                      './mvnw clean package -V ' \
                         '-PfastSkip ' \
                         '-DskipTests ' \
                         '-T1C -B'
                     else
+                      extra_java_home = "#{Dir.home}/openjdk11"
                       # build command for older PMD versions
-                      './mvnw clean package ' \
+                      './mvnw clean package -V ' \
                         "-s #{ResourceLocator.resource('maven-settings.xml')} " \
                         '-Pfor-dokka-maven-plugin ' \
                         '-Dmaven.test.skip=true ' \
@@ -270,8 +272,8 @@ module PmdTester
                         '-T1C -B'
                     end
 
-      logger.debug "#{@pmd_branch_name}: maven command: #{package_cmd}"
-      Cmd.execute_successfully(package_cmd)
+      logger.debug "#{@pmd_branch_name}: maven command: #{package_cmd} java_home: #{extra_java_home}"
+      Cmd.execute_successfully(package_cmd, extra_java_home)
     end
   end
 end

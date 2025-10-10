@@ -13,7 +13,7 @@ module PmdTester
     # in path.
     #
     def self.execute(cmd, path)
-      stdout, stderr, status = internal_execute(cmd)
+      stdout, stderr, status = internal_execute(cmd, nil)
 
       file = File.new("#{path}/stdout.txt", 'w')
       file.puts stdout
@@ -26,8 +26,8 @@ module PmdTester
       status
     end
 
-    def self.execute_successfully(cmd)
-      stdout, stderr, status = internal_execute(cmd)
+    def self.execute_successfully(cmd, extra_java_home = nil)
+      stdout, stderr, status = internal_execute(cmd, extra_java_home)
 
       unless status.success?
         logger.error "Command failed: #{cmd}"
@@ -40,14 +40,20 @@ module PmdTester
     end
 
     def self.stderr_of(cmd)
-      _stdout, stderr, _status = internal_execute(cmd)
+      _stdout, stderr, _status = internal_execute(cmd, nil)
       stderr
     end
 
-    def self.internal_execute(cmd)
-      logger.debug "execute command '#{cmd}'"
+    def self.internal_execute(cmd, extra_java_home)
+      logger.debug "execute command '#{cmd}' (extra_java_home: #{extra_java_home})"
 
-      stdout, stderr, status = Open3.capture3("#{cmd};")
+      new_env = ENV.to_h
+      unless extra_java_home.nil?
+        new_env['JAVA_HOME'] = extra_java_home
+        new_env['PATH'] = "#{extra_java_home}/bin:#{new_env['PATH']}"
+      end
+
+      stdout, stderr, status = Open3.capture3(new_env, "#{cmd};")
 
       logger.debug "status: #{status}"
       logger.debug "stdout: #{stdout}"
