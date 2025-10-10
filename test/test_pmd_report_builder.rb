@@ -388,7 +388,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     PmdTester::Cmd.stubs(:execute_successfully).with do |cmd, extra_java_home|
       if cmd == './mvnw clean package -V ' \
                 '-PfastSkip ' \
-                '-Dmaven.test.skip=true ' \
+                '-DskipTests ' \
                 '-T1C -B' &&
          extra_java_home.nil?
         FileUtils.mkdir_p 'pmd-dist/target'

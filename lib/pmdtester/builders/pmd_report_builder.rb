@@ -256,7 +256,7 @@ module PmdTester
                       # build command since PMD migrated to central portal
                       './mvnw clean package -V ' \
                         '-PfastSkip ' \
-                        '-Dmaven.test.skip=true ' \
+                        '-DskipTests ' \
                         '-T1C -B'
                     else
                       extra_java_home = "#{Dir.home}/openjdk11"
