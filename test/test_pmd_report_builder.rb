@@ -367,13 +367,14 @@ class TestPmdReportBuilder < Test::Unit::TestCase
   end
 
   def stub_pmd_build_maven(binary_name:)
-    PmdTester::Cmd.stubs(:execute_successfully).with do |cmd|
-      if cmd == './mvnw clean package ' \
+    PmdTester::Cmd.stubs(:execute_successfully).with do |cmd, extra_java_home|
+      if cmd == './mvnw clean package -V ' \
                 "-s #{PmdTester::ResourceLocator.resource('maven-settings.xml')} " \
                 '-Pfor-dokka-maven-plugin ' \
                 '-Dmaven.test.skip=true ' \
                 '-Dmaven.javadoc.skip=true -Dmaven.source.skip=true ' \
-                '-Dcheckstyle.skip=true -Dpmd.skip=true -T1C -B'
+                '-Dcheckstyle.skip=true -Dpmd.skip=true -T1C -B' &&
+         extra_java_home == "#{Dir.home}/openjdk11"
         FileUtils.mkdir_p 'pmd-dist/target'
         FileUtils.touch "pmd-dist/target/#{binary_name}"
         true
@@ -384,11 +385,12 @@ class TestPmdReportBuilder < Test::Unit::TestCase
   end
 
   def stub_pmd_build_maven_new_pmd7_build
-    PmdTester::Cmd.stubs(:execute_successfully).with do |cmd|
-      if cmd == './mvnw clean package ' \
+    PmdTester::Cmd.stubs(:execute_successfully).with do |cmd, extra_java_home|
+      if cmd == './mvnw clean package -V ' \
                 '-PfastSkip ' \
                 '-DskipTests ' \
-                '-T1C -B'
+                '-T1C -B' &&
+         extra_java_home.nil?
         FileUtils.mkdir_p 'pmd-dist/target'
         FileUtils.touch "pmd-dist/target/pmd-dist-#{@pmd_version}-bin.zip"
         true
