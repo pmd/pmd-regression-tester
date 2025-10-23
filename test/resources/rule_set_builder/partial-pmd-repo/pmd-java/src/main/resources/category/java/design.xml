@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ruleset name="Design"
+    xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 https://pmd.sourceforge.io/ruleset_2_0_0.xsd">
+
+    <description>
+Rules that help you discover design issues.
+    </description>
+
+    <rule name="NcssCount"
+          language="java"
+          since="1.0"
+          message="not important for this test"
+          class="net.sourceforge.pmd.lang.java.rule.design.NcssCountRule"
+          externalInfoUrl="not important for this test">
+        <description>
+        not important for this test
+        </description>
+        <priority>3</priority>
+        <example>
+        </example>
+    </rule>
+
+</ruleset>

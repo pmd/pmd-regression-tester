@@ -25,7 +25,8 @@ module PmdTester
     def build?
       languages = determine_languages
       filenames = diff_filenames(languages)
-      run_required, rule_refs = get_rule_refs(filenames)
+      all_rules_hash = determine_all_rules
+      run_required, rule_refs = get_rule_refs(filenames, all_rules_hash)
       if run_required
         output_filter_set(rule_refs)
         build_config_file(rule_refs)
@@ -71,8 +72,8 @@ module PmdTester
     # filtering possible or if no rules are affected.
     # Whether to run the regression test is returned as an additional boolean flag.
     #
-    def get_rule_refs(filenames)
-      run_required, categories, rules = determine_categories_rules(filenames)
+    def get_rule_refs(filenames, all_rules_hash)
+      run_required, categories, rules = determine_categories_rules(filenames, all_rules_hash)
       logger.debug "Regression test required: #{run_required}"
       logger.debug "Categories: #{categories}"
       logger.debug "Rules: #{rules}"
@@ -122,12 +123,12 @@ module PmdTester
 
     private
 
-    def determine_categories_rules(filenames)
+    def determine_categories_rules(filenames, all_rules_hash)
       regression_test_required = false
       categories = Set[]
       rules = Set[]
       filenames.each do |filename|
-        matched = check_single_filename?(filename, categories, rules)
+        matched = check_single_filename?(filename, all_rules_hash, categories, rules)
         regression_test_required = true if matched
 
         next if matched
@@ -141,14 +142,13 @@ module PmdTester
       [regression_test_required, categories, rules]
     end
 
-    def check_single_filename?(filename, categories, rules)
+    def check_single_filename?(filename, all_rules_hash, categories, rules)
       logger.debug "Checking #{filename}"
 
-      # matches Java-based rule implementations
-      match_data = %r{.+/src/main/java/.+/lang/([^/]+)/rule/([^/]+)/([^/]+)Rule.java}.match(filename)
-      unless match_data.nil? || match_data[3].start_with?('Abstract')
-        logger.debug "Matches: #{match_data.inspect}"
-        rules.add("#{match_data[1]}/#{match_data[2]}.xml/#{match_data[3]}")
+      # direct match of a Java-based rule implementation
+      if all_rules_hash.key?(filename)
+        logger.debug "Direct match: #{all_rules_hash[filename]}"
+        rules.add(all_rules_hash[filename])
         return true
       end
 
@@ -195,6 +195,36 @@ module PmdTester
         languages.add(ref.split('/')[1])
       end
       languages
+    end
+
+    # Creates a mapping between java source files and the rule reference
+    # in the ruleset, e.g.:
+    # 'pmd-java/src/main/java/net/sourceforge/pmd/lang/java/rule/design/NcssCountRule.java'
+    #   => 'java/design.xml/NcssCount'
+    def determine_all_rules
+      all_rules_hash = {}
+      Dir.chdir(@options.local_git_repo) do
+        Dir.glob('**/src/main/resources/category/*/*.xml').each do |rulesetfile|
+          match_data = %r{.+/src/main/resources/category/([^/]+)/([^/.]+\.xml)}.match(rulesetfile)
+          ref_prefix = "#{match_data[1]}/#{match_data[2]}"
+          java_base_path = rulesetfile.gsub(%r{src/main/resources/category/.+/.+\.xml}, 'src/main/java')
+
+          doc = File.open(rulesetfile) { |f| Nokogiri::XML(f) }
+          rules = doc.css('ruleset rule')
+          rules.each do |r|
+            next if r.attributes['class'].nil? # skip rule references
+
+            ref = "#{ref_prefix}/#{r.attributes['name'].content}"
+            clazz = r.attributes['class'].content
+
+            # guess java file name at standard location src/main/java relative to the category ruleset
+            java_filename = "#{java_base_path}/#{clazz.gsub('.', '/')}.java"
+
+            all_rules_hash[java_filename] = ref
+          end
+        end
+      end
+      all_rules_hash
     end
   end
 end
