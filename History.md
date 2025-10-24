@@ -1,12 +1,9 @@
-# 1.6.2 / ????-??-??
-## New and Noteworthy
-## Enhancements
+# 1.6.2 / 2025-10-24
 ## Fixed Issues
 * [#142](https://github.com/pmd/pmd-regression-tester/pull/142): Support `--auto-gen-config` for rules which start with "Abstract"
 ## Merged pull requests
 * [#142](https://github.com/pmd/pmd-regression-tester/pull/142): Support `--auto-gen-config` for rules which start with "Abstract" - [Andreas Dangel](https://github.com/adangel) (@adangel)
 * [#143](https://github.com/pmd/pmd-regression-tester/pull/143): chore(ci): Use java 17 as default - [Andreas Dangel](https://github.com/adangel) (@adangel)
-## Dependency Updates
 
 # 1.6.1 / 2025-09-19
 
