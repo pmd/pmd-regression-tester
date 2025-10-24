@@ -1,3 +1,10 @@
+# 1.6.3 / ????-??-??
+## New and Noteworthy
+## Enhancements
+## Fixed Issues
+## Merged pull requests
+## Dependency Updates
+
 # 1.6.2 / 2025-10-24
 ## Fixed Issues
 * [#142](https://github.com/pmd/pmd-regression-tester/pull/142): Support `--auto-gen-config` for rules which start with "Abstract"
