@@ -14,14 +14,14 @@ diff --git a/docs/index.md b/docs/index.md
 index 3bafc43f4d..ac7b593dfd 100644
 --- a/docs/index.md
 +++ b/docs/index.md
-@@ -17,7 +17,7 @@ additional_js:
+@@ -16,7 +16,7 @@ additional_js:
   - js/shuffle.js
  ---
  
 -
 +<!-- some change in docs -->
  
- ## 💡 Overview
+ ## 💡️ Overview
  
 -- 
 2.45.2
