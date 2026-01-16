@@ -109,7 +109,13 @@ module PmdTester
         info_url: attrs['externalInfoUrl'],
         bline: attrs['beginline'].to_i,
         rule_name: attrs['rule'],
-        ruleset_name: attrs['ruleset'].freeze
+        ruleset_name: attrs['ruleset'].freeze,
+        location: Location.new(
+          beginline: attrs['beginline'].to_i,
+          endline: attrs['endline'].to_i,
+          begincolumn: attrs['begincolumn'].to_i,
+          endcolumn: attrs['endcolumn'].to_i
+        )
       )
     end
 

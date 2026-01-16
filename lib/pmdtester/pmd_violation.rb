@@ -27,16 +27,18 @@ module PmdTester
     #   </xs:simpleContent>
     # </xs:complexType>
 
-    attr_reader :fname, :info_url, :line, :old_line, :old_message, :rule_name, :ruleset_name, :language
+    attr_reader :fname, :info_url, :line, :old_line, :old_message, :rule_name, :ruleset_name, :language, :location,
+                :old_location
     attr_accessor :message
 
-    def initialize(branch:, fname:, info_url:, bline:, rule_name:, ruleset_name:)
+    def initialize(branch:, fname:, info_url:, bline:, rule_name:, ruleset_name:, location:)
       @branch = branch
       @fname = fname
       @message = ''
 
       @info_url = info_url
       @line = bline
+      @location = location
       @rule_name = rule_name
 
       @ruleset_name = ruleset_name
@@ -46,6 +48,7 @@ module PmdTester
       @changed = false
       @old_message = nil
       @old_line = nil
+      @old_location = nil
     end
 
     def line_move?(other)
@@ -55,10 +58,11 @@ module PmdTester
     def try_merge?(other)
       if branch != BASE && branch != other.branch && rule_name == other.rule_name &&
          !changed? && # not already changed
-         (line == other.line || line_move?(other))
+         (location.eql?(other.location) || location_move?(other))
         @changed = true
         @old_message = other.message
         @old_line = other.line
+        @old_location = other.location
         true
       else
         false
@@ -81,18 +85,18 @@ module PmdTester
     end
 
     def sort_key
-      line
+      location.beginline
     end
 
     def eql?(other)
       rule_name.eql?(other.rule_name) &&
-        line.eql?(other.line) &&
+        location.eql?(other.location) &&
         fname.eql?(other.fname) &&
         message.eql?(other.message)
     end
 
     def hash
-      [line, rule_name, message].hash
+      [location, rule_name, message].hash
     end
 
     def to_liquid
@@ -108,6 +112,14 @@ module PmdTester
       # @info_url is e.g. http://pmd.sourceforge.net/snapshot/pmd_rules_java_codestyle.html#fielddeclarationsshouldbeatstartofclass
       m = @info_url.match(/pmd_rules_(\w+)_/)
       m[1]
+    end
+
+    def location_move?(other)
+      message.eql?(other.message) &&
+        (location.beginline - other.location.beginline).abs <= 5 &&
+        (location.begincolumn - other.location.begincolumn).abs <= 5 &&
+        (location.endline - other.location.endline).abs <= 5 &&
+        (location.endcolumn - other.location.endcolumn).abs <= 5
     end
   end
 end

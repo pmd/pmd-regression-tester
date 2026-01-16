@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd xmlns="http://pmd.sourceforge.net/report/2.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://pmd.sourceforge.net/report/2.0.0 https://pmd.github.io/schema/report_2_0_0.xsd"
+    version="7.21.0-SNAPSHOT" timestamp="2026-01-16T17:00:00.000">
+<file name="File1.java">
+<!-- On line 7 in base report. Moved to line 8 in patch report. Line difference is 1. -->
+<violation beginline="8" endline="8" begincolumn="1" endcolumn="5" rule="UncommentedEmptyConstructor" ruleset="Documentation" class="Null" method="Null" externalInfoUrl="http://pmd.sourceforge.net/snapshot/pmd_rules_java_documentation.html#uncommentedemptyconstructor" priority="3">
+  Same message.
+</violation>
+<!-- On line 17 in base report. Moved to line 19 in patch report. Line difference is 2. -->
+<violation beginline="19" endline="19" begincolumn="1" endcolumn="5" rule="UncommentedEmptyConstructor" ruleset="Documentation" class="Null" method="Null" externalInfoUrl="http://pmd.sourceforge.net/snapshot/pmd_rules_java_documentation.html#uncommentedemptyconstructor" priority="3">
+  Same message.
+</violation>
+</file>
+<file name="File2.java">
+<!-- Base Report: 7:1-7:5. Move in patch report to: 7:2-7:6. Line difference is 0, columns changed -->
+<violation beginline="7" endline="7" begincolumn="2" endcolumn="6" rule="UncommentedEmptyConstructor" ruleset="Documentation" class="Null" method="Null" externalInfoUrl="http://pmd.sourceforge.net/snapshot/pmd_rules_java_documentation.html#uncommentedemptyconstructor" priority="3">
+  Same message.
+</violation>
+</file>
+</pmd>
