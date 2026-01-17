@@ -65,17 +65,17 @@ $(document).ready(function () {
         columnDefs: [
             { //file column
                 render(data, type, row) {
-                    data = project.file_index[data]
+                    data = project.file_index[data];
                     // display only the file name (not full path), but use full
                     // path for sorting and such
                     if (type === "display") {
-                        let line = 'ol' in row ? row.ol + " -> " + row.l : row.l;
+                        let line = 'ol' in row ? row.ol + "→" + row.lo : row.lo;
                         //note : target='_blank' requires that the link open in a new tab
-                        return "<a href='" + makeCodeLink(row) + "' target='_blank' rel='noopener noreferrer'>" + extractFilename(data) + " @ line " + line + "</a>"
+                        return "<a href='" + makeCodeLink(row) + "' target='_blank' rel='noopener noreferrer'>" + extractFilename(data) + " @ line " + line + "</a>";
                     } else if (type === "sort") {
-                        return data + "#" + row.line
+                        return data + "#" + row.l;
                     } else if (type === 'shortFile') {
-                        return extractFilename(data)
+                        return extractFilename(data);
                     } else {
                         return data;
                     }

@@ -8,6 +8,7 @@
 .hoerc
 .rubocop.yml
 .rubocop_todo.yml
+.vscode/launch.json
 Gemfile
 History.md
 LICENSE

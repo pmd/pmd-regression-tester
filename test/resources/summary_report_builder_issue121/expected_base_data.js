@@ -8,6 +8,7 @@ let project = {
         {
             "t":"+",
             "l":402,
+            "lo":"402:22-36",
             "f":0,
             "r":"CyclomaticComplexity",
             "m":"The method &#39;foo(List&lt;SObject&gt;, Map&lt;Id,SObject&gt;)&#39; has a cyclomatic complexity of 19."

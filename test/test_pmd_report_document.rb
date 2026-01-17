@@ -14,8 +14,8 @@ class TestPmdReportDocument < Test::Unit::TestCase
     assert_equal(8, doc.violations.total_size)
     assert_equal('Document \'empty\' constructor', doc.violations[FIRST_FILE][0].message)
     assert_equal(7, doc.violations[FIRST_FILE][0].line) # beginline
-    assert_equal(Location.new(beginline: 7, endline: 8, begincolumn: 12, endcolumn: 5),
-                 doc.violations[FIRST_FILE][0].location)
+    expected_location = Location.new(beginline: 7, endline: 8, begincolumn: 12, endcolumn: 5)
+    assert_true(expected_location.eql?(doc.violations[FIRST_FILE][0].location))
     assert_equal(2, doc.errors.total_size)
     pmd_errors = doc.errors.all_values
     assert_not_nil(pmd_errors[0])

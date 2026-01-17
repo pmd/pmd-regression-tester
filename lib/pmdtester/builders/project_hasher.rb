@@ -115,11 +115,13 @@ module PmdTester
       h = {
         't' => is_diff ? violation_type(violation) : '+',
         'l' => violation.line,
+        'lo' => violation.location.to_s,
         'f' => file_ref,
         'r' => violation.rule_name,
         'm' => create_violation_message(violation, is_diff && violation.changed?)
       }
-      h['ol'] = violation.old_line if is_diff && violation.changed? && violation.line != violation.old_line
+      h['ol'] = violation.old_location.to_s if is_diff && violation.changed? &&
+                                               !violation.location.eql?(violation.old_location)
       h
     end
 

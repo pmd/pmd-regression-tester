@@ -19,14 +19,20 @@ module PmdTester
         endcolumn == other.endcolumn
     end
 
-    def ==(other)
-      return false unless other.is_a?(Location)
-
-      eql?(other)
-    end
-
     def hash
       [beginline, endline, begincolumn, endcolumn].hash
+    end
+
+    def to_s
+      if beginline == endline
+        if begincolumn == endcolumn
+          "#{beginline}:#{begincolumn}"
+        else
+          "#{beginline}:#{begincolumn}-#{endcolumn}"
+        end
+      else
+        "#{beginline}:#{begincolumn}-#{endline}:#{endcolumn}"
+      end
     end
   end
 end

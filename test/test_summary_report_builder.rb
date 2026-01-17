@@ -52,6 +52,8 @@ class TestSummaryReportBuilder < Test::Unit::TestCase
                        'target/reports/diff/index.html')
   end
 
+  # Tests that the message is escaped correctly when it contains "<" and ">".
+  # Note: This test contains one violation, and the message is actually changed (a space is added in patch).
   # See https://github.com/pmd/pmd-regression-tester/issues/121
   def test_summary_report_builder_issue121
     test_resources_path = 'test/resources/summary_report_builder_issue121'
