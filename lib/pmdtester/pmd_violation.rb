@@ -116,10 +116,7 @@ module PmdTester
 
     def location_move?(other)
       message.eql?(other.message) &&
-        (location.beginline - other.location.beginline).abs <= 5 &&
-        (location.begincolumn - other.location.begincolumn).abs <= 5 &&
-        (location.endline - other.location.endline).abs <= 5 &&
-        (location.endcolumn - other.location.endcolumn).abs <= 5
+        (location.beginline - other.location.beginline).abs <= 5
     end
   end
 end
