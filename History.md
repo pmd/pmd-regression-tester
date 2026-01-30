@@ -4,6 +4,7 @@
 ## Fixed Issues
 ## Merged pull requests
 * [#147](https://github.com/pmd/pmd-regression-tester/pull/147): chore: Fix manual integration tests - [Andreas Dangel](https://github.com/adangel) (@adangel)
+* [#150](https://github.com/pmd/pmd-regression-tester/pull/150): chore: Use java 21 as default - [Andreas Dangel](https://github.com/adangel) (@adangel)
 ## Dependency Updates
 
 # 1.6.2 / 2025-10-24
