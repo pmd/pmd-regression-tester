@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'differ'
-
 module PmdTester
   # Turn a project report into a hash that can be rendered somewhere else
   module ProjectHasher
@@ -128,9 +126,8 @@ module PmdTester
     def create_violation_message(violation, is_diff)
       return escape_html(violation.message) unless is_diff
 
-      diff = Differ.diff_by_word(escape_html(violation.message),
-                                 escape_html(violation.old_message))
-      diff.format_as(:html)
+      WordDiffer.diff_words(escape_html(violation.old_message),
+                            escape_html(violation.message))
     end
 
     def escape_html(string)
