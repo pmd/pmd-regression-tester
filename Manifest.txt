@@ -8,6 +8,7 @@
 .hoerc
 .rubocop.yml
 .rubocop_todo.yml
+.vscode/launch.json
 Gemfile
 History.md
 LICENSE
@@ -31,6 +32,7 @@ lib/pmdtester/builders/simple_progress_logger.rb
 lib/pmdtester/builders/summary_report_builder.rb
 lib/pmdtester/cmd.rb
 lib/pmdtester/collection_by_file.rb
+lib/pmdtester/location.rb
 lib/pmdtester/parsers/options.rb
 lib/pmdtester/parsers/pmd_report_document.rb
 lib/pmdtester/parsers/projects_parser.rb

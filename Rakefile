@@ -40,6 +40,7 @@ hoe = Hoe.spec 'pmdtester' do
     ['rdoc',          '~> 6.12'],
     ['rake',          '~> 13.3'],
     ['hoe',           '~> 4.2'],
+    ['debug',         '~> 1.11']
   ]
   spec_extras[:required_ruby_version] = '>= 3.3'
 

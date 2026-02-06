@@ -38,6 +38,24 @@ class TestDiffBuilder < Test::Unit::TestCase
     # assert_equal('00:00:56', diffs_report.diff_execution_time)
   end
 
+  def test_violation_diffs_location_change
+    base_report_path = 'test/resources/diff_builder/test_violation_diffs_location_change_base.xml'
+    patch_report_path = 'test/resources/diff_builder/test_violation_diffs_location_change_patch.xml'
+    diffs_report = build_report_diff(base_report_path, patch_report_path,
+                                     BASE_REPORT_INFO_PATH, PATCH_REPORT_INFO_PATH)
+    violation_diffs = diffs_report.violation_diffs_by_file
+    keys = violation_diffs.keys
+    assert_counters_empty(diffs_report.error_counts)
+    assert_counters_eq(diffs_report.violation_counts,
+                       base_total: 3, patch_total: 3, changed_total: 3)
+    assert_changes_eq(diffs_report.violation_counts,
+                      removed: 0, added: 0, changed: 3)
+    assert_equal('File1.java', keys[0])
+    assert_equal(2, violation_diffs[keys[0]].size)
+    assert_equal('File2.java', keys[1])
+    assert_equal(1, violation_diffs[keys[1]].size)
+  end
+
   def test_violation_diffs_rule_message_change
     base_report_path = 'test/resources/diff_builder/test_violation_diffs_rule_message_change_base.xml'
     patch_report_path = 'test/resources/diff_builder/test_violation_diffs_rule_message_change_patch.xml'
@@ -131,9 +149,9 @@ class TestDiffBuilder < Test::Unit::TestCase
   end
 
   def assert_counters_eq(counters, base_total:, patch_total:, changed_total:)
-    assert_equal(base_total, counters.base_total)
-    assert_equal(patch_total, counters.patch_total)
-    assert_equal(changed_total, counters.changed_total)
+    assert_equal(base_total, counters.base_total, 'base total')
+    assert_equal(patch_total, counters.patch_total, 'patch total')
+    assert_equal(changed_total, counters.changed_total, 'changed total')
   end
 
   def assert_changes_eq(counters, removed:, added:, changed:)

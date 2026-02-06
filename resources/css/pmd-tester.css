@@ -20,6 +20,10 @@ table.code-snippet > tbody > tr > td {
 table.code-snippet > tbody > tr > td.line-number > code:before {
   content: attr(data-line-number);
 }
+table.code-snippet > tbody > tr > td:nth-child(2) {
+  width: 100%;
+  padding-left: 1ex;
+}
 .btn-clipboard {
   margin-top: 1rem;
   display: block;
@@ -104,6 +108,9 @@ table.dataTable > tbody > tr.changed,
 #rule-summary td[data-count='0'],
 #rule-summary td {
   background-color: #fefefe;
+}
+#rule-summary tr:hover td.rulename {
+  background: lightgray;
 }
 
 .external-link-secondary {

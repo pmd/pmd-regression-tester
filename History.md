@@ -2,8 +2,10 @@
 ## New and Noteworthy
 ## Enhancements
 ## Fixed Issues
+* [#148](https://github.com/pmd/pmd-regression-tester/issues/148): Add support for comparing entire rule violation location
 ## Merged pull requests
 * [#147](https://github.com/pmd/pmd-regression-tester/pull/147): chore: Fix manual integration tests - [Andreas Dangel](https://github.com/adangel) (@adangel)
+* [#149](https://github.com/pmd/pmd-regression-tester/pull/149): Fix #148: Add support for comparing entire rule violation location - [Andreas Dangel](https://github.com/adangel) (@adangel)
 * [#150](https://github.com/pmd/pmd-regression-tester/pull/150): chore: Use java 21 as default - [Andreas Dangel](https://github.com/adangel) (@adangel)
 ## Dependency Updates
 

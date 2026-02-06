@@ -42,6 +42,8 @@ class TestProjectDiffReport < Test::Unit::TestCase
 
     PmdTester::LiquidProjectRenderer.new.write_project_index(project, actual_report_path)
 
+    copy_resources(project)
+
     # Checking the content of diff report is expected.
     assert_file_equals(EXPECTED_REPORT_PATH, "#{actual_report_path}/index.html")
     assert_file_exists("#{actual_report_path}/project_data.js")
@@ -70,5 +72,22 @@ class TestProjectDiffReport < Test::Unit::TestCase
 
     # Checking the content of diff report is expected.
     assert_file_equals(EXPECTED_EMPTY_REPORT_PATH, "#{actual_report_path}/index.html")
+  end
+
+  private
+
+  def copy_resources(project)
+    # create all the resources, so that it is easier to verify the report manually if needed
+    base_path = 'target/reports/base_branch'
+    FileUtils.mkdir_p(base_path)
+    FileUtils.cp('test/resources/summary_report_builder/base_branch_info.json', "#{base_path}/branch_info.json")
+    patch_path = 'target/reports/patch_branch'
+    FileUtils.mkdir_p(patch_path)
+    FileUtils.cp('test/resources/summary_report_builder/patch_branch_info.json', "#{patch_path}/branch_info.json")
+    base_branch_details = PmdTester::PmdBranchDetail.load('base_branch', nil)
+    patch_branch_details = PmdTester::PmdBranchDetail.load('patch_branch', nil)
+    SummaryReportBuilder.new.write_all_projects([project],
+                                                base_branch_details,
+                                                patch_branch_details)
   end
 end
