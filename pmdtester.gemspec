@@ -40,7 +40,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency(%q<mocha>.freeze, ["~> 3.0".freeze])
   s.add_development_dependency(%q<rubocop>.freeze, ["~> 1.84".freeze])
   s.add_development_dependency(%q<test-unit>.freeze, ["~> 3.7".freeze])
-  s.add_development_dependency(%q<rdoc>.freeze, ["~> 6.12".freeze])
+  s.add_development_dependency(%q<rdoc>.freeze, ["~> 7.2".freeze])
   s.add_development_dependency(%q<rake>.freeze, ["~> 13.3".freeze])
   s.add_development_dependency(%q<hoe>.freeze, ["~> 4.2".freeze])
   s.add_development_dependency(%q<debug>.freeze, ["~> 1.11".freeze])
