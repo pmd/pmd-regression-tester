@@ -1,3 +1,4 @@
+.github/dependabot.yml
 .github/workflows/build-pr.yml
 .github/workflows/build-release.yml
 .github/workflows/build-snapshot.yml
