@@ -18,6 +18,7 @@
 * [#158](https://github.com/pmd/pmd-regression-tester/pull/158): chore: Bump mocha from 2.7 to 3.0
 * [#159](https://github.com/pmd/pmd-regression-tester/pull/159): chore: Bump rubocop from 1.79 to 1.84
 * [#160](https://github.com/pmd/pmd-regression-tester/pull/160): chore: Bump rdoc from 6.12 to 7.2
+* [#161](https://github.com/pmd/pmd-regression-tester/pull/161): chore: Bump hoe from 4.2 to 4.6
 
 # 1.6.2 / 2025-10-24
 ## Fixed Issues
