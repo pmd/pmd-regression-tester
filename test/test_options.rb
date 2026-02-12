@@ -41,6 +41,8 @@ class TestOptions < Test::Unit::TestCase
     assert_equal(Options::DEFAULT_LIST_PATH, opts.project_list)
     assert_equal(Options::DEFAULT_BASELINE_URL_PREFIX, opts.baseline_download_url_prefix)
     assert_false(opts.error_recovery)
+    assert_true(opts.run_cpd)
+    assert_true(opts.run_pmd)
   end
 
   def test_download_url_with_trailing_slash
@@ -97,5 +99,16 @@ class TestOptions < Test::Unit::TestCase
     argv = %w[-r target/repositories/pmd -p pmd_releases/6.1.0 -m online]
     expect = 'base branch name is required in online mode.'
     parse_and_assert_error_messages(argv, expect)
+  end
+
+  def test_invalid_cpd_pmd_options
+    argv = %w[-r target/repositories/pmd -b pmd_releases/6.1.0 -p main --no-cpd --no-pmd]
+    begin
+      Options.new(argv)
+    rescue InvalidOptionError => e
+      expect = 'Both "--no-cpd" and "--no-pmd" are given. At least one of PMD and CPD must be executed. ' \
+               'Please check your options.'
+      assert_equal(expect, e.message)
+    end
   end
 end

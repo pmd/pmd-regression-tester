@@ -43,6 +43,8 @@ on a list of standard projects (e.g. Spring Framework, Checkstyle, OpenJDK, etc.
     -d, --debug                 whether change log level to DEBUG to see more information
     --error-recovery            enable error recovery mode when executing PMD. Might help to analyze errors.
     --baseline-download-url     download url prefix from where to download the baseline in online mode
+    --no-cpd                    do not execute CPD (Copy Paste Detector) and compare duplications; only execute PMD
+    --no-pmd                    do not execute PMD and compare rule violations; only execute CPD (Copy Paste Detector)
     -v, --version               
     -h, --help                  
 
