@@ -30,7 +30,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency(%q<slop>.freeze, ["~> 4.10".freeze])
   s.add_runtime_dependency(%q<rufus-scheduler>.freeze, ["~> 3.9".freeze])
   s.add_runtime_dependency(%q<logger-colors>.freeze, ["~> 1.1".freeze])
-  s.add_runtime_dependency(%q<liquid>.freeze, ["~> 5.8".freeze])
+  s.add_runtime_dependency(%q<liquid>.freeze, ["~> 5.11".freeze])
   s.add_runtime_dependency(%q<base64>.freeze, ["~> 0.3".freeze])
   s.add_runtime_dependency(%q<bigdecimal>.freeze, ["~> 3.2".freeze])
   s.add_runtime_dependency(%q<logger>.freeze, ["~> 1.7".freeze])
