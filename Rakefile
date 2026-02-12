@@ -20,10 +20,10 @@ hoe = Hoe.spec 'pmdtester' do
 
   self.clean_globs = %w[target/reports/**/* target/test/**/* target/dynamic-config.xml]
   self.extra_deps += [
-    ['nokogiri',        '~> 1.18'],
+    ['nokogiri',        '~> 1.19'],
     ['slop',            '~> 4.10'],
     ['rufus-scheduler', '~> 3.9'],
-    ['logger-colors',   '~> 1.0'],
+    ['logger-colors',   '~> 1.1'],
     ['liquid',          '~> 5.11'],
     ['base64',          '~> 0.3'],
     ['bigdecimal',      '~> 3.2'],
