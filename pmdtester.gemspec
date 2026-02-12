@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib".freeze]
   s.authors = ["Andreas Dangel".freeze, "Binguo Bao".freeze, "Cl\u00E9ment Fournier".freeze]
   s.date = "1980-01-02"
-  s.description = "A regression testing tool ensure that new problems and unexpected behaviors will not be introduced to PMD project after fixing an issue , and new rules can work as expected.".freeze
+  s.description = "A regression testing tool ensure that new problems and unexpected behaviors will not be introduced to PMD project after fixing an issue\nand new rules work as expected.\n\n== Features/Problems:\n\nThe diff report can be generated according to the base and patch branch of PMD\non a list of standard projects (e.g. Spring Framework, Checkstyle, OpenJDK, etc.)".freeze
   s.email = ["andreas.dangel@pmd-code.org".freeze, "djydewang@gmail.com".freeze, "clement.fournier76@gmail.com".freeze]
   s.executables = ["pmdtester".freeze]
   s.extra_rdoc_files = ["History.md".freeze, "Manifest.txt".freeze, "README.rdoc".freeze, "resources/js/README.md".freeze]
@@ -22,23 +22,23 @@ Gem::Specification.new do |s|
   s.rdoc_options = ["--main".freeze, "README.rdoc".freeze]
   s.required_ruby_version = Gem::Requirement.new(">= 3.3".freeze)
   s.rubygems_version = "3.6.9".freeze
-  s.summary = "A regression testing tool ensure that new problems and unexpected behaviors will not be introduced to PMD project after fixing an issue , and new rules can work as expected.".freeze
+  s.summary = "A regression testing tool ensure that new problems and unexpected behaviors will not be introduced to PMD project after fixing an issue and new rules work as expected".freeze
 
   s.specification_version = 4
 
-  s.add_runtime_dependency(%q<nokogiri>.freeze, ["~> 1.18".freeze])
+  s.add_runtime_dependency(%q<nokogiri>.freeze, ["~> 1.19".freeze])
   s.add_runtime_dependency(%q<slop>.freeze, ["~> 4.10".freeze])
   s.add_runtime_dependency(%q<rufus-scheduler>.freeze, ["~> 3.9".freeze])
-  s.add_runtime_dependency(%q<logger-colors>.freeze, ["~> 1.0".freeze])
-  s.add_runtime_dependency(%q<liquid>.freeze, ["~> 5.8".freeze])
+  s.add_runtime_dependency(%q<logger-colors>.freeze, ["~> 1.1".freeze])
+  s.add_runtime_dependency(%q<liquid>.freeze, ["~> 5.11".freeze])
   s.add_runtime_dependency(%q<base64>.freeze, ["~> 0.3".freeze])
-  s.add_runtime_dependency(%q<bigdecimal>.freeze, ["~> 3.2".freeze])
+  s.add_runtime_dependency(%q<bigdecimal>.freeze, ["~> 4.0".freeze])
   s.add_runtime_dependency(%q<logger>.freeze, ["~> 1.7".freeze])
   s.add_development_dependency(%q<hoe-bundler>.freeze, ["~> 1.5".freeze])
   s.add_development_dependency(%q<hoe-git>.freeze, ["~> 1.6".freeze])
-  s.add_development_dependency(%q<minitest>.freeze, ["~> 5.25".freeze])
-  s.add_development_dependency(%q<mocha>.freeze, ["~> 2.7".freeze])
-  s.add_development_dependency(%q<rubocop>.freeze, ["~> 1.79".freeze])
+  s.add_development_dependency(%q<minitest>.freeze, ["~> 6.0".freeze])
+  s.add_development_dependency(%q<mocha>.freeze, ["~> 3.0".freeze])
+  s.add_development_dependency(%q<rubocop>.freeze, ["~> 1.84".freeze])
   s.add_development_dependency(%q<test-unit>.freeze, ["~> 3.7".freeze])
   s.add_development_dependency(%q<rdoc>.freeze, ["~> 7.2".freeze])
   s.add_development_dependency(%q<rake>.freeze, ["~> 13.3".freeze])
