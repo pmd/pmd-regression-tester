@@ -34,7 +34,7 @@ jobs:
         with:
           ref: ${{ github.event.workflow_run.head_branch }}
       - name: Set up Ruby 3.3
-        uses: ruby/setup-ruby@2a7b30092b0caf9c046252510f9273b4875f3db9 #v1.254.0
+        uses: ruby/setup-ruby@09a7688d3b55cf0e976497ff046b70949eeaccfd #v1.288.0
         with:
           ruby-version: 3.3
       - name: Install dependencies (bundler)
@@ -95,7 +95,7 @@ jobs:
         with:
           ref: ${{ github.event.workflow_run.head_branch }}
       - name: Set up Ruby 3.3
-        uses: ruby/setup-ruby@2a7b30092b0caf9c046252510f9273b4875f3db9 #v1.254.0
+        uses: ruby/setup-ruby@09a7688d3b55cf0e976497ff046b70949eeaccfd #v1.288.0
         with:
           ruby-version: 3.3
       - name: Install dependencies (bundler)
