@@ -35,7 +35,7 @@ require_relative 'pmdtester/parsers/projects_parser'
 # and unexpected behaviors will not be introduced to PMD project
 # after fixing an issue and new rules can work as expected.
 module PmdTester
-  VERSION = '1.6.3-SNAPSHOT'
+  VERSION = '1.7.0-SNAPSHOT'
   BASE = 'base'
   PATCH = 'patch'
   PR_NUM_ENV_VAR = 'PMD_CI_PULL_REQUEST_NUMBER' # see PmdBranchDetail
