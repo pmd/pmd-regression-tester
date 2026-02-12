@@ -21,6 +21,11 @@
 * [#159](https://github.com/pmd/pmd-regression-tester/pull/159): chore: Bump rubocop from 1.79 to 1.84
 * [#160](https://github.com/pmd/pmd-regression-tester/pull/160): chore: Bump rdoc from 6.12 to 7.2
 * [#161](https://github.com/pmd/pmd-regression-tester/pull/161): chore: Bump hoe from 4.2 to 4.6
+* [#163](https://github.com/pmd/pmd-regression-tester/pull/163): Bump actions/cache from 4.2.4 to 5.0.3
+* [#164](https://github.com/pmd/pmd-regression-tester/pull/164): Bump actions/setup-java from 4.7.1 to 5.2.0
+* [#165](https://github.com/pmd/pmd-regression-tester/pull/165): Bump actions/checkout from 4 to 6
+* [#166](https://github.com/pmd/pmd-regression-tester/pull/166): Bump ruby/setup-ruby from 1.254.0 to 1.288.0
+* [#167](https://github.com/pmd/pmd-regression-tester/pull/167): Bump actions/create-github-app-token from 2.0.6 to 2.2.1
 
 # 1.6.2 / 2025-10-24
 ## Fixed Issues
