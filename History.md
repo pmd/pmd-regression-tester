@@ -10,6 +10,7 @@
 * [#150](https://github.com/pmd/pmd-regression-tester/pull/150): chore: Use java 21 as default - [Andreas Dangel](https://github.com/adangel) (@adangel)
 * [#151](https://github.com/pmd/pmd-regression-tester/pull/151): chore: fix deprecations - [Andreas Dangel](https://github.com/adangel) (@adangel)
 ## Dependency Updates
+* [#160](https://github.com/pmd/pmd-regression-tester/pull/160): chore: Bump rdoc from 6.12 to 7.2
 
 # 1.6.2 / 2025-10-24
 ## Fixed Issues
