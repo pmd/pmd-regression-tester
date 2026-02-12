@@ -41,7 +41,7 @@ hoe = Hoe.spec 'pmdtester' do
     ['hoe',           '~> 4.6'],
     ['debug',         '~> 1.11']
   ]
-  spec_extras[:required_ruby_version] = '>= 3.3'
+  spec_extras[:required_ruby_version] = '>= 4'
 
   license 'BSD-2-Clause'
 end

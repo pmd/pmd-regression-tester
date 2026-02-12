@@ -33,10 +33,10 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd #v6.0.2
         with:
           ref: ${{ github.event.workflow_run.head_branch }}
-      - name: Set up Ruby 3.3
+      - name: Set up Ruby 4
         uses: ruby/setup-ruby@09a7688d3b55cf0e976497ff046b70949eeaccfd #v1.288.0
         with:
-          ruby-version: 3.3
+          ruby-version: 4
       - name: Install dependencies (bundler)
         run: |
           # bundler should already be installed

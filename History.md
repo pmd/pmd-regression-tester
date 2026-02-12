@@ -1,9 +1,14 @@
-# 1.6.3 / ????-??-??
+# 1.7.0 / ????-??-??
 ## New and Noteworthy
+### Required Ruby version
+
+With this version, Ruby 4 or higher is required.
+
 ## Enhancements
+* [#148](https://github.com/pmd/pmd-regression-tester/issues/148): Add support for comparing entire rule violation location
+* [#168](https://github.com/pmd/pmd-regression-tester/pull/168): Update to ruby 4
 ## Fixed Issues
 * [#144](https://github.com/pmd/pmd-regression-tester/issues/144): Deprecated usage liquid Template.file_system
-* [#148](https://github.com/pmd/pmd-regression-tester/issues/148): Add support for comparing entire rule violation location
 ## Merged pull requests
 * [#147](https://github.com/pmd/pmd-regression-tester/pull/147): chore: Fix manual integration tests - [Andreas Dangel](https://github.com/adangel) (@adangel)
 * [#149](https://github.com/pmd/pmd-regression-tester/pull/149): Fix #148: Add support for comparing entire rule violation location - [Andreas Dangel](https://github.com/adangel) (@adangel)
