@@ -23,7 +23,7 @@ hoe = Hoe.spec 'pmdtester' do
     ['nokogiri',        '~> 1.19'],
     ['slop',            '~> 4.10'],
     ['rufus-scheduler', '~> 3.9'],
-    ['logger-colors',   '~> 1.0'],
+    ['logger-colors',   '~> 1.1'],
     ['liquid',          '~> 5.8'],
     ['base64',          '~> 0.3'],
     ['bigdecimal',      '~> 3.2'],
