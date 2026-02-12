@@ -111,4 +111,18 @@ class TestOptions < Test::Unit::TestCase
       assert_equal(expect, e.message)
     end
   end
+
+  def test_no_cpd_option
+    argv = %w[-r target/repositories/pmd -b pmd_releases/6.1.0 -p main --no-cpd]
+    opts = Options.new(argv)
+    assert_true(opts.run_pmd)
+    assert_false(opts.run_cpd)
+  end
+
+  def test_no_pmd_option
+    argv = %w[-r target/repositories/pmd -b pmd_releases/6.1.0 -p main --no-pmd]
+    opts = Options.new(argv)
+    assert_false(opts.run_pmd)
+    assert_true(opts.run_cpd)
+  end
 end

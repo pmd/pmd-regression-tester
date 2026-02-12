@@ -38,7 +38,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     record_expectations_after_build
 
     PmdTester::PmdReportBuilder
-      .new(projects, options, options.base_config, options.base_branch)
+      .new(projects, options, options.base_config, options.base_branch, true)
       .build
   end
 
@@ -67,7 +67,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     record_expectations_after_build
 
     PmdTester::PmdReportBuilder
-      .new(projects, options, options.base_config, options.base_branch)
+      .new(projects, options, options.base_config, options.base_branch, true)
       .build
   end
 
@@ -93,7 +93,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     record_expectations_after_build
 
     PmdTester::PmdReportBuilder
-      .new(projects, options, options.base_config, options.base_branch)
+      .new(projects, options, options.base_config, options.base_branch, true)
       .build
   end
 
@@ -117,7 +117,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     record_expectations_after_build
 
     PmdTester::PmdReportBuilder
-      .new(projects, options, options.base_config, options.base_branch)
+      .new(projects, options, options.base_config, options.base_branch, true)
       .build
   end
 
@@ -141,7 +141,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     record_expectations_after_build
 
     PmdTester::PmdReportBuilder
-      .new(projects, options, options.base_config, options.base_branch)
+      .new(projects, options, options.base_config, options.base_branch, true)
       .build
   end
 
@@ -166,7 +166,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     record_expectations_after_build
 
     PmdTester::PmdReportBuilder
-      .new(projects, options, options.base_config, options.base_branch)
+      .new(projects, options, options.base_config, options.base_branch, true)
       .build
   end
 
@@ -175,7 +175,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     projects = PmdTester::ProjectsParser.new.parse(project_list)
     assert_equal(1, projects.size)
     argv = %w[-r target/repositories/pmd -b main -p pmd_releases/6.1.0
-              -c config/design.xml --debug -l]
+              -c config/design.xml --debug --no-cpd -l]
     argv.push project_list
     options = PmdTester::Options.new(argv)
 
@@ -185,7 +185,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     record_expectations_project_build(sha1: 'sha1abc')
 
     PmdTester::PmdReportBuilder
-      .new(projects, options, options.base_config, options.base_branch)
+      .new(projects, options, options.base_config, options.base_branch, true)
       .build
 
     expected = File.read('test/resources/pmd_report_builder/expected-config.xml')
@@ -198,7 +198,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     projects = PmdTester::ProjectsParser.new.parse(project_list)
     assert_equal(1, projects.size)
     argv = %w[-r target/repositories/pmd -b main -p pmd_releases/6.1.0
-              -c config/design.xml --debug --error-recovery -l]
+              -c config/design.xml --debug --error-recovery --no-cpd -l]
     argv.push project_list
     options = PmdTester::Options.new(argv)
 
@@ -208,7 +208,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     record_expectations_project_build(sha1: 'sha1abc', error: true)
 
     PmdTester::PmdReportBuilder
-      .new(projects, options, options.base_config, options.base_branch)
+      .new(projects, options, options.base_config, options.base_branch, true)
       .build
   end
 
@@ -218,7 +218,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     projects = PmdTester::ProjectsParser.new.parse(project_list)
     assert_equal(1, projects.size)
     argv = %w[-r target/repositories/pmd -b main -p pmd_releases/6.1.0
-              -c config/design.xml --debug --error-recovery -l]
+              -c config/design.xml --debug --error-recovery --no-cpd -l]
     argv.push project_list
     options = PmdTester::Options.new(argv)
 
@@ -228,7 +228,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     record_expectations_project_build(sha1: 'sha1abc', error: true, long_cli_options: true)
 
     PmdTester::PmdReportBuilder
-      .new(projects, options, options.base_config, options.base_branch)
+      .new(projects, options, options.base_config, options.base_branch, true)
       .build
   end
 
@@ -239,7 +239,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     projects = PmdTester::ProjectsParser.new.parse(project_list)
     assert_equal(1, projects.size)
     argv = %w[-r target/repositories/pmd -b main -p pmd_releases/6.1.0
-              -c config/design.xml --debug --error-recovery -l]
+              -c config/design.xml --debug --error-recovery --no-cpd -l]
     argv.push project_list
     options = PmdTester::Options.new(argv)
 
@@ -252,7 +252,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     pmd_cli_cmd = prepare_pmd_dist_dir(version: @pmd_version, sha1: sha1)
     begin
       PmdTester::PmdReportBuilder
-        .new(projects, options, options.base_config, options.base_branch)
+        .new(projects, options, options.base_config, options.base_branch, true)
         .build
     ensure
       cleanup_pmd_dist_dir(base_dir: pmd_cli_cmd)
@@ -268,7 +268,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     projects = PmdTester::ProjectsParser.new.parse(project_list)
     assert_equal(1, projects.size)
     argv = %w[-r target/repositories/pmd -b main -p pmd_releases/6.1.0
-              -c config/design.xml --debug --error-recovery -l]
+              -c config/design.xml --debug --error-recovery --no-cpd -l]
     argv.push project_list
     options = PmdTester::Options.new(argv)
 
@@ -278,7 +278,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     record_expectations_project_build(sha1: 'sha1abc', error: true, exit_status: 1)
 
     PmdTester::PmdReportBuilder
-      .new(projects, options, options.base_config, options.base_branch)
+      .new(projects, options, options.base_config, options.base_branch, true)
       .build
   end
 

@@ -83,11 +83,27 @@ module PmdTester
       end
     end
 
+    def get_cpd_report_path(branch_name)
+      if branch_name.nil?
+        nil
+      else
+        "#{get_project_target_dir(branch_name)}/cpd_report.xml"
+      end
+    end
+
     def get_report_info_path(branch_name)
       if branch_name.nil?
         nil
       else
         "#{get_project_target_dir(branch_name)}/report_info.json"
+      end
+    end
+
+    def get_cpd_report_info_path(branch_name)
+      if branch_name.nil?
+        nil
+      else
+        "#{get_project_target_dir(branch_name)}/cpd_report_info.json"
       end
     end
 
