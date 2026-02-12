@@ -31,7 +31,7 @@ class IntegrationTestPmdReportBuilder < Test::Unit::TestCase
     options = PmdTester::Options.new(argv)
     projects = ProjectsParser.new.parse(options.project_list)
 
-    builder = PmdReportBuilder.new(projects, options, options.config, options.patch_branch)
+    builder = PmdReportBuilder.new(projects, options, options.config, options.patch_branch, true)
     builder.build
 
     assert_equal(0, $CHILD_STATUS.exitstatus)
