@@ -34,7 +34,7 @@ hoe = Hoe.spec 'pmdtester' do
     ['hoe-git',       '~> 1.6'],
     ['minitest',      '~> 5.25'],
     ['mocha',         '~> 2.7'],
-    ['rubocop',       '~> 1.79'],
+    ['rubocop',       '~> 1.84'],
     ['test-unit',     '~> 3.7'],
     ['rdoc',          '~> 6.12'],
     ['rake',          '~> 13.3'],
