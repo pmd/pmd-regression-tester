@@ -14,6 +14,7 @@
 * [#154](https://github.com/pmd/pmd-regression-tester/pull/154): chore: Bump logger-colors from 1.0 to 1.1
 * [#155](https://github.com/pmd/pmd-regression-tester/pull/155): chore: Bump liquid from 5.8 to 5.11
 * [#156](https://github.com/pmd/pmd-regression-tester/pull/156): chore: Bump bigdecimal from 3.2 to 4.0
+* [#157](https://github.com/pmd/pmd-regression-tester/pull/157): chore: Bump minitest from 5.25 to 6.0
 
 # 1.6.2 / 2025-10-24
 ## Fixed Issues
