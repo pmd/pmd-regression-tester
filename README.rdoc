@@ -4,9 +4,9 @@ home  :: https://pmd.github.io
 code  :: https://github.com/pmd/pmd-regression-tester
 bugs  :: https://github.com/pmd/pmd-regression-tester/issues
 
-build-status :: {<img src="https://github.com/pmd/pmd-regression-tester/workflows/build/badge.svg?branch=main" alt="Build Status" />}[https://github.com/pmd/pmd-regression-tester/actions?query=workflow%3Abuild]
+build-status :: {rdoc-image:https://github.com/pmd/pmd-regression-tester/actions/workflows/build-snapshot.yml/badge.svg?branch=main}[https://github.com/pmd/pmd-regression-tester/actions/workflows/build-snapshot.yml]
 
-gem-version :: {<img src="https://badge.fury.io/rb/pmdtester.svg" alt="Gem Version" />}[https://rubygems.org/gems/pmdtester]
+gem-version :: {rdoc-image:https://badge.fury.io/rb/pmdtester.svg}[https://rubygems.org/gems/pmdtester]
 
 == DESCRIPTION:
 
@@ -155,6 +155,32 @@ The tool creates the following folders:
   Run a single test, e.g.:
   bundle exec ruby -I test test/test_project_diff_report.rb -n test_diff_report_builder
 
+=== Debugging
+
+This assumes using vscode[https://code.visualstudio.com/] with the extension {Ruby LSP}[https://marketplace.visualstudio.com/items?itemName=Shopify.ruby-lsp].
+
+* Execute a single test with debugger:
+
+    bundle exec rdbg --open --command -- ruby -Itest test/test_word_differ.rb -n test_simple_difference
+
+* The debugger will wait, until a debugging session is attached. You can use the "Attach debugger" run configuration in vscode.
+
+* In case, Ruby LSP doesn't find an locally running debugger ("No debuggee processes found"), you might need to explicitly set the debugger socket
+
+    # find local debugger sockets
+    bundle exec rdbg --util=list-socks
+
+* Then change "Attach debugger to socket" config to specify a "debugSocketPath" explicitly and run this:
+
+        {
+            "type": "ruby_lsp",
+            "name": "Attach debugger to socket",
+            "request": "attach",
+            "debugSocketPath": "/run/user/1000/rdbg-382154"
+        }
+
+Note: The socket changes for every debugging session.
+
 === Releasing
 
 * Update +History.md+ (version and date)
@@ -168,6 +194,6 @@ The tool creates the following folders:
 * Push to main.
 * Push the tag. Github Actions will build and publish the new gem
 * A github release is automatically created, verify it on https://github.com/pmd/pmd-regression-tester/releases
-* To make pmd's main CI use the new version (in [pmd/pmd](https://github.com/pmd/pmd/)),
+* To make pmd's main CI use the new version (in {pmd/pmd}[https://github.com/pmd/pmd/]),
   go to the directory ".ci/files" and run `bundle lock --update`. Commit these changes.
 * Rename milestone to version, close it and create a new "Next" milestone: https://github.com/pmd/pmd-regression-tester/milestones
