@@ -32,7 +32,7 @@ hoe = Hoe.spec 'pmdtester' do
   self.extra_dev_deps += [
     ['hoe-bundler',   '~> 1.5'],
     ['hoe-git',       '~> 1.6'],
-    ['minitest',      '~> 5.25'],
+    ['minitest',      '~> 6.0'],
     ['mocha',         '~> 2.7'],
     ['rubocop',       '~> 1.79'],
     ['test-unit',     '~> 3.7'],

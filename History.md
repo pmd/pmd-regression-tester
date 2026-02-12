@@ -10,6 +10,7 @@
 * [#150](https://github.com/pmd/pmd-regression-tester/pull/150): chore: Use java 21 as default - [Andreas Dangel](https://github.com/adangel) (@adangel)
 * [#151](https://github.com/pmd/pmd-regression-tester/pull/151): chore: fix deprecations - [Andreas Dangel](https://github.com/adangel) (@adangel)
 ## Dependency Updates
+* [#157](https://github.com/pmd/pmd-regression-tester/pull/157): chore: Bump minitest from 5.25 to 6.0
 
 # 1.6.2 / 2025-10-24
 ## Fixed Issues
