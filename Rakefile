@@ -26,7 +26,7 @@ hoe = Hoe.spec 'pmdtester' do
     ['logger-colors',   '~> 1.1'],
     ['liquid',          '~> 5.11'],
     ['base64',          '~> 0.3'],
-    ['bigdecimal',      '~> 3.2'],
+    ['bigdecimal',      '~> 4.0'],
     ['logger',          '~> 1.7']
   ]
   self.extra_dev_deps += [
