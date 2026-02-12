@@ -9,10 +9,18 @@
 * [#149](https://github.com/pmd/pmd-regression-tester/pull/149): Fix #148: Add support for comparing entire rule violation location - [Andreas Dangel](https://github.com/adangel) (@adangel)
 * [#150](https://github.com/pmd/pmd-regression-tester/pull/150): chore: Use java 21 as default - [Andreas Dangel](https://github.com/adangel) (@adangel)
 * [#151](https://github.com/pmd/pmd-regression-tester/pull/151): chore: fix deprecations - [Andreas Dangel](https://github.com/adangel) (@adangel)
+* [#152](https://github.com/pmd/pmd-regression-tester/pull/152): chore: enable dependabot - [Andreas Dangel](https://github.com/adangel) (@adangel)
 * [#162](https://github.com/pmd/pmd-regression-tester/pull/162): chore: Add debugging information - [Andreas Dangel](https://github.com/adangel) (@adangel)
 ## Dependency Updates
 * [#153](https://github.com/pmd/pmd-regression-tester/pull/153): chore: Bump nokogiri from 1.18 to 1.19
 * [#154](https://github.com/pmd/pmd-regression-tester/pull/154): chore: Bump logger-colors from 1.0 to 1.1
+* [#155](https://github.com/pmd/pmd-regression-tester/pull/155): chore: Bump liquid from 5.8 to 5.11
+* [#156](https://github.com/pmd/pmd-regression-tester/pull/156): chore: Bump bigdecimal from 3.2 to 4.0
+* [#157](https://github.com/pmd/pmd-regression-tester/pull/157): chore: Bump minitest from 5.25 to 6.0
+* [#158](https://github.com/pmd/pmd-regression-tester/pull/158): chore: Bump mocha from 2.7 to 3.0
+* [#159](https://github.com/pmd/pmd-regression-tester/pull/159): chore: Bump rubocop from 1.79 to 1.84
+* [#160](https://github.com/pmd/pmd-regression-tester/pull/160): chore: Bump rdoc from 6.12 to 7.2
+* [#161](https://github.com/pmd/pmd-regression-tester/pull/161): chore: Bump hoe from 4.2 to 4.6
 
 # 1.6.2 / 2025-10-24
 ## Fixed Issues

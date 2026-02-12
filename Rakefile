@@ -24,21 +24,21 @@ hoe = Hoe.spec 'pmdtester' do
     ['slop',            '~> 4.10'],
     ['rufus-scheduler', '~> 3.9'],
     ['logger-colors',   '~> 1.1'],
-    ['liquid',          '~> 5.8'],
+    ['liquid',          '~> 5.11'],
     ['base64',          '~> 0.3'],
-    ['bigdecimal',      '~> 3.2'],
+    ['bigdecimal',      '~> 4.0'],
     ['logger',          '~> 1.7']
   ]
   self.extra_dev_deps += [
     ['hoe-bundler',   '~> 1.5'],
     ['hoe-git',       '~> 1.6'],
-    ['minitest',      '~> 5.25'],
-    ['mocha',         '~> 2.7'],
-    ['rubocop',       '~> 1.79'],
+    ['minitest',      '~> 6.0'],
+    ['mocha',         '~> 3.0'],
+    ['rubocop',       '~> 1.84'],
     ['test-unit',     '~> 3.7'],
-    ['rdoc',          '~> 6.12'],
+    ['rdoc',          '~> 7.2'],
     ['rake',          '~> 13.3'],
-    ['hoe',           '~> 4.2'],
+    ['hoe',           '~> 4.6'],
     ['debug',         '~> 1.11']
   ]
   spec_extras[:required_ruby_version] = '>= 3.3'

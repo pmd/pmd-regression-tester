@@ -23,8 +23,8 @@ jobs:
       run:
         shell: bash
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 #v4.2.2
-      - uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00 #v4.7.1
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd #v6.0.2
+      - uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 #v5.2.0
         with:
           distribution: 'temurin'
           java-version: |
@@ -32,7 +32,7 @@ jobs:
             21
       - name: Prepare HOME/openjdk11
         run: ln -sfn "${JAVA_HOME_11_X64}" "${HOME}/openjdk11"
-      - uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809 #v4.2.4
+      - uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 #v5.0.3
         with:
           path: |
             ~/.m2/repository
@@ -44,7 +44,7 @@ jobs:
           restore-keys: |
             v4-${{ runner.os }}-
       - name: Set up Ruby 3.3
-        uses: ruby/setup-ruby@2a7b30092b0caf9c046252510f9273b4875f3db9 #v1.254.0
+        uses: ruby/setup-ruby@09a7688d3b55cf0e976497ff046b70949eeaccfd #v1.288.0
         with:
           ruby-version: 3.3
       - name: Install dependencies (bundler)
