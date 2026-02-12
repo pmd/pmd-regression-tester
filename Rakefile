@@ -22,7 +22,6 @@ hoe = Hoe.spec 'pmdtester' do
   self.extra_deps += [
     ['nokogiri',        '~> 1.18'],
     ['slop',            '~> 4.10'],
-    ['differ',          '~> 0.1'],
     ['rufus-scheduler', '~> 3.9'],
     ['logger-colors',   '~> 1.0'],
     ['liquid',          '~> 5.8'],

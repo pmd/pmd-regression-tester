@@ -12,7 +12,7 @@ module PmdTester
     def render_liquid(template_path, env)
       to_render = File.read(ResourceLocator.resource(template_path))
       includes = Liquid::LocalFileSystem.new(ResourceLocator.resource('_includes'), '%s.html')
-      Liquid::Template.file_system = includes
+      Liquid::Environment.default.file_system = includes
       template = Liquid::Template.parse(to_render, error_mode: :strict)
       template.render!(env, { strict_variables: true })
     end
@@ -89,7 +89,7 @@ module PmdTester
         **violations_to_hash(project, violations_by_file, branch == 'diff')
       }
 
-      project_data = JSON.fast_generate(h, indent: '    ', object_nl: "\n", array_nl: "\n")
+      project_data = JSON.generate(h, indent: '    ', object_nl: "\n", array_nl: "\n")
       "let project = #{project_data}"
     end
 
