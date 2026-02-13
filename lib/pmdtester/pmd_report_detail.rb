@@ -8,6 +8,7 @@ module PmdTester
     attr_accessor :execution_time
     attr_accessor :timestamp
     attr_accessor :working_dir
+    attr_accessor :cmdline
     attr_accessor :exit_code
     attr_accessor :stdout
     attr_accessor :stderr
@@ -17,6 +18,7 @@ module PmdTester
         execution_time: @execution_time,
         timestamp: @timestamp,
         working_dir: @working_dir,
+        cmdline: @cmdline,
         exit_code: @exit_code,
         stdout: @stdout,
         stderr: @stderr
@@ -40,12 +42,12 @@ module PmdTester
       self.class.convert_seconds(@execution_time)
     end
 
-    def self.create(execution_time: 0, timestamp: '', working_dir: Dir.getwd, exit_code: nil,
-                    stdout: '', stderr: '',
+    def self.create(execution_time: 0, timestamp: '', working_dir: Dir.getwd, cmdline: '',
+                    exit_code: nil, stdout: '', stderr: '',
                     report_info_path:)
       detail = PmdReportDetail.new(execution_time: execution_time, timestamp: timestamp,
-                                   working_dir: working_dir, exit_code: exit_code,
-                                   stdout: stdout, stderr: stderr)
+                                   working_dir: working_dir, cmdline: cmdline,
+                                   exit_code: exit_code, stdout: stdout, stderr: stderr)
       detail.save(report_info_path)
       detail
     end
@@ -57,10 +59,12 @@ module PmdTester
 
     private
 
-    def initialize(execution_time: 0, timestamp: '', working_dir: Dir.getwd, exit_code: nil, stdout: '', stderr: '')
+    def initialize(execution_time: 0, timestamp: '', working_dir: Dir.getwd, cmdline: '',
+                   exit_code: nil, stdout: '', stderr: '')
       @execution_time = execution_time
       @timestamp = timestamp
       @working_dir = working_dir
+      @cmdline = cmdline
       @exit_code = exit_code.nil? ? '?' : exit_code.to_s
       @stdout = stdout
       @stderr = stderr

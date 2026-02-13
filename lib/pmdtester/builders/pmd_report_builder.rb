@@ -162,11 +162,12 @@ module PmdTester
       @projects.each do |project|
         progress_logger = SimpleProgressLogger.new("generating #{project.name}'s CPD report")
         progress_logger.start
-        execution_time, end_time, exit_code, stdout, stderr = generate_cpd_report(project)
+        cpd_cmd, execution_time, end_time, exit_code, stdout, stderr = generate_cpd_report(project)
         progress_logger.stop
         sum_time += execution_time
 
         PmdReportDetail.create(execution_time: execution_time, timestamp: end_time,
+                               cmdline: cpd_cmd,
                                exit_code: exit_code, stdout: stdout, stderr: stderr,
                                report_info_path: project.get_cpd_report_info_path(@pmd_branch_name))
         logger.info "#{project.name}'s CPD report was generated successfully (exit code: #{exit_code})"
@@ -193,7 +194,7 @@ module PmdTester
         exit_code = status.exitstatus
       end
       end_time = Time.now
-      [end_time - start_time, end_time, exit_code, stdout, stderr]
+      [cpd_cmd, end_time - start_time, end_time, exit_code, stdout, stderr]
     end
 
     # returns the branch details
