@@ -183,7 +183,7 @@ module PmdTester
                 '--language java ' \
                 '--minimum-tokens 50 ' \
                 '--no-fail-on-violation ' \
-                "-r #{project.get_cpd_report_path(@pmd_branch_name)} "
+                "-r #{project.get_cpd_report_path(@pmd_branch_name)}"
       start_time = Time.now
       exit_code = nil
       if File.exist?(project.get_cpd_report_path(@pmd_branch_name))
