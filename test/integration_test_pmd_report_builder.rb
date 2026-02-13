@@ -15,12 +15,17 @@ class IntegrationTestPmdReportBuilder < Test::Unit::TestCase
   # The main branch should always be buildable by the regression tester. For older
   # versions, we can rely on baselines.
   #
-  # Note 1: Although a base branch is configured here, this is not used. Only the patch
-  # branch is built.
+  # Note 1: This test doesn't exercise the complete Regression Tester, it only
+  # tests the report builder, that is: We can build PMD and can call PMD to
+  # generate the PMD reports and CPD reports. We don't test the HTML report builder.
+  #
   # Note 2: We use a limited set of projects and rules, to make the test faster.
   def test_build_main_branch
-    argv = ['-r', 'target/repositories/pmd',
-            '-b', 'pmd_releases/6.55.0',
+    path = 'target/repositories/pmd'
+    clone_and_update_pmd_main(path)
+
+    argv = ['--mode', 'single',
+            '-r', path,
             '-p', 'main',
             '-c', 'test/resources/integration_test_pmd_report_builder/pmd7-config.xml',
             '-l', 'test/resources/integration_test_pmd_report_builder/project-test.xml',
@@ -39,5 +44,27 @@ class IntegrationTestPmdReportBuilder < Test::Unit::TestCase
     assert_path_exist('target/reports/main/checkstyle/report_info.json')
     assert_path_exist('target/reports/main/checkstyle/cpd_report.xml')
     assert_path_exist('target/reports/main/checkstyle/cpd_report_info.json')
+  end
+
+  private
+
+  # clone PMD into target/repositories/pmd, if it is not already there. PMD will be built
+  # by the regression tester then.
+  def clone_and_update_pmd_main(path)
+    logger.level = Logger::INFO
+    if File.exist?(path)
+      logger.warn "Skipping clone, project path #{path} already exists"
+    else
+      Cmd.execute_successfully("git clone --single-branch --depth 1 https://github.com/pmd/pmd #{path}")
+    end
+    Dir.chdir(path) do
+      Cmd.execute_successfully('git checkout -b fetched/temp')
+      Cmd.execute_successfully('git fetch --depth 1 origin main')
+      Cmd.execute_successfully('git branch --force fetched/main FETCH_HEAD')
+      Cmd.execute_successfully('git checkout fetched/main')
+      Cmd.execute_successfully('git branch -D fetched/temp')
+      last_commit_log = Cmd.execute_successfully('git log -1 --pretty="%h %ci %s"').strip
+      logger.info "PMD main branch is at: #{last_commit_log}"
+    end
   end
 end
