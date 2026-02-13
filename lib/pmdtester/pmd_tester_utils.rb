@@ -34,6 +34,19 @@ module PmdTester
       )
     end
 
+    # Parse the base and the patch CPD report, compute their diff
+    # Returns a +CpdReportDiff+
+    def build_cpd_report_diff(base_report_file, patch_report_file, base_info, patch_info)
+      base_details = PmdReportDetail.load(base_info)
+      patch_details = PmdReportDetail.load(patch_info)
+
+      base_report = parse_cpd_report(base_report_file, BASE, base_details)
+      patch_report = parse_cpd_report(patch_report_file, PATCH, patch_details)
+
+      logger.info 'Calculating CPD diffs'
+      CpdReportDiff.new(base_report: base_report, patch_report: patch_report)
+    end
+
     def parse_cpd_report(report_file, branch, report_details)
       logger.info "Parsing CPD Report #{report_file}"
       doc = CpdReportDocument.new(branch, report_details.working_dir).parse(report_file)
