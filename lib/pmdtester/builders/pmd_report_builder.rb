@@ -179,9 +179,10 @@ module PmdTester
       error_recovery_options = @error_recovery ? 'PMD_JAVA_OPTS="-Dpmd.error_recovery -ea" ' : ''
       cpd_cmd = "#{error_recovery_options}" \
                 "#{determine_run_path(command: 'cpd')} -d #{project.local_source_path} -f xml " \
+                '--language java ' \
                 '--minimum-tokens 20 ' \
-                "-r #{project.get_cpd_report_path(@pmd_branch_name)} " \
-                "#{' --no-progress' if pmd7?}"
+                '--no-fail-on-violation ' \
+                "-r #{project.get_cpd_report_path(@pmd_branch_name)} "
       start_time = Time.now
       exit_code = nil
       if File.exist?(project.get_cpd_report_path(@pmd_branch_name))
