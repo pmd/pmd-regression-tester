@@ -181,7 +181,7 @@ module PmdTester
       cpd_cmd = "#{error_recovery_options}" \
                 "#{determine_run_path(command: 'cpd')} -d #{project.local_source_path} -f xml " \
                 '--language java ' \
-                '--minimum-tokens 20 ' \
+                '--minimum-tokens 50 ' \
                 '--no-fail-on-violation ' \
                 "-r #{project.get_cpd_report_path(@pmd_branch_name)} "
       start_time = Time.now
