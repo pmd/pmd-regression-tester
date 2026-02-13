@@ -21,13 +21,23 @@ module PmdTester
     # Parse the +report_file+ to produce a +Report+.
     # For the schema of xml reports, refer to https://pmd.github.io/schema/report_2_0_0.xsd
     def parse_pmd_report(report_file, branch, report_details, filter_set = nil)
-      require 'nokogiri'
-
-      logger.info "Parsing #{report_file}"
+      logger.info "Parsing PMD Report #{report_file}"
       doc = PmdReportDocument.new(branch, report_details.working_dir, filter_set)
-      parser = Nokogiri::XML::SAX::Parser.new(doc)
-      parser.parse_file(report_file) if File.exist?(report_file)
+                             .parse(report_file)
       Report.new(
+        report_document: doc,
+        file: report_file,
+
+        timestamp: report_details.timestamp,
+        exec_time: report_details.execution_time,
+        exit_code: report_details.exit_code
+      )
+    end
+
+    def parse_cpd_report(report_file, branch, report_details)
+      logger.info "Parsing CPD Report #{report_file}"
+      doc = CpdReportDocument.new(branch, report_details.working_dir).parse(report_file)
+      CpdReport.new(
         report_document: doc,
         file: report_file,
 

@@ -33,6 +33,7 @@ lib/pmdtester/builders/simple_progress_logger.rb
 lib/pmdtester/builders/summary_report_builder.rb
 lib/pmdtester/cmd.rb
 lib/pmdtester/collection_by_file.rb
+lib/pmdtester/cpd_report_diff.rb
 lib/pmdtester/location.rb
 lib/pmdtester/parsers/cpd_report_document.rb
 lib/pmdtester/parsers/options.rb

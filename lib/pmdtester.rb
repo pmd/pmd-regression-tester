@@ -5,6 +5,7 @@ require 'logger/colors'
 
 require_relative 'pmdtester/cmd'
 require_relative 'pmdtester/collection_by_file'
+require_relative 'pmdtester/cpd_report_diff'
 require_relative 'pmdtester/pmd_branch_detail'
 require_relative 'pmdtester/pmd_configerror'
 require_relative 'pmdtester/pmd_error'

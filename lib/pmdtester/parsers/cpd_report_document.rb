@@ -6,12 +6,13 @@ module PmdTester
   class CpdReportDocument < Nokogiri::XML::SAX::Document
     attr_reader :duplications, :errors
 
-    def initialize(working_dir)
+    def initialize(branch_name, working_dir)
       super()
       @duplications = []
       @errors = []
 
       @working_dir = working_dir
+      @branch_name = branch_name
 
       @current_duplication = nil
       @current_error = nil
@@ -20,7 +21,7 @@ module PmdTester
 
     def parse(file_path)
       parser = Nokogiri::XML::SAX::Parser.new(self)
-      parser.parse(File.open(file_path))
+      parser.parse(File.open(file_path)) if File.exist?(file_path)
       self
     end
 
@@ -75,7 +76,11 @@ module PmdTester
     end
 
     def handle_start_duplication(attrs)
-      @current_duplication = { lines: attrs['lines'].to_i, tokens: attrs['tokens'].to_i, files: [], codefragment: '' }
+      @current_duplication = { lines: attrs['lines'].to_i,
+                               tokens: attrs['tokens'].to_i,
+                               files: [],
+                               codefragment: '',
+                               branch: @branch_name }
     end
 
     def handle_end_duplication
@@ -110,7 +115,8 @@ module PmdTester
       @current_error = {
         filename: remove_work_dir!(attrs['filename']),
         msg: remove_work_dir!(attrs['msg']),
-        stack_trace: ''
+        stack_trace: '',
+        branch: @branch_name
       }
       @cur_text.clear
     end

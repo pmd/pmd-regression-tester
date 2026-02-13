@@ -5,18 +5,21 @@ require 'test_helper'
 class TestCpdReportDocument < Test::Unit::TestCase
   include PmdTester
 
+  FILE_PATH = 'pmd-core/src/test/java/net/sourceforge/pmd/RuleReferenceTest.java'
+  ERROR_FILE_PATH = 'pmd-cli/src/test/resources/net/sourceforge/pmd/cli/cpd/badandgood/BadFile.java'
+  BRANCH = 'base'
+
   def test_document
-    doc = PmdTester::CpdReportDocument.new('SHOULD_BE_REPLACED').parse('test/resources/cpd_report_document/test_document.xml')
+    doc = PmdTester::CpdReportDocument.new(BRANCH, 'SHOULD_BE_REPLACED')
+                                      .parse('test/resources/cpd_report_document/test_document.xml')
     assert_equal(2, doc.duplications.size)
     assert_equal(1, doc.errors.size)
     first_duplication = doc.duplications[0]
     assert_duplication(duplication: first_duplication, lines: 33, tokens: 239, files: 2,
                        codefragment_start: '    public void testOverride() {')
-    assert_file(file_info: first_duplication[:files][0],
-                path: 'pmd-core/src/test/java/net/sourceforge/pmd/RuleReferenceTest.java',
+    assert_file(file_info: first_duplication[:files][0], path: FILE_PATH,
                 line: 32, column: 29, endline: 64, endcolumn: 75, begintoken: 2356, endtoken: 2594)
-    assert_file(file_info: first_duplication[:files][1],
-                path: 'pmd-core/src/test/java/net/sourceforge/pmd/RuleReferenceTest.java',
+    assert_file(file_info: first_duplication[:files][1], path: FILE_PATH,
                 line: 68, column: 37, endline: 100, endcolumn: 75, begintoken: 5700, endtoken: 5938)
 
     second_duplication = doc.duplications[1]
@@ -27,9 +30,8 @@ class TestCpdReportDocument < Test::Unit::TestCase
 
     first_error = doc.errors[0]
     assert_error(error_info: first_error,
-                 filename: 'pmd-cli/src/test/resources/net/sourceforge/pmd/cli/cpd/badandgood/BadFile.java',
-                 msg_start: 'LexException: Lexical error in file \'pmd-cli/src/test/resources/net/' \
-                            'sourceforge/pmd/cli/cpd/badandgood/BadFile.java\' at')
+                 filename: ERROR_FILE_PATH,
+                 msg_start: "LexException: Lexical error in file '#{ERROR_FILE_PATH}' at")
   end
 
   private
@@ -39,6 +41,7 @@ class TestCpdReportDocument < Test::Unit::TestCase
     assert_equal(tokens, duplication[:tokens])
     assert_equal(files, duplication[:files].size)
     assert_true(duplication[:codefragment].start_with?(codefragment_start))
+    assert_equal(BRANCH, duplication[:branch])
   end
 
   def assert_file(file_info:, path:, line:, column:, endline:, endcolumn:, begintoken:, endtoken:)
@@ -55,5 +58,6 @@ class TestCpdReportDocument < Test::Unit::TestCase
     assert_equal(filename, error_info[:filename])
     assert_true(error_info[:msg].start_with?(msg_start))
     assert_true(error_info[:stack_trace].start_with?("net.sourceforge.pmd.lang.ast.#{msg_start}"))
+    assert_equal(BRANCH, error_info[:branch])
   end
 end

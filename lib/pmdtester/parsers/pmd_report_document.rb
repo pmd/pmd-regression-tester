@@ -26,6 +26,12 @@ module PmdTester
       @cur_text = String.new(capacity: 200)
     end
 
+    def parse(file_path)
+      parser = Nokogiri::XML::SAX::Parser.new(self)
+      parser.parse(File.open(file_path)) if File.exist?(file_path)
+      self
+    end
+
     def start_element(name, attrs = [])
       attrs = attrs.to_h
 
