@@ -9,7 +9,7 @@ module PmdTester
   class PmdReportBuilder
     include PmdTester
 
-    def initialize(projects, options, branch_config, branch_name)
+    def initialize(projects, options, branch_config, branch_name, rules_changed)
       @projects = projects
       @local_git_repo = options.local_git_repo
       @threads = options.threads
@@ -20,9 +20,11 @@ module PmdTester
 
       @pmd_branch_details = PmdBranchDetail.new(@pmd_branch_name)
       @project_builder = ProjectBuilder.new(@projects)
+      @run_pmd = options.run_pmd && rules_changed
+      @run_cpd = options.run_cpd
     end
 
-    def get_pmd_binary_file
+    def create_pmd_package
       logger.info "#{@pmd_branch_name}: Start packaging PMD"
       Dir.chdir(@local_git_repo) do
         checkout_build_branch # needs a clean working tree, otherwise fails
@@ -32,7 +34,7 @@ module PmdTester
         # for local branches.
         build_branch_sha = Cmd.execute_successfully("git rev-parse #{@pmd_branch_name}^{commit}")
 
-        raise "Wrong branch #{get_last_commit_sha}" unless build_branch_sha == get_last_commit_sha
+        raise "Wrong branch #{determine_last_commit_sha}" unless build_branch_sha == determine_last_commit_sha
 
         distro_path = saved_distro_path(build_branch_sha)
         logger.debug "#{@pmd_branch_name}: PMD Version is #{@pmd_version} " \
@@ -47,7 +49,7 @@ module PmdTester
 
         # we're still on the build branch
         @pmd_branch_details.branch_last_sha = build_branch_sha
-        @pmd_branch_details.branch_last_message = get_last_commit_message
+        @pmd_branch_details.branch_last_message = determine_last_commit_message
       end
       logger.info "#{@pmd_branch_name}: Packaging PMD completed"
     end
@@ -82,14 +84,14 @@ module PmdTester
       Cmd.execute_successfully(version_cmd)
     end
 
-    def get_last_commit_sha
-      get_last_commit_sha_cmd = 'git rev-parse HEAD^{commit}'
-      Cmd.execute_successfully(get_last_commit_sha_cmd)
+    def determine_last_commit_sha
+      last_commit_sha_cmd = 'git rev-parse HEAD^{commit}'
+      Cmd.execute_successfully(last_commit_sha_cmd)
     end
 
-    def get_last_commit_message
-      get_last_commit_message_cmd = 'git log -1 --pretty=%B'
-      Cmd.execute_successfully(get_last_commit_message_cmd)
+    def determine_last_commit_message
+      last_commit_message_cmd = 'git log -1 --pretty=%B'
+      Cmd.execute_successfully(last_commit_message_cmd)
     end
 
     def generate_pmd_report(project)
@@ -109,7 +111,7 @@ module PmdTester
         logger.warn "#{@pmd_branch_name}: Skipping PMD run - report " \
                     "#{project.get_pmd_report_path(@pmd_branch_name)} already exists"
       else
-        status = Cmd.execute(pmd_cmd, project.get_project_target_dir(@pmd_branch_name))
+        status = Cmd.execute_save_output(pmd_cmd, project.get_project_target_dir(@pmd_branch_name))
         exit_code = status.exitstatus
       end
       end_time = Time.now
@@ -149,25 +151,69 @@ module PmdTester
         logger.info "#{project.name}'s PMD report was generated successfully (exit code: #{exit_code})"
       end
 
-      @pmd_branch_details.execution_time = sum_time
-      @pmd_branch_details.save
+      @pmd_branch_details.execution_time += sum_time
       FileUtils.cp(@branch_config, @pmd_branch_details.target_branch_config_path)
-      @pmd_branch_details
+    end
+
+    def generate_cpd_reports
+      logger.info "Generating CPD report started -- branch #{@pmd_branch_name}"
+
+      sum_time = 0
+      @projects.each do |project|
+        progress_logger = SimpleProgressLogger.new("generating #{project.name}'s CPD report")
+        progress_logger.start
+        cpd_cmd, execution_time, end_time, exit_code, stdout, stderr = generate_cpd_report(project)
+        progress_logger.stop
+        sum_time += execution_time
+
+        PmdReportDetail.create(execution_time: execution_time, timestamp: end_time,
+                               cmdline: cpd_cmd,
+                               exit_code: exit_code, stdout: stdout, stderr: stderr,
+                               report_info_path: project.get_cpd_report_info_path(@pmd_branch_name))
+        logger.info "#{project.name}'s CPD report was generated successfully (exit code: #{exit_code})"
+      end
+
+      @pmd_branch_details.execution_time += sum_time
+    end
+
+    def generate_cpd_report(project)
+      error_recovery_options = @error_recovery ? 'PMD_JAVA_OPTS="-Dpmd.error_recovery -ea" ' : ''
+      cpd_cmd = "#{error_recovery_options}" \
+                "#{determine_run_path(command: 'cpd')} -d #{project.local_source_path} -f xml " \
+                '--language java ' \
+                '--minimum-tokens 50 ' \
+                '--no-fail-on-violation ' \
+                "-r #{project.get_cpd_report_path(@pmd_branch_name)}"
+      start_time = Time.now
+      exit_code = nil
+      if File.exist?(project.get_cpd_report_path(@pmd_branch_name))
+        logger.warn "#{@pmd_branch_name}: Skipping CPD run - report " \
+                    "#{project.get_cpd_report_path(@pmd_branch_name)} already exists"
+      else
+        status, stdout, stderr = Cmd.execute(cpd_cmd)
+        exit_code = status.exitstatus
+      end
+      end_time = Time.now
+      [cpd_cmd, end_time - start_time, end_time, exit_code, stdout, stderr]
     end
 
     # returns the branch details
     def build
       @project_builder.clone_projects
       @project_builder.build_projects
-      get_pmd_binary_file
-      generate_pmd_reports
+      create_pmd_package
+      @pmd_branch_details.execution_time = 0
+      generate_pmd_reports if @run_pmd
+      generate_cpd_reports if @run_cpd
+      @pmd_branch_details.save
+      @pmd_branch_details
     end
 
     private
 
     def checkout_build_branch
       logger.info "#{@pmd_branch_name}: Checking out the branch"
-      # note that this would fail if the tree is dirty
+      # the checkout will fail if the tree is dirty
       Cmd.execute_successfully("git checkout #{@pmd_branch_name}")
 
       # determine the version
@@ -225,15 +271,14 @@ module PmdTester
       Semver.compare(@pmd_version, '7.0.0-SNAPSHOT') >= 0
     end
 
-    def determine_run_path
+    def determine_run_path(command: 'check')
       run_path = "#{saved_distro_path(@pmd_branch_details.branch_last_sha)}/bin"
-      run_path = if File.exist?("#{run_path}/pmd")
-                   # New PMD 7 CLI script (pmd/pmd#4059)
-                   "#{run_path}/pmd check"
-                 else
-                   "#{run_path}/run.sh pmd"
-                 end
-      run_path
+      if File.exist?("#{run_path}/pmd")
+        # New PMD 7 CLI script (pmd/pmd#4059)
+        "#{run_path}/pmd #{command}"
+      else
+        "#{run_path}/run.sh pmd"
+      end
     end
 
     def find_pmd_dist_target

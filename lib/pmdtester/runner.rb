@@ -33,15 +33,17 @@ module PmdTester
     def run_local_mode
       logger.info "Mode: #{@options.mode}"
       get_projects(@options.project_list) unless @options.nil?
+
+      rules_changed = true
       if @options.auto_config_flag
-        run_required = RuleSetBuilder.new(@options).build?
-        logger.debug "Run required: #{run_required}"
-        return unless run_required
+        rules_changed = RuleSetBuilder.new(@options).build?
+        logger.debug "Rules have changed: #{rules_changed}"
       end
 
-      base_branch_details = create_pmd_report(config: @options.base_config, branch: @options.base_branch)
-      patch_branch_details = create_pmd_report(config: @options.patch_config, branch: @options.patch_branch)
-
+      base_branch_details = create_pmd_report(config: @options.base_config, branch: @options.base_branch,
+                                              rules_changed: rules_changed)
+      patch_branch_details = create_pmd_report(config: @options.patch_config, branch: @options.patch_branch,
+                                               rules_changed: rules_changed)
       build_html_reports(@projects, base_branch_details, patch_branch_details)
     end
 
@@ -66,7 +68,8 @@ module PmdTester
         RuleSetBuilder.new(@options).calculate_filter_set if @options.filter_with_patch_config
       end
 
-      patch_branch_details = create_pmd_report(config: @options.patch_config, branch: @options.patch_branch)
+      patch_branch_details = create_pmd_report(config: @options.patch_config, branch: @options.patch_branch,
+                                               rules_changed: true)
 
       base_branch_details = PmdBranchDetail.load(@options.base_branch, logger)
       build_html_reports(@projects, base_branch_details, patch_branch_details, @options.filter_set)
@@ -112,7 +115,8 @@ module PmdTester
       logger.info "Mode: #{@options.mode}"
 
       get_projects(@options.project_list) unless @options.nil?
-      patch_branch_details = create_pmd_report(config: @options.patch_config, branch: @options.patch_branch)
+      patch_branch_details = create_pmd_report(config: @options.patch_config, branch: @options.patch_branch,
+                                               rules_changed: true)
       # copy list of projects file to the patch baseline
       FileUtils.cp(@options.project_list, patch_branch_details.target_branch_project_list_path)
 
@@ -153,8 +157,8 @@ module PmdTester
 
     private
 
-    def create_pmd_report(config:, branch:)
-      PmdReportBuilder.new(@projects, @options, config, branch).build
+    def create_pmd_report(config:, branch:, rules_changed:)
+      PmdReportBuilder.new(@projects, @options, config, branch, rules_changed).build
     end
   end
 end

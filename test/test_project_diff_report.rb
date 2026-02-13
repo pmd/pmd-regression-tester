@@ -14,9 +14,15 @@ class TestProjectDiffReport < Test::Unit::TestCase
     'test/resources/html_report_builder/test_html_report_builder_base.xml'
   PATCH_PMD_REPORT_PATH =
     'test/resources/html_report_builder/test_html_report_builder_patch.xml'
-
   BASE_REPORT_INFO_PATH = 'test/resources/html_report_builder/base_report_info.json'
   PATCH_REPORT_INFO_PATH = 'test/resources/html_report_builder/patch_report_info.json'
+
+  BASE_CPD_REPORT_PATH =
+    'test/resources/html_report_builder/cpd_report_base.xml'
+  PATCH_CPD_REPORT_PATH =
+    'test/resources/html_report_builder/cpd_report_patch.xml'
+  BASE_CPD_REPORT_INFO_PATH = 'test/resources/html_report_builder/cpd_report_info_base.json'
+  PATCH_CPD_REPORT_INFO_PATH = 'test/resources/html_report_builder/cpd_report_info_patch.json'
 
   EXPECTED_REPORT_PATH =
     'test/resources/html_report_builder/expected_diff_report_index.html'
@@ -35,10 +41,7 @@ class TestProjectDiffReport < Test::Unit::TestCase
 
     actual_report_path = "target/reports/diff/#{project.name}"
 
-    project.report_diff = build_report_diff(BASE_PMD_REPORT_PATH, PATCH_PMD_REPORT_PATH,
-                                            BASE_REPORT_INFO_PATH, PATCH_REPORT_INFO_PATH)
-    project.report_diff.base_report.report_folder = BASE_REPORT_FOLDER
-    project.report_diff.patch_report.report_folder = PATCH_REPORT_FOLDER
+    build_report_diffs(project)
 
     PmdTester::LiquidProjectRenderer.new.write_project_index(project, actual_report_path)
 
@@ -50,21 +53,22 @@ class TestProjectDiffReport < Test::Unit::TestCase
     assert_file_exists("#{actual_report_path}/base_pmd_report.xml")
     assert_file_exists("#{actual_report_path}/base_data.js")
     assert_file_exists("#{actual_report_path}/base_pmd_report.html")
-    assert_file_exists("#{actual_report_path}/base_stdout.txt")
-    assert_file_exists("#{actual_report_path}/base_stderr.txt")
     assert_file_equals(EXPECTED_FULL_BASE_HTML_REPORT, "#{actual_report_path}/base_pmd_report.html")
     assert_file_exists("#{actual_report_path}/patch_pmd_report.xml")
     assert_file_exists("#{actual_report_path}/patch_data.js")
     assert_file_exists("#{actual_report_path}/patch_pmd_report.html")
-    assert_file_exists("#{actual_report_path}/patch_stdout.txt")
-    assert_file_exists("#{actual_report_path}/patch_stderr.txt")
     assert_file_equals(EXPECTED_FULL_PATCH_HTML_REPORT, "#{actual_report_path}/patch_pmd_report.html")
+
+    assert_pmd_stdout_stderr_files(actual_report_path)
+    assert_cpd_stdout_stderr_files(actual_report_path)
   end
 
   def test_report_diffs_empty
     project = PmdTester::ProjectsParser.new.parse('test/resources/project_diff_report/project-list.xml')[1]
     project.report_diff = PmdTester::ReportDiff.new(base_report: PmdTester::Report.empty,
                                                     patch_report: PmdTester::Report.empty)
+    project.cpd_report_diff = PmdTester::CpdReportDiff.new(base_report: PmdTester::CpdReport.empty,
+                                                           patch_report: PmdTester::CpdReport.empty)
 
     actual_report_path = "target/reports/diff/#{project.name}"
 
@@ -75,6 +79,30 @@ class TestProjectDiffReport < Test::Unit::TestCase
   end
 
   private
+
+  def build_report_diffs(project)
+    project.report_diff = build_report_diff(BASE_PMD_REPORT_PATH, PATCH_PMD_REPORT_PATH,
+                                            BASE_REPORT_INFO_PATH, PATCH_REPORT_INFO_PATH)
+    project.report_diff.base_report.report_folder = BASE_REPORT_FOLDER
+    project.report_diff.patch_report.report_folder = PATCH_REPORT_FOLDER
+
+    project.cpd_report_diff = build_cpd_report_diff(BASE_CPD_REPORT_PATH, PATCH_CPD_REPORT_PATH,
+                                                    BASE_CPD_REPORT_INFO_PATH, PATCH_CPD_REPORT_INFO_PATH)
+  end
+
+  def assert_pmd_stdout_stderr_files(actual_report_path)
+    assert_file_exists("#{actual_report_path}/base_stdout.txt")
+    assert_file_exists("#{actual_report_path}/base_stderr.txt")
+    assert_file_exists("#{actual_report_path}/patch_stdout.txt")
+    assert_file_exists("#{actual_report_path}/patch_stderr.txt")
+  end
+
+  def assert_cpd_stdout_stderr_files(actual_report_path)
+    assert_file_exists("#{actual_report_path}/base_cpd_stdout.txt")
+    assert_file_exists("#{actual_report_path}/base_cpd_stderr.txt")
+    assert_file_exists("#{actual_report_path}/patch_cpd_stdout.txt")
+    assert_file_exists("#{actual_report_path}/patch_cpd_stderr.txt")
+  end
 
   def copy_resources(project)
     # create all the resources, so that it is easier to verify the report manually if needed

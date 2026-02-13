@@ -21,20 +21,13 @@ fi
 
 set -e
 
-# Make sure to use java11. This is already installed by setup-java.
+# Make sure to use java11. This is already installed by build.yml/publish-snapshot.yml/publish-release.yml
 export JAVA_HOME=${HOME}/openjdk11
 export PATH=$JAVA_HOME/bin:$PATH
 
 mvn test-compile -B
 mvn dependency:build-classpath -DincludeScope=test -Dmdep.outputFile=classpath.txt -B
 ]]></build-command>
-    <auxclasspath-command>echo -n "$(pwd)/target/classes:$(pwd)/target/test-classes:"; cat classpath.txt</auxclasspath-command>
-  </project>
-
-  <!-- this project configuration is here, so that PMD's repo is cloned into target/repositories for integration tests -->
-  <project>
-    <name>pmd</name>
-    <type>git</type>
-    <connection>https://github.com/pmd/pmd</connection>
+    <auxclasspath-command>echo -n "${HOME}/openjdk11/lib/jrt-fs.jar:$(pwd)/target/classes:$(pwd)/target/test-classes:"; cat classpath.txt</auxclasspath-command>
   </project>
 </projectlist>

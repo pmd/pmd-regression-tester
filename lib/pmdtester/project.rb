@@ -17,6 +17,7 @@ module PmdTester
     attr_reader :exclude_patterns
     attr_reader :src_subpath
     attr_accessor :report_diff
+    attr_accessor :cpd_report_diff
     # key: pmd branch name as String => value: local path of pmd report
     attr_reader :build_command
     attr_reader :auxclasspath_command
@@ -83,11 +84,27 @@ module PmdTester
       end
     end
 
+    def get_cpd_report_path(branch_name)
+      if branch_name.nil?
+        nil
+      else
+        "#{get_project_target_dir(branch_name)}/cpd_report.xml"
+      end
+    end
+
     def get_report_info_path(branch_name)
       if branch_name.nil?
         nil
       else
         "#{get_project_target_dir(branch_name)}/report_info.json"
+      end
+    end
+
+    def get_cpd_report_info_path(branch_name)
+      if branch_name.nil?
+        nil
+      else
+        "#{get_project_target_dir(branch_name)}/cpd_report_info.json"
       end
     end
 
@@ -128,6 +145,11 @@ module PmdTester
 
       report_diff.base_report.report_folder = get_project_target_dir(base_branch)
       report_diff.patch_report.report_folder = get_project_target_dir(patch_branch)
+
+      self.cpd_report_diff = build_cpd_report_diff(get_cpd_report_path(base_branch),
+                                                   get_cpd_report_path(patch_branch),
+                                                   get_cpd_report_info_path(base_branch),
+                                                   get_cpd_report_info_path(patch_branch))
     end
   end
 end
