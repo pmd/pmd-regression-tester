@@ -111,7 +111,7 @@ module PmdTester
         logger.warn "#{@pmd_branch_name}: Skipping PMD run - report " \
                     "#{project.get_pmd_report_path(@pmd_branch_name)} already exists"
       else
-        status = Cmd.execute(pmd_cmd, project.get_project_target_dir(@pmd_branch_name))
+        status = Cmd.execute_save_output(pmd_cmd, project.get_project_target_dir(@pmd_branch_name))
         exit_code = status.exitstatus
       end
       end_time = Time.now
@@ -162,12 +162,12 @@ module PmdTester
       @projects.each do |project|
         progress_logger = SimpleProgressLogger.new("generating #{project.name}'s CPD report")
         progress_logger.start
-        execution_time, end_time, exit_code = generate_cpd_report(project)
+        execution_time, end_time, exit_code, stdout, stderr = generate_cpd_report(project)
         progress_logger.stop
         sum_time += execution_time
 
         PmdReportDetail.create(execution_time: execution_time, timestamp: end_time,
-                               exit_code: exit_code,
+                               exit_code: exit_code, stdout: stdout, stderr: stderr,
                                report_info_path: project.get_cpd_report_info_path(@pmd_branch_name))
         logger.info "#{project.name}'s CPD report was generated successfully (exit code: #{exit_code})"
       end
@@ -189,11 +189,11 @@ module PmdTester
         logger.warn "#{@pmd_branch_name}: Skipping CPD run - report " \
                     "#{project.get_cpd_report_path(@pmd_branch_name)} already exists"
       else
-        status = Cmd.execute(cpd_cmd, project.get_project_target_dir(@pmd_branch_name))
+        status, stdout, stderr = Cmd.execute(cpd_cmd)
         exit_code = status.exitstatus
       end
       end_time = Time.now
-      [end_time - start_time, end_time, exit_code]
+      [end_time - start_time, end_time, exit_code, stdout, stderr]
     end
 
     # returns the branch details
