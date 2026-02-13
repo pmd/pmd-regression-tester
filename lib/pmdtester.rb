@@ -27,6 +27,7 @@ require_relative 'pmdtester/builders/liquid_renderer'
 require_relative 'pmdtester/builders/rule_set_builder'
 require_relative 'pmdtester/builders/summary_report_builder'
 
+require_relative 'pmdtester/parsers/cpd_report_document'
 require_relative 'pmdtester/parsers/options'
 require_relative 'pmdtester/parsers/pmd_report_document'
 require_relative 'pmdtester/parsers/projects_parser'

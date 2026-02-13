@@ -6,12 +6,11 @@
 # Note that changes in the inspected code, or installation of new
 # versions of RuboCop, may require this file to be generated again.
 
-# Offense count: 3
+# Offense count: 2
 # Configuration parameters: AllowedParentClasses.
 Lint/MissingSuper:
   Exclude:
     - 'lib/pmdtester/cmd.rb'
-    - 'lib/pmdtester/parsers/pmd_report_document.rb'
     - 'lib/pmdtester/parsers/projects_parser.rb'
 
 # Offense count: 47

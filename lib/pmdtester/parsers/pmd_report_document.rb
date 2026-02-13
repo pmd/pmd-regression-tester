@@ -10,6 +10,7 @@ module PmdTester
     attr_reader :configerrors
 
     def initialize(branch_name, working_dir, filter_set = nil)
+      super()
       @violations = CollectionByFile.new
       @errors = CollectionByFile.new
       @configerrors = Hash.new { |hash, key| hash[key] = [] }
