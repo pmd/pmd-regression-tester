@@ -24,11 +24,6 @@ Metrics/AbcSize:
 Metrics/MethodLength:
   Max: 22
 
-# Offense count: 3
-Naming/AccessorMethodName:
-  Exclude:
-    - 'lib/pmdtester/builders/pmd_report_builder.rb'
-
 # Offense count: 2
 # Configuration parameters: EnforcedStyle, CheckMethodNames, CheckSymbols, AllowedIdentifiers, AllowedPatterns.
 # SupportedStyles: snake_case, normalcase, non_integer
@@ -57,7 +52,6 @@ Style/AccessorGrouping:
 # Keywords: TODO, FIXME, OPTIMIZE, HACK, REVIEW, NOTE
 Style/CommentAnnotation:
   Exclude:
-    - 'lib/pmdtester/builders/pmd_report_builder.rb'
     - 'lib/pmdtester/builders/project_builder.rb'
     - 'test/test_pmd_report_document.rb'
 
@@ -80,9 +74,3 @@ Style/HashEachMethods:
 Style/KeywordParametersOrder:
   Exclude:
     - 'lib/pmdtester/pmd_report_detail.rb'
-
-# Offense count: 1
-# This cop supports safe autocorrection (--autocorrect).
-Style/RedundantAssignment:
-  Exclude:
-    - 'lib/pmdtester/builders/pmd_report_builder.rb'

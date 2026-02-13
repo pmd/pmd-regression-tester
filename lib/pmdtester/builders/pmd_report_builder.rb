@@ -24,7 +24,7 @@ module PmdTester
       @run_cpd = options.run_cpd
     end
 
-    def get_pmd_binary_file
+    def create_pmd_package
       logger.info "#{@pmd_branch_name}: Start packaging PMD"
       Dir.chdir(@local_git_repo) do
         checkout_build_branch # needs a clean working tree, otherwise fails
@@ -34,7 +34,7 @@ module PmdTester
         # for local branches.
         build_branch_sha = Cmd.execute_successfully("git rev-parse #{@pmd_branch_name}^{commit}")
 
-        raise "Wrong branch #{get_last_commit_sha}" unless build_branch_sha == get_last_commit_sha
+        raise "Wrong branch #{determine_last_commit_sha}" unless build_branch_sha == determine_last_commit_sha
 
         distro_path = saved_distro_path(build_branch_sha)
         logger.debug "#{@pmd_branch_name}: PMD Version is #{@pmd_version} " \
@@ -49,7 +49,7 @@ module PmdTester
 
         # we're still on the build branch
         @pmd_branch_details.branch_last_sha = build_branch_sha
-        @pmd_branch_details.branch_last_message = get_last_commit_message
+        @pmd_branch_details.branch_last_message = determine_last_commit_message
       end
       logger.info "#{@pmd_branch_name}: Packaging PMD completed"
     end
@@ -84,14 +84,14 @@ module PmdTester
       Cmd.execute_successfully(version_cmd)
     end
 
-    def get_last_commit_sha
-      get_last_commit_sha_cmd = 'git rev-parse HEAD^{commit}'
-      Cmd.execute_successfully(get_last_commit_sha_cmd)
+    def determine_last_commit_sha
+      last_commit_sha_cmd = 'git rev-parse HEAD^{commit}'
+      Cmd.execute_successfully(last_commit_sha_cmd)
     end
 
-    def get_last_commit_message
-      get_last_commit_message_cmd = 'git log -1 --pretty=%B'
-      Cmd.execute_successfully(get_last_commit_message_cmd)
+    def determine_last_commit_message
+      last_commit_message_cmd = 'git log -1 --pretty=%B'
+      Cmd.execute_successfully(last_commit_message_cmd)
     end
 
     def generate_pmd_report(project)
@@ -201,7 +201,7 @@ module PmdTester
     def build
       @project_builder.clone_projects
       @project_builder.build_projects
-      get_pmd_binary_file
+      create_pmd_package
       @pmd_branch_details.execution_time = 0
       generate_pmd_reports if @run_pmd
       generate_cpd_reports if @run_cpd
@@ -213,7 +213,7 @@ module PmdTester
 
     def checkout_build_branch
       logger.info "#{@pmd_branch_name}: Checking out the branch"
-      # note that this would fail if the tree is dirty
+      # the checkout will fail if the tree is dirty
       Cmd.execute_successfully("git checkout #{@pmd_branch_name}")
 
       # determine the version
@@ -273,13 +273,12 @@ module PmdTester
 
     def determine_run_path(command: 'check')
       run_path = "#{saved_distro_path(@pmd_branch_details.branch_last_sha)}/bin"
-      run_path = if File.exist?("#{run_path}/pmd")
-                   # New PMD 7 CLI script (pmd/pmd#4059)
-                   "#{run_path}/pmd #{command}"
-                 else
-                   "#{run_path}/run.sh pmd"
-                 end
-      run_path
+      if File.exist?("#{run_path}/pmd")
+        # New PMD 7 CLI script (pmd/pmd#4059)
+        "#{run_path}/pmd #{command}"
+      else
+        "#{run_path}/run.sh pmd"
+      end
     end
 
     def find_pmd_dist_target
