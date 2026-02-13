@@ -8,19 +8,29 @@ module PmdTester
                 :exec_time,
                 :timestamp,
                 :exit_code,
+                :stdout,
+                :stderr,
                 :file
 
     def initialize(report_document:,
                    file:,
                    timestamp:,
                    exec_time:,
-                   exit_code:)
+                   exit_code:,
+                   stdout:,
+                   stderr:)
       initialize_empty
       initialize_with_report_document report_document unless report_document.nil?
       @timestamp = timestamp
       @exec_time = exec_time
       @exit_code = exit_code
+      @stdout = stdout
+      @stderr = stderr
       @file = file
+    end
+
+    def self.empty
+      new(report_document: nil, file: '', timestamp: '', exec_time: 0, exit_code: '?', stdout: '', stderr: '')
     end
 
     private

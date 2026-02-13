@@ -89,6 +89,8 @@
                     <th>Violation diff</th>
                     <th>Error diff</th>
                     <th>ConfigError diff</th>
+                    <th>Duplication diff</th>
+                    <th>CPD Error diff</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -99,9 +101,11 @@
                 <tr>
                     <td class="project-header"><a href="{{ project.report_url }}">{{ project.name }}</a></td>
                     <td>{{ project.tag }}</td>
-                    <td>{% include 'diff_pill_row' h: project.violation_counts %}</td>
-                    <td>{% include 'diff_pill_row' h: project.error_counts %}</td>
-                    <td>{% include 'diff_pill_row' h: project.configerror_counts %}</td>
+                    <td>{% include 'diff_pill_row' h: project.pmd_report.violation_counts %}</td>
+                    <td>{% include 'diff_pill_row' h: project.pmd_report.error_counts %}</td>
+                    <td>{% include 'diff_pill_row' h: project.pmd_report.configerror_counts %}</td>
+                    <td>{% include 'diff_pill_row' h: project.cpd_report.duplication_counts %}</td>
+                    <td>{% include 'diff_pill_row' h: project.cpd_report.error_counts %}</td>
                 </tr>
                 {% endfor %}
                 </tbody>

@@ -50,6 +50,8 @@ module PmdTester
         'diff' => report_diff_to_h(project.report_diff),
         'error_diffs' => errors_to_h(project),
         'configerror_diffs' => configerrors_to_h(project),
+        'cpd_diff' => cpd_report_diff_to_h(project.cpd_report_diff),
+        'cpd_error_diffs' => cpd_errors_to_h(project),
         'project_name' => project.name
       }
 
@@ -60,11 +62,8 @@ module PmdTester
       # copy original pmd reports
       copy_file("#{root}/base_pmd_report.xml", project.report_diff.base_report.file)
       copy_file("#{root}/patch_pmd_report.xml", project.report_diff.patch_report.file)
-      # copy stdout and stderr outputs
-      copy_file("#{root}/base_stdout.txt", "#{project.report_diff.base_report.report_folder}/stdout.txt")
-      copy_file("#{root}/base_stderr.txt", "#{project.report_diff.base_report.report_folder}/stderr.txt")
-      copy_file("#{root}/patch_stdout.txt", "#{project.report_diff.patch_report.report_folder}/stdout.txt")
-      copy_file("#{root}/patch_stderr.txt", "#{project.report_diff.patch_report.report_folder}/stderr.txt")
+      write_pmd_stdout_stderr(root, project.report_diff)
+      write_cpd_stdout_stderr(root, project.cpd_report_diff)
       # render full pmd reports
       write_file("#{root}/base_pmd_report.html",
                  render_liquid('project_pmd_report.html', pmd_report_liquid_env(project, BASE)))
@@ -94,6 +93,20 @@ module PmdTester
     end
 
     private
+
+    def write_pmd_stdout_stderr(root, report_diff)
+      copy_file("#{root}/base_stdout.txt", "#{report_diff.base_report.report_folder}/stdout.txt")
+      copy_file("#{root}/base_stderr.txt", "#{report_diff.base_report.report_folder}/stderr.txt")
+      copy_file("#{root}/patch_stdout.txt", "#{report_diff.patch_report.report_folder}/stdout.txt")
+      copy_file("#{root}/patch_stderr.txt", "#{report_diff.patch_report.report_folder}/stderr.txt")
+    end
+
+    def write_cpd_stdout_stderr(root, cpd_report_diff)
+      write_file("#{root}/base_cpd_stdout.txt", cpd_report_diff.base_report.stdout)
+      write_file("#{root}/base_cpd_stderr.txt", cpd_report_diff.base_report.stderr)
+      write_file("#{root}/patch_cpd_stdout.txt", cpd_report_diff.patch_report.stdout)
+      write_file("#{root}/patch_cpd_stderr.txt", cpd_report_diff.patch_report.stderr)
+    end
 
     def copy_file(target_file, source_file)
       if File.exist? source_file

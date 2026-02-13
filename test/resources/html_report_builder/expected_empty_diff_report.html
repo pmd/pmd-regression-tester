@@ -78,6 +78,34 @@
                 </td>
             </tr>
             <tr>
+                <td class="item"><a href="#section-duplications">Duplications</a></td>
+                <td class="base">0</td>
+                <td class="patch">0</td>
+                <td class="diff">
+
+<span class="badge rounded-pill badge-secondary added">+0</span>
+<span class="badge rounded-pill badge-secondary removed">-0</span>
+
+<span class="badge rounded-pill badge-secondary changed">~0</span>
+
+
+                </td>
+            </tr>
+            <tr>
+                <td class="item"><a href="#section-cpd-errors">CPD Errors</a></td>
+                <td class="base">0</td>
+                <td class="patch">0</td>
+                <td class="diff">
+
+<span class="badge rounded-pill badge-secondary added">+0</span>
+<span class="badge rounded-pill badge-secondary removed">-0</span>
+
+<span class="badge rounded-pill badge-secondary changed">~0</span>
+
+
+                </td>
+            </tr>
+            <tr>
                 <td class="item">Execution time</td>
                 <td class="base">00:00:00</td>
                 <td class="patch">00:00:00</td>
@@ -90,9 +118,15 @@
                 <td class="diff"></td>
             </tr>
             <tr>
-                <td class="item">Exit Code</td>
+                <td class="item">PMD Exit Code</td>
                 <td class="base">? <a href="base_stdout.txt">stdout</a> | <a href="base_stderr.txt">stderr</a></td>
                 <td class="patch">? <a href="patch_stdout.txt">stdout</a> | <a href="patch_stderr.txt">stderr</a></td>
+                <td class="diff"></td>
+            </tr>
+            <tr>
+                <td class="item">CPD Exit Code</td>
+                <td class="base">? <a href="base_cpd_stdout.txt">stdout</a> | <a href="base_cpd_stderr.txt">stderr</a></td>
+                <td class="patch">? <a href="patch_cpd_stdout.txt">stdout</a> | <a href="patch_cpd_stderr.txt">stderr</a></td>
                 <td class="diff"></td>
             </tr>
             <tr>
@@ -193,6 +227,46 @@
                 </thead>
                 <tbody>
 
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="section" id="section-duplications">
+
+    <h2>Duplications</h2>
+
+    <div class="section-content">
+
+        <table id="duplicationsTable" width="100%" class="table">
+            <thead>
+            <tr>
+                <th>First Location (click row to expand)</th>
+                <th>Duplication</th>
+                <th>Type</th>
+            </tr>
+            </thead>
+        </table>
+
+    </div>
+</div>
+
+<div class="section" id="section-cpd-errors">
+
+    <h2>CPD Errors</h2>
+
+    <div class="section-content">
+
+        <div class="table-responsive">
+            <table id="cpd-error-table" class="table">
+                <thead>
+                 <tr>
+                     <th>File</th>
+                     <th>Description (click to expand)</th>
+                 </tr>
+                </thead>
+                <tbody>
                 </tbody>
             </table>
         </div>

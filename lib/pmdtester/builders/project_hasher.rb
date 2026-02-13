@@ -26,6 +26,24 @@ module PmdTester
       }
     end
 
+    def cpd_report_diff_to_h(cpd_rdiff)
+      {
+        'duplication_counts' => cpd_rdiff.duplication_counts.to_h.transform_keys(&:to_s),
+        'error_counts' => cpd_rdiff.error_counts.to_h.transform_keys(&:to_s),
+
+        'base_execution_time' => PmdReportDetail.convert_seconds(cpd_rdiff.base_report.exec_time),
+        'patch_execution_time' => PmdReportDetail.convert_seconds(cpd_rdiff.patch_report.exec_time),
+        'diff_execution_time' => PmdReportDetail.convert_seconds(cpd_rdiff.patch_report.exec_time -
+                                                                   cpd_rdiff.base_report.exec_time),
+
+        'base_timestamp' => cpd_rdiff.base_report.timestamp,
+        'patch_timestamp' => cpd_rdiff.patch_report.timestamp,
+
+        'base_exit_code' => cpd_rdiff.base_report.exit_code,
+        'patch_exit_code' => cpd_rdiff.patch_report.exit_code
+      }
+    end
+
     def violations_to_hash(project, violations_by_file, is_diff)
       filename_index = []
       all_vs = []
@@ -51,6 +69,11 @@ module PmdTester
     def configerrors_to_h(project)
       configerrors = project.report_diff.configerror_diffs_by_rule.values.flatten
       configerrors.map { |e| configerror_to_hash(e) }
+    end
+
+    def cpd_errors_to_h(project)
+      errors = project.cpd_report_diff.error_diffs
+      errors.map { |e| error_to_hash(e, project) }
     end
 
     def link_template(project)

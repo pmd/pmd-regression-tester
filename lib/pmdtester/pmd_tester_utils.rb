@@ -56,7 +56,9 @@ module PmdTester
 
         timestamp: report_details.timestamp,
         exec_time: report_details.execution_time,
-        exit_code: report_details.exit_code
+        exit_code: report_details.exit_code,
+        stdout: report_details.stdout,
+        stderr: report_details.stderr
       )
     end
 
