@@ -77,10 +77,10 @@ class TestSummaryReportBuilder < Test::Unit::TestCase
                        PmdTester::PmdBranchDetail.load('patch_branch', nil))
 
     assert_file_equals("#{test_resources_path}/expected_base_data.js",
-                       'target/reports/diff/sample_project/base_data.js')
+                       'target/reports/diff/sample_project/base_pmd_data.js')
     assert_file_equals("#{test_resources_path}/expected_patch_data.js",
-                       'target/reports/diff/sample_project/patch_data.js')
+                       'target/reports/diff/sample_project/patch_pmd_data.js')
     assert_file_equals("#{test_resources_path}/expected_project_data.js",
-                       'target/reports/diff/sample_project/project_data.js')
+                       'target/reports/diff/sample_project/diff_pmd_data.js')
   end
 end

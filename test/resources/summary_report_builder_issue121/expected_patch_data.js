@@ -1,4 +1,4 @@
-let project = {
+let pmd_report = {
     "source_link_base":"https://github.com/pmd/sample_project/tree/main",
     "source_link_template":"https://github.com/pmd/sample_project/tree/main/{file}#L{line}",
     "file_index":[

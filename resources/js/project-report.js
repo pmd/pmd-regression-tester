@@ -1,8 +1,8 @@
 /*
-    This is what's included in project_diff_report.html
+    This is what's included in project_diff_report.html, project_pmd_report.html and project_cpd_report.html
     to make the violation table and duplication table work.
 
-    It depends on the `project` and `cpd_report` global vars, which is generated
+    It depends on the `pmd_report` and `cpd_report` global vars, which is generated
     in another JS file by LiquidProjectRenderer
  */
 
@@ -27,20 +27,20 @@ $(document).ready(function () {
 
     function renderViolationsTable() {
         function makeCodeLink(violation) {
-            let template = project.source_link_template
-            template = template.replace('{file}', project.file_index[violation.f])
+            let template = pmd_report.source_link_template
+            template = template.replace('{file}', pmd_report.file_index[violation.f])
             template = template.replace('{line}', violation.l);
             return template
         }
         function renderCodeSnippet(violation) {
             var node = document.createElement('p');
-            var url = project.source_link_base + '/' + project.file_index[violation.f];
+            var url = pmd_report.source_link_base + '/' + pmd_report.file_index[violation.f];
             window.pmd_code_snippets.fetch(document, node, url, violation.l, makeCodeLink(violation));
             return node;
         }
 
         var table = $('#violationsTable').DataTable({
-            data: project.violations,
+            data: pmd_report.violations,
             columns: [
                 // other attributes in data:
                 // l: line
@@ -65,7 +65,7 @@ $(document).ready(function () {
             columnDefs: [
                 { //file column
                     render(data, type, row) {
-                        data = project.file_index[data];
+                        data = pmd_report.file_index[data];
                         // display only the file name (not full path), but use full
                         // path for sorting and such
                         if (type === "display") {

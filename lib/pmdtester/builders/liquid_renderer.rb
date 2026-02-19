@@ -68,7 +68,7 @@ module PmdTester
 
     def write_pmd_diff_report(project, root)
       # generate array of violations in json
-      write_file("#{root}/project_data.js", dump_violations_json(project))
+      write_file("#{root}/diff_pmd_data.js", dump_violations_json(project))
       # copy original pmd reports
       copy_file("#{root}/base_pmd_report.xml", project.report_diff.base_report.file)
       copy_file("#{root}/patch_pmd_report.xml", project.report_diff.patch_report.file)
@@ -79,15 +79,15 @@ module PmdTester
       # render full pmd reports
       write_file("#{root}/base_pmd_report.html",
                  render_liquid('project_pmd_report.html', pmd_report_liquid_env(project, BASE)))
-      write_file("#{root}/base_data.js", dump_violations_json(project, BASE))
+      write_file("#{root}/base_pmd_data.js", dump_violations_json(project, BASE))
       write_file("#{root}/patch_pmd_report.html",
                  render_liquid('project_pmd_report.html', pmd_report_liquid_env(project, PATCH)))
-      write_file("#{root}/patch_data.js", dump_violations_json(project, PATCH))
+      write_file("#{root}/patch_pmd_data.js", dump_violations_json(project, PATCH))
     end
 
     def write_cpd_diff_report(project, root)
       # generate array of cpd duplications in json
-      write_file("#{root}/cpd_data.js", dump_cpd_duplications_json(project, 'diff'))
+      write_file("#{root}/diff_cpd_data.js", dump_cpd_duplications_json(project, 'diff'))
       # copy original cpd reports
       copy_file("#{root}/base_cpd_report.xml", project.cpd_report_diff.base_report.file)
       copy_file("#{root}/patch_cpd_report.xml", project.cpd_report_diff.patch_report.file)
@@ -120,7 +120,7 @@ module PmdTester
       }
 
       project_data = JSON.generate(h, indent: '    ', object_nl: "\n", array_nl: "\n")
-      "let project = #{project_data}"
+      "let pmd_report = #{project_data}"
     end
 
     def dump_cpd_duplications_json(project, branch)
@@ -141,10 +141,10 @@ module PmdTester
     end
 
     def write_pmd_stdout_stderr(root, report_diff)
-      copy_file("#{root}/base_stdout.txt", "#{report_diff.base_report.report_folder}/stdout.txt")
-      copy_file("#{root}/base_stderr.txt", "#{report_diff.base_report.report_folder}/stderr.txt")
-      copy_file("#{root}/patch_stdout.txt", "#{report_diff.patch_report.report_folder}/stdout.txt")
-      copy_file("#{root}/patch_stderr.txt", "#{report_diff.patch_report.report_folder}/stderr.txt")
+      copy_file("#{root}/base_pmd_stdout.txt", "#{report_diff.base_report.report_folder}/stdout.txt")
+      copy_file("#{root}/base_pmd_stderr.txt", "#{report_diff.base_report.report_folder}/stderr.txt")
+      copy_file("#{root}/patch_pmd_stdout.txt", "#{report_diff.patch_report.report_folder}/stdout.txt")
+      copy_file("#{root}/patch_pmd_stderr.txt", "#{report_diff.patch_report.report_folder}/stderr.txt")
     end
 
     def write_cpd_stdout_stderr(root, cpd_report_diff)
