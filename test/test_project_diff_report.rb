@@ -23,6 +23,8 @@ class TestProjectDiffReport < Test::Unit::TestCase
     'test/resources/html_report_builder/cpd_report_patch.xml'
   BASE_CPD_REPORT_INFO_PATH = 'test/resources/html_report_builder/cpd_report_info_base.json'
   PATCH_CPD_REPORT_INFO_PATH = 'test/resources/html_report_builder/cpd_report_info_patch.json'
+  EXPECTED_FULL_BASE_CPD_HTML_REPORT = 'test/resources/html_report_builder/expected_cpd_report_base.html'
+  EXPECTED_FULL_PATCH_CPD_HTML_REPORT = 'test/resources/html_report_builder/expected_cpd_report_patch.html'
 
   EXPECTED_REPORT_PATH =
     'test/resources/html_report_builder/expected_diff_report_index.html'
@@ -48,19 +50,10 @@ class TestProjectDiffReport < Test::Unit::TestCase
     copy_resources(project)
 
     # Checking the content of diff report is expected.
-    assert_file_equals(EXPECTED_REPORT_PATH, "#{actual_report_path}/index.html")
-    assert_file_exists("#{actual_report_path}/project_data.js")
-    assert_file_exists("#{actual_report_path}/base_pmd_report.xml")
-    assert_file_exists("#{actual_report_path}/base_data.js")
-    assert_file_exists("#{actual_report_path}/base_pmd_report.html")
-    assert_file_equals(EXPECTED_FULL_BASE_HTML_REPORT, "#{actual_report_path}/base_pmd_report.html")
-    assert_file_exists("#{actual_report_path}/patch_pmd_report.xml")
-    assert_file_exists("#{actual_report_path}/patch_data.js")
-    assert_file_exists("#{actual_report_path}/patch_pmd_report.html")
-    assert_file_equals(EXPECTED_FULL_PATCH_HTML_REPORT, "#{actual_report_path}/patch_pmd_report.html")
+    assert_pmd_output(actual_report_path)
     assert_pmd_stdout_stderr_files(actual_report_path)
 
-    assert_file_exists("#{actual_report_path}/cpd_data.js")
+    assert_cpd_output(actual_report_path)
     assert_cpd_stdout_stderr_files(actual_report_path)
   end
 
@@ -91,11 +84,36 @@ class TestProjectDiffReport < Test::Unit::TestCase
                                                     BASE_CPD_REPORT_INFO_PATH, PATCH_CPD_REPORT_INFO_PATH)
   end
 
+  def assert_pmd_output(actual_report_path)
+    assert_file_equals(EXPECTED_REPORT_PATH, "#{actual_report_path}/index.html")
+    assert_file_exists("#{actual_report_path}/project_data.js")
+    assert_file_exists("#{actual_report_path}/base_pmd_report.xml")
+    assert_file_exists("#{actual_report_path}/base_data.js")
+    assert_file_exists("#{actual_report_path}/base_pmd_report.html")
+    assert_file_equals(EXPECTED_FULL_BASE_HTML_REPORT, "#{actual_report_path}/base_pmd_report.html")
+    assert_file_exists("#{actual_report_path}/patch_pmd_report.xml")
+    assert_file_exists("#{actual_report_path}/patch_data.js")
+    assert_file_exists("#{actual_report_path}/patch_pmd_report.html")
+    assert_file_equals(EXPECTED_FULL_PATCH_HTML_REPORT, "#{actual_report_path}/patch_pmd_report.html")
+  end
+
   def assert_pmd_stdout_stderr_files(actual_report_path)
     assert_file_exists("#{actual_report_path}/base_stdout.txt")
     assert_file_exists("#{actual_report_path}/base_stderr.txt")
     assert_file_exists("#{actual_report_path}/patch_stdout.txt")
     assert_file_exists("#{actual_report_path}/patch_stderr.txt")
+  end
+
+  def assert_cpd_output(actual_report_path)
+    assert_file_exists("#{actual_report_path}/cpd_data.js")
+    assert_file_exists("#{actual_report_path}/base_cpd_report.xml")
+    assert_file_exists("#{actual_report_path}/base_cpd_data.js")
+    assert_file_exists("#{actual_report_path}/base_cpd_report.html")
+    assert_file_equals(EXPECTED_FULL_BASE_CPD_HTML_REPORT, "#{actual_report_path}/base_cpd_report.html")
+    assert_file_exists("#{actual_report_path}/patch_cpd_report.xml")
+    assert_file_exists("#{actual_report_path}/patch_cpd_data.js")
+    assert_file_exists("#{actual_report_path}/patch_cpd_report.html")
+    assert_file_equals(EXPECTED_FULL_PATCH_CPD_HTML_REPORT, "#{actual_report_path}/patch_cpd_report.html")
   end
 
   def assert_cpd_stdout_stderr_files(actual_report_path)

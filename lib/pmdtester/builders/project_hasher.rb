@@ -61,9 +61,9 @@ module PmdTester
       }
     end
 
-    def duplications_to_hash(project, duplications)
+    def duplications_to_hash(project, duplications, is_diff)
       duplications_list = duplications.map do |d|
-        make_duplication_hash(project, d)
+        make_duplication_hash(project, d, is_diff)
       end
 
       {
@@ -156,7 +156,7 @@ module PmdTester
       h
     end
 
-    def make_duplication_hash(project, duplication)
+    def make_duplication_hash(project, duplication, is_diff)
       locations = duplication.files.map do |f|
         {
           'path' => project.get_local_path(f.path),
@@ -166,7 +166,7 @@ module PmdTester
 
       {
         'locations' => locations,
-        'type' => if duplication.added?
+        'type' => if !is_diff || duplication.added?
                     '+'
                   elsif duplication.changed?
                     '~'

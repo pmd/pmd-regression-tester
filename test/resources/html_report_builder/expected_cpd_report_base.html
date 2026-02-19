@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>CPD Report for spring-framework</title>
+
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap-5.3.0-alpha3.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/datatables.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/pmd-tester.css">
+
+    <script src="../js/jquery-3.6.4.slim.min.js"></script>
+    <script src="../js/popper-2.11.7.min.js"></script>
+    <script src="../js/bootstrap-5.3.0-alpha3.min.js"></script>
+    <script src="../js/datatables.min.js"></script>
+    <script src="../js/code-snippets.js"></script>
+    <!-- This is generated -->
+    <script src="./base_cpd_data.js"></script>
+
+</head>
+<body>
+<div class="section">
+    <h1>CPD Report for spring-framework</h1>
+</div>
+<div class="section">
+    <h2>Summary</h2>
+    <div class="section-content">
+        <table id="table-summary" class="table">
+            <thead>
+            <tr>
+                <th></th>
+                <th>Base</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td class="item"><a href="#section-duplications">Duplications</a></td>
+                <td class="base">3</td>
+            </tr>
+            <tr>
+                <td class="item"><a href="#section-cpd-errors">CPD Errors</a></td>
+                <td class="base">1</td>
+            </tr>
+            <tr>
+                <td class="item">Execution time</td>
+                <td class="base">00:02:01</td>
+            </tr>
+            <tr>
+                <td class="item">Timestamp</td>
+                <td class="base">base time stamp</td>
+            </tr>
+            <tr>
+                <td class="item">Exit Code</td>
+                <td class="base">4 <a href="base_cpd_stdout.txt">stdout</a> | <a href="base_cpd_stderr.txt">stderr</a></td>
+            </tr>
+            <tr>
+                <td class="item">Full Report</td>
+                <td class="base"><a href="base_cpd_report.xml">base_cpd_report.xml</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<div class="section" id="section-duplications">
+
+    <h2>Duplications</h2>
+
+    <div class="section-content">
+
+        <table id="duplicationsTable" width="100%" class="table">
+            <thead>
+            <tr>
+                <th>Location (click row to expand)</th>
+                <th>Lines</th>
+                <th>Tokens</th>
+                <th>Duplication</th>
+                <th>Type</th>
+            </tr>
+            </thead>
+        </table>
+
+    </div>
+
+</div>
+
+<div class="section" id="section-cpd-errors">
+
+    <h2>CPD Errors</h2>
+
+    <div class="section-content">
+
+        <div class="table-responsive">
+            <table id="cpd-error-table" class="table">
+                <thead>
+                 <tr>
+                     <th>File</th>
+                     <th>Description (click to expand)</th>
+                 </tr>
+                </thead>
+                <tbody>
+                
+                <tr id="cpd-error-1" data-bs-toggle="collapse" data-bs-target="#cpd-error-1-expanded">
+                    <td><a href="pmd-cli/src/test/resources/net/sourceforge/pmd/cli/cpd/badandgood/BadFile.java"  target="_blank" rel="noopener noreferrer">BadFile.java</a></td>
+                    <td>LexException: Lexical error in file &#39;<span class='meta-var'>$FILE</span>&#39; at line 4, column 14: &quot;\ufffd&quot; (65533), after : &quot;&quot; (in lexical state DEFAULT)</td>
+                </tr>
+                <tr>
+                    <td class="row-hidden" colspan="2">
+                        <div class="accordion-body collapse" id="cpd-error-1-expanded">
+                            <div class="collapsed-content-padder">
+                                <pre>
+net.sourceforge.pmd.lang.ast.LexException: Lexical error in file &#39;<span class="meta-var">$FILE</span>&#39; at line 4, column 14: &quot;\ufffd&quot; (65533), after : &quot;&quot; (in lexical state DEFAULT)
+        at net.sourceforge.pmd.lang.ast.InternalApiBridge.<span class="stack-trace-method">newLexException</span>(InternalApiBridge.java:25)
+        at net.sourceforge.pmd.lang.java.ast.JavaParserImplTokenManager.<span class="stack-trace-method">getNextToken</span>(JavaParserImplTokenManager.java:2698)
+        at net.sourceforge.pmd.lang.java.ast.JavaParserImplTokenManager.<span class="stack-trace-method">getNextToken</span>(JavaParserImplTokenManager.java:18)
+        at net.sourceforge.pmd.cpd.impl.BaseTokenFilter.<span class="stack-trace-method">getNextToken</span>(BaseTokenFilter.java:44)
+        at net.sourceforge.pmd.cpd.impl.CpdLexerBase.<span class="stack-trace-method">tokenize</span>(CpdLexerBase.java:40)
+        at net.sourceforge.pmd.cpd.CpdLexer.<span class="stack-trace-method">tokenize</span>(CpdLexer.java:29)
+        at net.sourceforge.pmd.cpd.CpdAnalysis.<span class="stack-trace-method">doTokenize</span>(CpdAnalysis.java:146)
+        at net.sourceforge.pmd.cpd.CpdAnalysis.<span class="stack-trace-method">performAnalysis</span>(CpdAnalysis.java:173)
+        at net.sourceforge.pmd.cli.commands.internal.CpdCommand.<span class="stack-trace-method">doExecute</span>(CpdCommand.java:134)
+        at net.sourceforge.pmd.cli.commands.internal.CpdCommand.<span class="stack-trace-method">doExecute</span>(CpdCommand.java:29)
+        at net.sourceforge.pmd.cli.internal.PmdRootLogger.<span class="stack-trace-method">executeInLoggingContext</span>(PmdRootLogger.java:55)
+        at net.sourceforge.pmd.cli.commands.internal.AbstractAnalysisPmdSubcommand.<span class="stack-trace-method">execute</span>(AbstractAnalysisPmdSubcommand.java:111)
+        at net.sourceforge.pmd.cli.commands.internal.AbstractPmdSubcommand.<span class="stack-trace-method">call</span>(AbstractPmdSubcommand.java:30)
+        at net.sourceforge.pmd.cli.commands.internal.AbstractPmdSubcommand.<span class="stack-trace-method">call</span>(AbstractPmdSubcommand.java:16)
+        at picocli.CommandLine.<span class="stack-trace-method">executeUserObject</span>(CommandLine.java:2041)
+        at picocli.CommandLine.access$<span class="stack-trace-method">1500</span>(CommandLine.java:148)
+        at picocli.CommandLine$RunLast.<span class="stack-trace-method">executeUserObjectOfLastSubcommandWithSameParent</span>(CommandLine.java:2461)
+        at picocli.CommandLine$RunLast.<span class="stack-trace-method">handle</span>(CommandLine.java:2453)
+        at picocli.CommandLine$RunLast.<span class="stack-trace-method">handle</span>(CommandLine.java:2415)
+        at picocli.CommandLine$AbstractParseResultHandler.<span class="stack-trace-method">execute</span>(CommandLine.java:2273)
+        at picocli.CommandLine$RunLast.<span class="stack-trace-method">execute</span>(CommandLine.java:2417)
+        at picocli.CommandLine.<span class="stack-trace-method">execute</span>(CommandLine.java:2170)
+        at net.sourceforge.pmd.cli.PmdCli.<span class="stack-trace-method">main</span>(PmdCli.java:24)
+   
+                                </pre>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+<script src="../js/project-report.js"></script>
+
+</body>
+</html>

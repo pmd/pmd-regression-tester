@@ -58,8 +58,9 @@ module PmdTester
       # Renders index.html using liquid
       write_file("#{root}/index.html", render_liquid('project_diff_report.html', liquid_env))
       write_pmd_diff_report(project, root)
-      write_cpd_diff_report(project, root)
       write_pmd_full_report(project, root)
+      write_cpd_diff_report(project, root)
+      write_cpd_full_report(project, root)
     end
 
     private
@@ -85,11 +86,21 @@ module PmdTester
 
     def write_cpd_diff_report(project, root)
       # generate array of cpd duplications in json
-      write_file("#{root}/cpd_data.js", dump_cpd_duplications_json(project))
+      write_file("#{root}/cpd_data.js", dump_cpd_duplications_json(project, 'diff'))
       # copy original cpd reports
       copy_file("#{root}/base_cpd_report.xml", project.cpd_report_diff.base_report.file)
       copy_file("#{root}/patch_cpd_report.xml", project.cpd_report_diff.patch_report.file)
       write_cpd_stdout_stderr(root, project.cpd_report_diff)
+    end
+
+    def write_cpd_full_report(project, root)
+      # render full cpd reports
+      write_file("#{root}/base_cpd_report.html",
+                 render_liquid('project_cpd_report.html', cpd_report_liquid_env(project, BASE)))
+      write_file("#{root}/base_cpd_data.js", dump_cpd_duplications_json(project, BASE))
+      write_file("#{root}/patch_cpd_report.html",
+                 render_liquid('project_cpd_report.html', cpd_report_liquid_env(project, PATCH)))
+      write_file("#{root}/patch_cpd_data.js", dump_cpd_duplications_json(project, PATCH))
     end
 
     def dump_violations_json(project, branch = 'diff')
@@ -111,16 +122,18 @@ module PmdTester
       "let project = #{project_data}"
     end
 
-    def dump_cpd_duplications_json(project, branch = 'diff')
+    def dump_cpd_duplications_json(project, branch)
       duplications = if branch == BASE
-                       project.cpd_report_diff.base_report.report_document.duplications
+                       project.cpd_report_diff.base_report.duplications
                      elsif branch == PATCH
-                       project.cpd_report_diff.patch_report.report_document.duplications
+                       project.cpd_report_diff.patch_report.duplications
                      else
                        project.cpd_report_diff.duplication_diffs
                      end
       h = {
-        **duplications_to_hash(project, duplications)
+        'source_link_base' => project.webview_url,
+        'source_link_template' => link_template(project),
+        **duplications_to_hash(project, duplications, branch == 'diff')
       }
 
       "let cpd_report = #{JSON.generate(h, indent: '    ', object_nl: "\n", array_nl: "\n")}"
@@ -162,6 +175,19 @@ module PmdTester
       }
     end
 
+    def cpd_report_liquid_env(project, branch)
+      report = if branch == BASE
+                 project.cpd_report_diff.base_report
+               else
+                 project.cpd_report_diff.patch_report
+               end
+      {
+        'project_name' => project.name,
+        'branch' => branch,
+        'cpd_report' => cpd_report_to_h(project, report)
+      }
+    end
+
     def report_to_h(project, report)
       {
         'violation_counts' => report.violations_by_file.total_size,
@@ -175,6 +201,19 @@ module PmdTester
         'rules' => report.rule_summaries,
         'errors' => report.errors_by_file.all_values.map { |e| error_to_hash(e, project) },
         'configerrors' => report.configerrors_by_rule.values.flatten.map { |e| configerror_to_hash(e) }
+      }
+    end
+
+    def cpd_report_to_h(project, cpd_report)
+      {
+        'duplication_counts' => cpd_report.duplications.length,
+        'error_counts' => cpd_report.errors.length,
+
+        'execution_time' => PmdReportDetail.convert_seconds(cpd_report.exec_time),
+        'timestamp' => cpd_report.timestamp,
+        'exit_code' => cpd_report.exit_code,
+
+        'errors' => cpd_report.errors.map { |e| error_to_hash(e, project) }
       }
     end
   end
