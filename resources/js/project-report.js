@@ -8,23 +8,9 @@
 
 $(document).ready(function () {
 
-    function makeCodeLink(violation) {
-        let template = project.source_link_template
-        template = template.replace('{file}', project.file_index[violation.f])
-        template = template.replace('{line}', violation.l);
-        return template
-    }
-
     function extractFilename(path) {
         const pathArray = path.split("/");
         return pathArray[pathArray.length - 1];
-    }
-
-    function renderCodeSnippet(violation) {
-        var node = document.createElement('p');
-        var url = project.source_link_base + '/' + project.file_index[violation.f];
-        window.pmd_code_snippets.fetch(document, node, url, violation.l, makeCodeLink(violation));
-        return node;
     }
 
     const cssClass = {
@@ -40,6 +26,19 @@ $(document).ready(function () {
     }
 
     function renderViolationsTable() {
+        function makeCodeLink(violation) {
+            let template = project.source_link_template
+            template = template.replace('{file}', project.file_index[violation.f])
+            template = template.replace('{line}', violation.l);
+            return template
+        }
+        function renderCodeSnippet(violation) {
+            var node = document.createElement('p');
+            var url = project.source_link_base + '/' + project.file_index[violation.f];
+            window.pmd_code_snippets.fetch(document, node, url, violation.l, makeCodeLink(violation));
+            return node;
+        }
+
         var table = $('#violationsTable').DataTable({
             data: project.violations,
             columns: [
@@ -146,15 +145,14 @@ $(document).ready(function () {
         });
     }
 
-    function makeCodeLinkDuplication(firstDuplication) {
-        let template = cpd_report.source_link_template
-        template = template.replace('{file}', firstDuplication.path)
-        template = template.replace('{line}', firstDuplication.location.split(":")[0]); // use the line number, but ignore the column number
-        return template
-    }
-
-
     function renderDuplicationTable() {
+        function makeCodeLinkDuplication(firstDuplication) {
+            let template = cpd_report.source_link_template
+            template = template.replace('{file}', cpd_report.file_index[firstDuplication.file])
+            template = template.replace('{line}', `${firstDuplication.begin_line}-L${firstDuplication.end_line}`);
+            return template
+        }
+
         var cpdTable = $('#duplicationsTable').DataTable({
             data: cpd_report.duplications,
             columns: [
@@ -177,13 +175,13 @@ $(document).ready(function () {
                 { // locations column
                     render(data, type, row) {
                         let first = data[0];
-                        let firstPath = first.path;
+                        let firstPath = cpd_report.file_index[first.file];
                         let firstLocation = first.location;
                         let firstFilename = extractFilename(firstPath);
                         if (type === "display") {
                             return "<a href='" + makeCodeLinkDuplication(first) + "' target='_blank' rel='noopener noreferrer'>" + firstFilename + " @ line " + firstLocation + "</a>" + (data.length > 1 ? " (and " + (data.length - 1) + " more)" : "");
                         } else if (type === "sort") {
-                            return firstPath + "#" + firstLocation.split(":")[0]; // use the line number for sorting, but ignore the column number
+                            return firstPath + "#" + first.begin_line;
                         } else if (type === 'filter') {
                             return firstFilename;
                         } else if (type === 'shortFile') {
@@ -246,9 +244,10 @@ $(document).ready(function () {
                 // Open this row
                 let data = row.data();
                 var node = document.createElement('p');
-                var innerHTML = "locations:<br>";
+                var innerHTML = `${data.locations.length} locations:<br>`;
                 data.locations.forEach(location => {
-                    innerHTML += `<a href="${makeCodeLinkDuplication(location)}" target="_blank" rel="noopener noreferrer">${extractFilename(location.path)} @ line ${location.location}</a><br>`;
+                    let url = makeCodeLinkDuplication(location);
+                    innerHTML += `<a href="${url}" target="_blank" rel="noopener noreferrer">${url} @ line ${location.location}</a><br>`;
                 });
                 innerHTML += `code fragment (lines: ${data.lines}, tokens: ${data.tokens}):<br>`;
 
@@ -256,7 +255,7 @@ $(document).ready(function () {
                 table.classList.add('code-snippet');
                 let tableBody = document.createElement('tbody');
                 table.appendChild(tableBody);
-                let lineNumber = data.locations[0].location.split(":")[0]; // use the line number of the first location, but ignore the column number
+                let lineNumber = data.locations[0].begin_line;
                 // now we have just the lines which will be displayed
                 data.duplication.split('\n').forEach(line => {
                     let tableRow = document.createElement('tr');
