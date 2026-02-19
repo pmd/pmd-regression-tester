@@ -146,21 +146,69 @@ $(document).ready(function () {
     }
 
     function renderDuplicationTable() {
+        const COLUMN_LOCATION = 0;
+        const COLUMN_LOCATION_FILE = 0; // in the location array: file index
+        const COLUMN_LOCATION_BEGIN_LINE = 1; // in the location array
+        const COLUMN_LOCATION_END_LINE = 2; // in the location array
+        const COLUMN_LOCATION_STRING = 3; // in the location array
+        const COLUMN_LINES = 1;
+        const COLUMN_TOKENS = 2;
+        const COLUMN_CODEFRAGMENT = 3; // codefragment
+        const COLUMN_TYPE = 4; // type (+, -, ~)
+
         function makeCodeLinkDuplication(firstDuplication) {
-            let template = cpd_report.source_link_template
-            template = template.replace('{file}', cpd_report.file_index[firstDuplication.file])
-            template = template.replace('{line}', `${firstDuplication.begin_line}-L${firstDuplication.end_line}`);
-            return template
+            let template = cpd_report.source_link_template;
+            template = template.replace('{file}', cpd_report.file_index[firstDuplication[COLUMN_LOCATION_FILE]]);
+            template = template.replace('{line}', `${firstDuplication[COLUMN_LOCATION_BEGIN_LINE]}-L${firstDuplication[COLUMN_LOCATION_END_LINE]}`);
+            return template;
+        }
+        function renderCodeFragment(data) {
+            var node = document.createElement('p');
+            var innerHTML = `${data[COLUMN_LOCATION].length} locations:<br>`;
+            data[COLUMN_LOCATION].forEach(location => {
+                let url = makeCodeLinkDuplication(location);
+                innerHTML += `<a href="${url}" target="_blank" rel="noopener noreferrer">${url} @ line ${location[COLUMN_LOCATION_STRING]}</a><br>`;
+            });
+            innerHTML += `code fragment (lines: ${data[COLUMN_LINES]}, tokens: ${data[COLUMN_TOKENS]}):<br>`;
+
+            let table = document.createElement('table');
+            table.classList.add('code-snippet');
+            let tableBody = document.createElement('tbody');
+            table.appendChild(tableBody);
+            // line number of first location
+            let lineNumber = data[COLUMN_LOCATION][0][COLUMN_LOCATION_BEGIN_LINE];
+            data[COLUMN_CODEFRAGMENT].split('\n').forEach(line => {
+                let tableRow = document.createElement('tr');
+                let lineNumberColumn = document.createElement('td');
+                lineNumberColumn.classList.add('line-number');
+                tableRow.appendChild(lineNumberColumn);
+                let lineNumberElement = document.createElement('code');
+                lineNumberColumn.appendChild(lineNumberElement);
+                lineNumberElement.setAttribute('data-line-number', lineNumber);
+
+                let codeColumn = document.createElement('td');
+                tableRow.appendChild(codeColumn);
+                let codeElement = document.createElement("code");
+                codeColumn.appendChild(codeElement);
+                // createTextNode escapes special chars
+                codeElement.appendChild(document.createTextNode(line));
+
+                tableBody.appendChild(tableRow); // append row to the table
+                lineNumber++; // increment line number for each line
+            });
+
+            node.innerHTML = innerHTML + table.outerHTML;
+            return node;
         }
 
         var cpdTable = $('#duplicationsTable').DataTable({
             data: cpd_report.duplications,
             columns: [
-                {"data": "locations"},
-                {"data": "lines"},
-                {"data": "tokens"},
-                {"data": "duplication"}, // duplication text
-                {"data": "type"}, // type
+                {"data": COLUMN_LOCATION},
+                {"data": COLUMN_LINES},
+                {"data": COLUMN_TOKENS},
+                {"data": COLUMN_CODEFRAGMENT},
+                {"data": COLUMN_TYPE},
             ],
             deferRender: true,
             dom: 'Pfrtipl', // Search Panes, filtering input, processing display element, table, table information summary, pagination control, length changing input control
@@ -175,13 +223,13 @@ $(document).ready(function () {
                 { // locations column
                     render(data, type, row) {
                         let first = data[0];
-                        let firstPath = cpd_report.file_index[first.file];
-                        let firstLocation = first.location;
+                        let firstPath = cpd_report.file_index[first[COLUMN_LOCATION_FILE]];
+                        let firstLocation = first[COLUMN_LOCATION_STRING];
                         let firstFilename = extractFilename(firstPath);
                         if (type === "display") {
                             return "<a href='" + makeCodeLinkDuplication(first) + "' target='_blank' rel='noopener noreferrer'>" + firstFilename + " @ line " + firstLocation + "</a>" + (data.length > 1 ? " (and " + (data.length - 1) + " more)" : "");
                         } else if (type === "sort") {
-                            return firstPath + "#" + first.begin_line;
+                            return firstPath + "#" + first[COLUMN_LOCATION_END_LINE];
                         } else if (type === 'filter') {
                             return firstFilename;
                         } else if (type === 'shortFile') {
@@ -198,7 +246,7 @@ $(document).ready(function () {
                     },
                     targets: 0
                 },
-                { // duplication column
+                { // codefragment column
                     render(data, type, row) {
                         if (type === "display") {
                             data = data.replace(/\r\n|\n/g, "\\n"); // replace newlines with \n for better display in the table
@@ -219,7 +267,7 @@ $(document).ready(function () {
             displayLength: 25,
             lengthMenu: [ [10, 20, 25, 50, 100, -1], [10, 20, 25, 50, 100, "All"] ],
             rowCallback(row, data, index) {
-            $(row).addClass(cssClass[data.type]);
+                $(row).addClass(cssClass[data[4]]);
             },
         });
         $('#duplicationsTable tbody').on('click', 'tr', function() {
@@ -242,42 +290,7 @@ $(document).ready(function () {
             }
             else {
                 // Open this row
-                let data = row.data();
-                var node = document.createElement('p');
-                var innerHTML = `${data.locations.length} locations:<br>`;
-                data.locations.forEach(location => {
-                    let url = makeCodeLinkDuplication(location);
-                    innerHTML += `<a href="${url}" target="_blank" rel="noopener noreferrer">${url} @ line ${location.location}</a><br>`;
-                });
-                innerHTML += `code fragment (lines: ${data.lines}, tokens: ${data.tokens}):<br>`;
-
-                let table = document.createElement('table');
-                table.classList.add('code-snippet');
-                let tableBody = document.createElement('tbody');
-                table.appendChild(tableBody);
-                let lineNumber = data.locations[0].begin_line;
-                // now we have just the lines which will be displayed
-                data.duplication.split('\n').forEach(line => {
-                    let tableRow = document.createElement('tr');
-                    let lineNumberColumn = document.createElement('td');
-                    lineNumberColumn.classList.add('line-number');
-                    tableRow.appendChild(lineNumberColumn);
-                    let lineNumberElement = document.createElement('code');
-                    lineNumberColumn.appendChild(lineNumberElement);
-                    lineNumberElement.setAttribute('data-line-number', lineNumber);
-
-                    let codeColumn = document.createElement('td');
-                    tableRow.appendChild(codeColumn);
-                    let codeElement = document.createElement("code");
-                    codeColumn.appendChild(codeElement);
-                    // createTextNode escapes special chars
-                    codeElement.appendChild(document.createTextNode(line));
-
-                    tableBody.appendChild(tableRow); // append row to the table
-                });
-                innerHTML += table.outerHTML;
-                node.innerHTML = innerHTML;
-                row.child( node ).show();
+                row.child( renderCodeFragment(row.data()) ).show();
                 tr.addClass('shown');
             }
         });

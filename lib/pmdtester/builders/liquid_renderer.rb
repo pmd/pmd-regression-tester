@@ -43,6 +43,7 @@ module PmdTester
   class LiquidProjectRenderer
     include PmdTester
     include ProjectHasher
+    include CpdProjectHasher
     include LiquidRenderer
 
     def write_project_index(project, root)
@@ -136,7 +137,7 @@ module PmdTester
         **duplications_to_hash(project, duplications, branch == 'diff')
       }
 
-      "let cpd_report = #{JSON.generate(h, indent: '    ', object_nl: "\n", array_nl: "\n")}"
+      "let cpd_report = #{JSON.generate(h, object_nl: "\n")}"
     end
 
     def write_pmd_stdout_stderr(root, report_diff)

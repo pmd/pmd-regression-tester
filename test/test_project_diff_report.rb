@@ -23,6 +23,9 @@ class TestProjectDiffReport < Test::Unit::TestCase
     'test/resources/html_report_builder/cpd_report_patch.xml'
   BASE_CPD_REPORT_INFO_PATH = 'test/resources/html_report_builder/cpd_report_info_base.json'
   PATCH_CPD_REPORT_INFO_PATH = 'test/resources/html_report_builder/cpd_report_info_patch.json'
+  EXPECTED_CPD_DATA_JS = 'test/resources/html_report_builder/expected_cpd_data.js'
+  EXPECTED_BASE_CPD_DATA_JS = 'test/resources/html_report_builder/expected_base_cpd_data.js'
+  EXPECTED_PATCH_CPD_DATA_JS = 'test/resources/html_report_builder/expected_patch_cpd_data.js'
   EXPECTED_FULL_BASE_CPD_HTML_REPORT = 'test/resources/html_report_builder/expected_cpd_report_base.html'
   EXPECTED_FULL_PATCH_CPD_HTML_REPORT = 'test/resources/html_report_builder/expected_cpd_report_patch.html'
 
@@ -106,12 +109,15 @@ class TestProjectDiffReport < Test::Unit::TestCase
 
   def assert_cpd_output(actual_report_path)
     assert_file_exists("#{actual_report_path}/cpd_data.js")
+    assert_file_equals(EXPECTED_CPD_DATA_JS, "#{actual_report_path}/cpd_data.js")
     assert_file_exists("#{actual_report_path}/base_cpd_report.xml")
     assert_file_exists("#{actual_report_path}/base_cpd_data.js")
+    assert_file_equals(EXPECTED_BASE_CPD_DATA_JS, "#{actual_report_path}/base_cpd_data.js")
     assert_file_exists("#{actual_report_path}/base_cpd_report.html")
     assert_file_equals(EXPECTED_FULL_BASE_CPD_HTML_REPORT, "#{actual_report_path}/base_cpd_report.html")
     assert_file_exists("#{actual_report_path}/patch_cpd_report.xml")
     assert_file_exists("#{actual_report_path}/patch_cpd_data.js")
+    assert_file_equals(EXPECTED_PATCH_CPD_DATA_JS, "#{actual_report_path}/patch_cpd_data.js")
     assert_file_exists("#{actual_report_path}/patch_cpd_report.html")
     assert_file_equals(EXPECTED_FULL_PATCH_CPD_HTML_REPORT, "#{actual_report_path}/patch_cpd_report.html")
   end

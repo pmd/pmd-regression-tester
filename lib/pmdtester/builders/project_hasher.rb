@@ -26,24 +26,6 @@ module PmdTester
       }
     end
 
-    def cpd_report_diff_to_h(cpd_rdiff)
-      {
-        'duplication_counts' => cpd_rdiff.duplication_counts.to_h.transform_keys(&:to_s),
-        'error_counts' => cpd_rdiff.error_counts.to_h.transform_keys(&:to_s),
-
-        'base_execution_time' => PmdReportDetail.convert_seconds(cpd_rdiff.base_report.exec_time),
-        'patch_execution_time' => PmdReportDetail.convert_seconds(cpd_rdiff.patch_report.exec_time),
-        'diff_execution_time' => PmdReportDetail.convert_seconds(cpd_rdiff.patch_report.exec_time -
-                                                                   cpd_rdiff.base_report.exec_time),
-
-        'base_timestamp' => cpd_rdiff.base_report.timestamp,
-        'patch_timestamp' => cpd_rdiff.patch_report.timestamp,
-
-        'base_exit_code' => cpd_rdiff.base_report.exit_code,
-        'patch_exit_code' => cpd_rdiff.patch_report.exit_code
-      }
-    end
-
     def violations_to_hash(project, violations_by_file, is_diff)
       filename_index = []
       all_vs = []
@@ -61,25 +43,6 @@ module PmdTester
       }
     end
 
-    def duplications_to_hash(project, duplications, is_diff)
-      filename_index = {}
-      duplications.each do |d|
-        d.files.each do |f|
-          local_path = project.get_local_path(f.path)
-          filename_index[local_path] = filename_index.size unless filename_index.include?(local_path)
-        end
-      end
-
-      duplications_list = duplications.map do |d|
-        make_duplication_hash(project, filename_index, d, is_diff)
-      end
-
-      {
-        'file_index' => filename_index.keys,
-        'duplications' => duplications_list
-      }
-    end
-
     def errors_to_h(project)
       errors = project.report_diff.error_diffs_by_file.values.flatten
       errors.map { |e| error_to_hash(e, project) }
@@ -88,11 +51,6 @@ module PmdTester
     def configerrors_to_h(project)
       configerrors = project.report_diff.configerror_diffs_by_rule.values.flatten
       configerrors.map { |e| configerror_to_hash(e) }
-    end
-
-    def cpd_errors_to_h(project)
-      errors = project.cpd_report_diff.error_diffs
-      errors.map { |e| error_to_hash(e, project) }
     end
 
     def link_template(project)
@@ -163,31 +121,6 @@ module PmdTester
       h['ol'] = violation.old_location.to_s if is_diff && violation.changed? &&
                                                !violation.location.eql?(violation.old_location)
       h
-    end
-
-    def make_duplication_hash(project, filename_index, duplication, is_diff)
-      locations = duplication.files.map do |f|
-        {
-          'file' => filename_index[project.get_local_path(f.path)],
-          'begin_line' => f.location.beginline,
-          'end_line' => f.location.endline,
-          'location' => f.location.to_s
-        }
-      end
-
-      {
-        'locations' => locations,
-        'type' => if !is_diff || duplication.added?
-                    '+'
-                  elsif duplication.changed?
-                    '~'
-                  else
-                    '-'
-                  end,
-        'duplication' => duplication.codefragment,
-        'lines' => duplication.lines,
-        'tokens' => duplication.tokens
-      }
     end
 
     def create_violation_message(violation, is_diff)

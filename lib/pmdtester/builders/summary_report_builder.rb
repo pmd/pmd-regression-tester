@@ -6,6 +6,7 @@ module PmdTester
     include PmdTester
     include LiquidRenderer
     include ProjectHasher
+    include CpdProjectHasher
 
     REPORT_DIR = 'target/reports/diff'
     BASE_CONFIG_NAME = 'base_config.xml'

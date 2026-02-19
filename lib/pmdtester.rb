@@ -20,6 +20,7 @@ require_relative 'pmdtester/runner'
 require_relative 'pmdtester/semver'
 require_relative 'pmdtester/word_differ'
 
+require_relative 'pmdtester/builders/cpd_project_hasher'
 require_relative 'pmdtester/builders/simple_progress_logger'
 require_relative 'pmdtester/builders/project_builder'
 require_relative 'pmdtester/builders/project_hasher'
