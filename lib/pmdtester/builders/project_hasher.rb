@@ -119,11 +119,13 @@ module PmdTester
 
     def make_violation_datable(file_ref, rule_ref, violation, is_diff: true)
       type = is_diff ? violation_type(violation) : '+'
-      old_location = nil
-      old_location = violation.old_location.to_s if is_diff && violation.changed? &&
-                                                    !violation.location.eql?(violation.old_location)
+      old_location = []
+      if is_diff && violation.changed? && !violation.location.eql?(violation.old_location)
+        old_location = [violation.old_location.to_s]
+      end
+
       [violation.line, violation.location.to_s, type, file_ref, rule_ref,
-       create_violation_message(violation, is_diff && violation.changed?), old_location]
+       create_violation_message(violation, is_diff && violation.changed?)] + old_location
     end
 
     def create_violation_message(violation, is_diff)

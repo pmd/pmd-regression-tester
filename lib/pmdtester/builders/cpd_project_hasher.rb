@@ -60,7 +60,17 @@ module PmdTester
              else
                '-'
              end
-      [locations, duplication.lines, duplication.tokens, duplication.codefragment, type]
+      [locations, duplication.lines, duplication.tokens, duplication.codefragment,
+       type] + generate_old_duplication_info(project, filename_index, duplication, is_diff)
+    end
+
+    def generate_old_duplication_info(project, filename_index, duplication, is_diff)
+      return [] unless is_diff && duplication.changed?
+
+      old_files = duplication.old_files.map do |f|
+        [filename_index[project.get_local_path(f.path)], f.location.beginline, f.location.endline, f.location.to_s]
+      end
+      [duplication.old_lines, duplication.old_tokens, old_files]
     end
   end
 end

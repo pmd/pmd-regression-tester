@@ -75,7 +75,7 @@ $(document).ready(function () {
                         // path for sorting and such
                         if (type === "display") {
                             let line = row[COLUMN_LOCATION];
-                            if (row[COLUMN_OLD_LOCATION] !== null) {
+                            if (row[COLUMN_OLD_LOCATION] !== undefined) {
                                 line = row[COLUMN_OLD_LOCATION] + "→" + line;
                             }
                             //note : target='_blank' requires that the link open in a new tab
@@ -162,6 +162,9 @@ $(document).ready(function () {
         const COLUMN_TOKENS = 2;
         const COLUMN_CODEFRAGMENT = 3; // codefragment
         const COLUMN_TYPE = 4; // type (+, -, ~)
+        const COLUMN_OLD_LINES = 5; // only for changed duplications
+        const COLUMN_OLD_TOKENS = 6; // only for changed duplications
+        const COLUMN_OLD_LOCATION = 7; // [array] only for changed duplications
 
         function makeCodeLinkDuplication(firstDuplication) {
             let template = cpd_report.source_link_template;
@@ -176,7 +179,19 @@ $(document).ready(function () {
                 let url = makeCodeLinkDuplication(location);
                 innerHTML += `<a href="${url}" target="_blank" rel="noopener noreferrer">${url} @ line ${location[COLUMN_LOCATION_STRING]}</a><br>`;
             });
-            innerHTML += `code fragment (lines: ${data[COLUMN_LINES]}, tokens: ${data[COLUMN_TOKENS]}):<br>`;
+
+            if (data[COLUMN_OLD_LOCATION] !== undefined) {
+                innerHTML += `changed from ${data[COLUMN_OLD_LOCATION].length} previous locations:<br>`;
+                data[COLUMN_OLD_LOCATION].forEach(location => {
+                    let url = makeCodeLinkDuplication(location);
+                    innerHTML += `<a href="${url}" target="_blank" rel="noopener noreferrer">${url} @ line ${location[COLUMN_LOCATION_STRING]}</a><br>`;
+                });
+            }
+            if (data[COLUMN_OLD_LINES] !== undefined && data[COLUMN_OLD_TOKENS] !== undefined) {
+                innerHTML += `code fragment (lines: ${data[COLUMN_OLD_LINES]} → ${data[COLUMN_LINES]}, tokens: ${data[COLUMN_OLD_TOKENS]} → ${data[COLUMN_TOKENS]}):<br>`;
+            } else {
+                innerHTML += `code fragment (lines: ${data[COLUMN_LINES]}, tokens: ${data[COLUMN_TOKENS]}):<br>`;
+            }
 
             let table = document.createElement('table');
             table.classList.add('code-snippet');
