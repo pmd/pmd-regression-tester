@@ -27,18 +27,26 @@ module PmdTester
     end
 
     def violations_to_hash(project, violations_by_file, is_diff)
+      rulename_index = {}
+      violations_by_file.each_value do |vs|
+        vs.each do |v|
+          rulename_index[v.rule_name] = rulename_index.size unless rulename_index.include?(v.rule_name)
+        end
+      end
       filename_index = []
       all_vs = []
       violations_by_file.each do |file, vs|
         file_ref = filename_index.size
         filename_index.push(project.get_local_path(file))
         vs.each do |v|
-          all_vs.push(make_violation_hash(file_ref, v, is_diff: is_diff))
+          rule_ref = rulename_index[v.rule_name]
+          all_vs.push(make_violation_datable(file_ref, rule_ref, v, is_diff: is_diff))
         end
       end
 
       {
         'file_index' => filename_index,
+        'rule_index' => rulename_index.keys,
         'violations' => all_vs
       }
     end
@@ -109,18 +117,13 @@ module PmdTester
       end
     end
 
-    def make_violation_hash(file_ref, violation, is_diff: true)
-      h = {
-        't' => is_diff ? violation_type(violation) : '+',
-        'l' => violation.line,
-        'lo' => violation.location.to_s,
-        'f' => file_ref,
-        'r' => violation.rule_name,
-        'm' => create_violation_message(violation, is_diff && violation.changed?)
-      }
-      h['ol'] = violation.old_location.to_s if is_diff && violation.changed? &&
-                                               !violation.location.eql?(violation.old_location)
-      h
+    def make_violation_datable(file_ref, rule_ref, violation, is_diff: true)
+      type = is_diff ? violation_type(violation) : '+'
+      old_location = nil
+      old_location = violation.old_location.to_s if is_diff && violation.changed? &&
+                                                    !violation.location.eql?(violation.old_location)
+      [violation.line, violation.location.to_s, type, file_ref, rule_ref,
+       create_violation_message(violation, is_diff && violation.changed?), old_location]
     end
 
     def create_violation_message(violation, is_diff)

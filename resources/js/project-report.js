@@ -26,29 +26,34 @@ $(document).ready(function () {
     }
 
     function renderViolationsTable() {
+        const COLUMN_LINE = 0;
+        const COLUMN_LOCATION = 1;
+        const COLUMN_TYPE = 2;
+        const COLUMN_FILE = 3; // reference to file name in pmd_report.file_index
+        const COLUMN_RULE = 4; // reference to rule name in pmd_report.rule_index
+        const COLUMN_MESSAGE = 5;
+        const COLUMN_OLD_LOCATION = 6;
+
         function makeCodeLink(violation) {
-            let template = pmd_report.source_link_template
-            template = template.replace('{file}', pmd_report.file_index[violation.f])
-            template = template.replace('{line}', violation.l);
-            return template
+            let template = pmd_report.source_link_template;
+            template = template.replace('{file}', pmd_report.file_index[violation[COLUMN_FILE]]);
+            template = template.replace('{line}', violation[COLUMN_LINE]);
+            return template;
         }
         function renderCodeSnippet(violation) {
             var node = document.createElement('p');
-            var url = pmd_report.source_link_base + '/' + pmd_report.file_index[violation.f];
-            window.pmd_code_snippets.fetch(document, node, url, violation.l, makeCodeLink(violation));
+            var url = pmd_report.source_link_base + '/' + pmd_report.file_index[violation[COLUMN_FILE]];
+            window.pmd_code_snippets.fetch(document, node, url, violation[COLUMN_LINE], makeCodeLink(violation));
             return node;
         }
 
         var table = $('#violationsTable').DataTable({
             data: pmd_report.violations,
             columns: [
-                // other attributes in data:
-                // l: line
-                // ol: old line
-                {"data": "f"}, // file
-                {"data": "r"}, // rule
-                {"data": "m"}, // message
-                {"data": "t"}, // type
+                {"data": COLUMN_FILE},
+                {"data": COLUMN_RULE},
+                {"data": COLUMN_MESSAGE},
+                {"data": COLUMN_TYPE},
             ],
             deferRender: true,
             // scrollY: "6000px",
@@ -65,19 +70,22 @@ $(document).ready(function () {
             columnDefs: [
                 { //file column
                     render(data, type, row) {
-                        data = pmd_report.file_index[data];
+                        let filepath = pmd_report.file_index[data];
                         // display only the file name (not full path), but use full
                         // path for sorting and such
                         if (type === "display") {
-                            let line = 'ol' in row ? row.ol + "→" + row.lo : row.lo;
+                            let line = row[COLUMN_LOCATION];
+                            if (row[COLUMN_OLD_LOCATION] !== null) {
+                                line = row[COLUMN_OLD_LOCATION] + "→" + line;
+                            }
                             //note : target='_blank' requires that the link open in a new tab
-                            return "<a href='" + makeCodeLink(row) + "' target='_blank' rel='noopener noreferrer'>" + extractFilename(data) + " @ line " + line + "</a>";
+                            return "<a href='" + makeCodeLink(row) + "' target='_blank' rel='noopener noreferrer'>" + extractFilename(filepath) + " @ line " + line + "</a>";
                         } else if (type === "sort") {
-                            return data + "#" + row.l;
+                            return filepath + "#" + row[COLUMN_LINE];
                         } else if (type === 'shortFile') {
-                            return extractFilename(data);
+                            return extractFilename(filepath);
                         } else {
-                            return data;
+                            return filepath;
                         }
                     },
                     searchPanes :{
@@ -90,12 +98,11 @@ $(document).ready(function () {
                 },
                 { // rule column
                     render(data, type, row) {
-                        // display only the file name (not full path), but use full
-                        // path for sorting and such
+                        let rulename = pmd_report.rule_index[data];
                         if (type === "display")
-                            return "<a href='#rule-summary-" + data + "'>" + data + "</a>"
+                            return "<a href='#rule-summary-" + rulename + "'>" + rulename + "</a>"
                         else
-                            return data;
+                            return rulename;
                     },
                     searchPanes: {
                         orthogonal: {
@@ -115,7 +122,7 @@ $(document).ready(function () {
             displayLength: 25,
             lengthMenu: [ [10, 20, 25, 50, 100, -1], [10, 20, 25, 50, 100, "All"] ],
             rowCallback(row, data, index) {
-                $(row).addClass(cssClass[data.t]);
+                $(row).addClass(cssClass[data[COLUMN_TYPE]]);
             },
         });
 
@@ -146,11 +153,11 @@ $(document).ready(function () {
     }
 
     function renderDuplicationTable() {
-        const COLUMN_LOCATION = 0;
-        const COLUMN_LOCATION_FILE = 0; // in the location array: file index
-        const COLUMN_LOCATION_BEGIN_LINE = 1; // in the location array
-        const COLUMN_LOCATION_END_LINE = 2; // in the location array
-        const COLUMN_LOCATION_STRING = 3; // in the location array
+        const COLUMN_LOCATION = 0; // location array
+        const COLUMN_LOCATION_FILE = 0; // in the location array: reference to file name in cpd_report.file_index
+        const COLUMN_LOCATION_BEGIN_LINE = 1;
+        const COLUMN_LOCATION_END_LINE = 2;
+        const COLUMN_LOCATION_STRING = 3;
         const COLUMN_LINES = 1;
         const COLUMN_TOKENS = 2;
         const COLUMN_CODEFRAGMENT = 3; // codefragment

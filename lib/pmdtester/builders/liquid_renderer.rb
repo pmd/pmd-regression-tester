@@ -119,7 +119,7 @@ module PmdTester
         **violations_to_hash(project, violations_by_file, branch == 'diff')
       }
 
-      project_data = JSON.generate(h, indent: '    ', object_nl: "\n", array_nl: "\n")
+      project_data = JSON.generate(h, object_nl: "\n")
       "let pmd_report = #{project_data}"
     end
 
