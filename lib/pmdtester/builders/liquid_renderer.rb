@@ -57,13 +57,23 @@ module PmdTester
 
       # Renders index.html using liquid
       write_file("#{root}/index.html", render_liquid('project_diff_report.html', liquid_env))
+      write_pmd_diff_report(project, root)
+      write_cpd_diff_report(project, root)
+      write_pmd_full_report(project, root)
+    end
+
+    private
+
+    def write_pmd_diff_report(project, root)
       # generate array of violations in json
       write_file("#{root}/project_data.js", dump_violations_json(project))
       # copy original pmd reports
       copy_file("#{root}/base_pmd_report.xml", project.report_diff.base_report.file)
       copy_file("#{root}/patch_pmd_report.xml", project.report_diff.patch_report.file)
       write_pmd_stdout_stderr(root, project.report_diff)
-      write_cpd_stdout_stderr(root, project.cpd_report_diff)
+    end
+
+    def write_pmd_full_report(project, root)
       # render full pmd reports
       write_file("#{root}/base_pmd_report.html",
                  render_liquid('project_pmd_report.html', pmd_report_liquid_env(project, BASE)))
@@ -71,6 +81,15 @@ module PmdTester
       write_file("#{root}/patch_pmd_report.html",
                  render_liquid('project_pmd_report.html', pmd_report_liquid_env(project, PATCH)))
       write_file("#{root}/patch_data.js", dump_violations_json(project, PATCH))
+    end
+
+    def write_cpd_diff_report(project, root)
+      # generate array of cpd duplications in json
+      write_file("#{root}/cpd_data.js", dump_cpd_duplications_json(project))
+      # copy original cpd reports
+      copy_file("#{root}/base_cpd_report.xml", project.cpd_report_diff.base_report.file)
+      copy_file("#{root}/patch_cpd_report.xml", project.cpd_report_diff.patch_report.file)
+      write_cpd_stdout_stderr(root, project.cpd_report_diff)
     end
 
     def dump_violations_json(project, branch = 'diff')
@@ -92,7 +111,20 @@ module PmdTester
       "let project = #{project_data}"
     end
 
-    private
+    def dump_cpd_duplications_json(project, branch = 'diff')
+      duplications = if branch == BASE
+                       project.cpd_report_diff.base_report.report_document.duplications
+                     elsif branch == PATCH
+                       project.cpd_report_diff.patch_report.report_document.duplications
+                     else
+                       project.cpd_report_diff.duplication_diffs
+                     end
+      h = {
+        **duplications_to_hash(project, duplications)
+      }
+
+      "let cpd_report = #{JSON.generate(h, indent: '    ', object_nl: "\n", array_nl: "\n")}"
+    end
 
     def write_pmd_stdout_stderr(root, report_diff)
       copy_file("#{root}/base_stdout.txt", "#{report_diff.base_report.report_folder}/stdout.txt")

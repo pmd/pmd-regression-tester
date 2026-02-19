@@ -61,6 +61,16 @@ module PmdTester
       }
     end
 
+    def duplications_to_hash(project, duplications)
+      duplications_list = duplications.map do |d|
+        make_duplication_hash(project, d)
+      end
+
+      {
+        'duplications' => duplications_list
+      }
+    end
+
     def errors_to_h(project)
       errors = project.report_diff.error_diffs_by_file.values.flatten
       errors.map { |e| error_to_hash(e, project) }
@@ -144,6 +154,29 @@ module PmdTester
       h['ol'] = violation.old_location.to_s if is_diff && violation.changed? &&
                                                !violation.location.eql?(violation.old_location)
       h
+    end
+
+    def make_duplication_hash(project, duplication)
+      locations = duplication.files.map do |f|
+        {
+          'path' => project.get_local_path(f.path),
+          'location' => f.location.to_s
+        }
+      end
+
+      {
+        'locations' => locations,
+        'type' => if duplication.added?
+                    '+'
+                  elsif duplication.changed?
+                    '~'
+                  else
+                    '-'
+                  end,
+        'duplication' => duplication.codefragment,
+        'lines' => duplication.lines,
+        'tokens' => duplication.tokens
+      }
     end
 
     def create_violation_message(violation, is_diff)

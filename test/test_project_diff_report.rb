@@ -58,8 +58,9 @@ class TestProjectDiffReport < Test::Unit::TestCase
     assert_file_exists("#{actual_report_path}/patch_data.js")
     assert_file_exists("#{actual_report_path}/patch_pmd_report.html")
     assert_file_equals(EXPECTED_FULL_PATCH_HTML_REPORT, "#{actual_report_path}/patch_pmd_report.html")
-
     assert_pmd_stdout_stderr_files(actual_report_path)
+
+    assert_file_exists("#{actual_report_path}/cpd_data.js")
     assert_cpd_stdout_stderr_files(actual_report_path)
   end
 
