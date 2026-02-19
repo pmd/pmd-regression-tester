@@ -13,6 +13,9 @@ class TestProjectDiffReport < Test::Unit::TestCase
   PATCH_PMD_REPORT_PATH = "#{TEST_RESOURCES}/pmd_report_patch.xml"
   BASE_REPORT_INFO_PATH = "#{TEST_RESOURCES}/base_report_info.json"
   PATCH_REPORT_INFO_PATH = "#{TEST_RESOURCES}/patch_report_info.json"
+  EXPECTED_DIFF_PMD_DATA_JS = "#{TEST_RESOURCES}/expected_diff_pmd_data.js"
+  EXPECTED_BASE_PMD_DATA_JS = "#{TEST_RESOURCES}/expected_base_pmd_data.js"
+  EXPECTED_PATCH_PMD_DATA_JS = "#{TEST_RESOURCES}/expected_patch_pmd_data.js"
 
   BASE_CPD_REPORT_PATH = "#{TEST_RESOURCES}/cpd_report_base.xml"
   PATCH_CPD_REPORT_PATH = "#{TEST_RESOURCES}/cpd_report_patch.xml"
@@ -81,12 +84,15 @@ class TestProjectDiffReport < Test::Unit::TestCase
   def assert_pmd_output(actual_report_path)
     assert_file_equals(EXPECTED_REPORT_PATH, "#{actual_report_path}/index.html")
     assert_file_exists("#{actual_report_path}/diff_pmd_data.js")
+    assert_file_equals(EXPECTED_DIFF_PMD_DATA_JS, "#{actual_report_path}/diff_pmd_data.js")
     assert_file_exists("#{actual_report_path}/base_pmd_report.xml")
     assert_file_exists("#{actual_report_path}/base_pmd_data.js")
+    assert_file_equals(EXPECTED_BASE_PMD_DATA_JS, "#{actual_report_path}/base_pmd_data.js")
     assert_file_exists("#{actual_report_path}/base_pmd_report.html")
     assert_file_equals(EXPECTED_FULL_BASE_HTML_REPORT, "#{actual_report_path}/base_pmd_report.html")
     assert_file_exists("#{actual_report_path}/patch_pmd_report.xml")
     assert_file_exists("#{actual_report_path}/patch_pmd_data.js")
+    assert_file_equals(EXPECTED_PATCH_PMD_DATA_JS, "#{actual_report_path}/patch_pmd_data.js")
     assert_file_exists("#{actual_report_path}/patch_pmd_report.html")
     assert_file_equals(EXPECTED_FULL_PATCH_HTML_REPORT, "#{actual_report_path}/patch_pmd_report.html")
   end
