@@ -7,34 +7,29 @@ class TestProjectDiffReport < Test::Unit::TestCase
   include PmdTester::PmdTesterUtils
   include TestUtils
 
-  BASE_REPORT_FOLDER = 'test/resources/html_report_builder/base'
-  PATCH_REPORT_FOLDER = 'test/resources/html_report_builder/patch'
+  TEST_RESOURCES = 'test/resources/project_diff_report'
 
-  BASE_PMD_REPORT_PATH =
-    'test/resources/html_report_builder/test_html_report_builder_base.xml'
-  PATCH_PMD_REPORT_PATH =
-    'test/resources/html_report_builder/test_html_report_builder_patch.xml'
-  BASE_REPORT_INFO_PATH = 'test/resources/html_report_builder/base_report_info.json'
-  PATCH_REPORT_INFO_PATH = 'test/resources/html_report_builder/patch_report_info.json'
+  BASE_REPORT_FOLDER = "#{TEST_RESOURCES}/base"
+  PATCH_REPORT_FOLDER = "#{TEST_RESOURCES}/patch"
 
-  BASE_CPD_REPORT_PATH =
-    'test/resources/html_report_builder/cpd_report_base.xml'
-  PATCH_CPD_REPORT_PATH =
-    'test/resources/html_report_builder/cpd_report_patch.xml'
-  BASE_CPD_REPORT_INFO_PATH = 'test/resources/html_report_builder/cpd_report_info_base.json'
-  PATCH_CPD_REPORT_INFO_PATH = 'test/resources/html_report_builder/cpd_report_info_patch.json'
-  EXPECTED_CPD_DATA_JS = 'test/resources/html_report_builder/expected_cpd_data.js'
-  EXPECTED_BASE_CPD_DATA_JS = 'test/resources/html_report_builder/expected_base_cpd_data.js'
-  EXPECTED_PATCH_CPD_DATA_JS = 'test/resources/html_report_builder/expected_patch_cpd_data.js'
-  EXPECTED_FULL_BASE_CPD_HTML_REPORT = 'test/resources/html_report_builder/expected_cpd_report_base.html'
-  EXPECTED_FULL_PATCH_CPD_HTML_REPORT = 'test/resources/html_report_builder/expected_cpd_report_patch.html'
+  BASE_PMD_REPORT_PATH = "#{TEST_RESOURCES}/pmd_report_base.xml"
+  PATCH_PMD_REPORT_PATH = "#{TEST_RESOURCES}/pmd_report_patch.xml"
+  BASE_REPORT_INFO_PATH = "#{TEST_RESOURCES}/base_report_info.json"
+  PATCH_REPORT_INFO_PATH = "#{TEST_RESOURCES}/patch_report_info.json"
 
-  EXPECTED_REPORT_PATH =
-    'test/resources/html_report_builder/expected_diff_report_index.html'
-  EXPECTED_FULL_BASE_HTML_REPORT = 'test/resources/project_diff_report/expected_full_base.html'
-  EXPECTED_FULL_PATCH_HTML_REPORT = 'test/resources/project_diff_report/expected_full_patch.html'
-  EXPECTED_EMPTY_REPORT_PATH =
-    'test/resources/html_report_builder/expected_empty_diff_report.html'
+  BASE_CPD_REPORT_PATH = "#{TEST_RESOURCES}/cpd_report_base.xml"
+  PATCH_CPD_REPORT_PATH = "#{TEST_RESOURCES}/cpd_report_patch.xml"
+  BASE_CPD_REPORT_INFO_PATH = "#{TEST_RESOURCES}/cpd_report_info_base.json"
+  PATCH_CPD_REPORT_INFO_PATH = "#{TEST_RESOURCES}/cpd_report_info_patch.json"
+  EXPECTED_CPD_DATA_JS = "#{TEST_RESOURCES}/expected_diff_cpd_data.js"
+  EXPECTED_BASE_CPD_DATA_JS = "#{TEST_RESOURCES}/expected_base_cpd_data.js"
+  EXPECTED_PATCH_CPD_DATA_JS = "#{TEST_RESOURCES}/expected_patch_cpd_data.js"
+  EXPECTED_FULL_BASE_CPD_HTML_REPORT = "#{TEST_RESOURCES}/expected_cpd_report_base.html"
+  EXPECTED_FULL_PATCH_CPD_HTML_REPORT = "#{TEST_RESOURCES}/expected_cpd_report_patch.html"
+
+  EXPECTED_REPORT_PATH = "#{TEST_RESOURCES}/expected_diff_report_index.html"
+  EXPECTED_FULL_BASE_HTML_REPORT = "#{TEST_RESOURCES}/expected_full_base.html"
+  EXPECTED_FULL_PATCH_HTML_REPORT = "#{TEST_RESOURCES}/expected_full_patch.html"
 
   def setup
     `rake clean`
@@ -61,6 +56,7 @@ class TestProjectDiffReport < Test::Unit::TestCase
   end
 
   def test_report_diffs_empty
+    # Project name: openjdk-11
     project = PmdTester::ProjectsParser.new.parse('test/resources/project_diff_report/project-list.xml')[1]
     project.report_diff = PmdTester::ReportDiff.new(base_report: PmdTester::Report.empty,
                                                     patch_report: PmdTester::Report.empty)
@@ -72,7 +68,7 @@ class TestProjectDiffReport < Test::Unit::TestCase
     PmdTester::LiquidProjectRenderer.new.write_project_index(project, actual_report_path)
 
     # Checking the content of diff report is expected.
-    assert_file_equals(EXPECTED_EMPTY_REPORT_PATH, "#{actual_report_path}/index.html")
+    assert_file_equals("#{TEST_RESOURCES}/expected_empty_diff_report.html", "#{actual_report_path}/index.html")
   end
 
   private
@@ -131,6 +127,7 @@ class TestProjectDiffReport < Test::Unit::TestCase
 
   def copy_resources(project)
     # create all the resources, so that it is easier to verify the report manually if needed
+    # just open target/reports/diff/index.html in browser and check the content
     base_path = 'target/reports/base_branch'
     FileUtils.mkdir_p(base_path)
     FileUtils.cp('test/resources/summary_report_builder/base_branch_info.json', "#{base_path}/branch_info.json")
