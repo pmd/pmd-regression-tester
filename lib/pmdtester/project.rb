@@ -96,7 +96,7 @@ module PmdTester
       if branch_name.nil?
         nil
       else
-        "#{get_project_target_dir(branch_name)}/report_info.json"
+        "#{get_project_target_dir(branch_name)}/pmd_report_info.json"
       end
     end
 

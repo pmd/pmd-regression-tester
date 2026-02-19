@@ -278,7 +278,7 @@ class ManualIntegrationTests < Test::Unit::TestCase
 
   def assert_main_baseline_project(project_name, report_size_in_bytes)
     assert_path_exist("target/reports/main/#{project_name}/config.xml")
-    assert_path_exist("target/reports/main/#{project_name}/report_info.json")
+    assert_path_exist("target/reports/main/#{project_name}/pmd_report_info.json")
     assert_path_exist("target/reports/main/#{project_name}/pmd_report.xml")
     assert(File.size("target/reports/main/#{project_name}/pmd_report.xml") > report_size_in_bytes)
   end

@@ -41,7 +41,7 @@ class IntegrationTestPmdReportBuilder < Test::Unit::TestCase
 
     assert_equal(0, $CHILD_STATUS.exitstatus)
     assert_path_exist('target/reports/main/checkstyle/pmd_report.xml')
-    assert_path_exist('target/reports/main/checkstyle/report_info.json')
+    assert_path_exist('target/reports/main/checkstyle/pmd_report_info.json')
     assert_path_exist('target/reports/main/checkstyle/cpd_report.xml')
     assert_path_exist('target/reports/main/checkstyle/cpd_report_info.json')
   end
