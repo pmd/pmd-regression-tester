@@ -9,9 +9,6 @@ class TestProjectDiffReport < Test::Unit::TestCase
 
   TEST_RESOURCES = 'test/resources/project_diff_report'
 
-  BASE_REPORT_FOLDER = "#{TEST_RESOURCES}/base"
-  PATCH_REPORT_FOLDER = "#{TEST_RESOURCES}/patch"
-
   BASE_PMD_REPORT_PATH = "#{TEST_RESOURCES}/pmd_report_base.xml"
   PATCH_PMD_REPORT_PATH = "#{TEST_RESOURCES}/pmd_report_patch.xml"
   BASE_REPORT_INFO_PATH = "#{TEST_RESOURCES}/base_report_info.json"
@@ -76,8 +73,6 @@ class TestProjectDiffReport < Test::Unit::TestCase
   def build_report_diffs(project)
     project.report_diff = build_report_diff(BASE_PMD_REPORT_PATH, PATCH_PMD_REPORT_PATH,
                                             BASE_REPORT_INFO_PATH, PATCH_REPORT_INFO_PATH)
-    project.report_diff.base_report.report_folder = BASE_REPORT_FOLDER
-    project.report_diff.patch_report.report_folder = PATCH_REPORT_FOLDER
 
     project.cpd_report_diff = build_cpd_report_diff(BASE_CPD_REPORT_PATH, PATCH_CPD_REPORT_PATH,
                                                     BASE_CPD_REPORT_INFO_PATH, PATCH_CPD_REPORT_INFO_PATH)

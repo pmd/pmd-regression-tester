@@ -58,7 +58,9 @@ module PmdTester
                 :exec_time,
                 :timestamp,
                 :exit_code,
-                :file
+                :file,
+                :stdout,
+                :stderr
 
     attr_accessor :report_folder
 
@@ -66,13 +68,17 @@ module PmdTester
                    file: '',
                    exec_time: 0,
                    timestamp: '0',
-                   exit_code: '?')
+                   exit_code: '?',
+                   stdout: '',
+                   stderr: '')
       initialize_empty
       initialize_with_report_document report_document unless report_document.nil?
       @exec_time = exec_time
       @timestamp = timestamp
       @file = file
       @exit_code = exit_code
+      @stdout = stdout
+      @stderr = stderr
     end
 
     def self.empty

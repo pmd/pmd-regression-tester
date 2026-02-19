@@ -362,18 +362,17 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     distro_path = "#{Dir.getwd}/target/pmd-bin-#{@pmd_version}-main-#{sha1}"
     process_status = mock
     process_status.expects(:exitstatus).returns(exit_status).once
-    PmdTester::Cmd.stubs(:execute_save_output)
+    PmdTester::Cmd.stubs(:execute)
                   .with("#{error_prefix}" \
                         "#{distro_path}/bin/#{base_cmd} " \
                         '-d target/repositories/checkstyle -f xml ' \
                         '-R target/reports/main/checkstyle/config.xml ' \
                         '-r target/reports/main/checkstyle/pmd_report.xml ' \
                         "#{fail_on_violation} -t 1 #{auxclasspath_option}" \
-                        "#{' --no-progress' if no_progress_bar}",
-                        'target/reports/main/checkstyle').once
-                  .returns(process_status)
+                        "#{' --no-progress' if no_progress_bar}").once
+                  .returns([process_status, 'stdout output', 'stderr output'])
                   .once
-    PmdTester::PmdReportDetail.stubs(:create).once.with { |params| params[:exit_code] == exit_status }
+    PmdTester::PmdReportDetail.stubs(:create).once.with { |params| params[:exit_code] == exit_status && params[:stdout] == 'stdout output' && params[:stderr] == 'stderr output' }
   end
 
   def record_expectations_project_build_cpd(sha1:, error: false, exit_status: 0)

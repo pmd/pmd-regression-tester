@@ -141,10 +141,10 @@ module PmdTester
     end
 
     def write_pmd_stdout_stderr(root, report_diff)
-      copy_file("#{root}/base_pmd_stdout.txt", "#{report_diff.base_report.report_folder}/stdout.txt")
-      copy_file("#{root}/base_pmd_stderr.txt", "#{report_diff.base_report.report_folder}/stderr.txt")
-      copy_file("#{root}/patch_pmd_stdout.txt", "#{report_diff.patch_report.report_folder}/stdout.txt")
-      copy_file("#{root}/patch_pmd_stderr.txt", "#{report_diff.patch_report.report_folder}/stderr.txt")
+      write_file("#{root}/base_pmd_stdout.txt", report_diff.base_report.stdout)
+      write_file("#{root}/base_pmd_stderr.txt", report_diff.base_report.stderr)
+      write_file("#{root}/patch_pmd_stdout.txt", report_diff.patch_report.stdout)
+      write_file("#{root}/patch_pmd_stderr.txt", report_diff.patch_report.stderr)
     end
 
     def write_cpd_stdout_stderr(root, cpd_report_diff)
