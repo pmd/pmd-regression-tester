@@ -9,26 +9,22 @@ class IntegrationTestRunner < Test::Unit::TestCase
   end
 
   def test_local_mode
-    argv = '-r target/repositories/pmd -b pmd_releases/6.41.0 -bc config/design.xml ' \
-           '-p main -pc config/design.xml -l test/resources/integration_test_runner/project-test.xml ' \
+    # NOTE: 7.14.0 is currently the oldest supported version, which is needed to use "--report-file" cli parameter
+    # for Cpd.
+    argv = '-r target/repositories/pmd ' \
+           '-b pmd_releases/7.14.0 ' \
+           '-bc test/resources/integration_test_runner/test_local_mode-config.xml ' \
+           '-p main ' \
+           '-pc test/resources/integration_test_runner/test_local_mode-config.xml ' \
+           '-l test/resources/integration_test_runner/project-test.xml ' \
            '--threads ' + Etc.nprocessors.to_s
 
     system("bundle exec bin/pmdtester #{argv}")
 
     assert_equal(0, $CHILD_STATUS.exitstatus)
-    assert_path_exist('target/reports/main/checkstyle/pmd_report.xml')
-    assert_path_exist('target/reports/main/pmd/pmd_report.xml')
-    assert_path_exist('target/reports/pmd_releases_6.41.0/checkstyle/pmd_report.xml')
-    assert_path_exist('target/reports/pmd_releases_6.41.0/checkstyle/config.xml')
-    assert_path_exist('target/reports/pmd_releases_6.41.0/pmd/pmd_report.xml')
-    assert_path_exist('target/reports/pmd_releases_6.41.0/pmd/config.xml')
-    assert_path_exist('target/reports/diff/checkstyle/index.html')
-    assert_path_exist('target/reports/diff/checkstyle/project_data.js')
-    assert_path_exist('target/reports/diff/pmd/index.html')
-    assert_path_exist('target/reports/diff/pmd/project_data.js')
-    assert_path_exist('target/reports/diff/index.html')
-    assert_path_exist('target/reports/diff/base_config.xml')
-    assert_path_exist('target/reports/diff/patch_config.xml')
+    assert_reports_exist('main', %w[checkstyle pmd])
+    assert_reports_exist('pmd_releases_7.14.0', %w[checkstyle pmd])
+    assert_diff_reports_exist(%w[checkstyle pmd])
   end
 
   def test_single_mode
@@ -153,5 +149,43 @@ class IntegrationTestRunner < Test::Unit::TestCase
       assert_path_exist("target/reports/#{patch_path}/#{name}/config.xml")
       assert_path_exist("target/reports/diff/#{name}/index.html")
     end
+  end
+
+  def assert_reports_exist(branch_name, project_names)
+    assert_path_exist("target/reports/#{branch_name}/branch_info.json")
+    assert_path_exist("target/reports/#{branch_name}/config.xml")
+    project_names.each do |project_name|
+      assert_path_exist("target/reports/#{branch_name}/#{project_name}/config.xml")
+      assert_path_exist("target/reports/#{branch_name}/#{project_name}/cpd_report_info.json")
+      assert_path_exist("target/reports/#{branch_name}/#{project_name}/cpd_report.xml")
+      assert_path_exist("target/reports/#{branch_name}/#{project_name}/pmd_report_info.json")
+      assert_path_exist("target/reports/#{branch_name}/#{project_name}/pmd_report.xml")
+    end
+  end
+
+  def assert_diff_reports_exist(project_names)
+    assert_path_exist('target/reports/diff/base_config.xml')
+    assert_path_exist('target/reports/diff/index.html')
+    assert_path_exist('target/reports/diff/patch_config.xml')
+    project_names.each do |project_name|
+      assert_path_exist("target/reports/diff/#{project_name}/diff_cpd_data.js")
+      assert_path_exist("target/reports/diff/#{project_name}/diff_pmd_data.js")
+      assert_path_exist("target/reports/diff/#{project_name}/index.html")
+      assert_diff_reports_exist_for_project('base', project_name)
+      assert_diff_reports_exist_for_project('patch', project_name)
+    end
+  end
+
+  def assert_diff_reports_exist_for_project(flavor, project_name)
+    assert_path_exist("target/reports/diff/#{project_name}/#{flavor}_cpd_data.js")
+    assert_path_exist("target/reports/diff/#{project_name}/#{flavor}_cpd_report.html")
+    assert_path_exist("target/reports/diff/#{project_name}/#{flavor}_cpd_report.xml")
+    assert_path_exist("target/reports/diff/#{project_name}/#{flavor}_cpd_stderr.txt")
+    assert_path_exist("target/reports/diff/#{project_name}/#{flavor}_cpd_stdout.txt")
+    assert_path_exist("target/reports/diff/#{project_name}/#{flavor}_pmd_data.js")
+    assert_path_exist("target/reports/diff/#{project_name}/#{flavor}_pmd_report.html")
+    assert_path_exist("target/reports/diff/#{project_name}/#{flavor}_pmd_report.xml")
+    assert_path_exist("target/reports/diff/#{project_name}/#{flavor}_pmd_stderr.txt")
+    assert_path_exist("target/reports/diff/#{project_name}/#{flavor}_pmd_stdout.txt")
   end
 end
