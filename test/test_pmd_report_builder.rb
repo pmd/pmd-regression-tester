@@ -387,7 +387,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
                         "#{distro_path}/bin/pmd cpd " \
                         '-d target/repositories/checkstyle -f xml ' \
                         '--language java ' \
-                        '--minimum-tokens 50 ' \
+                        '--minimum-tokens 100 ' \
                         '--no-fail-on-violation ' \
                         '-r target/reports/main/checkstyle/cpd_report.xml').once
                   .returns([process_status, 'stdout output', 'stderr output'])
