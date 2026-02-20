@@ -390,14 +390,14 @@ class TestPmdReportBuilder < Test::Unit::TestCase
                '-d target/repositories/checkstyle -f xml ' \
                '--language java ' \
                '--minimum-tokens 100 ' \
-               '--no-fail-on-violation ' \
-               '-r target/reports/main/checkstyle/cpd_report.xml'
+               '--skip-lexical-errors'
     PmdTester::Cmd.stubs(:execute).with(cmd_line)
                   .returns([process_status, 'stdout output', 'stderr output'])
                   .once
+    File.stubs(:write).with('target/reports/main/checkstyle/cpd_report.xml', 'stdout output').once
     PmdTester::PmdReportDetail.stubs(:create).once.with do |params|
       params[:cmdline] == cmd_line && params[:exit_code] == exit_status \
-      && params[:stdout] == 'stdout output' && params[:stderr] == 'stderr output' \
+      && params[:stdout] == '' && params[:stderr] == 'stderr output' \
     end
   end
 

@@ -3,8 +3,6 @@
 require 'test_helper'
 require 'etc'
 
-# NOTE: 7.14.0 is currently the oldest supported version, which is needed to use "--report-file" cli parameter
-# for Cpd.
 class IntegrationTestRunner < Test::Unit::TestCase
   def setup
     `rake clean`
@@ -12,7 +10,7 @@ class IntegrationTestRunner < Test::Unit::TestCase
 
   def test_local_mode
     argv = '-r target/repositories/pmd ' \
-           '-b pmd_releases/7.14.0 ' \
+           '-b pmd_releases/7.0.0 ' \
            '-bc test/resources/integration_test_runner/test_local_mode-config.xml ' \
            '-p main ' \
            '-pc test/resources/integration_test_runner/test_local_mode-config.xml ' \
@@ -24,13 +22,13 @@ class IntegrationTestRunner < Test::Unit::TestCase
     assert_equal(0, $CHILD_STATUS.exitstatus)
 
     assert_reports_exist('main', %w[checkstyle pmd])
-    assert_reports_exist('pmd_releases_7.14.0', %w[checkstyle pmd])
+    assert_reports_exist('pmd_releases_7.0.0', %w[checkstyle pmd])
     assert_diff_reports_exist(%w[checkstyle pmd])
   end
 
   def test_single_mode
     argv = '-r target/repositories/pmd -m single ' \
-           '-p pmd_releases/7.14.0 -pc test/resources/integration_test_runner/test_single_mode-config.xml ' \
+           '-p pmd_releases/7.0.0 -pc test/resources/integration_test_runner/test_single_mode-config.xml ' \
            '-l test/resources/integration_test_runner/project-list-single.xml ' \
            '--error-recovery ' \
            '--threads ' + Etc.nprocessors.to_s
@@ -38,7 +36,7 @@ class IntegrationTestRunner < Test::Unit::TestCase
     system("bundle exec bin/pmdtester #{argv}")
     assert_equal(0, $CHILD_STATUS.exitstatus)
 
-    assert_reports_exist('pmd_releases_7.14.0', %w[checkstyle pmd])
+    assert_reports_exist('pmd_releases_7.0.0', %w[checkstyle pmd])
     assert_path_not_exist('target/reports/diff/base_config.xml')
     assert_path_exist('target/reports/diff/index.html')
     assert_path_exist('target/reports/diff/patch_config.xml')
@@ -53,7 +51,7 @@ class IntegrationTestRunner < Test::Unit::TestCase
   #
   def test_single_mode_with_html_flag_option
     argv = '-r target/repositories/pmd -m single ' \
-           '-p pmd_releases/7.14.0 -pc test/resources/integration_test_runner/test_single_mode-config.xml ' \
+           '-p pmd_releases/7.0.0 -pc test/resources/integration_test_runner/test_single_mode-config.xml ' \
            '-l test/resources/integration_test_runner/project-list-single.xml ' \
            '-f ' \
            '--error-recovery ' \
@@ -62,7 +60,7 @@ class IntegrationTestRunner < Test::Unit::TestCase
     system("bundle exec bin/pmdtester #{argv}")
 
     assert_equal(0, $CHILD_STATUS.exitstatus)
-    assert_reports_exist('pmd_releases_7.14.0', %w[checkstyle pmd])
+    assert_reports_exist('pmd_releases_7.0.0', %w[checkstyle pmd])
     assert_path_exist('target/repositories/checkstyle/classpath.txt')
     assert_path_not_exist('target/reports/diff/checkstyle/index.html')
     assert_path_not_exist('target/reports/diff/pmd/index.html')

@@ -182,8 +182,7 @@ module PmdTester
                 "#{determine_run_path(command: 'cpd')} -d #{project.local_source_path} -f xml " \
                 '--language java ' \
                 '--minimum-tokens 100 ' \
-                '--no-fail-on-violation ' \
-                "-r #{project.get_cpd_report_path(@pmd_branch_name)}"
+                '--skip-lexical-errors'
       start_time = Time.now
       exit_code = nil
       if File.exist?(project.get_cpd_report_path(@pmd_branch_name))
@@ -192,6 +191,11 @@ module PmdTester
       else
         status, stdout, stderr = Cmd.execute(cpd_cmd)
         exit_code = status.exitstatus
+      end
+      # NOTE: --report-file is only supported in PMD 7.14.0+. To support 7.0.0, we use stdout.
+      if [0, 4, 5].include?(exit_code)
+        File.write(project.get_cpd_report_path(@pmd_branch_name), stdout)
+        stdout = ''
       end
       end_time = Time.now
       [cpd_cmd, end_time - start_time, end_time, exit_code, stdout, stderr]
