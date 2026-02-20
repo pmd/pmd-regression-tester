@@ -11,8 +11,8 @@ class TestProjectDiffReport < Test::Unit::TestCase
 
   BASE_PMD_REPORT_PATH = "#{TEST_RESOURCES}/pmd_report_base.xml"
   PATCH_PMD_REPORT_PATH = "#{TEST_RESOURCES}/pmd_report_patch.xml"
-  BASE_REPORT_INFO_PATH = "#{TEST_RESOURCES}/base_report_info.json"
-  PATCH_REPORT_INFO_PATH = "#{TEST_RESOURCES}/patch_report_info.json"
+  BASE_REPORT_INFO_PATH = "#{TEST_RESOURCES}/pmd_report_info_base.json"
+  PATCH_REPORT_INFO_PATH = "#{TEST_RESOURCES}/pmd_report_info_patch.json"
   EXPECTED_DIFF_PMD_DATA_JS = "#{TEST_RESOURCES}/expected_diff_pmd_data.js"
   EXPECTED_BASE_PMD_DATA_JS = "#{TEST_RESOURCES}/expected_base_pmd_data.js"
   EXPECTED_PATCH_PMD_DATA_JS = "#{TEST_RESOURCES}/expected_patch_pmd_data.js"

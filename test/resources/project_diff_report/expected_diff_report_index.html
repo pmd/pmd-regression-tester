@@ -106,34 +106,56 @@
                 </td>
             </tr>
             <tr>
-                <td class="item">Execution time</td>
-                <td class="base">00:02:01</td>
-                <td class="patch">00:01:05</td>
-                <td class="diff">00:00:56</td>
+                <td class="item">PMD Details</td>
+                <td class="base">
+                    <small>
+                    Timestamp: base time stamp<br>
+                    <details><summary>Command:</summary><code>pmd check ...</code></details><br>
+                    Exit Code: 0<br>
+                    Execution Time: 00:02:01<br>
+                    <a href="base_pmd_stdout.txt">stdout</a> | <a href="base_pmd_stderr.txt">stderr</a><br>
+                    <a href="base_pmd_report.html">Base PMD Report</a>
+                    </small>
+                </td>
+                <td class="patch">
+                    <small>
+                    Timestamp: patch time stamp<br>
+                    <details><summary>Command:</summary><code>pmd check ...</code></details><br>
+                    Exit Code: 1<br>
+                    Execution Time: 00:01:05<br>
+                    <a href="patch_pmd_stdout.txt">stdout</a> | <a href="patch_pmd_stderr.txt">stderr</a><br>
+                    <a href="patch_pmd_report.html">Patch PMD Report</a>
+                    </small>
+                </td>
+                <td class="diff">
+                    <small>Execution Time: 00:00:56</small>
+                </td>
             </tr>
             <tr>
-                <td class="item">Timestamp</td>
-                <td class="base">base time stamp</td>
-                <td class="patch">patch time stamp</td>
-                <td class="diff"></td>
-            </tr>
-            <tr>
-                <td class="item">PMD Exit Code</td>
-                <td class="base">0 <a href="base_pmd_stdout.txt">stdout</a> | <a href="base_pmd_stderr.txt">stderr</a></td>
-                <td class="patch">1 <a href="patch_pmd_stdout.txt">stdout</a> | <a href="patch_pmd_stderr.txt">stderr</a></td>
-                <td class="diff"></td>
-            </tr>
-            <tr>
-                <td class="item">CPD Exit Code</td>
-                <td class="base">4 <a href="base_cpd_stdout.txt">stdout</a> | <a href="base_cpd_stderr.txt">stderr</a></td>
-                <td class="patch">4 <a href="patch_cpd_stdout.txt">stdout</a> | <a href="patch_cpd_stderr.txt">stderr</a></td>
-                <td class="diff"></td>
-            </tr>
-            <tr>
-                <td class="item">Full Reports</td>
-                <td class="base"><a href="base_pmd_report.html">Base PMD Report</a><br><a href="base_cpd_report.html">Base CPD Report</a></td>
-                <td class="patch"><a href="patch_pmd_report.html">Patch PMD Report</a><br><a href="patch_cpd_report.html">Patch CPD Report</a></td>
-                <td class="diff"></td>
+                <td class="item">CPD Details</td>
+                <td class="base">
+                    <small>
+                    Timestamp: base time stamp<br>
+                    <details><summary>Command:</summary><code>pmd cpd ...</code></details><br>
+                    Exit Code: 4<br>
+                    Execution Time: 00:02:01<br>
+                    <a href="base_cpd_stdout.txt">stdout</a> | <a href="base_cpd_stderr.txt">stderr</a><br>
+                    <a href="base_cpd_report.html">Base CPD Report</a>
+                    </small>
+                </td>
+                <td class="patch">
+                    <small>
+                    Timestamp: patch time stamp<br>
+                    <details><summary>Command:</summary><code>pmd cpd ...</code></details><br>
+                    Exit Code: 4<br>
+                    Execution Time: 00:02:11<br>
+                    <a href="patch_cpd_stdout.txt">stdout</a> | <a href="patch_cpd_stderr.txt">stderr</a><br>
+                    <a href="patch_cpd_report.html">Patch CPD Report</a>
+                    </small>
+                </td>
+                <td class="diff">
+                    <small>Execution Time: 00:00:10</small>
+                </td>
             </tr>
             </tbody>
         </table>

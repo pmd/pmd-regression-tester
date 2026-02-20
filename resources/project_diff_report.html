@@ -76,34 +76,56 @@
                 </td>
             </tr>
             <tr>
-                <td class="item">Execution time</td>
-                <td class="base">{{diff.base_execution_time}}</td>
-                <td class="patch">{{diff.patch_execution_time}}</td>
-                <td class="diff">{{diff.diff_execution_time}}</td>
+                <td class="item">PMD Details</td>
+                <td class="base">
+                    <small>
+                    Timestamp: {{diff.base_details.timestamp}}<br>
+                    <details><summary>Command:</summary><code>{{diff.base_details.cmdline}}</code></details><br>
+                    Exit Code: {{diff.base_details.exit_code}}<br>
+                    Execution Time: {{diff.base_details.execution_time}}<br>
+                    <a href="base_pmd_stdout.txt">stdout</a> | <a href="base_pmd_stderr.txt">stderr</a><br>
+                    <a href="base_pmd_report.html">Base PMD Report</a>
+                    </small>
+                </td>
+                <td class="patch">
+                    <small>
+                    Timestamp: {{diff.patch_details.timestamp}}<br>
+                    <details><summary>Command:</summary><code>{{diff.patch_details.cmdline}}</code></details><br>
+                    Exit Code: {{diff.patch_details.exit_code}}<br>
+                    Execution Time: {{diff.patch_details.execution_time}}<br>
+                    <a href="patch_pmd_stdout.txt">stdout</a> | <a href="patch_pmd_stderr.txt">stderr</a><br>
+                    <a href="patch_pmd_report.html">Patch PMD Report</a>
+                    </small>
+                </td>
+                <td class="diff">
+                    <small>Execution Time: {{diff.diff_execution_time}}</small>
+                </td>
             </tr>
             <tr>
-                <td class="item">Timestamp</td>
-                <td class="base">{{diff.base_timestamp}}</td>
-                <td class="patch">{{diff.patch_timestamp}}</td>
-                <td class="diff"></td>
-            </tr>
-            <tr>
-                <td class="item">PMD Exit Code</td>
-                <td class="base">{{diff.base_exit_code}} <a href="base_pmd_stdout.txt">stdout</a> | <a href="base_pmd_stderr.txt">stderr</a></td>
-                <td class="patch">{{diff.patch_exit_code}} <a href="patch_pmd_stdout.txt">stdout</a> | <a href="patch_pmd_stderr.txt">stderr</a></td>
-                <td class="diff"></td>
-            </tr>
-            <tr>
-                <td class="item">CPD Exit Code</td>
-                <td class="base">{{cpd_diff.base_exit_code}} <a href="base_cpd_stdout.txt">stdout</a> | <a href="base_cpd_stderr.txt">stderr</a></td>
-                <td class="patch">{{cpd_diff.patch_exit_code}} <a href="patch_cpd_stdout.txt">stdout</a> | <a href="patch_cpd_stderr.txt">stderr</a></td>
-                <td class="diff"></td>
-            </tr>
-            <tr>
-                <td class="item">Full Reports</td>
-                <td class="base"><a href="base_pmd_report.html">Base PMD Report</a><br><a href="base_cpd_report.html">Base CPD Report</a></td>
-                <td class="patch"><a href="patch_pmd_report.html">Patch PMD Report</a><br><a href="patch_cpd_report.html">Patch CPD Report</a></td>
-                <td class="diff"></td>
+                <td class="item">CPD Details</td>
+                <td class="base">
+                    <small>
+                    Timestamp: {{cpd_diff.base_details.timestamp}}<br>
+                    <details><summary>Command:</summary><code>{{cpd_diff.base_details.cmdline}}</code></details><br>
+                    Exit Code: {{cpd_diff.base_details.exit_code}}<br>
+                    Execution Time: {{cpd_diff.base_details.execution_time}}<br>
+                    <a href="base_cpd_stdout.txt">stdout</a> | <a href="base_cpd_stderr.txt">stderr</a><br>
+                    <a href="base_cpd_report.html">Base CPD Report</a>
+                    </small>
+                </td>
+                <td class="patch">
+                    <small>
+                    Timestamp: {{cpd_diff.patch_details.timestamp}}<br>
+                    <details><summary>Command:</summary><code>{{cpd_diff.patch_details.cmdline}}</code></details><br>
+                    Exit Code: {{cpd_diff.patch_details.exit_code}}<br>
+                    Execution Time: {{cpd_diff.patch_details.execution_time}}<br>
+                    <a href="patch_cpd_stdout.txt">stdout</a> | <a href="patch_cpd_stderr.txt">stderr</a><br>
+                    <a href="patch_cpd_report.html">Patch CPD Report</a>
+                    </small>
+                </td>
+                <td class="diff">
+                    <small>Execution Time: {{cpd_diff.diff_execution_time}}</small>
+                </td>
             </tr>
             </tbody>
         </table>

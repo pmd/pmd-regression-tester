@@ -25,14 +25,9 @@ module PmdTester
       doc = PmdReportDocument.new(branch, report_details.working_dir, filter_set)
                              .parse(report_file)
       Report.new(
+        report_details: report_details,
         report_document: doc,
-        file: report_file,
-
-        timestamp: report_details.timestamp,
-        exec_time: report_details.execution_time,
-        exit_code: report_details.exit_code,
-        stdout: report_details.stdout,
-        stderr: report_details.stderr
+        file: report_file
       )
     end
 
@@ -53,14 +48,9 @@ module PmdTester
       logger.info "Parsing CPD Report #{report_file}"
       doc = CpdReportDocument.new(branch, report_details.working_dir).parse(report_file)
       CpdReport.new(
+        report_details: report_details,
         report_document: doc,
-        file: report_file,
-
-        timestamp: report_details.timestamp,
-        exec_time: report_details.execution_time,
-        exit_code: report_details.exit_code,
-        stdout: report_details.stdout,
-        stderr: report_details.stderr
+        file: report_file
       )
     end
 

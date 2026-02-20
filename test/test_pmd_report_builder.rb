@@ -362,17 +362,20 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     distro_path = "#{Dir.getwd}/target/pmd-bin-#{@pmd_version}-main-#{sha1}"
     process_status = mock
     process_status.expects(:exitstatus).returns(exit_status).once
-    PmdTester::Cmd.stubs(:execute)
-                  .with("#{error_prefix}" \
-                        "#{distro_path}/bin/#{base_cmd} " \
-                        '-d target/repositories/checkstyle -f xml ' \
-                        '-R target/reports/main/checkstyle/config.xml ' \
-                        '-r target/reports/main/checkstyle/pmd_report.xml ' \
-                        "#{fail_on_violation} -t 1 #{auxclasspath_option}" \
-                        "#{' --no-progress' if no_progress_bar}").once
+    cmd_line = "#{error_prefix}" \
+               "#{distro_path}/bin/#{base_cmd} " \
+               '-d target/repositories/checkstyle -f xml ' \
+               '-R target/reports/main/checkstyle/config.xml ' \
+               '-r target/reports/main/checkstyle/pmd_report.xml ' \
+               "#{fail_on_violation} -t 1 #{auxclasspath_option}" \
+               "#{' --no-progress' if no_progress_bar}"
+    PmdTester::Cmd.stubs(:execute).with(cmd_line)
                   .returns([process_status, 'stdout output', 'stderr output'])
                   .once
-    PmdTester::PmdReportDetail.stubs(:create).once.with { |params| params[:exit_code] == exit_status && params[:stdout] == 'stdout output' && params[:stderr] == 'stderr output' }
+    PmdTester::PmdReportDetail.stubs(:create).once.with do |params|
+      params[:cmdline] == cmd_line && params[:exit_code] == exit_status \
+      && params[:stdout] == 'stdout output' && params[:stderr] == 'stderr output'
+    end
   end
 
   def record_expectations_project_build_cpd(sha1:, error: false, exit_status: 0)
@@ -382,17 +385,20 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     distro_path = "#{Dir.getwd}/target/pmd-bin-#{@pmd_version}-main-#{sha1}"
     process_status = mock
     process_status.expects(:exitstatus).returns(exit_status).once
-    PmdTester::Cmd.stubs(:execute)
-                  .with("#{error_prefix}" \
-                        "#{distro_path}/bin/pmd cpd " \
-                        '-d target/repositories/checkstyle -f xml ' \
-                        '--language java ' \
-                        '--minimum-tokens 100 ' \
-                        '--no-fail-on-violation ' \
-                        '-r target/reports/main/checkstyle/cpd_report.xml').once
+    cmd_line = "#{error_prefix}" \
+               "#{distro_path}/bin/pmd cpd " \
+               '-d target/repositories/checkstyle -f xml ' \
+               '--language java ' \
+               '--minimum-tokens 100 ' \
+               '--no-fail-on-violation ' \
+               '-r target/reports/main/checkstyle/cpd_report.xml'
+    PmdTester::Cmd.stubs(:execute).with(cmd_line)
                   .returns([process_status, 'stdout output', 'stderr output'])
                   .once
-    PmdTester::PmdReportDetail.stubs(:create).once.with { |params| params[:exit_code] == exit_status && params[:stdout] == 'stdout output' && params[:stderr] == 'stderr output' }
+    PmdTester::PmdReportDetail.stubs(:create).once.with do |params|
+      params[:cmdline] == cmd_line && params[:exit_code] == exit_status \
+      && params[:stdout] == 'stdout output' && params[:stderr] == 'stderr output' \
+    end
   end
 
   def record_expectations(sha1_head:, sha1_base:, zip_file_exists:)

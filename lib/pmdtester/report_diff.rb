@@ -55,34 +55,20 @@ module PmdTester
     attr_reader :violations_by_file,
                 :errors_by_file,
                 :configerrors_by_rule,
-                :exec_time,
-                :timestamp,
-                :exit_code,
                 :file,
-                :stdout,
-                :stderr
+                :report_details
 
     attr_accessor :report_folder
 
-    def initialize(report_document: nil,
-                   file: '',
-                   exec_time: 0,
-                   timestamp: '0',
-                   exit_code: '?',
-                   stdout: '',
-                   stderr: '')
+    def initialize(report_details:, report_document:, file:)
       initialize_empty
       initialize_with_report_document report_document unless report_document.nil?
-      @exec_time = exec_time
-      @timestamp = timestamp
+      @report_details = report_details
       @file = file
-      @exit_code = exit_code
-      @stdout = stdout
-      @stderr = stderr
     end
 
     def self.empty
-      new
+      new(report_details: PmdTester::PmdReportDetail.empty, report_document: nil, file: '')
     end
 
     def rule_summaries

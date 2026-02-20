@@ -5,32 +5,18 @@ module PmdTester
   # can be diffed with another report into a CpdReportDiff
   class CpdReport
     attr_reader :duplications, :errors,
-                :exec_time,
-                :timestamp,
-                :exit_code,
-                :stdout,
-                :stderr,
-                :file
+                :file,
+                :report_details
 
-    def initialize(report_document:,
-                   file:,
-                   timestamp:,
-                   exec_time:,
-                   exit_code:,
-                   stdout:,
-                   stderr:)
+    def initialize(report_details:, report_document:, file:)
       initialize_empty
       initialize_with_report_document report_document unless report_document.nil?
-      @timestamp = timestamp
-      @exec_time = exec_time
-      @exit_code = exit_code
-      @stdout = stdout
-      @stderr = stderr
+      @report_details = report_details
       @file = file
     end
 
     def self.empty
-      new(report_document: nil, file: '', timestamp: '', exec_time: 0, exit_code: '?', stdout: '', stderr: '')
+      new(report_details: PmdTester::PmdReportDetail.empty, report_document: nil, file: '')
     end
 
     private

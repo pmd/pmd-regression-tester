@@ -1,1 +1,1 @@
-{"execution_time":121,"timestamp":"base time stamp","working_dir":"SHOULD_BE_REPLACED","exit_code":4,"stdout":"base cpd stdout","stderr":"base cpd stderr"}
+{"execution_time":121,"timestamp":"base time stamp","working_dir":"SHOULD_BE_REPLACED","cmdline":"pmd cpd ...","exit_code":4,"stdout":"base cpd stdout","stderr":"base cpd stderr"}

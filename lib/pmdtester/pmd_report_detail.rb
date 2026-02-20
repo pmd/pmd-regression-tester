@@ -38,7 +38,7 @@ module PmdTester
       end
     end
 
-    def format_execution_time
+    def execution_time_formatted
       self.class.convert_seconds(@execution_time)
     end
 
@@ -50,6 +50,11 @@ module PmdTester
                                    exit_code: exit_code, stdout: stdout, stderr: stderr)
       detail.save(report_info_path)
       detail
+    end
+
+    def self.empty
+      new(execution_time: 0, timestamp: '', working_dir: Dir.getwd, cmdline: '',
+          exit_code: nil, stdout: '', stderr: '')
     end
 
     # convert seconds into HH::MM::SS

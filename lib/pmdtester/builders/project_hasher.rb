@@ -11,16 +11,20 @@ module PmdTester
         'error_counts' => rdiff.error_counts.to_h.transform_keys(&:to_s),
         'configerror_counts' => rdiff.configerror_counts.to_h.transform_keys(&:to_s),
 
-        'base_execution_time' => PmdReportDetail.convert_seconds(rdiff.base_report.exec_time),
-        'patch_execution_time' => PmdReportDetail.convert_seconds(rdiff.patch_report.exec_time),
-        'diff_execution_time' => PmdReportDetail.convert_seconds(rdiff.patch_report.exec_time -
-                                                                   rdiff.base_report.exec_time),
-
-        'base_timestamp' => rdiff.base_report.timestamp,
-        'patch_timestamp' => rdiff.patch_report.timestamp,
-
-        'base_exit_code' => rdiff.base_report.exit_code,
-        'patch_exit_code' => rdiff.patch_report.exit_code,
+        'base_details' => {
+          'timestamp' => rdiff.base_report.report_details.timestamp,
+          'exit_code' => rdiff.base_report.report_details.exit_code,
+          'cmdline' => rdiff.base_report.report_details.cmdline,
+          'execution_time' => rdiff.base_report.report_details.execution_time_formatted
+        },
+        'patch_details' => {
+          'timestamp' => rdiff.patch_report.report_details.timestamp,
+          'exit_code' => rdiff.patch_report.report_details.exit_code,
+          'cmdline' => rdiff.patch_report.report_details.cmdline,
+          'execution_time' => rdiff.patch_report.report_details.execution_time_formatted
+        },
+        'diff_execution_time' => PmdReportDetail.convert_seconds(rdiff.patch_report.report_details.execution_time -
+                                                                   rdiff.base_report.report_details.execution_time),
 
         'rule_diffs' => rdiff.rule_summaries
       }

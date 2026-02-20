@@ -141,17 +141,17 @@ module PmdTester
     end
 
     def write_pmd_stdout_stderr(root, report_diff)
-      write_file("#{root}/base_pmd_stdout.txt", report_diff.base_report.stdout)
-      write_file("#{root}/base_pmd_stderr.txt", report_diff.base_report.stderr)
-      write_file("#{root}/patch_pmd_stdout.txt", report_diff.patch_report.stdout)
-      write_file("#{root}/patch_pmd_stderr.txt", report_diff.patch_report.stderr)
+      write_file("#{root}/base_pmd_stdout.txt", report_diff.base_report.report_details.stdout)
+      write_file("#{root}/base_pmd_stderr.txt", report_diff.base_report.report_details.stderr)
+      write_file("#{root}/patch_pmd_stdout.txt", report_diff.patch_report.report_details.stdout)
+      write_file("#{root}/patch_pmd_stderr.txt", report_diff.patch_report.report_details.stderr)
     end
 
     def write_cpd_stdout_stderr(root, cpd_report_diff)
-      write_file("#{root}/base_cpd_stdout.txt", cpd_report_diff.base_report.stdout)
-      write_file("#{root}/base_cpd_stderr.txt", cpd_report_diff.base_report.stderr)
-      write_file("#{root}/patch_cpd_stdout.txt", cpd_report_diff.patch_report.stdout)
-      write_file("#{root}/patch_cpd_stderr.txt", cpd_report_diff.patch_report.stderr)
+      write_file("#{root}/base_cpd_stdout.txt", cpd_report_diff.base_report.report_details.stdout)
+      write_file("#{root}/base_cpd_stderr.txt", cpd_report_diff.base_report.report_details.stderr)
+      write_file("#{root}/patch_cpd_stdout.txt", cpd_report_diff.patch_report.report_details.stdout)
+      write_file("#{root}/patch_cpd_stderr.txt", cpd_report_diff.patch_report.report_details.stderr)
     end
 
     def copy_file(target_file, source_file)
@@ -195,9 +195,9 @@ module PmdTester
         'error_counts' => report.errors_by_file.total_size,
         'configerror_counts' => report.configerrors_by_rule.values.flatten.length,
 
-        'execution_time' => PmdReportDetail.convert_seconds(report.exec_time),
-        'timestamp' => report.timestamp,
-        'exit_code' => report.exit_code,
+        'execution_time' => report.report_details.execution_time_formatted,
+        'timestamp' => report.report_details.timestamp,
+        'exit_code' => report.report_details.exit_code,
 
         'rules' => report.rule_summaries,
         'errors' => report.errors_by_file.all_values.map { |e| error_to_hash(e, project) },
@@ -210,9 +210,9 @@ module PmdTester
         'duplication_counts' => cpd_report.duplications.length,
         'error_counts' => cpd_report.errors.length,
 
-        'execution_time' => PmdReportDetail.convert_seconds(cpd_report.exec_time),
-        'timestamp' => cpd_report.timestamp,
-        'exit_code' => cpd_report.exit_code,
+        'execution_time' => cpd_report.report_details.execution_time_formatted,
+        'timestamp' => cpd_report.report_details.timestamp,
+        'exit_code' => cpd_report.report_details.exit_code,
 
         'errors' => cpd_report.errors.map { |e| error_to_hash(e, project) }
       }
