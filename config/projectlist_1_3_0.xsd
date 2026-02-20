@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<!-- version 1.2.0 -->
+<!-- version 1.3.0 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:element name="projectlist">
     <xs:complexType>
@@ -34,6 +34,20 @@
       <xs:element name="exclude-pattern" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element name="build-command" type="xs:string" minOccurs="0" maxOccurs="1"/>
       <xs:element name="auxclasspath-command" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="cpd-options" type="cpd-options" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="cpd-options">
+    <xs:sequence>
+      <xs:element name="language" type="xs:string" minOccurs="0" maxOccurs="1" default="java"/>
+      <xs:element name="minimum-tokens" type="xs:integer" minOccurs="0" maxOccurs="1" default="100"/>
+      <xs:element name="max-memory" type="xs:string" minOccurs="0" maxOccurs="1" default="512m"/>
+      <xs:element name="directories" type="directories" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="directories">
+    <xs:sequence>
+      <xs:element name="directory" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
     </xs:sequence>
   </xs:complexType>
 </xs:schema>

@@ -177,11 +177,12 @@ module PmdTester
     end
 
     def generate_cpd_report(project)
-      error_recovery_options = @error_recovery ? 'PMD_JAVA_OPTS="-Dpmd.error_recovery -ea" ' : ''
-      cpd_cmd = "#{error_recovery_options}" \
-                "#{determine_run_path(command: 'cpd')} -d #{project.local_source_path} -f xml " \
-                '--language java ' \
-                '--minimum-tokens 100 ' \
+      error_recovery_options = @error_recovery ? ' -Dpmd.error_recovery -ea' : ''
+      pmd_java_options = "PMD_JAVA_OPTS=\"-Xmx#{project.cpd_options.max_memory}#{error_recovery_options}\" "
+      directories = project.cpd_options.directories.map { |dir| "-d #{project.clone_root_path}/#{dir}" }.join(' ')
+      cpd_cmd = "#{pmd_java_options}" \
+                "#{determine_run_path(command: 'cpd')} #{directories} -f xml " \
+                "--language #{project.cpd_options.language} --minimum-tokens #{project.cpd_options.minimum_tokens} " \
                 '--skip-lexical-errors'
       start_time = Time.now
       exit_code = nil

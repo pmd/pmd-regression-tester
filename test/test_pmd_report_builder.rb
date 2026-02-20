@@ -381,15 +381,17 @@ class TestPmdReportBuilder < Test::Unit::TestCase
   def record_expectations_project_build_cpd(sha1:, error: false, exit_status: 0)
     PmdTester::SimpleProgressLogger.any_instance.stubs(:start).once
     PmdTester::SimpleProgressLogger.any_instance.stubs(:stop).once
-    error_prefix = error ? 'PMD_JAVA_OPTS="-Dpmd.error_recovery -ea" ' : ''
+    error_prefix = error ? 'PMD_JAVA_OPTS="-Dpmd.error_recovery -ea -Xmx256m" ' : 'PMD_JAVA_OPTS="-Xmx256m" '
     distro_path = "#{Dir.getwd}/target/pmd-bin-#{@pmd_version}-main-#{sha1}"
     process_status = mock
     process_status.expects(:exitstatus).returns(exit_status).once
     cmd_line = "#{error_prefix}" \
                "#{distro_path}/bin/pmd cpd " \
-               '-d target/repositories/checkstyle -f xml ' \
+               '-d target/repositories/checkstyle/src/main/java ' \
+               '-d target/repositories/checkstyle/src/test/java ' \
+               '-f xml ' \
                '--language java ' \
-               '--minimum-tokens 100 ' \
+               '--minimum-tokens 50 ' \
                '--skip-lexical-errors'
     PmdTester::Cmd.stubs(:execute).with(cmd_line)
                   .returns([process_status, 'stdout output', 'stderr output'])

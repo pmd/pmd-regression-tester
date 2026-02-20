@@ -23,6 +23,7 @@ module PmdTester
     attr_reader :auxclasspath_command
     # stores the auxclasspath calculated after cloning/preparing the project
     attr_accessor :auxclasspath
+    attr_reader :cpd_options
 
     def initialize(project) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
       @name = project.at_xpath('name').text
@@ -45,6 +46,7 @@ module PmdTester
       @auxclasspath_command = project.at_xpath('auxclasspath-command')&.text
 
       @report_diff = nil
+      @cpd_options = CpdOptions.new(project.at_xpath('cpd-options'))
     end
 
     # Generate the default webview url for the projects
@@ -150,6 +152,41 @@ module PmdTester
                                                    get_cpd_report_path(patch_branch),
                                                    get_cpd_report_info_path(base_branch),
                                                    get_cpd_report_info_path(patch_branch))
+    end
+
+    # Containts Cpd specific options from project-list.xml
+    class CpdOptions
+      attr_reader :language
+      attr_reader :minimum_tokens
+      attr_reader :max_memory
+      attr_reader :directories
+
+      def initialize(cpd_options_element)
+        # default values
+        @language = 'java'
+        @minimum_tokens = 100
+        @max_memory = '512m'
+        @directories = ['.']
+
+        return if cpd_options_element.nil?
+
+        @language = parse_text(cpd_options_element, 'language', @language)
+        @minimum_tokens = parse_text(cpd_options_element, 'minimum-tokens', @minimum_tokens).to_i
+        @max_memory = parse_text(cpd_options_element, 'max-memory', @max_memory)
+        @directories = parse_directories(cpd_options_element, @directories)
+      end
+
+      private
+
+      def parse_text(cpd_options_element, element_name, default_value)
+        element = cpd_options_element.at_xpath(element_name)
+        element.nil? ? default_value : element.text
+      end
+
+      def parse_directories(cpd_options_element, default_value)
+        directories = cpd_options_element.xpath('directories/directory').map(&:text)
+        directories.empty? ? default_value : directories
+      end
     end
   end
 end

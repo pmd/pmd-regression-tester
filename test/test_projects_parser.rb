@@ -61,4 +61,22 @@ class TestProjectsParser < Test::Unit::TestCase
                    e.errors[2].to_s)
     end
   end
+
+  def test_cpd_options
+    projects = PmdTester::ProjectsParser.new.parse('test/resources/projects_parser/project-list-cpd-options.xml')
+    assert_equal('checkstyle', projects[0].name)
+    assert_equal('lava', projects[0].cpd_options.language)
+    assert_equal(1001, projects[0].cpd_options.minimum_tokens)
+    assert_equal('42m', projects[0].cpd_options.max_memory)
+    assert_equal(['src/main/java', 'src/test/java'], projects[0].cpd_options.directories)
+  end
+
+  def test_cpd_options_defaults
+    projects = PmdTester::ProjectsParser.new.parse('test/resources/projects_parser/project-list.xml')
+    assert_equal('checkstyle', projects[0].name)
+    assert_equal('java', projects[0].cpd_options.language)
+    assert_equal(100, projects[0].cpd_options.minimum_tokens)
+    assert_equal('512m', projects[0].cpd_options.max_memory)
+    assert_equal(['.'], projects[0].cpd_options.directories)
+  end
 end
