@@ -179,9 +179,8 @@ module PmdTester
     def generate_cpd_report(project)
       error_recovery_options = @error_recovery ? ' -Dpmd.error_recovery -ea' : ''
       pmd_java_options = "PMD_JAVA_OPTS=\"-Xmx#{project.cpd_options.max_memory}#{error_recovery_options}\" "
-      directories = project.cpd_options.directories.map { |dir| "-d #{project.clone_root_path}/#{dir}" }.join(' ')
       cpd_cmd = "#{pmd_java_options}" \
-                "#{determine_run_path(command: 'cpd')} #{directories} -f xml " \
+                "#{determine_run_path(command: 'cpd')} #{get_directories_option(project)} -f xml " \
                 "--language #{project.cpd_options.language} --minimum-tokens #{project.cpd_options.minimum_tokens} " \
                 '--skip-lexical-errors'
       start_time = Time.now
@@ -215,6 +214,12 @@ module PmdTester
     end
 
     private
+
+    def get_directories_option(project)
+      project.cpd_options.directories.map do |dir|
+        "-d #{Pathname.new("#{project.clone_root_path}/#{dir}").cleanpath}"
+      end.join(' ')
+    end
 
     def checkout_build_branch
       logger.info "#{@pmd_branch_name}: Checking out the branch"

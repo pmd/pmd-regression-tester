@@ -75,8 +75,8 @@ class TestProjectsParser < Test::Unit::TestCase
     projects = PmdTester::ProjectsParser.new.parse('test/resources/projects_parser/project-list.xml')
     assert_equal('checkstyle', projects[0].name)
     assert_equal('java', projects[0].cpd_options.language)
-    assert_equal(100, projects[0].cpd_options.minimum_tokens)
-    assert_equal('512m', projects[0].cpd_options.max_memory)
+    assert_equal(150, projects[0].cpd_options.minimum_tokens)
+    assert_equal('5g', projects[0].cpd_options.max_memory)
     assert_equal(['.'], projects[0].cpd_options.directories)
   end
 end

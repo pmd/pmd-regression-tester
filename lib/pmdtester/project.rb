@@ -164,8 +164,8 @@ module PmdTester
       def initialize(cpd_options_element)
         # default values
         @language = 'java'
-        @minimum_tokens = 100
-        @max_memory = '512m'
+        @minimum_tokens = 150
+        @max_memory = '5g'
         @directories = ['.']
 
         return if cpd_options_element.nil?

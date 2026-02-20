@@ -29,5 +29,15 @@ mvn test-compile -B
 mvn dependency:build-classpath -DincludeScope=test -Dmdep.outputFile=classpath.txt -B
 ]]></build-command>
     <auxclasspath-command>echo -n "${HOME}/openjdk11/lib/jrt-fs.jar:$(pwd)/target/classes:$(pwd)/target/test-classes:"; cat classpath.txt</auxclasspath-command>
+
+    <cpd-options>
+      <language>java</language>
+      <minimum-tokens>100</minimum-tokens>
+      <max-memory>512m</max-memory>
+      <directories>
+        <directory>src/main/java</directory>
+        <directory>src/test/java</directory>
+      </directories>
+    </cpd-options>
   </project>
 </projectlist>
