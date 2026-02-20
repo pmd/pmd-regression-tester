@@ -97,20 +97,23 @@ class TestRunner < Test::Unit::TestCase
   end
 
   def test_online_mode
+    File.stubs(:directory?).with(anything).returns(true).at_least_once
     FileUtils.stubs(:mkdir_p).with('target/reports').at_most_once
     FileUtils.stubs(:mkdir_p).with('target/reports/diff').at_least_once
-    FileUtils.stubs(:copy_entry).with(anything, 'target/reports/diff/css').once
-    FileUtils.stubs(:copy_entry).with(anything, 'target/reports/diff/js').once
-    File.stubs(:new).with('target/reports/diff/index.html', anything).returns.once
+    FileUtils.stubs(:copy_entry).with(anything, 'target/reports/diff/css')
+    FileUtils.stubs(:copy_entry).with(anything, 'target/reports/diff/js')
+    File.stubs(:new).with('target/reports/diff/index.html', anything).returns
 
-    Dir.stubs(:chdir).with('target/reports').yields.once
-    Cmd.stubs(:execute_successfully).with('wget --no-verbose --timestamping https://sourceforge.net/projects/pmd/files/pmd-regression-tester/main-baseline.zip').once
-    Cmd.stubs(:execute_successfully).with('unzip -qo main-baseline.zip').once
+    Dir.stubs(:chdir).with('target/reports').yields
+    Cmd.stubs(:execute_successfully).with('wget --no-verbose --timestamping https://sourceforge.net/projects/pmd/files/pmd-regression-tester/main-baseline.zip')
+    Cmd.stubs(:execute_successfully).with('unzip -qo main-baseline.zip')
     ProjectsParser.any_instance.stubs(:parse)
                   .with('target/reports/main/project-list.xml')
-                  .returns([]).once
-
-    PmdReportBuilder.any_instance.stubs(:build).returns(PmdBranchDetail.new('test_branch')).once
+                  .returns([])
+    Dir.stubs(:each_child).with('target/reports/main')
+    FileUtils.stubs(:cp).with('target/reports/main/project-list.xml',
+                              'target/reports/test_branch/project-list.xml')
+    PmdReportBuilder.any_instance.stubs(:build).returns(PmdBranchDetail.new('test_branch'))
 
     argv = %w[-r target/repositories/pmd -m online -b main -p pmd_releases/6.7.0]
     summarized_results = run_runner(argv)
@@ -118,12 +121,16 @@ class TestRunner < Test::Unit::TestCase
   end
 
   def test_online_mode_multithreading
+    File.stubs(:directory?).with(anything).returns(true).at_least_once
+    Dir.stubs(:each_child).with('target/reports/main')
+    FileUtils.stubs(:cp).with('target/reports/main/project-list.xml',
+                              'target/reports/some_branch/project-list.xml')
     FileUtils.stubs(:mkdir_p).with('target/reports').at_most_once
-    Dir.stubs(:chdir).with('target/reports').yields.once
+    Dir.stubs(:chdir).with('target/reports').yields
     Cmd.stubs(:execute_successfully).twice
     ProjectsParser.any_instance.stubs(:parse)
                   .with('target/reports/main/project-list.xml')
-                  .returns([]).once
+                  .returns([])
 
     report_builder_mock = mock
     PmdReportBuilder.stubs(:new)
@@ -131,9 +138,8 @@ class TestRunner < Test::Unit::TestCase
                       options.threads == 3
                     end
                     .returns(report_builder_mock)
-                    .once
-    report_builder_mock.stubs(:build).returns(PmdBranchDetail.new('some_branch')).once
-    SummaryReportBuilder.any_instance.stubs(:write_all_projects).once
+    report_builder_mock.stubs(:build).returns(PmdBranchDetail.new('some_branch'))
+    SummaryReportBuilder.any_instance.stubs(:write_all_projects)
 
     argv = %w[-r target/repositories/pmd -m online -b main -p pmd_releases/6.7.0 -t 3]
     summarized_results = run_runner(argv)

@@ -10,6 +10,7 @@ module PmdTester
     attr_reader :configerrors
 
     def initialize(branch_name, working_dir, filter_set = nil)
+      super()
       @violations = CollectionByFile.new
       @errors = CollectionByFile.new
       @configerrors = Hash.new { |hash, key| hash[key] = [] }
@@ -23,6 +24,12 @@ module PmdTester
       @branch_name = branch_name
 
       @cur_text = String.new(capacity: 200)
+    end
+
+    def parse(file_path)
+      parser = Nokogiri::XML::SAX::Parser.new(self)
+      parser.parse(File.open(file_path)) if File.exist?(file_path)
+      self
     end
 
     def start_element(name, attrs = [])

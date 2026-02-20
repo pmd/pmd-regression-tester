@@ -23,7 +23,9 @@ config/project-list.xml
 config/projectlist_1_0_0.xsd
 config/projectlist_1_1_0.xsd
 config/projectlist_1_2_0.xsd
+config/projectlist_1_3_0.xsd
 lib/pmdtester.rb
+lib/pmdtester/builders/cpd_project_hasher.rb
 lib/pmdtester/builders/liquid_renderer.rb
 lib/pmdtester/builders/pmd_report_builder.rb
 lib/pmdtester/builders/project_builder.rb
@@ -33,7 +35,9 @@ lib/pmdtester/builders/simple_progress_logger.rb
 lib/pmdtester/builders/summary_report_builder.rb
 lib/pmdtester/cmd.rb
 lib/pmdtester/collection_by_file.rb
+lib/pmdtester/cpd_report_diff.rb
 lib/pmdtester/location.rb
+lib/pmdtester/parsers/cpd_report_document.rb
 lib/pmdtester/parsers/options.rb
 lib/pmdtester/parsers/pmd_report_document.rb
 lib/pmdtester/parsers/projects_parser.rb
@@ -62,6 +66,7 @@ resources/js/jquery-3.6.4.slim.min.js
 resources/js/popper-2.11.7.min.js
 resources/js/project-report.js
 resources/maven-settings.xml
+resources/project_cpd_report.html
 resources/project_diff_report.html
 resources/project_index.html
 resources/project_pmd_report.html

@@ -14,8 +14,8 @@
     <script src="../js/datatables.min.js"></script>
     <script src="../js/code-snippets.js"></script>
     <!-- This is generated -->
-    <script src="./project_data.js"></script>
-
+    <script src="./diff_pmd_data.js"></script>
+    <script src="./diff_cpd_data.js"></script>
 </head>
 <body>
 <div class="section">
@@ -68,7 +68,7 @@
                 <td class="base">1</td>
                 <td class="patch">2</td>
                 <td class="diff">
-
+                    
 <span class="badge rounded-pill badge-secondary added">+1</span>
 <span class="badge rounded-pill badge-secondary removed">-0</span>
 
@@ -78,28 +78,84 @@
                 </td>
             </tr>
             <tr>
-                <td class="item">Execution time</td>
-                <td class="base">00:02:01</td>
-                <td class="patch">00:01:05</td>
-                <td class="diff">00:00:56</td>
+                <td class="item"><a href="#section-duplications">Duplications</a></td>
+                <td class="base">3</td>
+                <td class="patch">3</td>
+                <td class="diff">
+                    
+<span class="badge rounded-pill badge-secondary added">+1</span>
+<span class="badge rounded-pill badge-secondary removed">-1</span>
+
+<span class="badge rounded-pill badge-secondary changed">~1</span>
+
+
+                </td>
             </tr>
             <tr>
-                <td class="item">Timestamp</td>
-                <td class="base">base time stamp</td>
-                <td class="patch">patch time stamp</td>
-                <td class="diff"></td>
+                <td class="item"><a href="#section-cpd-errors">CPD Errors</a></td>
+                <td class="base">1</td>
+                <td class="patch">1</td>
+                <td class="diff">
+                    
+<span class="badge rounded-pill badge-secondary added">+0</span>
+<span class="badge rounded-pill badge-secondary removed">-0</span>
+
+<span class="badge rounded-pill badge-secondary changed">~1</span>
+
+
+                </td>
             </tr>
             <tr>
-                <td class="item">Exit Code</td>
-                <td class="base">0 <a href="base_stdout.txt">stdout</a> | <a href="base_stderr.txt">stderr</a></td>
-                <td class="patch">1 <a href="patch_stdout.txt">stdout</a> | <a href="patch_stderr.txt">stderr</a></td>
-                <td class="diff"></td>
+                <td class="item">PMD Details</td>
+                <td class="base">
+                    <small>
+                    Timestamp: base time stamp<br>
+                    <details><summary>Command:</summary><code>pmd check ...</code></details><br>
+                    Exit Code: 0<br>
+                    Execution Time: 00:02:01<br>
+                    <a href="base_pmd_stdout.txt">stdout</a> | <a href="base_pmd_stderr.txt">stderr</a><br>
+                    <a href="base_pmd_report.html">Base PMD Report</a>
+                    </small>
+                </td>
+                <td class="patch">
+                    <small>
+                    Timestamp: patch time stamp<br>
+                    <details><summary>Command:</summary><code>pmd check ...</code></details><br>
+                    Exit Code: 1<br>
+                    Execution Time: 00:01:05<br>
+                    <a href="patch_pmd_stdout.txt">stdout</a> | <a href="patch_pmd_stderr.txt">stderr</a><br>
+                    <a href="patch_pmd_report.html">Patch PMD Report</a>
+                    </small>
+                </td>
+                <td class="diff">
+                    <small>Execution Time: 00:00:56</small>
+                </td>
             </tr>
             <tr>
-                <td class="item">Full Report</td>
-                <td class="base"><a href="base_pmd_report.html">Base PMD Report</a></td>
-                <td class="patch"><a href="patch_pmd_report.html">Patch PMD Report</a></td>
-                <td class="diff"></td>
+                <td class="item">CPD Details</td>
+                <td class="base">
+                    <small>
+                    Timestamp: base time stamp<br>
+                    <details><summary>Command:</summary><code>pmd cpd ...</code></details><br>
+                    Exit Code: 4<br>
+                    Execution Time: 00:02:01<br>
+                    <a href="base_cpd_stdout.txt">stdout</a> | <a href="base_cpd_stderr.txt">stderr</a><br>
+                    <a href="base_cpd_report.html">Base CPD Report</a>
+                    </small>
+                </td>
+                <td class="patch">
+                    <small>
+                    Timestamp: patch time stamp<br>
+                    <details><summary>Command:</summary><code>pmd cpd ...</code></details><br>
+                    Exit Code: 4<br>
+                    Execution Time: 00:02:11<br>
+                    <a href="patch_cpd_stdout.txt">stdout</a> | <a href="patch_cpd_stderr.txt">stderr</a><br>
+                    <a href="patch_cpd_report.html">Patch CPD Report</a>
+                    </small>
+                </td>
+                <td class="diff">
+                    <small>Execution Time: 00:00:10</small>
+                </td>
             </tr>
             </tbody>
         </table>
@@ -265,7 +321,6 @@ Was expecting one of:
 	at net.sourceforge.pmd.SourceCodeProcessor.<span class="stack-trace-method">processSource</span>(SourceCodeProcessor.java:175)
 	at net.sourceforge.pmd.SourceCodeProcessor.<span class="stack-trace-method">processSourceCode</span>(SourceCodeProcessor.java:96)
 	... 9 more
-
                                 </pre>
                             </div>
                         </div>
@@ -294,13 +349,100 @@ Was expecting one of:
                  </tr>
                 </thead>
                 <tbody>
+                
                 <tr class="configerror-row added">
                     <td>NewRule</td>
                     <td>Property method_name not defined</td>
                 </tr>
+                
                 </tbody>
             </table>
         </div>
+    </div>
+</div>
+
+<div class="section" id="section-duplications">
+
+    <h2>Duplications</h2>
+
+    <div class="section-content">
+
+        <table id="duplicationsTable" width="100%" class="table">
+            <thead>
+            <tr>
+                <th>Location (click row to expand)</th>
+                <th>Lines</th>
+                <th>Tokens</th>
+                <th>Code Fragment</th>
+                <th>Type</th>
+            </tr>
+            </thead>
+        </table>
+
+    </div>
+
+</div>
+
+<div class="section" id="section-cpd-errors">
+
+    <h2>CPD Errors</h2>
+
+    <div class="section-content">
+
+        <div class="table-responsive">
+            <table id="cpd-error-table" class="table">
+                <thead>
+                 <tr>
+                     <th>File</th>
+                     <th>Description (click to expand)</th>
+                 </tr>
+                </thead>
+                <tbody>
+                
+                <tr id="cpd-error-1" class="changed" data-bs-toggle="collapse" data-bs-target="#cpd-error-1-expanded">
+                    <td><a href="pmd-cli/src/test/resources/net/sourceforge/pmd/cli/cpd/badandgood/BadFile.java"  target="_blank" rel="noopener noreferrer">BadFile.java</a></td>
+                    <td>LexException: Lexical error in file &#39;<span class='meta-var'>$FILE</span>&#39; at line 4, column 14: &quot;\ufffd&quot; (65533), after : &quot;&quot; (in lexical state DEFAULT)</td>
+                </tr>
+                <tr>
+                    <td class="row-hidden" colspan="2">
+                        <div class="accordion-body collapse" id="cpd-error-1-expanded">
+                            <div class="collapsed-content-padder">
+                                <pre>
+net.sourceforge.pmd.lang.ast.LexException: Lexical error in file &#39;<span class="meta-var">$FILE</span>&#39; at line 4, column 14: &quot;\ufffd&quot; (65533), after : &quot;&quot; (in lexical state DEFAULT)
+        at net.sourceforge.pmd.lang.ast.InternalApiBridge.<span class="stack-trace-method">newLexException</span>(InternalApiBridge.java:25)
+        at net.sourceforge.pmd.lang.java.ast.JavaParserImplTokenManager.<span class="stack-trace-method">getNextToken</span>(JavaParserImplTokenManager.java:2699)
+        at net.sourceforge.pmd.lang.java.ast.JavaParserImplTokenManager.<span class="stack-trace-method">getNextToken</span>(JavaParserImplTokenManager.java:18)
+        at net.sourceforge.pmd.cpd.impl.BaseTokenFilter.<span class="stack-trace-method">getNextToken</span>(BaseTokenFilter.java:44)
+        at net.sourceforge.pmd.cpd.impl.CpdLexerBase.<span class="stack-trace-method">tokenize</span>(CpdLexerBase.java:40)
+        at net.sourceforge.pmd.cpd.CpdLexer.<span class="stack-trace-method">tokenize</span>(CpdLexer.java:29)
+        at net.sourceforge.pmd.cpd.CpdAnalysis.<span class="stack-trace-method">doTokenize</span>(CpdAnalysis.java:146)
+        at net.sourceforge.pmd.cpd.CpdAnalysis.<span class="stack-trace-method">performAnalysis</span>(CpdAnalysis.java:173)
+        at net.sourceforge.pmd.cli.commands.internal.CpdCommand.<span class="stack-trace-method">doExecute</span>(CpdCommand.java:134)
+        at net.sourceforge.pmd.cli.commands.internal.CpdCommand.<span class="stack-trace-method">doExecute</span>(CpdCommand.java:29)
+        at net.sourceforge.pmd.cli.internal.PmdRootLogger.<span class="stack-trace-method">executeInLoggingContext</span>(PmdRootLogger.java:55)
+        at net.sourceforge.pmd.cli.commands.internal.AbstractAnalysisPmdSubcommand.<span class="stack-trace-method">execute</span>(AbstractAnalysisPmdSubcommand.java:111)
+        at net.sourceforge.pmd.cli.commands.internal.AbstractPmdSubcommand.<span class="stack-trace-method">call</span>(AbstractPmdSubcommand.java:30)
+        at net.sourceforge.pmd.cli.commands.internal.AbstractPmdSubcommand.<span class="stack-trace-method">call</span>(AbstractPmdSubcommand.java:16)
+        at picocli.CommandLine.<span class="stack-trace-method">executeUserObject</span>(CommandLine.java:2041)
+        at picocli.CommandLine.access$<span class="stack-trace-method">1500</span>(CommandLine.java:148)
+        at picocli.CommandLine$RunLast.<span class="stack-trace-method">executeUserObjectOfLastSubcommandWithSameParent</span>(CommandLine.java:2461)
+        at picocli.CommandLine$RunLast.<span class="stack-trace-method">handle</span>(CommandLine.java:2453)
+        at picocli.CommandLine$RunLast.<span class="stack-trace-method">handle</span>(CommandLine.java:2415)
+        at picocli.CommandLine$AbstractParseResultHandler.<span class="stack-trace-method">execute</span>(CommandLine.java:2273)
+        at picocli.CommandLine$RunLast.<span class="stack-trace-method">execute</span>(CommandLine.java:2417)
+        at picocli.CommandLine.<span class="stack-trace-method">execute</span>(CommandLine.java:2170)
+        at net.sourceforge.pmd.cli.PmdCli.<span class="stack-trace-method">main</span>(PmdCli.java:24)
+   
+                                </pre>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                
+                </tbody>
+            </table>
+        </div>
+
     </div>
 </div>
 

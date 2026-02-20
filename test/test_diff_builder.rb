@@ -34,8 +34,6 @@ class TestDiffBuilder < Test::Unit::TestCase
     assert_equal('Patch1.java', keys[2])
     assert_equal('Patch2.java', keys[3])
     assert_equal('Patch3.java', keys[4])
-
-    # assert_equal('00:00:56', diffs_report.diff_execution_time)
   end
 
   def test_violation_diffs_location_change

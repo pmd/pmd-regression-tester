@@ -47,6 +47,7 @@ Fields should be declared at the top of the class, before any method declaration
 Fields should be declared at the top of the class, before any method declarations, constructors, initializers or inner classes.
 </violation>
 </file>
+<!-- stacktrace changed for AbstractJavaParser.java: (AbstractJavaParser.java:58) -> (AbstractJavaParser.java:57) -->
   <error filename="SHOULD_BE_REPLACED/target/repositories/spring-framework/spring-aop/src/main/java/org/springframework/aop/TrueMethodMatcher.java"
     msg="This is an artificial error message.">
 <![CDATA[net.sourceforge.pmd.PMDException: Error while parsing /home/bbg/projects/pmdtester/pmdtester/target/repositories/checkstyle/src/test/resources-noncompilable/com/puppycrawl/tools/checkstyle/asttreestringprinter/InputAstTreeStringPrinter.java

@@ -40,9 +40,9 @@ class TestSummaryReportBuilder < Test::Unit::TestCase
     FileUtils.cp("#{test_resources_path}/empty_config.xml", "#{base_path}/config.xml")
     FileUtils.cp("#{test_resources_path}/empty_config.xml", "#{patch_path}/config.xml")
     FileUtils.mkdir_p("#{base_path}/checkstyle")
-    FileUtils.cp("#{test_resources_path}/base-checkstyle-report.xml", "#{base_path}/checkstyle/pmd_report.xml")
+    FileUtils.cp("#{test_resources_path}/base-checkstyle-pmd_report.xml", "#{base_path}/checkstyle/pmd_report.xml")
     FileUtils.mkdir_p("#{patch_path}/checkstyle")
-    FileUtils.cp("#{test_resources_path}/patch-checkstyle-report.xml", "#{patch_path}/checkstyle/pmd_report.xml")
+    FileUtils.cp("#{test_resources_path}/patch-checkstyle-pmd_report.xml", "#{patch_path}/checkstyle/pmd_report.xml")
 
     branch = PmdTester::PmdBranchDetail.load('base_branch', nil)
     patch = PmdTester::PmdBranchDetail.load('patch_branch', nil)
@@ -64,23 +64,23 @@ class TestSummaryReportBuilder < Test::Unit::TestCase
     FileUtils.cp("#{test_resources_path}/base_branch_info.json", "#{base_path}/branch_info.json")
     FileUtils.cp("#{test_resources_path}/empty_config.xml", "#{base_path}/config.xml")
     FileUtils.mkdir_p("#{base_path}/sample_project")
-    FileUtils.cp("#{test_resources_path}/base-report.xml", "#{base_path}/sample_project/pmd_report.xml")
+    FileUtils.cp("#{test_resources_path}/base_pmd_report.xml", "#{base_path}/sample_project/pmd_report.xml")
 
     patch_path = 'target/reports/patch_branch'
     FileUtils.mkdir_p(patch_path)
     FileUtils.cp("#{test_resources_path}/patch_branch_info.json", "#{patch_path}/branch_info.json")
     FileUtils.cp("#{test_resources_path}/empty_config.xml", "#{patch_path}/config.xml")
     FileUtils.mkdir_p("#{patch_path}/sample_project")
-    FileUtils.cp("#{test_resources_path}/patch-report.xml", "#{patch_path}/sample_project/pmd_report.xml")
+    FileUtils.cp("#{test_resources_path}/patch_pmd_report.xml", "#{patch_path}/sample_project/pmd_report.xml")
 
     build_html_reports(projects, PmdTester::PmdBranchDetail.load('base_branch', nil),
                        PmdTester::PmdBranchDetail.load('patch_branch', nil))
 
-    assert_file_equals("#{test_resources_path}/expected_base_data.js",
-                       'target/reports/diff/sample_project/base_data.js')
-    assert_file_equals("#{test_resources_path}/expected_patch_data.js",
-                       'target/reports/diff/sample_project/patch_data.js')
-    assert_file_equals("#{test_resources_path}/expected_project_data.js",
-                       'target/reports/diff/sample_project/project_data.js')
+    assert_file_equals("#{test_resources_path}/expected_base_pmd_data.js",
+                       'target/reports/diff/sample_project/base_pmd_data.js')
+    assert_file_equals("#{test_resources_path}/expected_patch_pmd_data.js",
+                       'target/reports/diff/sample_project/patch_pmd_data.js')
+    assert_file_equals("#{test_resources_path}/expected_diff_pmd_data.js",
+                       'target/reports/diff/sample_project/diff_pmd_data.js')
   end
 end

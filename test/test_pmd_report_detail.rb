@@ -18,7 +18,7 @@ class TestPmdReportDetail < Test::Unit::TestCase
 
     assert_equal(121, details.execution_time)
     assert_equal('timestamp', details.timestamp)
-    assert_equal('00:02:01', details.format_execution_time)
+    assert_equal('00:02:01', details.execution_time_formatted)
     assert_equal(Dir.getwd, details.working_dir)
     assert_equal('0', details.exit_code)
   end

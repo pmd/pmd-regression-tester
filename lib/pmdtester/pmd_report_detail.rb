@@ -3,29 +3,28 @@
 require 'json'
 
 module PmdTester
-  # This class represents all details about report of pmd
+  # This class represents all details about an execution of PMD
   class PmdReportDetail
     attr_accessor :execution_time
     attr_accessor :timestamp
     attr_accessor :working_dir
+    attr_accessor :cmdline
     attr_accessor :exit_code
-
-    def initialize(execution_time: 0, timestamp: '', working_dir: Dir.getwd, exit_code: nil)
-      @execution_time = execution_time
-      @timestamp = timestamp
-      @working_dir = working_dir
-      @exit_code = exit_code.nil? ? '?' : exit_code.to_s
-    end
+    attr_accessor :stdout
+    attr_accessor :stderr
 
     def save(report_info_path)
       hash = {
         execution_time: @execution_time,
         timestamp: @timestamp,
         working_dir: @working_dir,
-        exit_code: @exit_code
+        cmdline: @cmdline,
+        exit_code: @exit_code,
+        stdout: @stdout,
+        stderr: @stderr
       }
       file = File.new(report_info_path, 'w')
-      file.puts JSON.generate(hash)
+      file.puts JSON.pretty_generate(hash)
       file.close
     end
 
@@ -39,20 +38,41 @@ module PmdTester
       end
     end
 
-    def format_execution_time
+    def execution_time_formatted
       self.class.convert_seconds(@execution_time)
     end
 
-    def self.create(execution_time: 0, timestamp: '', working_dir: Dir.getwd, exit_code: nil, report_info_path:)
+    def self.create(execution_time: 0, timestamp: '', working_dir: Dir.getwd, cmdline: '',
+                    exit_code: nil, stdout: '', stderr: '',
+                    report_info_path:)
       detail = PmdReportDetail.new(execution_time: execution_time, timestamp: timestamp,
-                                   working_dir: working_dir, exit_code: exit_code)
+                                   working_dir: working_dir, cmdline: cmdline,
+                                   exit_code: exit_code, stdout: stdout, stderr: stderr)
       detail.save(report_info_path)
       detail
+    end
+
+    def self.empty
+      new(execution_time: 0, timestamp: '', working_dir: Dir.getwd, cmdline: '',
+          exit_code: nil, stdout: '', stderr: '')
     end
 
     # convert seconds into HH::MM::SS
     def self.convert_seconds(seconds)
       Time.at(seconds.abs).utc.strftime('%H:%M:%S')
+    end
+
+    private
+
+    def initialize(execution_time: 0, timestamp: '', working_dir: Dir.getwd, cmdline: '',
+                   exit_code: nil, stdout: '', stderr: '')
+      @execution_time = execution_time
+      @timestamp = timestamp
+      @working_dir = working_dir
+      @cmdline = cmdline
+      @exit_code = exit_code.nil? ? '?' : exit_code.to_s
+      @stdout = stdout
+      @stderr = stderr
     end
   end
 end

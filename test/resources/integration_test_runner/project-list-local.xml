@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <projectlist xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xsi:noNamespaceSchemaLocation="projectlist_1_2_0.xsd">
+xsi:noNamespaceSchemaLocation="projectlist_1_3_0.xsd">
   <description>Standard Projects</description>
 
   <project>
@@ -10,9 +10,8 @@ xsi:noNamespaceSchemaLocation="projectlist_1_2_0.xsd">
     <connection>https://github.com/checkstyle/checkstyle</connection>
     <tag>checkstyle-9.1</tag>
 
-    <exclude-pattern>.*/target/test-classes/com/puppycrawl/tools/checkstyle/.*</exclude-pattern>
-    <exclude-pattern>.*/target/generated-sources/.*</exclude-pattern>
-    <exclude-pattern>.*/src/test/resources-noncompilable/com/puppycrawl/tools/checkstyle/javaparser/InputJavaParserNoFreezeOnDeeplyNestedLambdas.java</exclude-pattern>
+    <!-- this avoids analyzing src/test/resources-noncompilable ... -->
+    <src-subpath>src/main/java</src-subpath>
 
     <build-command><![CDATA[#!/usr/bin/env bash
 if test -e classpath.txt; then
@@ -29,6 +28,17 @@ mvn test-compile -B
 mvn dependency:build-classpath -DincludeScope=test -Dmdep.outputFile=classpath.txt -B
 ]]></build-command>
     <auxclasspath-command>echo -n "$(pwd)/target/classes:$(pwd)/target/test-classes:"; cat classpath.txt</auxclasspath-command>
+
+    <cpd-options>
+      <language>java</language>
+      <minimum-tokens>50</minimum-tokens>
+      <max-memory>4g</max-memory>
+      <directories>
+        <!-- this avoids analyzing src/test/resources-noncompilable ... -->
+        <directory>src/main/java</directory>
+        <directory>src/test/java</directory>
+      </directories>
+    </cpd-options>
   </project>
 
   <!-- this project configuration is here, so that PMD's repo is cloned into target/repositories for integration tests -->
@@ -36,5 +46,18 @@ mvn dependency:build-classpath -DincludeScope=test -Dmdep.outputFile=classpath.t
     <name>pmd</name>
     <type>git</type>
     <connection>https://github.com/pmd/pmd</connection>
+    <!-- just take a subset of pmd, to make the test faster -->
+    <src-subpath>pmd-core/src/main/java</src-subpath>
+
+    <cpd-options>
+      <language>java</language>
+      <minimum-tokens>50</minimum-tokens>
+      <max-memory>4g</max-memory>
+      <directories>
+        <!-- just take a subset of pmd, to make the test faster -->
+        <directory>pmd-core/src/main/java</directory>
+        <directory>pmd-java/src/main/java</directory>
+      </directories>
+    </cpd-options>
   </project>
 </projectlist>

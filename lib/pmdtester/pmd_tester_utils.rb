@@ -21,19 +21,36 @@ module PmdTester
     # Parse the +report_file+ to produce a +Report+.
     # For the schema of xml reports, refer to https://pmd.github.io/schema/report_2_0_0.xsd
     def parse_pmd_report(report_file, branch, report_details, filter_set = nil)
-      require 'nokogiri'
-
-      logger.info "Parsing #{report_file}"
+      logger.info "Parsing PMD Report #{report_file}"
       doc = PmdReportDocument.new(branch, report_details.working_dir, filter_set)
-      parser = Nokogiri::XML::SAX::Parser.new(doc)
-      parser.parse_file(report_file) if File.exist?(report_file)
+                             .parse(report_file)
       Report.new(
+        report_details: report_details,
         report_document: doc,
-        file: report_file,
+        file: report_file
+      )
+    end
 
-        timestamp: report_details.timestamp,
-        exec_time: report_details.execution_time,
-        exit_code: report_details.exit_code
+    # Parse the base and the patch CPD report, compute their diff
+    # Returns a +CpdReportDiff+
+    def build_cpd_report_diff(base_report_file, patch_report_file, base_info, patch_info)
+      base_details = PmdReportDetail.load(base_info)
+      patch_details = PmdReportDetail.load(patch_info)
+
+      base_report = parse_cpd_report(base_report_file, BASE, base_details)
+      patch_report = parse_cpd_report(patch_report_file, PATCH, patch_details)
+
+      logger.info 'Calculating CPD diffs'
+      CpdReportDiff.new(base_report: base_report, patch_report: patch_report)
+    end
+
+    def parse_cpd_report(report_file, branch, report_details)
+      logger.info "Parsing CPD Report #{report_file}"
+      doc = CpdReportDocument.new(branch, report_details.working_dir).parse(report_file)
+      CpdReport.new(
+        report_details: report_details,
+        report_document: doc,
+        file: report_file
       )
     end
 

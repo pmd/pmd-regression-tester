@@ -31,7 +31,7 @@ mvn dependency:build-classpath -DincludeScope=test -Dmdep.outputFile=classpath.t
     <auxclasspath-command>echo -n "$(pwd)/target/classes:$(pwd)/target/test-classes:"; cat classpath.txt</auxclasspath-command>
   </project>
 
-<!-- The base pmd_releases_6.40.0-baseline.zip contains also spring-framework
+<!-- The base pmd_releases_7.14.0-baseline.zip contains also spring-framework
      which is skipped in that integration test -->
 <!--
   <project>
