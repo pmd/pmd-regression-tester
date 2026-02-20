@@ -34,6 +34,22 @@ class TestCpdReportDocument < Test::Unit::TestCase
                  msg_start: "LexException: Lexical error in file '#{ERROR_FILE_PATH}' at")
   end
 
+  def test_equality
+    file1 = DuplicationFileInfo.new(path: 'file1', location: Location.new(beginline: 1, endline: 10, begincolumn: 1,
+                                                                          endcolumn: 80),
+                                    begintoken: 1, endtoken: 100)
+    file2 = DuplicationFileInfo.new(path: 'file1', location: Location.new(beginline: 1, endline: 10, begincolumn: 1,
+                                                                          endcolumn: 80),
+                                    begintoken: 1, endtoken: 100)
+    assert_true(file1.eql?(file2))
+    assert_equal(file1.hash, file2.hash)
+
+    duplication1 = Duplication.new(lines: 10, tokens: 100, files: [file1], codefragment: 'code1', branch: BRANCH)
+    duplication2 = Duplication.new(lines: 10, tokens: 100, files: [file2], codefragment: 'code1', branch: BRANCH)
+    assert_true(duplication1.eql?(duplication2))
+    assert_equal(duplication1.hash, duplication2.hash)
+  end
+
   private
 
   def assert_duplication(duplication:, lines:, tokens:, files:, codefragment_start:)

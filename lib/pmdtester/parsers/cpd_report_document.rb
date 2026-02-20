@@ -162,6 +162,10 @@ module PmdTester
         codefragment == other.codefragment
     end
 
+    def hash
+      [lines, tokens, files, codefragment].hash
+    end
+
     def try_merge?(other)
       if branch != BASE && branch != other.branch &&
          !changed? && # not already changed
@@ -228,6 +232,10 @@ module PmdTester
         location.eql?(other.location) &&
         begintoken == other.begintoken &&
         endtoken == other.endtoken
+    end
+
+    def hash
+      [path, location, begintoken, endtoken].hash
     end
   end
 end
