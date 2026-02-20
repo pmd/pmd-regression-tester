@@ -162,3 +162,8 @@ span.meta-var {
 span.stack-trace-method {
   font-weight: bold;
 }
+
+/* cmdline inside summary table */
+.table code {
+  white-space: normal;
+}
