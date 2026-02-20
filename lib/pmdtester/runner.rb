@@ -43,11 +43,15 @@ module PmdTester
       base_branch_details = create_pmd_report(config: @options.base_config, branch: @options.base_branch,
                                               rules_changed: rules_changed)
       # copy list of projects file to the base baseline
+      base_branch_dir = File.dirname(base_branch_details.target_branch_project_list_path)
+      FileUtils.mkdir_p(base_branch_dir) unless File.directory?(base_branch_dir)
       FileUtils.cp(@options.project_list, base_branch_details.target_branch_project_list_path)
 
       patch_branch_details = create_pmd_report(config: @options.patch_config, branch: @options.patch_branch,
                                                rules_changed: rules_changed)
       # copy list of projects file to the patch baseline
+      patch_branch_dir = File.dirname(patch_branch_details.target_branch_project_list_path)
+      FileUtils.mkdir_p(patch_branch_dir) unless File.directory?(patch_branch_dir)
       FileUtils.cp(@options.project_list, patch_branch_details.target_branch_project_list_path)
 
       build_html_reports(@projects, base_branch_details, patch_branch_details)
@@ -77,7 +81,9 @@ module PmdTester
       patch_branch_details = create_pmd_report(config: @options.patch_config, branch: @options.patch_branch,
                                                rules_changed: true)
       # copy list of projects file to the patch baseline
-      FileUtils.cp(@options.project_list, patch_branch_details.target_branch_project_list_path)
+      patch_branch_dir = File.dirname(patch_branch_details.target_branch_project_list_path)
+      FileUtils.mkdir_p(patch_branch_dir) unless File.directory?(patch_branch_dir)
+      FileUtils.cp(project_list, patch_branch_details.target_branch_project_list_path)
 
       base_branch_details = PmdBranchDetail.load(@options.base_branch, logger)
       build_html_reports(@projects, base_branch_details, patch_branch_details, @options.filter_set)
@@ -128,6 +134,8 @@ module PmdTester
       patch_branch_details = create_pmd_report(config: @options.patch_config, branch: @options.patch_branch,
                                                rules_changed: true)
       # copy list of projects file to the patch baseline
+      patch_branch_dir = File.dirname(patch_branch_details.target_branch_project_list_path)
+      FileUtils.mkdir_p(patch_branch_dir) unless File.directory?(patch_branch_dir)
       FileUtils.cp(@options.project_list, patch_branch_details.target_branch_project_list_path)
 
       # for creating a baseline, no html report is needed
