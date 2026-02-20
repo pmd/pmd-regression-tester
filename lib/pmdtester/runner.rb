@@ -42,8 +42,14 @@ module PmdTester
 
       base_branch_details = create_pmd_report(config: @options.base_config, branch: @options.base_branch,
                                               rules_changed: rules_changed)
+      # copy list of projects file to the base baseline
+      FileUtils.cp(@options.project_list, base_branch_details.target_branch_project_list_path)
+
       patch_branch_details = create_pmd_report(config: @options.patch_config, branch: @options.patch_branch,
                                                rules_changed: rules_changed)
+      # copy list of projects file to the patch baseline
+      FileUtils.cp(@options.project_list, patch_branch_details.target_branch_project_list_path)
+
       build_html_reports(@projects, base_branch_details, patch_branch_details)
     end
 
@@ -70,6 +76,8 @@ module PmdTester
 
       patch_branch_details = create_pmd_report(config: @options.patch_config, branch: @options.patch_branch,
                                                rules_changed: true)
+      # copy list of projects file to the patch baseline
+      FileUtils.cp(@options.project_list, patch_branch_details.target_branch_project_list_path)
 
       base_branch_details = PmdBranchDetail.load(@options.base_branch, logger)
       build_html_reports(@projects, base_branch_details, patch_branch_details, @options.filter_set)
@@ -103,6 +111,8 @@ module PmdTester
         Cmd.execute_successfully(wget_cmd) unless File.exist?(zip_filename)
         Cmd.execute_successfully(unzip_cmd)
       end
+
+      make_baseline_compatible("#{target_path}/#{branch_filename}")
 
       "#{target_path}/#{branch_filename}"
     end
@@ -159,6 +169,25 @@ module PmdTester
 
     def create_pmd_report(config:, branch:, rules_changed:)
       PmdReportBuilder.new(@projects, @options, config, branch, rules_changed).build
+    end
+
+    # for compatibility with old baselines, create empty CPD reports if they are missing in the baseline
+    # this allows to run the regression tester with baselines created with an old regression tester version
+    def make_baseline_compatible(branch_path)
+      Dir.each_child(branch_path) do |project_path|
+        next unless File.directory?("#{branch_path}/#{project_path}")
+
+        unless File.exist?("#{branch_path}/#{project_path}/cpd_report_info.json")
+          File.write("#{branch_path}/#{project_path}/cpd_report_info.json", '{}')
+        end
+        unless File.exist?("#{branch_path}/#{project_path}/cpd_report.xml")
+          FileUtils.touch("#{branch_path}/#{project_path}/cpd_report.xml")
+        end
+        unless File.exist?("#{branch_path}/#{project_path}/pmd_report_info.json")
+          FileUtils.cp("#{branch_path}/#{project_path}/report_info.json",
+                       "#{branch_path}/#{project_path}/pmd_report_info.json")
+        end
+      end
     end
   end
 end
