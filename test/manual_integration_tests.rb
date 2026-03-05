@@ -148,24 +148,30 @@ class ManualIntegrationTests < Test::Unit::TestCase
 
     print "#############################: test_case_3_change_in_core\n" \
           "#{@summary}\n#############################\n"
-    assert_equal(0, @summary[:violations][:changed], 'found changed violations')
-    assert_equal(0, @summary[:violations][:new], 'found new violations')
-    assert_equal(0, @summary[:violations][:removed], 'found removed violations')
-    assert_equal(0, @summary[:errors][:removed], 'found removed errors')
+    assert_pmd_violations(new: 0, changed: 0, removed: 0)
     # The stack overflow exception might vary in the beginning/end of the stack frames shown
     # This stack overflow error is from checkstyle's InputIndentationLongConcatenatedString.java
     # instead of assert_equal(0, @summary[:errors][:changed], 'found changed errors')
     # allow 0 or 1 changed errors
-    assert @summary[:errors][:changed] <= 1
-    assert_equal(0, @summary[:errors][:new], 'found new errors')
-    assert_equal(0, @summary[:configerrors][:changed], 'found changed configerrors')
-    assert_equal(0, @summary[:configerrors][:new], 'found new configerrors')
-    assert_equal(0, @summary[:configerrors][:removed], 'found removed configerrors')
+    assert_pmd_errors(new: 0, removed: 0, max_changed: 1)
+    assert_pmd_config_errors(new: 0, removed: 0, changed: 0)
 
-    assert_equal("This changeset changes 0 violations,\n" \
+    # CPD. Currently, the baseline has no cpd results, so all CPD duplications and errors are new.
+    # There are no removed or changed duplications or errors.
+    # Also, the baseline doesn't have specific cpd options, so only java projects are considered
+    # project "checkstyle": 1412 new duplications
+    # project "spring-framework": 532 new duplications
+    assert_cpd_duplications(new: 1412 + 532, removed: 0, changed: 0)
+    # project "checkstyle": 4 new CPD errors
+    assert_cpd_errors(new: 4, removed: 0, changed: 0)
+
+    assert_equal("Compared to main:\nThis changeset changes 0 violations,\n" \
                  "introduces 0 new violations, 0 new errors and 0 new configuration errors,\n" \
-                 'removes 0 violations, 0 errors and 0 configuration errors.',
+                 "removes 0 violations, 0 errors and 0 configuration errors.\n" \
+                 "There are 0 changed duplications, 1944 new duplications and 0 removed duplications.\n" \
+                 "There are 0 changed CPD errors, 4 new CPD errors and 0 removed CPD errors.\n",
                  create_summary_message)
+    assert_equal('neutral', determine_conclusion)
 
     assert_file_equals("#{PATCHES_PATH}/expected_patch_config_3.xml", 'target/reports/diff/patch_config.xml')
     assert_file_equals("#{PATCHES_PATH}/expected_patch_config_3.xml", 'target/reports/HEAD/config.xml')
