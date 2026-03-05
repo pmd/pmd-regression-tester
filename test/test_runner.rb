@@ -163,17 +163,17 @@ class TestRunner < Test::Unit::TestCase
                 --keep-reports --filter-with-patch-config
                 --patch-config test/resources/runner/patch-config.xml]
       summarized_results = run_runner(argv)
-      assert_equal(0, summarized_results[:violations][:changed])
-      assert_equal(1, summarized_results[:violations][:new])
+      assert_equal(0, summarized_results[:pmd_violations][:changed])
+      assert_equal(1, summarized_results[:pmd_violations][:new])
       # while the baseline has also a violation for a different rule (AbstractClassWithoutAbstractMethod)
       # the patch-config.xml ruleset only contains the rule ConsecutiveLiteralAppends
       # and so does the prepared result pmd_report.xml.
       # with "--filter-with-patch-config" the irrelevant rules from baseline are ignored
-      assert_equal(0, summarized_results[:violations][:removed])
+      assert_equal(0, summarized_results[:pmd_violations][:removed])
       # baseline has only one violation for rule ConsecutiveLiteralAppends
-      assert_equal(1, summarized_results[:violations][:base_total])
+      assert_equal(1, summarized_results[:pmd_violations][:base_total])
       # patch has two violations for rule ConsecutiveLiteralAppends
-      assert_equal(2, summarized_results[:violations][:patch_total])
+      assert_equal(2, summarized_results[:pmd_violations][:patch_total])
     ensure
       # cleanup
       Dir.rmdir fake_pmd_bin if Dir.empty?(fake_pmd_bin)
@@ -182,26 +182,41 @@ class TestRunner < Test::Unit::TestCase
 
   def test_summary_message_and_conclusion
     summary = {
-      violations: { changed: 1, new: 2, removed: 3, base_total: 4,
-                    patch_total: 5 },
-      errors: { changed: 6, new: 7, removed: 8, base_total: 9, patch_total: 10 },
-      configerrors: { changed: 11, new: 12, removed: 13, base_total: 14, patch_total: 15 }
+      pmd_violations: { changed: 1, new: 2, removed: 3, base_total: 4,
+                        patch_total: 5 },
+      pmd_errors: { changed: 6, new: 7, removed: 8, base_total: 9, patch_total: 10 },
+      pmd_configerrors: { changed: 11, new: 12, removed: 13, base_total: 14, patch_total: 15 },
+      cpd_duplications: { changed: 16, new: 17, removed: 18, base_total: 19, patch_total: 20 },
+      cpd_errors: { changed: 21, new: 22, removed: 23, base_total: 24, patch_total: 25 }
     }
     message = PmdTester::Runner.create_message('main', summary)
     assert_equal("Compared to main:\nThis changeset changes 1 violations,\n" \
                  "introduces 2 new violations, 7 new errors and 12 new configuration errors,\n" \
-                 "removes 3 violations, 8 errors and 13 configuration errors.\n",
+                 "removes 3 violations, 8 errors and 13 configuration errors.\n" \
+                 "There are 16 changed duplications, 17 new duplications and 18 removed duplications.\n" \
+                 "There are 21 changed CPD errors, 22 new CPD errors and 23 removed CPD errors.\n",
                  message)
     assert_equal('neutral', PmdTester::Runner.determine_conclusion(summary))
+  end
+
+  def test_empty_summary_conclusion
+    empty_summary = {
+      pmd_violations: { changed: 0, new: 0, removed: 0, base_total: 0, patch_total: 0 },
+      pmd_errors: { changed: 0, new: 0, removed: 0, base_total: 0, patch_total: 0 },
+      pmd_configerrors: { changed: 0, new: 0, removed: 0, base_total: 0, patch_total: 0 },
+      cpd_duplications: { changed: 0, new: 0, removed: 0, base_total: 0, patch_total: 0 },
+      cpd_errors: { changed: 0, new: 0, removed: 0, base_total: 0, patch_total: 0 }
+    }
+    assert_equal('success', PmdTester::Runner.determine_conclusion(empty_summary))
   end
 
   private
 
   def assert_summarized_diffs(diffs)
     refute_nil(diffs)
-    assert_counters(diffs[:errors])
-    assert_counters(diffs[:violations])
-    assert_counters(diffs[:configerrors])
+    assert_counters(diffs[:pmd_errors])
+    assert_counters(diffs[:pmd_violations])
+    assert_counters(diffs[:pmd_configerrors])
   end
 
   def assert_counters(counter)

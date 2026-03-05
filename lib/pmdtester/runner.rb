@@ -151,46 +151,55 @@ module PmdTester
     end
 
     def summarize_diffs
-      error_total = RunningDiffCounters.new(0)
-      violations_total = RunningDiffCounters.new(0)
-      configerrors_total = RunningDiffCounters.new(0)
+      pmd_error_total = RunningDiffCounters.new(0)
+      pmd_violations_total = RunningDiffCounters.new(0)
+      pmd_configerrors_total = RunningDiffCounters.new(0)
+      cpd_error_total = RunningDiffCounters.new(0)
+      cpd_duplications_total = RunningDiffCounters.new(0)
 
       @projects.each do |project|
         diff = project.report_diff
+        cpd_diff = project.cpd_report_diff
 
         # in case we are in single mode, there might be no diffs (only the patch branch is available)
-        next if diff.nil?
-
-        error_total.merge!(diff.error_counts)
-        violations_total.merge!(diff.violation_counts)
-        configerrors_total.merge!(diff.configerror_counts)
+        # or if only pmd or only cpd is has been run
+        sum_pmd_counters(diff, pmd_error_total, pmd_violations_total, pmd_configerrors_total) unless diff.nil?
+        sum_cpd_counters(cpd_diff, cpd_error_total, cpd_duplications_total) unless cpd_diff.nil?
       end
 
       {
-        errors: error_total.to_h,
-        violations: violations_total.to_h,
-        configerrors: configerrors_total.to_h
+        pmd_errors: pmd_error_total.to_h,
+        pmd_violations: pmd_violations_total.to_h,
+        pmd_configerrors: pmd_configerrors_total.to_h,
+        cpd_errors: cpd_error_total.to_h,
+        cpd_duplications: cpd_duplications_total.to_h
       }
     end
 
     def self.create_message(base_branch, summary)
       "Compared to #{base_branch}:\n" \
         'This changeset ' \
-        "changes #{summary[:violations][:changed]} violations,\n" \
-        "introduces #{summary[:violations][:new]} new violations, " \
-        "#{summary[:errors][:new]} new errors and " \
-        "#{summary[:configerrors][:new]} new configuration errors,\n" \
-        "removes #{summary[:violations][:removed]} violations, " \
-        "#{summary[:errors][:removed]} errors and " \
-        "#{summary[:configerrors][:removed]} configuration errors.\n"
+        "changes #{summary[:pmd_violations][:changed]} violations,\n" \
+        "introduces #{summary[:pmd_violations][:new]} new violations, " \
+        "#{summary[:pmd_errors][:new]} new errors and " \
+        "#{summary[:pmd_configerrors][:new]} new configuration errors,\n" \
+        "removes #{summary[:pmd_violations][:removed]} violations, " \
+        "#{summary[:pmd_errors][:removed]} errors and " \
+        "#{summary[:pmd_configerrors][:removed]} configuration errors.\n" \
+        "There are #{summary[:cpd_duplications][:changed]} changed duplications, " \
+        "#{summary[:cpd_duplications][:new]} new duplications and " \
+        "#{summary[:cpd_duplications][:removed]} removed duplications.\n" \
+        "There are #{summary[:cpd_errors][:changed]} changed CPD errors, " \
+        "#{summary[:cpd_errors][:new]} new CPD errors and " \
+        "#{summary[:cpd_errors][:removed]} removed CPD errors.\n"
     end
 
     def self.determine_conclusion(summary)
-      total_changes = summary[:violations][:changed] \
-        + summary[:violations][:new] \
-        + summary[:violations][:removed] \
-        + summary[:errors][:new] \
-        + summary[:configerrors][:new]
+      total_changes = summary[:pmd_violations][:changed] \
+        + summary[:pmd_violations][:new] \
+        + summary[:pmd_violations][:removed] \
+        + summary[:pmd_errors][:new] \
+        + summary[:pmd_configerrors][:new]
       if total_changes.positive?
         'neutral'
       else
@@ -199,6 +208,17 @@ module PmdTester
     end
 
     private
+
+    def sum_pmd_counters(diff, pmd_error_total, pmd_violations_total, pmd_configerrors_total)
+      pmd_error_total.merge!(diff.error_counts)
+      pmd_violations_total.merge!(diff.violation_counts)
+      pmd_configerrors_total.merge!(diff.configerror_counts)
+    end
+
+    def sum_cpd_counters(diff, cpd_error_total, cpd_duplications_total)
+      cpd_error_total.merge!(diff.error_counts)
+      cpd_duplications_total.merge!(diff.duplication_counts)
+    end
 
     def create_pmd_report(config:, branch:, rules_changed:)
       PmdReportBuilder.new(@projects, @options, config, branch, rules_changed).build
