@@ -173,6 +173,31 @@ module PmdTester
       }
     end
 
+    def self.create_message(base_branch, summary)
+      "Compared to #{base_branch}:\n" \
+        'This changeset ' \
+        "changes #{summary[:violations][:changed]} violations,\n" \
+        "introduces #{summary[:violations][:new]} new violations, " \
+        "#{summary[:errors][:new]} new errors and " \
+        "#{summary[:configerrors][:new]} new configuration errors,\n" \
+        "removes #{summary[:violations][:removed]} violations, " \
+        "#{summary[:errors][:removed]} errors and " \
+        "#{summary[:configerrors][:removed]} configuration errors.\n"
+    end
+
+    def self.determine_conclusion(summary)
+      total_changes = summary[:violations][:changed] \
+        + summary[:violations][:new] \
+        + summary[:violations][:removed] \
+        + summary[:errors][:new] \
+        + summary[:configerrors][:new]
+      if total_changes.positive?
+        'neutral'
+      else
+        'success'
+      end
+    end
+
     private
 
     def create_pmd_report(config:, branch:, rules_changed:)

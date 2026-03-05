@@ -180,6 +180,21 @@ class TestRunner < Test::Unit::TestCase
     end
   end
 
+  def test_summary_message_and_conclusion
+    summary = {
+      violations: { changed: 1, new: 2, removed: 3, base_total: 4,
+                    patch_total: 5 },
+      errors: { changed: 6, new: 7, removed: 8, base_total: 9, patch_total: 10 },
+      configerrors: { changed: 11, new: 12, removed: 13, base_total: 14, patch_total: 15 }
+    }
+    message = PmdTester::Runner.create_message('main', summary)
+    assert_equal("Compared to main:\nThis changeset changes 1 violations,\n" \
+                 "introduces 2 new violations, 7 new errors and 12 new configuration errors,\n" \
+                 "removes 3 violations, 8 errors and 13 configuration errors.\n",
+                 message)
+    assert_equal('neutral', PmdTester::Runner.determine_conclusion(summary))
+  end
+
   private
 
   def assert_summarized_diffs(diffs)
