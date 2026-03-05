@@ -212,7 +212,9 @@ class ManualIntegrationTests < Test::Unit::TestCase
             '--local-git-repo', PMD_REPO_PATH,
             '--patch-branch', 'main',
             '--patch-config', "#{PMD_REPO_PATH}/.ci/files/all-regression-rules.xml",
-            '--list-of-project', "#{PMD_REPO_PATH}/.ci/files/project-list.xml",
+            # need to use a custom project list until it is updated upstream with cpd-options
+            # '--list-of-project', "#{PMD_REPO_PATH}/.ci/files/project-list.xml",
+            '--list-of-project', 'config/project-list-with-cpd.xml',
             '--html-flag',
             '--error-recovery',
             '--threads', Etc.nprocessors.to_s]
@@ -226,6 +228,10 @@ class ManualIntegrationTests < Test::Unit::TestCase
     print "#############################: test_case_5_create_baseline\n"
     assert_path_not_exist('target/reports/diff')
     assert_main_baseline
+
+    # create a zip file to see how big it is
+    `cd target/reports; zip -q -r "main-baseline.zip" "main/"`
+    print "Baseline zip file size is: #{File.size('target/reports/main-baseline.zip') / (1024 * 1024)} MB\n"
   end
 
   private

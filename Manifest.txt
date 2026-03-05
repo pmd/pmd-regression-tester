@@ -19,6 +19,7 @@ Rakefile
 bin/pmdtester
 config/all-java.xml
 config/design.xml
+config/project-list-with-cpd.xml
 config/project-list.xml
 config/projectlist_1_0_0.xsd
 config/projectlist_1_1_0.xsd
