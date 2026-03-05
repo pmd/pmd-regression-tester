@@ -207,7 +207,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     record_expectations(sha1_head: sha1, sha1_base: sha1, zip_file_exists: true)
     record_expectations_after_build_cpd
     record_expectations_projects_clone_and_build
-    record_expectations_project_build_cpd(sha1: sha1)
+    record_expectations_project_build_cpd(sha1: sha1, max_memory: '256m', minimum_tokens: 50)
 
     run_report_builder(projects: projects, options: options, sha1: sha1)
   end
@@ -228,7 +228,31 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     record_expectations_after_build
     record_expectations_projects_clone_and_build
     record_expectations_project_build(sha1: sha1, no_progress_bar: true, pmd7: true)
-    record_expectations_project_build_cpd(sha1: sha1)
+    record_expectations_project_build_cpd(sha1: sha1, max_memory: '256m', minimum_tokens: 50)
+
+    run_report_builder(projects: projects, options: options, sha1: sha1)
+
+    assert_pmd_rule_config
+  end
+
+  def test_build_with_projects_pmd_and_cpd_apex
+    @pmd_version = '7.0.0'
+    sha1 = 'sha1abc'
+    project_list = 'test/resources/pmd_report_builder/project-list-apex.xml'
+    projects = PmdTester::ProjectsParser.new.parse(project_list)
+    assert_equal(1, projects.size)
+    argv = %w[-r target/repositories/pmd -b main -p pmd_releases/6.1.0
+              -c config/design.xml --debug -l]
+    argv.push project_list
+    options = PmdTester::Options.new(argv)
+
+    projects[0].auxclasspath = 'extra:dirs'
+    record_expectations(sha1_head: sha1, sha1_base: sha1, zip_file_exists: true)
+    record_expectations_after_build
+    record_expectations_projects_clone_and_build
+    record_expectations_project_build(sha1: sha1, no_progress_bar: true, pmd7: true,
+                                      project_name: 'Schedul-o-matic-9000')
+    record_expectations_project_build_cpd(sha1: sha1, cpd_language: 'apex', project_name: 'Schedul-o-matic-9000')
 
     run_report_builder(projects: projects, options: options, sha1: sha1)
 
@@ -353,7 +377,8 @@ class TestPmdReportBuilder < Test::Unit::TestCase
   end
 
   def record_expectations_project_build(sha1:, error: false, long_cli_options: false,
-                                        no_progress_bar: false, exit_status: 0, pmd7: false)
+                                        no_progress_bar: false, exit_status: 0, pmd7: false,
+                                        project_name: 'checkstyle')
     base_cmd, fail_on_violation, auxclasspath_option = determine_cli_cmd_and_options(pmd7: pmd7,
                                                                                      long_cli_options: long_cli_options)
     PmdTester::SimpleProgressLogger.any_instance.stubs(:start).once
@@ -364,9 +389,9 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     process_status.expects(:exitstatus).returns(exit_status).once
     cmd_line = "#{error_prefix}" \
                "#{distro_path}/bin/#{base_cmd} " \
-               '-d target/repositories/checkstyle -f xml ' \
-               '-R target/reports/main/checkstyle/config.xml ' \
-               '-r target/reports/main/checkstyle/pmd_report.xml ' \
+               "-d target/repositories/#{project_name} -f xml " \
+               "-R target/reports/main/#{project_name}/config.xml " \
+               "-r target/reports/main/#{project_name}/pmd_report.xml " \
                "#{fail_on_violation} -t 1 #{auxclasspath_option}" \
                "#{' --no-progress' if no_progress_bar}"
     PmdTester::Cmd.stubs(:execute).with(cmd_line)
@@ -378,25 +403,27 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     end
   end
 
-  def record_expectations_project_build_cpd(sha1:, error: false, exit_status: 0)
+  def record_expectations_project_build_cpd(sha1:, error: false, exit_status: 0,
+                                            cpd_language: 'java', project_name: 'checkstyle',
+                                            max_memory: '5g', minimum_tokens: 150)
     PmdTester::SimpleProgressLogger.any_instance.stubs(:start).once
     PmdTester::SimpleProgressLogger.any_instance.stubs(:stop).once
-    error_prefix = error ? 'PMD_JAVA_OPTS="-Dpmd.error_recovery -ea -Xmx256m" ' : 'PMD_JAVA_OPTS="-Xmx256m" '
+    error_opts = error ? '-Dpmd.error_recovery -ea ' : ''
+    java_opts = "PMD_JAVA_OPTS=\"#{error_opts}-Xmx#{max_memory}\""
     distro_path = "#{Dir.getwd}/target/pmd-bin-#{@pmd_version}-main-#{sha1}"
     process_status = mock
     process_status.expects(:exitstatus).returns(exit_status).once
-    cmd_line = "#{error_prefix}" \
-               "#{distro_path}/bin/pmd cpd " \
-               '-d target/repositories/checkstyle/src/main/java ' \
-               '-d target/repositories/checkstyle/src/test/java ' \
+    cmd_line = "#{java_opts} #{distro_path}/bin/pmd cpd " \
+               "-d target/repositories/#{project_name}/src/main/java " \
+               "-d target/repositories/#{project_name}/src/test/java " \
                '-f xml ' \
-               '--language java ' \
-               '--minimum-tokens 50 ' \
+               "--language #{cpd_language} " \
+               "--minimum-tokens #{minimum_tokens} " \
                '--skip-lexical-errors'
     PmdTester::Cmd.stubs(:execute).with(cmd_line)
                   .returns([process_status, 'stdout output', 'stderr output'])
                   .once
-    File.stubs(:write).with('target/reports/main/checkstyle/cpd_report.xml', 'stdout output').once
+    File.stubs(:write).with("target/reports/main/#{project_name}/cpd_report.xml", 'stdout output').once
     PmdTester::PmdReportDetail.stubs(:create).once.with do |params|
       params[:cmdline] == cmd_line && params[:exit_code] == exit_status \
       && params[:stdout] == '' && params[:stderr] == 'stderr output' \
