@@ -100,10 +100,8 @@ class ManualIntegrationTests < Test::Unit::TestCase
 
     print "#############################: test_case_2_single_xpath_rule_changed\n" \
           "#{@summary}\n#############################\n"
-    assert_equal(0, @summary[:violations][:changed], 'found changed violations')
-    assert_equal(0, @summary[:violations][:new], 'found new violations')
     # There are 22 violations, that have been removed for AvoidMessageDigestField (project openjdk-11)
-    assert_equal(22, @summary[:violations][:removed], 'found removed violations')
+    assert_pmd_violations(new: 0, changed: 0, removed: 22)
 
     # errors might have been caused in the baseline for other rules (only visible in the stacktrace)
     # hence they might appear as removed
@@ -114,21 +112,29 @@ class ManualIntegrationTests < Test::Unit::TestCase
     # project "openjdk-11" has 0 errors removed or changed
     # project "spring-framework" has 10 errors removed (sql files) and 0 changed
     # each project has 1 config error removed (LoosePackageCoupling dysfunctional): in total 8 config errors removed
-    assert_equal(2 + 2 + 1 + 10, @summary[:errors][:removed], 'found removed errors')
     # The stack overflow exception might vary in the beginning/end of the stack frames shown
     # This stack overflow error is from checkstyle's InputIndentationLongConcatenatedString.java
     # instead of assert_equal(0, @summary[:errors][:changed], 'found changed errors')
     # allow 0 or 1 changed errors
-    assert @summary[:errors][:changed] <= 1
-    assert_equal(0, @summary[:errors][:new], 'found new errors')
-    assert_equal(0, @summary[:configerrors][:changed], 'found changed configerrors')
-    assert_equal(0, @summary[:configerrors][:new], 'found new configerrors')
-    assert_equal(8, @summary[:configerrors][:removed], 'found removed configerrors')
+    assert_pmd_errors(new: 0, removed: 2 + 2 + 1 + 10, max_changed: 1)
+    assert_pmd_config_errors(new: 0, removed: 8, changed: 0)
 
-    assert_equal("This changeset changes 0 violations,\n" \
+    # CPD. Currently, the baseline has no cpd results, so all CPD duplications and errors are new.
+    # There are no removed or changed duplications or errors.
+    # Also, the baseline doesn't have specific cpd options, so only java projects are considered
+    # project "checkstyle": 1412 new duplications
+    # project "spring-framework": 532 new duplications
+    assert_cpd_duplications(new: 1412 + 532, removed: 0, changed: 0)
+    # project "checkstyle": 4 new CPD errors
+    assert_cpd_errors(new: 4, removed: 0, changed: 0)
+
+    assert_equal("Compared to main:\nThis changeset changes 0 violations,\n" \
                  "introduces 0 new violations, 0 new errors and 0 new configuration errors,\n" \
-                 'removes 22 violations, 15 errors and 8 configuration errors.',
+                 "removes 22 violations, 15 errors and 8 configuration errors.\n" \
+                 "There are 0 changed duplications, 1944 new duplications and 0 removed duplications.\n" \
+                 "There are 0 changed CPD errors, 4 new CPD errors and 0 removed CPD errors.\n",
                  create_summary_message)
+    assert_equal('neutral', determine_conclusion)
 
     assert_file_equals("#{PATCHES_PATH}/expected_patch_config_2.xml", 'target/reports/diff/patch_config.xml')
     assert_file_equals("#{PATCHES_PATH}/expected_patch_config_2.xml", 'target/reports/HEAD/config.xml')
