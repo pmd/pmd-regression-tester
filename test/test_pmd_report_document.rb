@@ -10,7 +10,7 @@ class TestPmdReportDocument < Test::Unit::TestCase
   def test_document
     doc = PmdReportDocument.new('base', 'SHOULD_BE_REPLACED')
     parser = Nokogiri::XML::SAX::Parser.new(doc)
-    parser.parse(File.open('test/resources/pmd_report_document/test_document.xml'))
+    parser.parse(File.read('test/resources/pmd_report_document/test_document.xml'))
     assert_equal(8, doc.violations.total_size)
     assert_equal('Document \'empty\' constructor', doc.violations[FIRST_FILE][0].message)
     assert_equal(7, doc.violations[FIRST_FILE][0].line) # beginline
@@ -25,7 +25,7 @@ class TestPmdReportDocument < Test::Unit::TestCase
     filter_set = Set['java/documentation.xml']
     doc = PmdReportDocument.new('base', 'SHOULD_BE_REPLACED', filter_set)
     parser = Nokogiri::XML::SAX::Parser.new(doc)
-    parser.parse(File.open('test/resources/pmd_report_document/test_document.xml'))
+    parser.parse(File.read('test/resources/pmd_report_document/test_document.xml'))
     assert_equal(1, doc.violations.total_size)
     assert_equal('UncommentedEmptyConstructor',
                  doc.violations[FIRST_FILE][0].rule_name)
@@ -36,7 +36,7 @@ class TestPmdReportDocument < Test::Unit::TestCase
     filter_set = Set['java/codestyle.xml/FieldDeclarationsShouldBeAtStartOfClass']
     doc = PmdReportDocument.new('base', 'SHOULD_BE_REPLACED', filter_set)
     parser = Nokogiri::XML::SAX::Parser.new(doc)
-    parser.parse(File.open('test/resources/pmd_report_document/test_document.xml'))
+    parser.parse(File.read('test/resources/pmd_report_document/test_document.xml'))
     assert_equal(4, doc.violations.total_size, 'wrong number of violations')
     assert_equal(3, doc.violations.num_files, 'wrong number of files')
     first_file = 'target/repositories/spring-framework/spring-aop/src/main/java/' \
@@ -47,7 +47,7 @@ class TestPmdReportDocument < Test::Unit::TestCase
   def test_error_filename_without_path
     doc = PmdReportDocument.new('base', '/tmp/workingDirectory')
     parser = Nokogiri::XML::SAX::Parser.new(doc)
-    parser.parse(File.open('test/resources/pmd_report_document/error_filename_without_path.xml'))
+    parser.parse(File.read('test/resources/pmd_report_document/error_filename_without_path.xml'))
     assert_equal(1, doc.errors.total_size)
     filenames = doc.errors.all_files
     assert_equal(1, filenames.length)
@@ -57,7 +57,7 @@ class TestPmdReportDocument < Test::Unit::TestCase
   def test_relativized_filenames
     doc = PmdReportDocument.new('base', '/home/runner/work/pmd')
     parser = Nokogiri::XML::SAX::Parser.new(doc)
-    parser.parse(File.open('test/resources/pmd_report_document/sample_report_relativized_paths.xml'))
+    parser.parse(File.read('test/resources/pmd_report_document/sample_report_relativized_paths.xml'))
 
     assert_equal(2, doc.violations.total_size, 'wrong number of violations')
     assert_equal(1, doc.violations.num_files, 'wrong number of files')
