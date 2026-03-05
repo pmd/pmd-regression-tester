@@ -54,7 +54,7 @@ module PmdTester
       FileUtils.mkdir_p(patch_branch_dir) unless File.directory?(patch_branch_dir)
       FileUtils.cp(@options.project_list, patch_branch_details.target_branch_project_list_path)
 
-      build_html_reports(@projects, base_branch_details, patch_branch_details)
+      build_html_reports(@projects, base_branch_details, patch_branch_details, nil, rules_changed)
     end
 
     def run_online_mode
@@ -65,9 +65,11 @@ module PmdTester
       project_list = determine_project_list_for_online_mode(baseline_path)
       get_projects(project_list)
 
+      rules_changed = true
       if @options.auto_config_flag
         logger.info 'Autogenerating a dynamic ruleset based on source changes'
-        return unless RuleSetBuilder.new(@options).build?
+        rules_changed = RuleSetBuilder.new(@options).build?
+        logger.debug "Rules have changed: #{rules_changed}"
       elsif @options.patch_config == Options::DEFAULT_CONFIG_PATH
         # patch branch build pmd reports with same configuration as base branch
         # if not specified otherwise. This allows to use a different config (e.g. less rules)
@@ -79,14 +81,14 @@ module PmdTester
       end
 
       patch_branch_details = create_pmd_report(config: @options.patch_config, branch: @options.patch_branch,
-                                               rules_changed: true)
+                                               rules_changed: rules_changed)
       # copy list of projects file to the patch baseline
       patch_branch_dir = File.dirname(patch_branch_details.target_branch_project_list_path)
       FileUtils.mkdir_p(patch_branch_dir) unless File.directory?(patch_branch_dir)
       FileUtils.cp(project_list, patch_branch_details.target_branch_project_list_path)
 
       base_branch_details = PmdBranchDetail.load(@options.base_branch, logger)
-      build_html_reports(@projects, base_branch_details, patch_branch_details, @options.filter_set)
+      build_html_reports(@projects, base_branch_details, patch_branch_details, @options.filter_set, rules_changed)
     end
 
     def determine_project_list_for_online_mode(baseline_path)
@@ -143,7 +145,7 @@ module PmdTester
 
       # in single mode, we don't have a base branch, only a patch branch...
       empty_base_branch_details = PmdBranchDetail.load('single-mode', logger)
-      build_html_reports(@projects, empty_base_branch_details, patch_branch_details)
+      build_html_reports(@projects, empty_base_branch_details, patch_branch_details, nil, true)
     end
 
     def get_projects(file_path)
@@ -199,7 +201,11 @@ module PmdTester
         + summary[:pmd_violations][:new] \
         + summary[:pmd_violations][:removed] \
         + summary[:pmd_errors][:new] \
-        + summary[:pmd_configerrors][:new]
+        + summary[:pmd_configerrors][:new] \
+        + summary[:cpd_duplications][:changed] \
+        + summary[:cpd_duplications][:new] \
+        + summary[:cpd_duplications][:removed] \
+        + summary[:cpd_errors][:new]
       if total_changes.positive?
         'neutral'
       else

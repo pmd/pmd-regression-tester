@@ -138,12 +138,12 @@ module PmdTester
       dir
     end
 
-    def compute_report_diff(base_branch, patch_branch, filter_set)
+    def compute_report_diff(base_branch, patch_branch, filter_set, rules_changed)
       self.report_diff = build_report_diff(get_pmd_report_path(base_branch),
                                            get_pmd_report_path(patch_branch),
                                            get_report_info_path(base_branch),
                                            get_report_info_path(patch_branch),
-                                           filter_set)
+                                           filter_set, rules_changed: rules_changed)
 
       report_diff.base_report.report_folder = get_project_target_dir(base_branch)
       report_diff.patch_report.report_folder = get_project_target_dir(patch_branch)

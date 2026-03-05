@@ -21,7 +21,7 @@ class TestSummaryReportBuilder < Test::Unit::TestCase
     FileUtils.cp("#{test_resources_path}/empty_config.xml", "#{base_path}/config.xml")
 
     branch = PmdTester::PmdBranchDetail.load('base_branch', nil)
-    build_html_reports(projects, branch, branch)
+    build_html_reports(projects, branch, branch, nil, true)
 
     assert_file_equals('test/resources/summary_report_builder/expected_index.html',
                        'target/reports/diff/index.html')
@@ -46,7 +46,7 @@ class TestSummaryReportBuilder < Test::Unit::TestCase
 
     branch = PmdTester::PmdBranchDetail.load('base_branch', nil)
     patch = PmdTester::PmdBranchDetail.load('patch_branch', nil)
-    build_html_reports(projects, branch, patch, Set['java/bestpractices.xml/AbstractClassWithoutAbstractMethod'])
+    build_html_reports(projects, branch, patch, Set['java/bestpractices.xml/AbstractClassWithoutAbstractMethod'], true)
 
     assert_file_equals('test/resources/summary_report_builder/expected_filtered_index.html',
                        'target/reports/diff/index.html')
@@ -74,7 +74,7 @@ class TestSummaryReportBuilder < Test::Unit::TestCase
     FileUtils.cp("#{test_resources_path}/patch_pmd_report.xml", "#{patch_path}/sample_project/pmd_report.xml")
 
     build_html_reports(projects, PmdTester::PmdBranchDetail.load('base_branch', nil),
-                       PmdTester::PmdBranchDetail.load('patch_branch', nil))
+                       PmdTester::PmdBranchDetail.load('patch_branch', nil), nil, true)
 
     assert_file_equals("#{test_resources_path}/expected_base_pmd_data.js",
                        'target/reports/diff/sample_project/base_pmd_data.js')
