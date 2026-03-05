@@ -189,7 +189,7 @@ module PmdTester
         logger.warn "#{@pmd_branch_name}: Skipping CPD run - report " \
                     "#{project.get_cpd_report_path(@pmd_branch_name)} already exists"
       else
-        status, stdout, stderr = Cmd.execute(cpd_cmd)
+        status, stdout, stderr = Cmd.execute(cpd_cmd, debug_log_stdout: false)
         exit_code = status.exitstatus
       end
       # NOTE: --report-file is only supported in PMD 7.14.0+. To support 7.0.0, we use stdout.

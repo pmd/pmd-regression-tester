@@ -420,7 +420,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
                "--language #{cpd_language} " \
                "--minimum-tokens #{minimum_tokens} " \
                '--skip-lexical-errors'
-    PmdTester::Cmd.stubs(:execute).with(cmd_line)
+    PmdTester::Cmd.stubs(:execute).with(cmd_line, debug_log_stdout: false)
                   .returns([process_status, 'stdout output', 'stderr output'])
                   .once
     File.stubs(:write).with("target/reports/main/#{project_name}/cpd_report.xml", 'stdout output').once
