@@ -174,8 +174,10 @@ class IntegrationTestRunner < Test::Unit::TestCase
       assert_path_exist("target/reports/#{branch_name}/#{project_name}/config.xml")
       assert_path_exist("target/reports/#{branch_name}/#{project_name}/cpd_report_info.json")
       assert_path_exist("target/reports/#{branch_name}/#{project_name}/cpd_report.xml")
+      assert_path_exist("target/reports/#{branch_name}/#{project_name}/cpd_recording.jfr")
       assert_path_exist("target/reports/#{branch_name}/#{project_name}/pmd_report_info.json")
       assert_path_exist("target/reports/#{branch_name}/#{project_name}/pmd_report.xml")
+      assert_path_exist("target/reports/#{branch_name}/#{project_name}/pmd_recording.jfr")
     end
   end
 
