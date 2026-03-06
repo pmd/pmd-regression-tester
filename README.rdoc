@@ -16,7 +16,9 @@ and new rules work as expected.
 == FEATURES/PROBLEMS:
 
 The diff report can be generated according to the base and patch branch of PMD
-on a list of standard projects (e.g. Spring Framework, Checkstyle, OpenJDK, etc.)
+on a list of standard projects (e.g. Spring Framework, Checkstyle, OpenJDK, etc.).
+
+Rule violations and code duplications are compared to report, which are new, removed or changed.
 
 == SYNOPSIS:
 
@@ -43,6 +45,8 @@ on a list of standard projects (e.g. Spring Framework, Checkstyle, OpenJDK, etc.
     -d, --debug                 whether change log level to DEBUG to see more information
     --error-recovery            enable error recovery mode when executing PMD. Might help to analyze errors.
     --baseline-download-url     download url prefix from where to download the baseline in online mode
+    --no-cpd                    do not execute CPD (Copy Paste Detector) and compare duplications; only execute PMD
+    --no-pmd                    do not execute PMD and compare rule violations; only execute CPD (Copy Paste Detector)
     -v, --version               
     -h, --help                  
 
@@ -72,17 +76,26 @@ The tool creates the following folders:
   │   ├── PATCH_BRANCH_NAME       <- the patch baseline is placed here
   │   └── diff
   │       ├── index.html          <- the summary report of diff reports
+  |       ├── summary.txt         <- short summary in text form to be used as a PR comment
+  |       ├── conclusion.txt      <- GitHub action check conclusion (e.g. 'neutral' or 'success')
   │       ├── base_config.xml     <- pmd config from the base branch
   │       ├── patch_config.xml    <- pmd config from the patch branch
   │       ├── css  <- css resources are placed here
   │       ├── js   <- js resources
   │       ├── PROJECT_NAME_1
-  │       │   ├── project_data.js <- contains the violations as js/json
-  │       │   └── index.html      <- the diff report of PROJECT_1
+  │       │   ├── diff_pmd_data.js        <- contains the violations as js/json
+  |       |   ├── diff_cpd_data.js        <- contains the duplications as js/json
+  │       │   ├── index.html              <- the diff report of PROJECT_1
+  |       |   ├── base_pmd_report.html    <- full pmd report of the baseline
+  |       |   ├── base_cpd_report.html    <- full cpd report of the baseline
+  |       |   ├── patch_pmd_report.html   <- full pmd report of the patch branch
+  |       |   └── patch_cpd_report.html   <- full cpd report of the baseline
   │       ├── .......
   │       └── PROJECT_NAME_n
-  │           ├── project_data.js <- contains the violations as js/json
-  │           └── index.xml       <- the diff report of PROJECT_N
+  │           ├── diff_pmd_data.js        <- contains the violations as js/json
+  │           ├── diff_cpd_data.js        <- contains the duplications as js/json
+  │           ├── index.html              <- the diff report of PROJECT_N
+  │           └── ...
   ├── pmd-bin-<version>-<branch_name>-<sha1>  <- cached pmd builds that are reused
   └── pmd-bin-....
 
@@ -90,19 +103,22 @@ The tool creates the following folders:
   branch_name
   ├── branch_info.json
   ├── config.xml
+  ├── project-list.xml
   ├── STANDARD_PROJECT_NAME_1
-  │   ├── report_info.json
-  │   └── pmd_report.xml
+  │   ├── pmd_report_info.json
+  │   ├── pmd_report.xml
+  │   ├── cpd_report_info.json
+  │   └── cpd_report.xml
   ├── ......................
-  │   ├── report_info.json
-  │   └── pmd_report.xml
   └── STANDARD_PROJECT_NAME_n
-      ├── report_info.info
-      └── pmd_report.xml
+      ├── pmd_report_info.info
+      ├── pmd_report.xml
+      ├── cpd_report_info.info
+      └── cpd_report.xml
 
 == REQUIREMENTS:
 
-* Ruby 3.3 or higher
+* Ruby 4 or higher
 
 === Runtime dependency
 

@@ -27,6 +27,7 @@ class TestRunner < Test::Unit::TestCase
     FileUtils.expects(:cp).with(project_list_path, target_project_list_path).once
     Project.any_instance.stubs(:compute_report_diff).twice
     SummaryReportBuilder.any_instance.stubs(:write_all_projects).once
+    expect_summary_conclusion_is_written
 
     argv = %w[-r target/repositories/pmd -p pmd_releases/6.1.0
               -pc config/design.xml -l test/resources/runner/project-test.xml -m single]
@@ -40,7 +41,7 @@ class TestRunner < Test::Unit::TestCase
     PmdReportBuilder.any_instance.stubs(:build)
                     .returns(PmdBranchDetail.new('test_branch')).once
     FileUtils.expects(:cp).with(project_list_path, target_project_list_path).once
-
+    expect_summary_conclusion_is_written
     argv = %w[-r target/repositories/pmd -p pmd_releases/6.1.0
               -pc config/design.xml -l test/resources/runner/project-test.xml -m single
               --html-flag]
@@ -59,6 +60,7 @@ class TestRunner < Test::Unit::TestCase
     report_builder_mock.stubs(:build).returns(PmdBranchDetail.new('test_branch')).once
     FileUtils.expects(:cp).with(anything, anything).once
     Project.any_instance.stubs(:compute_report_diff).twice
+    expect_summary_conclusion_is_written
     SummaryReportBuilder.any_instance.stubs(:write_all_projects).once
 
     argv = %w[-r target/repositories/pmd -p pmd_releases/6.1.0
@@ -71,6 +73,7 @@ class TestRunner < Test::Unit::TestCase
     PmdReportBuilder.any_instance.stubs(:build).returns(PmdBranchDetail.new('some_branch')).twice
     Project.any_instance.stubs(:compute_report_diff).twice
     SummaryReportBuilder.any_instance.stubs(:write_all_projects).once
+    expect_summary_conclusion_is_written
 
     argv = %w[-r target/repositories/pmd -b main -bc config/design.xml -p pmd_releases/6.1.0
               -pc config/design.xml -l test/resources/runner/project-test.xml]
@@ -89,6 +92,7 @@ class TestRunner < Test::Unit::TestCase
     report_builder_mock.stubs(:build).returns(PmdBranchDetail.new('some_branch')).twice
     Project.any_instance.stubs(:compute_report_diff).twice
     SummaryReportBuilder.any_instance.stubs(:write_all_projects).once
+    expect_summary_conclusion_is_written
 
     argv = %w[-r target/repositories/pmd -b main -bc config/design.xml -p pmd_releases/6.1.0
               -pc config/design.xml -l test/resources/runner/project-test.xml -t 5]
@@ -97,20 +101,24 @@ class TestRunner < Test::Unit::TestCase
   end
 
   def test_online_mode
+    File.stubs(:directory?).with(anything).returns(true).at_least_once
     FileUtils.stubs(:mkdir_p).with('target/reports').at_most_once
     FileUtils.stubs(:mkdir_p).with('target/reports/diff').at_least_once
-    FileUtils.stubs(:copy_entry).with(anything, 'target/reports/diff/css').once
-    FileUtils.stubs(:copy_entry).with(anything, 'target/reports/diff/js').once
-    File.stubs(:new).with('target/reports/diff/index.html', anything).returns.once
+    FileUtils.stubs(:copy_entry).with(anything, 'target/reports/diff/css')
+    FileUtils.stubs(:copy_entry).with(anything, 'target/reports/diff/js')
+    File.stubs(:new).with('target/reports/diff/index.html', anything).returns
+    expect_summary_conclusion_is_written
 
-    Dir.stubs(:chdir).with('target/reports').yields.once
-    Cmd.stubs(:execute_successfully).with('wget --no-verbose --timestamping https://sourceforge.net/projects/pmd/files/pmd-regression-tester/main-baseline.zip').once
-    Cmd.stubs(:execute_successfully).with('unzip -qo main-baseline.zip').once
+    Dir.stubs(:chdir).with('target/reports').yields
+    Cmd.stubs(:execute_successfully).with('wget --no-verbose --timestamping https://sourceforge.net/projects/pmd/files/pmd-regression-tester/main-baseline.zip')
+    Cmd.stubs(:execute_successfully).with('unzip -qo main-baseline.zip')
     ProjectsParser.any_instance.stubs(:parse)
                   .with('target/reports/main/project-list.xml')
-                  .returns([]).once
-
-    PmdReportBuilder.any_instance.stubs(:build).returns(PmdBranchDetail.new('test_branch')).once
+                  .returns([])
+    Dir.stubs(:each_child).with('target/reports/main')
+    FileUtils.stubs(:cp).with('target/reports/main/project-list.xml',
+                              'target/reports/test_branch/project-list.xml')
+    PmdReportBuilder.any_instance.stubs(:build).returns(PmdBranchDetail.new('test_branch'))
 
     argv = %w[-r target/repositories/pmd -m online -b main -p pmd_releases/6.7.0]
     summarized_results = run_runner(argv)
@@ -118,12 +126,17 @@ class TestRunner < Test::Unit::TestCase
   end
 
   def test_online_mode_multithreading
+    File.stubs(:directory?).with(anything).returns(true).at_least_once
+    Dir.stubs(:each_child).with('target/reports/main')
+    FileUtils.stubs(:cp).with('target/reports/main/project-list.xml',
+                              'target/reports/some_branch/project-list.xml')
     FileUtils.stubs(:mkdir_p).with('target/reports').at_most_once
-    Dir.stubs(:chdir).with('target/reports').yields.once
+    expect_summary_conclusion_is_written
+    Dir.stubs(:chdir).with('target/reports').yields
     Cmd.stubs(:execute_successfully).twice
     ProjectsParser.any_instance.stubs(:parse)
                   .with('target/reports/main/project-list.xml')
-                  .returns([]).once
+                  .returns([])
 
     report_builder_mock = mock
     PmdReportBuilder.stubs(:new)
@@ -131,9 +144,8 @@ class TestRunner < Test::Unit::TestCase
                       options.threads == 3
                     end
                     .returns(report_builder_mock)
-                    .once
-    report_builder_mock.stubs(:build).returns(PmdBranchDetail.new('some_branch')).once
-    SummaryReportBuilder.any_instance.stubs(:write_all_projects).once
+    report_builder_mock.stubs(:build).returns(PmdBranchDetail.new('some_branch'))
+    SummaryReportBuilder.any_instance.stubs(:write_all_projects)
 
     argv = %w[-r target/repositories/pmd -m online -b main -p pmd_releases/6.7.0 -t 3]
     summarized_results = run_runner(argv)
@@ -157,30 +169,67 @@ class TestRunner < Test::Unit::TestCase
                 --keep-reports --filter-with-patch-config
                 --patch-config test/resources/runner/patch-config.xml]
       summarized_results = run_runner(argv)
-      assert_equal(0, summarized_results[:violations][:changed])
-      assert_equal(1, summarized_results[:violations][:new])
+      assert_equal(0, summarized_results[:pmd_violations][:changed])
+      assert_equal(1, summarized_results[:pmd_violations][:new])
       # while the baseline has also a violation for a different rule (AbstractClassWithoutAbstractMethod)
       # the patch-config.xml ruleset only contains the rule ConsecutiveLiteralAppends
       # and so does the prepared result pmd_report.xml.
       # with "--filter-with-patch-config" the irrelevant rules from baseline are ignored
-      assert_equal(0, summarized_results[:violations][:removed])
+      assert_equal(0, summarized_results[:pmd_violations][:removed])
       # baseline has only one violation for rule ConsecutiveLiteralAppends
-      assert_equal(1, summarized_results[:violations][:base_total])
+      assert_equal(1, summarized_results[:pmd_violations][:base_total])
       # patch has two violations for rule ConsecutiveLiteralAppends
-      assert_equal(2, summarized_results[:violations][:patch_total])
+      assert_equal(2, summarized_results[:pmd_violations][:patch_total])
     ensure
       # cleanup
       Dir.rmdir fake_pmd_bin if Dir.empty?(fake_pmd_bin)
     end
   end
 
+  def test_summary_message_and_conclusion
+    summary = {
+      pmd_violations: { changed: 1, new: 2, removed: 3, base_total: 4,
+                        patch_total: 5 },
+      pmd_errors: { changed: 6, new: 7, removed: 8, base_total: 9, patch_total: 10 },
+      pmd_configerrors: { changed: 11, new: 12, removed: 13, base_total: 14, patch_total: 15 },
+      cpd_duplications: { changed: 16, new: 17, removed: 18, base_total: 19, patch_total: 20 },
+      cpd_errors: { changed: 21, new: 22, removed: 23, base_total: 24, patch_total: 25 }
+    }
+    message = PmdTester::Runner.create_message('main', summary)
+    assert_equal("Compared to main:\nThis changeset changes 1 violations,\n" \
+                 "introduces 2 new violations, 7 new errors and 12 new configuration errors,\n" \
+                 "removes 3 violations, 8 errors and 13 configuration errors.\n" \
+                 "There are 16 changed duplications, 17 new duplications and 18 removed duplications.\n" \
+                 "There are 21 changed CPD errors, 22 new CPD errors and 23 removed CPD errors.\n",
+                 message)
+    assert_equal('neutral', PmdTester::Runner.determine_conclusion(summary))
+  end
+
+  def test_empty_summary_conclusion
+    empty_summary = {
+      pmd_violations: { changed: 0, new: 0, removed: 0, base_total: 0, patch_total: 0 },
+      pmd_errors: { changed: 0, new: 0, removed: 0, base_total: 0, patch_total: 0 },
+      pmd_configerrors: { changed: 0, new: 0, removed: 0, base_total: 0, patch_total: 0 },
+      cpd_duplications: { changed: 0, new: 0, removed: 0, base_total: 0, patch_total: 0 },
+      cpd_errors: { changed: 0, new: 0, removed: 0, base_total: 0, patch_total: 0 }
+    }
+    assert_equal('success', PmdTester::Runner.determine_conclusion(empty_summary))
+  end
+
   private
+
+  def expect_summary_conclusion_is_written
+    File.stubs(:write).with('target/reports/diff/summary.txt', anything)
+    File.stubs(:write).with('target/reports/diff/conclusion.txt', anything)
+  end
 
   def assert_summarized_diffs(diffs)
     refute_nil(diffs)
-    assert_counters(diffs[:errors])
-    assert_counters(diffs[:violations])
-    assert_counters(diffs[:configerrors])
+    assert_counters(diffs[:pmd_errors])
+    assert_counters(diffs[:pmd_violations])
+    assert_counters(diffs[:pmd_configerrors])
+    assert_counters(diffs[:cpd_duplications])
+    assert_counters(diffs[:cpd_errors])
   end
 
   def assert_counters(counter)
