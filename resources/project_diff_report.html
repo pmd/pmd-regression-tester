@@ -83,7 +83,7 @@
                     <details><summary>Command:</summary><code>{{diff.base_details.cmdline}}</code></details><br>
                     Exit Code: {{diff.base_details.exit_code}}<br>
                     Execution Time: {{diff.base_details.execution_time}}<br>
-                    <a href="base_pmd_stdout.txt">stdout</a> | <a href="base_pmd_stderr.txt">stderr</a><br>
+                    <a href="base_pmd_stdout.txt">stdout</a> | <a href="base_pmd_stderr.txt">stderr</a>{% if diff.base_details.oom %} ⚠️ OOM occurred{% endif %}<br>
                     <a href="base_pmd_report.html">Base PMD Report</a>
                     </small>
                 </td>
@@ -93,7 +93,7 @@
                     <details><summary>Command:</summary><code>{{diff.patch_details.cmdline}}</code></details><br>
                     Exit Code: {{diff.patch_details.exit_code}}<br>
                     Execution Time: {{diff.patch_details.execution_time}}<br>
-                    <a href="patch_pmd_stdout.txt">stdout</a> | <a href="patch_pmd_stderr.txt">stderr</a><br>
+                    <a href="patch_pmd_stdout.txt">stdout</a> | <a href="patch_pmd_stderr.txt">stderr</a>{% if diff.patch_details.oom %} ⚠️ OOM occurred{% endif %}<br>
                     <a href="patch_pmd_report.html">Patch PMD Report</a>
                     </small>
                 </td>
@@ -109,7 +109,7 @@
                     <details><summary>Command:</summary><code>{{cpd_diff.base_details.cmdline}}</code></details><br>
                     Exit Code: {{cpd_diff.base_details.exit_code}}<br>
                     Execution Time: {{cpd_diff.base_details.execution_time}}<br>
-                    <a href="base_cpd_stdout.txt">stdout</a> | <a href="base_cpd_stderr.txt">stderr</a><br>
+                    <a href="base_cpd_stdout.txt">stdout</a> | <a href="base_cpd_stderr.txt">stderr</a>{% if cpd_diff.base_details.oom %} ⚠️ OOM occurred{% endif %}<br>
                     <a href="base_cpd_report.html">Base CPD Report</a>
                     </small>
                 </td>
@@ -119,7 +119,7 @@
                     <details><summary>Command:</summary><code>{{cpd_diff.patch_details.cmdline}}</code></details><br>
                     Exit Code: {{cpd_diff.patch_details.exit_code}}<br>
                     Execution Time: {{cpd_diff.patch_details.execution_time}}<br>
-                    <a href="patch_cpd_stdout.txt">stdout</a> | <a href="patch_cpd_stderr.txt">stderr</a><br>
+                    <a href="patch_cpd_stdout.txt">stdout</a> | <a href="patch_cpd_stderr.txt">stderr</a>{% if cpd_diff.patch_details.oom %} ⚠️ OOM occurred{% endif %}<br>
                     <a href="patch_cpd_report.html">Patch CPD Report</a>
                     </small>
                 </td>

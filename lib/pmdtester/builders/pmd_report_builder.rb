@@ -95,22 +95,15 @@ module PmdTester
     end
 
     def generate_pmd_report(project)
-      error_recovery_options = @error_recovery ? 'PMD_JAVA_OPTS="-Dpmd.error_recovery -ea" ' : ''
-      fail_on_violation = create_failonviolation_option
-      auxclasspath_option = create_auxclasspath_option(project)
-      pmd_cmd = "#{error_recovery_options}" \
-                "#{determine_run_path} -d #{project.local_source_path} -f xml " \
-                "-R #{project.get_config_path(@pmd_branch_name)} " \
-                "-r #{project.get_pmd_report_path(@pmd_branch_name)} " \
-                "#{fail_on_violation} -t #{@threads} " \
-                "#{auxclasspath_option}" \
-                "#{' --no-progress' if pmd7?}"
       start_time = Time.now
       exit_code = nil
+      stdout = ''
+      stderr = ''
       if File.exist?(project.get_pmd_report_path(@pmd_branch_name))
         logger.warn "#{@pmd_branch_name}: Skipping PMD run - report " \
                     "#{project.get_pmd_report_path(@pmd_branch_name)} already exists"
       else
+        pmd_cmd = create_pmd_command(project)
         status, stdout, stderr = Cmd.execute(pmd_cmd)
         exit_code = status.exitstatus
       end
@@ -148,6 +141,7 @@ module PmdTester
 
         PmdReportDetail.create(execution_time: execution_time, timestamp: end_time,
                                cmdline: cmd_line, exit_code: exit_code, stdout: stdout, stderr: stderr,
+                               oom: stderr.include?('java.lang.OutOfMemoryError'),
                                report_info_path: project.get_report_info_path(@pmd_branch_name))
         logger.info "#{project.name}'s PMD report was generated successfully (exit code: #{exit_code})"
       end
@@ -214,6 +208,19 @@ module PmdTester
     end
 
     private
+
+    def create_pmd_command(project)
+      error_recovery_options = @error_recovery ? 'PMD_JAVA_OPTS="-Dpmd.error_recovery -ea" ' : ''
+      fail_on_violation = create_failonviolation_option
+      auxclasspath_option = create_auxclasspath_option(project)
+      "#{error_recovery_options}" \
+        "#{determine_run_path} -d #{project.local_source_path} -f xml " \
+        "-R #{project.get_config_path(@pmd_branch_name)} " \
+        "-r #{project.get_pmd_report_path(@pmd_branch_name)} " \
+        "#{fail_on_violation} -t #{@threads} " \
+        "#{auxclasspath_option}" \
+        "#{' --no-progress' if pmd7?}"
+    end
 
     def get_directories_option(project)
       project.cpd_options.directories.map do |dir|

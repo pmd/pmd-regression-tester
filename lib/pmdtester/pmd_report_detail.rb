@@ -12,6 +12,7 @@ module PmdTester
     attr_accessor :exit_code
     attr_accessor :stdout
     attr_accessor :stderr
+    attr_accessor :oom
 
     def save(report_info_path)
       hash = {
@@ -21,7 +22,8 @@ module PmdTester
         cmdline: @cmdline,
         exit_code: @exit_code,
         stdout: @stdout,
-        stderr: @stderr
+        stderr: @stderr,
+        oom: @oom
       }
       file = File.new(report_info_path, 'w')
       file.puts JSON.pretty_generate(hash)
@@ -42,11 +44,21 @@ module PmdTester
       self.class.convert_seconds(@execution_time)
     end
 
+    def to_h
+      {
+        'timestamp' => @timestamp,
+        'exit_code' => @exit_code,
+        'cmdline' => @cmdline,
+        'execution_time' => execution_time_formatted,
+        'oom' => @oom
+      }
+    end
+
     def self.create(execution_time: 0, timestamp: '', working_dir: Dir.getwd, cmdline: '',
-                    exit_code: nil, stdout: '', stderr: '',
+                    exit_code: nil, stdout: '', stderr: '', oom: false,
                     report_info_path:)
       detail = PmdReportDetail.new(execution_time: execution_time, timestamp: timestamp,
-                                   working_dir: working_dir, cmdline: cmdline,
+                                   working_dir: working_dir, cmdline: cmdline, oom: oom,
                                    exit_code: exit_code, stdout: stdout, stderr: stderr)
       detail.save(report_info_path)
       detail
@@ -54,7 +66,7 @@ module PmdTester
 
     def self.empty
       new(execution_time: 0, timestamp: '', working_dir: Dir.getwd, cmdline: '',
-          exit_code: nil, stdout: '', stderr: '')
+          exit_code: nil, stdout: '', stderr: '', oom: false)
     end
 
     # convert seconds into HH::MM::SS
@@ -65,7 +77,7 @@ module PmdTester
     private
 
     def initialize(execution_time: 0, timestamp: '', working_dir: Dir.getwd, cmdline: '',
-                   exit_code: nil, stdout: '', stderr: '')
+                   exit_code: nil, stdout: '', stderr: '', oom: false)
       @execution_time = execution_time
       @timestamp = timestamp
       @working_dir = working_dir
@@ -73,6 +85,7 @@ module PmdTester
       @exit_code = exit_code.nil? ? '?' : exit_code.to_s
       @stdout = stdout
       @stderr = stderr
+      @oom = oom
     end
   end
 end
