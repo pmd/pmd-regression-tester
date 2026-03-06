@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib".freeze]
   s.authors = ["Andreas Dangel".freeze, "Binguo Bao".freeze, "Cl\u00E9ment Fournier".freeze]
   s.date = "1980-01-02"
-  s.description = "A regression testing tool ensure that new problems and unexpected behaviors will not be introduced to PMD project after fixing an issue\nand new rules work as expected.\n\n== Features/Problems:\n\nThe diff report can be generated according to the base and patch branch of PMD\non a list of standard projects (e.g. Spring Framework, Checkstyle, OpenJDK, etc.)".freeze
+  s.description = "A regression testing tool ensure that new problems and unexpected behaviors will not be introduced to PMD project after fixing an issue\nand new rules work as expected.\n\n== Features/Problems:\n\nThe diff report can be generated according to the base and patch branch of PMD\non a list of standard projects (e.g. Spring Framework, Checkstyle, OpenJDK, etc.).\n\nRule violations and code duplications are compared to report, which are new, removed or changed.".freeze
   s.email = ["andreas.dangel@pmd-code.org".freeze, "djydewang@gmail.com".freeze, "clement.fournier76@gmail.com".freeze]
   s.executables = ["pmdtester".freeze]
   s.extra_rdoc_files = ["History.md".freeze, "Manifest.txt".freeze, "README.rdoc".freeze, "resources/js/README.md".freeze]
