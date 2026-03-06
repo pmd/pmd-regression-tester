@@ -21,6 +21,8 @@ class IntegrationTestRunner < Test::Unit::TestCase
     system("bundle exec bin/pmdtester #{argv}")
     assert_equal(0, $CHILD_STATUS.exitstatus)
 
+    assert_path_exist('target/reports/diff/summary.txt')
+    assert_path_exist('target/reports/diff/conclusion.txt')
     assert_reports_exist('main', %w[checkstyle pmd])
     assert_reports_exist('pmd_releases_7.0.0', %w[checkstyle pmd])
     assert_diff_reports_exist(%w[checkstyle pmd])
@@ -38,6 +40,8 @@ class IntegrationTestRunner < Test::Unit::TestCase
 
     assert_reports_exist('pmd_releases_7.0.0', %w[checkstyle pmd])
     assert_path_not_exist('target/reports/diff/base_config.xml')
+    assert_path_exist('target/reports/diff/summary.txt')
+    assert_path_exist('target/reports/diff/conclusion.txt')
     assert_path_exist('target/reports/diff/index.html')
     assert_path_exist('target/reports/diff/patch_config.xml')
     # NOTE: files for 'base' flavor exist, but they are just empty and not complete (e.g. no PMD/CPD xml reports)
@@ -65,6 +69,8 @@ class IntegrationTestRunner < Test::Unit::TestCase
     assert_path_not_exist('target/reports/diff/checkstyle/index.html')
     assert_path_not_exist('target/reports/diff/pmd/index.html')
     assert_path_not_exist('target/reports/diff/index.html')
+    assert_path_not_exist('target/reports/diff/summary.txt')
+    assert_path_not_exist('target/reports/diff/conclusion.txt')
   end
 
   def test_online_mode
@@ -90,6 +96,8 @@ class IntegrationTestRunner < Test::Unit::TestCase
     assert_reports_exist(base_branch_path, project_names)
     assert_reports_exist(patch_branch_path, project_names)
     assert_diff_reports_exist(project_names)
+    assert_path_exist('target/reports/diff/summary.txt')
+    assert_path_exist('target/reports/diff/conclusion.txt')
   end
 
   def test_online_mode_different_project_list_and_config
