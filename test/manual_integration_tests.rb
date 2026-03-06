@@ -78,16 +78,19 @@ class ManualIntegrationTests < Test::Unit::TestCase
     # project "checkstyle": 4 new CPD errors
     assert_cpd_errors(new: 4, removed: 0, changed: 0)
 
-    assert_equal("Compared to main:\nThis changeset changes 0 violations,\n" \
-                 "introduces 0 new violations, 0 new errors and 0 new configuration errors,\n" \
-                 "removes 505 violations, 15 errors and 8 configuration errors.\n" \
-                 "There are 0 changed duplications, 1944 new duplications and 0 removed duplications.\n" \
-                 "There are 0 changed CPD errors, 4 new CPD errors and 0 removed CPD errors.\n",
-                 create_summary_message)
-    assert_equal('neutral', determine_conclusion)
+    expected_summary_message = "Compared to main:\nThis changeset changes 0 violations,\n" \
+                               "introduces 0 new violations, 0 new errors and 0 new configuration errors,\n" \
+                               "removes 505 violations, 15 errors and 8 configuration errors.\n" \
+                               "There are 0 changed duplications, 1944 new duplications and 0 removed duplications.\n" \
+                               "There are 0 changed CPD errors, 4 new CPD errors and 0 removed CPD errors.\n"
+    expected_conclusion = 'neutral'
+    assert_equal(expected_summary_message, create_summary_message)
+    assert_equal(expected_conclusion, determine_conclusion)
 
     assert_file_equals("#{PATCHES_PATH}/expected_patch_config_1.xml", 'target/reports/diff/patch_config.xml')
     assert_file_equals("#{PATCHES_PATH}/expected_patch_config_1.xml", 'target/reports/HEAD/config.xml')
+    assert_file_content_equals(expected_summary_message, 'target/reports/diff/summary.txt')
+    assert_file_content_equals(expected_conclusion, 'target/reports/diff/conclusion.txt')
   end
 
   # Test case 2: A single xpath rule is changed. Now only the rules of the same category should

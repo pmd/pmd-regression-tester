@@ -27,6 +27,7 @@ class TestRunner < Test::Unit::TestCase
     FileUtils.expects(:cp).with(project_list_path, target_project_list_path).once
     Project.any_instance.stubs(:compute_report_diff).twice
     SummaryReportBuilder.any_instance.stubs(:write_all_projects).once
+    expect_summary_conclusion_is_written
 
     argv = %w[-r target/repositories/pmd -p pmd_releases/6.1.0
               -pc config/design.xml -l test/resources/runner/project-test.xml -m single]
@@ -40,7 +41,7 @@ class TestRunner < Test::Unit::TestCase
     PmdReportBuilder.any_instance.stubs(:build)
                     .returns(PmdBranchDetail.new('test_branch')).once
     FileUtils.expects(:cp).with(project_list_path, target_project_list_path).once
-
+    expect_summary_conclusion_is_written
     argv = %w[-r target/repositories/pmd -p pmd_releases/6.1.0
               -pc config/design.xml -l test/resources/runner/project-test.xml -m single
               --html-flag]
@@ -59,6 +60,7 @@ class TestRunner < Test::Unit::TestCase
     report_builder_mock.stubs(:build).returns(PmdBranchDetail.new('test_branch')).once
     FileUtils.expects(:cp).with(anything, anything).once
     Project.any_instance.stubs(:compute_report_diff).twice
+    expect_summary_conclusion_is_written
     SummaryReportBuilder.any_instance.stubs(:write_all_projects).once
 
     argv = %w[-r target/repositories/pmd -p pmd_releases/6.1.0
@@ -71,6 +73,7 @@ class TestRunner < Test::Unit::TestCase
     PmdReportBuilder.any_instance.stubs(:build).returns(PmdBranchDetail.new('some_branch')).twice
     Project.any_instance.stubs(:compute_report_diff).twice
     SummaryReportBuilder.any_instance.stubs(:write_all_projects).once
+    expect_summary_conclusion_is_written
 
     argv = %w[-r target/repositories/pmd -b main -bc config/design.xml -p pmd_releases/6.1.0
               -pc config/design.xml -l test/resources/runner/project-test.xml]
@@ -89,6 +92,7 @@ class TestRunner < Test::Unit::TestCase
     report_builder_mock.stubs(:build).returns(PmdBranchDetail.new('some_branch')).twice
     Project.any_instance.stubs(:compute_report_diff).twice
     SummaryReportBuilder.any_instance.stubs(:write_all_projects).once
+    expect_summary_conclusion_is_written
 
     argv = %w[-r target/repositories/pmd -b main -bc config/design.xml -p pmd_releases/6.1.0
               -pc config/design.xml -l test/resources/runner/project-test.xml -t 5]
@@ -103,6 +107,7 @@ class TestRunner < Test::Unit::TestCase
     FileUtils.stubs(:copy_entry).with(anything, 'target/reports/diff/css')
     FileUtils.stubs(:copy_entry).with(anything, 'target/reports/diff/js')
     File.stubs(:new).with('target/reports/diff/index.html', anything).returns
+    expect_summary_conclusion_is_written
 
     Dir.stubs(:chdir).with('target/reports').yields
     Cmd.stubs(:execute_successfully).with('wget --no-verbose --timestamping https://sourceforge.net/projects/pmd/files/pmd-regression-tester/main-baseline.zip')
@@ -126,6 +131,7 @@ class TestRunner < Test::Unit::TestCase
     FileUtils.stubs(:cp).with('target/reports/main/project-list.xml',
                               'target/reports/some_branch/project-list.xml')
     FileUtils.stubs(:mkdir_p).with('target/reports').at_most_once
+    expect_summary_conclusion_is_written
     Dir.stubs(:chdir).with('target/reports').yields
     Cmd.stubs(:execute_successfully).twice
     ProjectsParser.any_instance.stubs(:parse)
@@ -212,11 +218,18 @@ class TestRunner < Test::Unit::TestCase
 
   private
 
+  def expect_summary_conclusion_is_written
+    File.stubs(:write).with('target/reports/diff/summary.txt', anything)
+    File.stubs(:write).with('target/reports/diff/conclusion.txt', anything)
+  end
+
   def assert_summarized_diffs(diffs)
     refute_nil(diffs)
     assert_counters(diffs[:pmd_errors])
     assert_counters(diffs[:pmd_violations])
     assert_counters(diffs[:pmd_configerrors])
+    assert_counters(diffs[:cpd_duplications])
+    assert_counters(diffs[:cpd_errors])
   end
 
   def assert_counters(counter)

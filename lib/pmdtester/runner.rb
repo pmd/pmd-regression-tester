@@ -22,7 +22,11 @@ module PmdTester
         run_single_mode
       end
 
-      summarize_diffs
+      summary = summarize_diffs
+      File.write('target/reports/diff/summary.txt', Runner.create_message(@options.base_branch, summary))
+      File.write('target/reports/diff/conclusion.txt', Runner.determine_conclusion(summary))
+
+      summary
     end
 
     def clean
