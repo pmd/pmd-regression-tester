@@ -383,12 +383,12 @@ class TestPmdReportBuilder < Test::Unit::TestCase
                                                                                      long_cli_options: long_cli_options)
     PmdTester::SimpleProgressLogger.any_instance.stubs(:start).once
     PmdTester::SimpleProgressLogger.any_instance.stubs(:stop).once
-    error_prefix = error ? 'PMD_JAVA_OPTS="-Dpmd.error_recovery -ea" ' : ''
+    java_opts = "PMD_JAVA_OPTS=\"-XX:StartFlightRecording:filename=target/reports/main/#{project_name}/" \
+                "pmd_recording.jfr,settings=config/custom.jfc,dumponexit=true#{' -Dpmd.error_recovery -ea' if error}\""
     distro_path = "#{Dir.getwd}/target/pmd-bin-#{@pmd_version}-main-#{sha1}"
     process_status = mock
     process_status.expects(:exitstatus).returns(exit_status).once
-    cmd_line = "#{error_prefix}" \
-               "#{distro_path}/bin/#{base_cmd} " \
+    cmd_line = "#{java_opts} #{distro_path}/bin/#{base_cmd} " \
                "-d target/repositories/#{project_name} -f xml " \
                "-R target/reports/main/#{project_name}/config.xml " \
                "-r target/reports/main/#{project_name}/pmd_report.xml " \
@@ -408,16 +408,16 @@ class TestPmdReportBuilder < Test::Unit::TestCase
                                             max_memory: '5g', minimum_tokens: 150)
     PmdTester::SimpleProgressLogger.any_instance.stubs(:start).once
     PmdTester::SimpleProgressLogger.any_instance.stubs(:stop).once
-    error_opts = error ? '-Dpmd.error_recovery -ea ' : ''
-    java_opts = "PMD_JAVA_OPTS=\"#{error_opts}-Xmx#{max_memory}\""
+    java_opts = "PMD_JAVA_OPTS=\"-Xmx#{max_memory} -XX:StartFlightRecording:filename=" \
+                "target/reports/main/#{project_name}/cpd_recording.jfr,settings=config/custom.jfc," \
+                "dumponexit=true#{' -Dpmd.error_recovery -ea' if error}\""
     distro_path = "#{Dir.getwd}/target/pmd-bin-#{@pmd_version}-main-#{sha1}"
     process_status = mock
     process_status.expects(:exitstatus).returns(exit_status).once
     cmd_line = "#{java_opts} #{distro_path}/bin/pmd cpd " \
                "-d target/repositories/#{project_name}/src/main/java " \
                "-d target/repositories/#{project_name}/src/test/java " \
-               '-f xml ' \
-               "--language #{cpd_language} " \
+               "-f xml --language #{cpd_language} " \
                "--minimum-tokens #{minimum_tokens} " \
                '--skip-lexical-errors'
     PmdTester::Cmd.stubs(:execute).with(cmd_line, debug_log_stdout: false)

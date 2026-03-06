@@ -171,18 +171,13 @@ module PmdTester
     end
 
     def generate_cpd_report(project)
-      error_recovery_options = @error_recovery ? ' -Dpmd.error_recovery -ea' : ''
-      pmd_java_options = "PMD_JAVA_OPTS=\"-Xmx#{project.cpd_options.max_memory}#{error_recovery_options}\" "
-      cpd_cmd = "#{pmd_java_options}" \
-                "#{determine_run_path(command: 'cpd')} #{get_directories_option(project)} -f xml " \
-                "--language #{project.cpd_options.language} --minimum-tokens #{project.cpd_options.minimum_tokens} " \
-                '--skip-lexical-errors'
       start_time = Time.now
       exit_code = nil
       if File.exist?(project.get_cpd_report_path(@pmd_branch_name))
         logger.warn "#{@pmd_branch_name}: Skipping CPD run - report " \
                     "#{project.get_cpd_report_path(@pmd_branch_name)} already exists"
       else
+        cpd_cmd = create_cpd_command(project)
         status, stdout, stderr = Cmd.execute(cpd_cmd, debug_log_stdout: false)
         exit_code = status.exitstatus
       end
@@ -210,16 +205,32 @@ module PmdTester
     private
 
     def create_pmd_command(project)
-      error_recovery_options = @error_recovery ? 'PMD_JAVA_OPTS="-Dpmd.error_recovery -ea" ' : ''
+      error_recovery_options = @error_recovery ? ' -Dpmd.error_recovery -ea' : ''
+      java_opts = 'PMD_JAVA_OPTS="-XX:StartFlightRecording:' \
+                  "filename=#{project.get_project_target_dir(@pmd_branch_name)}/pmd_recording.jfr," \
+                  'settings=config/custom.jfc,dumponexit=true' \
+                  "#{error_recovery_options}\" "
       fail_on_violation = create_failonviolation_option
       auxclasspath_option = create_auxclasspath_option(project)
-      "#{error_recovery_options}" \
+      "#{java_opts}" \
         "#{determine_run_path} -d #{project.local_source_path} -f xml " \
         "-R #{project.get_config_path(@pmd_branch_name)} " \
         "-r #{project.get_pmd_report_path(@pmd_branch_name)} " \
         "#{fail_on_violation} -t #{@threads} " \
         "#{auxclasspath_option}" \
         "#{' --no-progress' if pmd7?}"
+    end
+
+    def create_cpd_command(project)
+      error_recovery_options = @error_recovery ? ' -Dpmd.error_recovery -ea' : ''
+      java_opts = "PMD_JAVA_OPTS=\"-Xmx#{project.cpd_options.max_memory} -XX:StartFlightRecording:" \
+                  "filename=#{project.get_project_target_dir(@pmd_branch_name)}/cpd_recording.jfr," \
+                  'settings=config/custom.jfc,dumponexit=true' \
+                  "#{error_recovery_options}\" "
+      "#{java_opts}" \
+        "#{determine_run_path(command: 'cpd')} #{get_directories_option(project)} -f xml " \
+        "--language #{project.cpd_options.language} --minimum-tokens #{project.cpd_options.minimum_tokens} " \
+        '--skip-lexical-errors'
     end
 
     def get_directories_option(project)

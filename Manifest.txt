@@ -18,6 +18,7 @@ README.rdoc
 Rakefile
 bin/pmdtester
 config/all-java.xml
+config/custom.jfc
 config/design.xml
 config/project-list-with-cpd.xml
 config/project-list.xml
