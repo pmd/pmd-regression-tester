@@ -198,6 +198,7 @@ module PmdTester
         'execution_time' => report.report_details.execution_time_formatted,
         'timestamp' => report.report_details.timestamp,
         'exit_code' => report.report_details.exit_code,
+        'jfr_summary' => report.report_details.jfr_summary.to_h_for_liquid,
 
         'rules' => report.rule_summaries,
         'errors' => report.errors_by_file.all_values.map { |e| error_to_hash(e, project) },
@@ -213,6 +214,7 @@ module PmdTester
         'execution_time' => cpd_report.report_details.execution_time_formatted,
         'timestamp' => cpd_report.report_details.timestamp,
         'exit_code' => cpd_report.report_details.exit_code,
+        'jfr_summary' => cpd_report.report_details.jfr_summary.to_h_for_liquid,
 
         'errors' => cpd_report.errors.map { |e| error_to_hash(e, project) }
       }
