@@ -158,6 +158,8 @@ class TestRunner < Test::Unit::TestCase
     FileUtils.cp 'test/resources/runner/main-baseline.zip', 'target/reports'
     # placing the report here avoids running PMD again - and we can craft it for the test
     FileUtils.cp 'test/resources/runner/pmd_report.xml', 'target/reports/pmd_releases_6.7.0/checkstyle/pmd_report.xml'
+    FileUtils.cp 'test/resources/runner/empty.jfr', 'target/reports/pmd_releases_6.7.0/checkstyle/pmd_recording.jfr'
+    FileUtils.cp 'test/resources/runner/empty.jfr', 'target/reports/pmd_releases_6.7.0/checkstyle/cpd_recording.jfr'
 
     # create a empty directory for PMD build to avoid building PMD during test
     fake_pmd_bin = 'target/pmd-bin-6.7.0-pmd_releases_6.7.0-b98bd0bb961d9f82437acccfe64923d992970310'

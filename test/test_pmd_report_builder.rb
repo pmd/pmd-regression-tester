@@ -396,7 +396,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
                "#{' --no-progress' if no_progress_bar}"
     PmdTester::Cmd.stubs(:execute).with(cmd_line)
                   .returns([process_status, 'stdout output', 'stderr output'])
-                  .once
+    PmdTester::JfrSummary.any_instance.stubs(:load).with("target/reports/main/#{project_name}/pmd_recording.jfr")
     PmdTester::PmdReportDetail.stubs(:create).once.with do |params|
       params[:cmdline] == cmd_line && params[:exit_code] == exit_status \
       && params[:stdout] == 'stdout output' && params[:stderr] == 'stderr output'
@@ -422,8 +422,8 @@ class TestPmdReportBuilder < Test::Unit::TestCase
                '--skip-lexical-errors'
     PmdTester::Cmd.stubs(:execute).with(cmd_line, debug_log_stdout: false)
                   .returns([process_status, 'stdout output', 'stderr output'])
-                  .once
     File.stubs(:write).with("target/reports/main/#{project_name}/cpd_report.xml", 'stdout output').once
+    PmdTester::JfrSummary.any_instance.stubs(:load).with("target/reports/main/#{project_name}/cpd_recording.jfr")
     PmdTester::PmdReportDetail.stubs(:create).once.with do |params|
       params[:cmdline] == cmd_line && params[:exit_code] == exit_status \
       && params[:stdout] == '' && params[:stderr] == 'stderr output' \

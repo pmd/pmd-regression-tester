@@ -139,10 +139,12 @@ module PmdTester
         progress_logger.stop
         sum_time += execution_time
 
+        jfr_summary = JfrSummary.new.load("#{project.get_project_target_dir(@pmd_branch_name)}/pmd_recording.jfr")
         PmdReportDetail.create(execution_time: execution_time, timestamp: end_time,
                                cmdline: cmd_line, exit_code: exit_code, stdout: stdout, stderr: stderr,
                                oom: stderr.include?('java.lang.OutOfMemoryError'),
-                               report_info_path: project.get_report_info_path(@pmd_branch_name))
+                               report_info_path: project.get_report_info_path(@pmd_branch_name),
+                               jfr_summary: jfr_summary)
         logger.info "#{project.name}'s PMD report was generated successfully (exit code: #{exit_code})"
       end
 
@@ -161,9 +163,11 @@ module PmdTester
         progress_logger.stop
         sum_time += execution_time
 
+        jfr_summary = JfrSummary.new.load("#{project.get_project_target_dir(@pmd_branch_name)}/cpd_recording.jfr")
         PmdReportDetail.create(execution_time: execution_time, timestamp: end_time,
                                cmdline: cpd_cmd, exit_code: exit_code, stdout: stdout, stderr: stderr,
-                               report_info_path: project.get_cpd_report_info_path(@pmd_branch_name))
+                               report_info_path: project.get_cpd_report_info_path(@pmd_branch_name),
+                               jfr_summary: jfr_summary)
         logger.info "#{project.name}'s CPD report was generated successfully (exit code: #{exit_code})"
       end
 
