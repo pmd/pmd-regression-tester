@@ -44,6 +44,15 @@ module PmdTester
       }
     end
 
+    def to_h_for_liquid
+      {
+        'execution_time' => PmdReportDetail.convert_seconds(@execution_time),
+        'max_heap_memory' => format_memory(@max_heap_memory),
+        'max_cpu_load' => format_percentage(@max_cpu_load),
+        'avg_cpu_load' => format_percentage(@avg_cpu_load)
+      }
+    end
+
     def self.from_h(hash)
       jfr_summary = JfrSummary.new
       jfr_summary.execution_time = hash[:execution_time] || 0
@@ -85,6 +94,18 @@ module PmdTester
       return [] if events.nil?
 
       events
+    end
+
+    def format_memory(bytes)
+      return '0 MB' if bytes.nil? || bytes.zero?
+
+      "#{(bytes / (1024 * 1024)).round} MB"
+    end
+
+    def format_percentage(value)
+      return '0%' if value.nil? || value.zero?
+
+      "#{(value * 100).round}%"
     end
   end
 end

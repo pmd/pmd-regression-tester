@@ -53,7 +53,7 @@ module PmdTester
         'cmdline' => @cmdline,
         'execution_time' => execution_time_formatted,
         'oom' => @oom,
-        'jfr_summary' => @jfr_summary.to_h
+        'jfr_summary' => @jfr_summary.to_h_for_liquid
       }
     end
 
