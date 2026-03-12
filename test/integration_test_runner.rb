@@ -205,6 +205,7 @@ class IntegrationTestRunner < Test::Unit::TestCase
     assert_path_exist("target/reports/diff/#{project_name}/#{flavor}_pmd_report.xml")
     assert_path_exist("target/reports/diff/#{project_name}/#{flavor}_pmd_stderr.txt")
     assert_path_exist("target/reports/diff/#{project_name}/#{flavor}_pmd_stdout.txt")
+    assert_path_exist("target/reports/diff/#{project_name}/#{flavor}_pmd_recording.jfr")
   end
 
   def assert_diff_reports_exist_for_project_cpd_only(flavor, project_name)
@@ -213,5 +214,6 @@ class IntegrationTestRunner < Test::Unit::TestCase
     assert_path_exist("target/reports/diff/#{project_name}/#{flavor}_cpd_report.xml")
     assert_path_exist("target/reports/diff/#{project_name}/#{flavor}_cpd_stderr.txt")
     assert_path_exist("target/reports/diff/#{project_name}/#{flavor}_cpd_stdout.txt")
+    assert_path_exist("target/reports/diff/#{project_name}/#{flavor}_cpd_recording.jfr")
   end
 end

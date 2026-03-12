@@ -313,9 +313,11 @@ class ManualIntegrationTests < Test::Unit::TestCase
     assert_path_exist("target/reports/main/#{project_name}/pmd_report_info.json")
     assert_path_exist("target/reports/main/#{project_name}/pmd_report.xml")
     assert(File.size("target/reports/main/#{project_name}/pmd_report.xml") > pmd_report_size_in_bytes)
+    assert_path_exist("target/reports/main/#{project_name}/pmd_recording.jfr")
     assert_path_exist("target/reports/main/#{project_name}/cpd_report_info.json")
     assert_path_exist("target/reports/main/#{project_name}/cpd_report.xml")
     assert(File.size("target/reports/main/#{project_name}/cpd_report.xml") > 10)
+    assert_path_exist("target/reports/main/#{project_name}/cpd_recording.jfr")
   end
 
   def assert_pmd_violations(new:, removed:, changed:)
