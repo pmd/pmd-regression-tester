@@ -164,6 +164,6 @@ span.stack-trace-method {
 }
 
 /* cmdline inside summary table */
-.table code {
+.table details code {
   white-space: normal;
 }
