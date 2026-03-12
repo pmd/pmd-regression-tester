@@ -1,0 +1,37 @@
+{
+  "recording": {
+    "events": [{
+      "type": "jdk.CPULoad", 
+      "values": {
+        "startTime": "2026-03-06T12:17:08.845115278+01:00", 
+        "jvmUser": 0.0, 
+        "jvmSystem": 0.0, 
+        "machineTotal": 0.0
+      }
+    }, {
+      "type": "jdk.CPULoad", 
+      "values": {
+        "startTime": "2026-03-06T12:17:09.850906190+01:00", 
+        "jvmUser": 0.6361323, 
+        "jvmSystem": 0.022900764, 
+        "machineTotal": 0.8549618
+      }
+    }, {
+      "type": "jdk.CPULoad", 
+      "values": {
+        "startTime": "2026-03-06T12:17:10.855535551+01:00", 
+        "jvmUser": 0.4715026, 
+        "jvmSystem": 0.038860105, 
+        "machineTotal": 0.7564767
+      }
+    }, {
+      "type": "jdk.CPULoad", 
+      "values": {
+        "startTime": "2026-03-06T12:17:11.860123917+01:00", 
+        "jvmUser": 0.4520202, 
+        "jvmSystem": 0.007575758, 
+        "machineTotal": 0.9419192
+      }
+    }]
+  }
+}

@@ -13,6 +13,7 @@ module PmdTester
     attr_accessor :stdout
     attr_accessor :stderr
     attr_accessor :oom
+    attr_accessor :jfr_summary
 
     def save(report_info_path)
       hash = {
@@ -23,7 +24,8 @@ module PmdTester
         exit_code: @exit_code,
         stdout: @stdout,
         stderr: @stderr,
-        oom: @oom
+        oom: @oom,
+        jfr_summary: @jfr_summary.to_h
       }
       file = File.new(report_info_path, 'w')
       file.puts JSON.pretty_generate(hash)
@@ -50,16 +52,17 @@ module PmdTester
         'exit_code' => @exit_code,
         'cmdline' => @cmdline,
         'execution_time' => execution_time_formatted,
-        'oom' => @oom
+        'oom' => @oom,
+        'jfr_summary' => @jfr_summary.to_h
       }
     end
 
     def self.create(execution_time: 0, timestamp: '', working_dir: Dir.getwd, cmdline: '',
                     exit_code: nil, stdout: '', stderr: '', oom: false,
-                    report_info_path:)
+                    report_info_path:, jfr_summary: nil)
       detail = PmdReportDetail.new(execution_time: execution_time, timestamp: timestamp,
                                    working_dir: working_dir, cmdline: cmdline, oom: oom,
-                                   exit_code: exit_code, stdout: stdout, stderr: stderr)
+                                   exit_code: exit_code, stdout: stdout, stderr: stderr, jfr_summary: jfr_summary)
       detail.save(report_info_path)
       detail
     end
@@ -77,7 +80,7 @@ module PmdTester
     private
 
     def initialize(execution_time: 0, timestamp: '', working_dir: Dir.getwd, cmdline: '',
-                   exit_code: nil, stdout: '', stderr: '', oom: false)
+                   exit_code: nil, stdout: '', stderr: '', oom: false, jfr_summary: nil)
       @execution_time = execution_time
       @timestamp = timestamp
       @working_dir = working_dir
@@ -86,6 +89,11 @@ module PmdTester
       @stdout = stdout
       @stderr = stderr
       @oom = oom
+      @jfr_summary = if jfr_summary.instance_of? JfrSummary
+                       jfr_summary
+                     else
+                       JfrSummary.from_h(jfr_summary || {})
+                     end
     end
   end
 end

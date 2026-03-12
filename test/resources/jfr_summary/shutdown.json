@@ -1,0 +1,231 @@
+{
+  "recording": {
+    "events": [{
+      "type": "jdk.Shutdown", 
+      "values": {
+        "startTime": "2026-03-06T12:17:12.280313365+01:00", 
+        "eventThread": {
+          "osName": "main", 
+          "osThreadId": 895440, 
+          "javaName": "main", 
+          "javaThreadId": 1, 
+          "group": {
+            "parent": {
+              "parent": null, 
+              "name": "system"
+            }, 
+            "name": "main"
+          }, 
+          "virtual": false
+        }, 
+        "stackTrace": {
+          "truncated": false, 
+          "frames": [{
+            "method": {
+              "type": {
+                "classLoader": {
+                  "type": null, 
+                  "name": "bootstrap"
+                }, 
+                "name": "java\/lang\/Shutdown", 
+                "package": {
+                  "name": "java\/lang", 
+                  "module": {
+                    "name": "java.base", 
+                    "version": "21.0.9", 
+                    "location": "jrt:\/java.base", 
+                    "classLoader": {
+                      "type": null, 
+                      "name": "bootstrap"
+                    }
+                  }, 
+                  "exported": true
+                }, 
+                "modifiers": 0, 
+                "hidden": false
+              }, 
+              "name": "beforeHalt", 
+              "descriptor": "()V", 
+              "modifiers": 264, 
+              "hidden": false
+            }, 
+            "lineNumber": -1, 
+            "bytecodeIndex": 0, 
+            "type": "Native"
+          }, {
+            "method": {
+              "type": {
+                "classLoader": {
+                  "type": null, 
+                  "name": "bootstrap"
+                }, 
+                "name": "java\/lang\/Shutdown", 
+                "package": {
+                  "name": "java\/lang", 
+                  "module": {
+                    "name": "java.base", 
+                    "version": "21.0.9", 
+                    "location": "jrt:\/java.base", 
+                    "classLoader": {
+                      "type": null, 
+                      "name": "bootstrap"
+                    }
+                  }, 
+                  "exported": true
+                }, 
+                "modifiers": 0, 
+                "hidden": false
+              }, 
+              "name": "exit", 
+              "descriptor": "(I)V", 
+              "modifiers": 8, 
+              "hidden": false
+            }, 
+            "lineNumber": 166, 
+            "bytecodeIndex": 9, 
+            "type": "Interpreted"
+          }, {
+            "method": {
+              "type": {
+                "classLoader": {
+                  "type": null, 
+                  "name": "bootstrap"
+                }, 
+                "name": "java\/lang\/Runtime", 
+                "package": {
+                  "name": "java\/lang", 
+                  "module": {
+                    "name": "java.base", 
+                    "version": "21.0.9", 
+                    "location": "jrt:\/java.base", 
+                    "classLoader": {
+                      "type": null, 
+                      "name": "bootstrap"
+                    }
+                  }, 
+                  "exported": true
+                }, 
+                "modifiers": 1, 
+                "hidden": false
+              }, 
+              "name": "exit", 
+              "descriptor": "(I)V", 
+              "modifiers": 1, 
+              "hidden": false
+            }, 
+            "lineNumber": 188, 
+            "bytecodeIndex": 14, 
+            "type": "Interpreted"
+          }, {
+            "method": {
+              "type": {
+                "classLoader": {
+                  "type": null, 
+                  "name": "bootstrap"
+                }, 
+                "name": "java\/lang\/System", 
+                "package": {
+                  "name": "java\/lang", 
+                  "module": {
+                    "name": "java.base", 
+                    "version": "21.0.9", 
+                    "location": "jrt:\/java.base", 
+                    "classLoader": {
+                      "type": null, 
+                      "name": "bootstrap"
+                    }
+                  }, 
+                  "exported": true
+                }, 
+                "modifiers": 17, 
+                "hidden": false
+              }, 
+              "name": "exit", 
+              "descriptor": "(I)V", 
+              "modifiers": 9, 
+              "hidden": false
+            }, 
+            "lineNumber": 1920, 
+            "bytecodeIndex": 4, 
+            "type": "Interpreted"
+          }, {
+            "method": {
+              "type": {
+                "classLoader": {
+                  "type": {
+                    "classLoader": {
+                      "type": null, 
+                      "name": "bootstrap"
+                    }, 
+                    "name": "jdk\/internal\/loader\/ClassLoaders$AppClassLoader", 
+                    "package": {
+                      "name": "jdk\/internal\/loader", 
+                      "module": {
+                        "name": "java.base", 
+                        "version": "21.0.9", 
+                        "location": "jrt:\/java.base", 
+                        "classLoader": {
+                          "type": null, 
+                          "name": "bootstrap"
+                        }
+                      }, 
+                      "exported": true
+                    }, 
+                    "modifiers": 10, 
+                    "hidden": false
+                  }, 
+                  "name": "app"
+                }, 
+                "name": "net\/sourceforge\/pmd\/cli\/PmdCli", 
+                "package": {
+                  "name": "net\/sourceforge\/pmd\/cli", 
+                  "module": {
+                    "name": null, 
+                    "version": null, 
+                    "location": null, 
+                    "classLoader": {
+                      "type": {
+                        "classLoader": {
+                          "type": null, 
+                          "name": "bootstrap"
+                        }, 
+                        "name": "jdk\/internal\/loader\/ClassLoaders$AppClassLoader", 
+                        "package": {
+                          "name": "jdk\/internal\/loader", 
+                          "module": {
+                            "name": "java.base", 
+                            "version": "21.0.9", 
+                            "location": "jrt:\/java.base", 
+                            "classLoader": {
+                              "type": null, 
+                              "name": "bootstrap"
+                            }
+                          }, 
+                          "exported": true
+                        }, 
+                        "modifiers": 10, 
+                        "hidden": false
+                      }, 
+                      "name": "app"
+                    }
+                  }, 
+                  "exported": true
+                }, 
+                "modifiers": 17, 
+                "hidden": false
+              }, 
+              "name": "main", 
+              "descriptor": "([Ljava\/lang\/String;)V", 
+              "modifiers": 9, 
+              "hidden": false
+            }, 
+            "lineNumber": 29, 
+            "bytecodeIndex": 4, 
+            "type": "Interpreted"
+          }]
+        }, 
+        "reason": "Shutdown requested from Java"
+      }
+    }]
+  }
+}
