@@ -237,6 +237,7 @@ module PmdTester
     end
 
     # for compatibility with old baselines, create empty CPD reports if they are missing in the baseline
+    # also create empty JFR recording files.
     # this allows to run the regression tester with baselines created with an old regression tester version
     def make_baseline_compatible(branch_path)
       Dir.each_child(branch_path) do |project_path|
@@ -252,7 +253,20 @@ module PmdTester
           FileUtils.cp("#{branch_path}/#{project_path}/report_info.json",
                        "#{branch_path}/#{project_path}/pmd_report_info.json")
         end
+        add_jfr_recording_for_old_baseline("#{branch_path}/#{project_path}", true)
+        add_jfr_recording_for_old_baseline("#{branch_path}/#{project_path}", false)
       end
+    end
+
+    def add_jfr_recording_for_old_baseline(path, pmd_or_cpd)
+      prefix = pmd_or_cpd ? 'pmd' : 'cpd'
+      recording_path = "#{path}/#{prefix}_recording.jfr"
+      return if File.exist?(recording_path)
+
+      FileUtils.touch(recording_path)
+      report_info = JSON.parse(File.read("#{path}/#{prefix}_report_info.json"))
+      report_info['jfr_summary'] = { 'recording_path' => recording_path }
+      File.write("#{path}/#{prefix}_report_info.json", JSON.pretty_generate(report_info))
     end
   end
 end
