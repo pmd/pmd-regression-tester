@@ -31,8 +31,13 @@ mvn dependency:build-classpath -DincludeScope=test -Dmdep.outputFile=classpath.t
     <auxclasspath-command>echo -n "${HOME}/openjdk11/lib/jrt-fs.jar:$(pwd)/target/classes:$(pwd)/target/test-classes:"; cat classpath.txt</auxclasspath-command>
     <cpd-options>
       <language>java</language>
-      <minimum-tokens>150</minimum-tokens>
+      <minimum-tokens>50</minimum-tokens>
       <max-memory>4g</max-memory>
+      <directories>
+        <!-- this avoids analyzing src/test/resources-noncompilable ... -->
+        <directory>src/main/java</directory>
+        <directory>src/test/java</directory>
+      </directories>
     </cpd-options>
   </project>
 
