@@ -53,6 +53,8 @@ class TestProjectDiffReport < Test::Unit::TestCase
 
     assert_cpd_output(actual_report_path)
     assert_cpd_stdout_stderr_files(actual_report_path)
+
+    assert_jfr_recordings(actual_report_path)
   end
 
   def test_report_diffs_empty
@@ -124,6 +126,13 @@ class TestProjectDiffReport < Test::Unit::TestCase
     assert_file_exists("#{actual_report_path}/base_cpd_stderr.txt")
     assert_file_exists("#{actual_report_path}/patch_cpd_stdout.txt")
     assert_file_exists("#{actual_report_path}/patch_cpd_stderr.txt")
+  end
+
+  def assert_jfr_recordings(actual_report_path)
+    assert_file_exists("#{actual_report_path}/base_pmd_recording.jfr")
+    assert_file_exists("#{actual_report_path}/patch_pmd_recording.jfr")
+    assert_file_exists("#{actual_report_path}/base_cpd_recording.jfr")
+    assert_file_exists("#{actual_report_path}/patch_cpd_recording.jfr")
   end
 
   def copy_resources(project)

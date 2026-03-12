@@ -7,5 +7,11 @@
     "stdout":"patch cpd stdout",
     "stderr":"patch cpd stderr",
     "oom":true,
-    "jfr_summary":{"execution_time":131,"max_heap_memory":536870912,"max_cpu_load":0.85,"avg_cpu_load":0.7}
+    "jfr_summary": {
+        "execution_time":131,
+        "max_heap_memory":536870912,
+        "max_cpu_load":0.85,
+        "avg_cpu_load":0.7,
+        "recording_path":"test/resources/project_diff_report/empty.jfr"
+    }
 }

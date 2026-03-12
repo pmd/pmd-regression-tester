@@ -5,16 +5,18 @@ require 'json'
 module PmdTester
   # This class reads a jfr recording and extract a summary
   class JfrSummary
-    attr_accessor :execution_time, :max_heap_memory, :max_cpu_load, :avg_cpu_load
+    attr_accessor :execution_time, :max_heap_memory, :max_cpu_load, :avg_cpu_load, :recording_path
 
     def initialize
       @execution_time = 0
       @max_heap_memory = 0
       @max_cpu_load = 0
       @avg_cpu_load = 0
+      @recording_path = ''
     end
 
     def load(jfr_recording)
+      @recording_path = jfr_recording
       start_time = get_start_time(jfr_recording)
       end_time = get_end_time(jfr_recording)
       @execution_time = end_time - start_time
@@ -40,7 +42,8 @@ module PmdTester
         execution_time: @execution_time,
         max_heap_memory: @max_heap_memory,
         max_cpu_load: @max_cpu_load,
-        avg_cpu_load: @avg_cpu_load
+        avg_cpu_load: @avg_cpu_load,
+        recording_path: @recording_path
       }
     end
 
@@ -59,6 +62,7 @@ module PmdTester
       jfr_summary.max_heap_memory = hash[:max_heap_memory] || 0
       jfr_summary.max_cpu_load = hash[:max_cpu_load] || 0
       jfr_summary.avg_cpu_load = hash[:avg_cpu_load] || 0
+      jfr_summary.recording_path = hash[:recording_path] || ''
       jfr_summary
     end
 
