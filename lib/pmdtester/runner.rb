@@ -24,6 +24,7 @@ module PmdTester
 
       summary = summarize_diffs
       unless @options.html_flag
+        FileUtils.mkdir_p('target/reports/diff') unless File.directory?('target/reports/diff')
         File.write('target/reports/diff/summary.txt', Runner.create_message(@options.base_branch, summary))
         File.write('target/reports/diff/conclusion.txt', Runner.determine_conclusion(summary))
       end
@@ -70,19 +71,16 @@ module PmdTester
       project_list = determine_project_list_for_online_mode(baseline_path)
       get_projects(project_list)
 
-      rules_changed = true
-      if @options.auto_config_flag
-        rules_changed = RuleSetBuilder.new(@options).build?
-      elsif @options.patch_config == Options::DEFAULT_CONFIG_PATH
-        # patch branch build pmd reports with same configuration as base branch
-        # if not specified otherwise. This allows to use a different config (e.g. less rules)
-        # than used for creating the baseline. Use with care, though
-        @options.patch_config = "#{baseline_path}/config.xml"
-      else
-        logger.info "Using config #{@options.patch_config} which might differ from baseline"
-        RuleSetBuilder.new(@options).calculate_filter_set if @options.filter_with_patch_config
-      end
+      rules_changed = determine_rule_changed_in_online_mode?(baseline_path)
       impl_changed = determine_impl_changed?
+
+      # When neither PMD nor CPD is executed, we can abort directly
+      # No report will be generated then
+      if !rules_changed && !impl_changed
+        @skipped = true
+        logger.info 'No relevant source code has been changed, pmdtester skipped.'
+        return
+      end
 
       patch_branch_details = create_pmd_report(config: @options.patch_config, branch: @options.patch_branch,
                                                rules_changed: rules_changed, impl_changed: impl_changed)
@@ -180,11 +178,14 @@ module PmdTester
         pmd_violations: pmd_violations_total.to_h,
         pmd_configerrors: pmd_configerrors_total.to_h,
         cpd_errors: cpd_error_total.to_h,
-        cpd_duplications: cpd_duplications_total.to_h
+        cpd_duplications: cpd_duplications_total.to_h,
+        skipped: @skipped
       }
     end
 
     def self.create_message(base_branch, summary)
+      return 'No relevant source code has been changed, pmdtester skipped.' if summary[:skipped]
+
       "Compared to #{base_branch}:\n" \
         'This changeset ' \
         "changes #{summary[:pmd_violations][:changed]} violations,\n" \
@@ -203,6 +204,8 @@ module PmdTester
     end
 
     def self.determine_conclusion(summary)
+      return 'skipped' if summary[:skipped]
+
       total_changes = summary[:pmd_violations][:changed] \
         + summary[:pmd_violations][:new] \
         + summary[:pmd_violations][:removed] \
@@ -284,6 +287,22 @@ module PmdTester
       result = filenames.split("\n").any? { |filename| filename.include?('/src/main/') }
       logger.debug "PMD impl changed: #{result}"
       result
+    end
+
+    def determine_rule_changed_in_online_mode?(baseline_path)
+      rules_changed = true
+      if @options.auto_config_flag
+        rules_changed = RuleSetBuilder.new(@options).build?
+      elsif @options.patch_config == Options::DEFAULT_CONFIG_PATH
+        # patch branch build pmd reports with same configuration as base branch
+        # if not specified otherwise. This allows to use a different config (e.g. less rules)
+        # than used for creating the baseline. Use with care, though
+        @options.patch_config = "#{baseline_path}/config.xml"
+      else
+        logger.info "Using config #{@options.patch_config} which might differ from baseline"
+        RuleSetBuilder.new(@options).calculate_filter_set if @options.filter_with_patch_config
+      end
+      rules_changed
     end
   end
 end

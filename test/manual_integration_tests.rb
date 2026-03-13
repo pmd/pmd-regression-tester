@@ -197,12 +197,14 @@ class ManualIntegrationTests < Test::Unit::TestCase
     assert_cpd_duplications(new: 0, removed: 0, changed: 0)
     assert_cpd_errors(new: 0, removed: 0, changed: 0)
 
-    assert_equal('success', determine_conclusion)
+    assert_file_content_equals('No relevant source code has been changed, pmdtester skipped.',
+                               'target/reports/diff/summary.txt')
+    assert_file_content_equals('skipped', 'target/reports/diff/conclusion.txt')
 
-    assert_path_not_exist('target/reports/diff/patch_config.xml')
+    assert_path_not_exist('target/reports/diff/index.html')
     assert_path_not_exist('target/reports/HEAD/config.xml')
-    assert_path_not_exist('target/reports/diff/checkstyle/pmd_report.xml')
-    assert_path_not_exist('target/reports/diff/checkstyle/cpd_report.xml')
+    assert_path_not_exist('target/reports/HEAD/checkstyle/pmd_report.xml')
+    assert_path_not_exist('target/reports/HEAD/checkstyle/cpd_report.xml')
   end
 
   def test_case_5_create_baseline
