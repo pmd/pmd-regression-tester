@@ -59,6 +59,11 @@
                     <td class="patch">{{patch.jdk_info | escape }}</td>
                 </tr>
                 <tr>
+                    <td class="item">System Info</td>
+                    <td class="base">{{base.cpu_info | escape}}<br>Memory: {{base.physical_memory | escape }}<br>OS: {{base.os_info | escape }}</td>
+                    <td class="patch">{{patch.cpu_info | escape}}<br>Memory: {{patch.physical_memory | escape }}<br>OS: {{patch.os_info | escape }}</td>
+                </tr>
+                <tr>
                     <td class="item">Locale</td>
                     <td class="base">{{base.locale | escape }}</td>
                     <td class="patch">{{patch.locale | escape }}</td>

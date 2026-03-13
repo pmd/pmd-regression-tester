@@ -16,6 +16,9 @@ module PmdTester
     attr_accessor :execution_time
     attr_accessor :jdk_version
     attr_accessor :language
+    attr_accessor :cpu_info
+    attr_accessor :physical_memory
+    attr_accessor :os_info
     attr_accessor :pull_request
 
     def self.branch_filename(branch_name)
@@ -33,6 +36,10 @@ module PmdTester
       # the result of command 'java -version' is going to stderr
       @jdk_version = Cmd.stderr_of('java -version')
       @language = ENV.fetch('LANG') # the locale
+      system_info = PmdTester::SystemInfo.new
+      @cpu_info = system_info.cpu_info
+      @physical_memory = system_info.physical_memory
+      @os_info = system_info.uname
 
       prnum = ENV.fetch(PR_NUM_ENV_VAR, 'false')
       @pull_request = prnum == 'false' ? nil : prnum
@@ -41,19 +48,14 @@ module PmdTester
     def self.load(branch_name, logger)
       details = PmdBranchDetail.new(branch_name)
       if File.exist?(details.path_to_save_file)
-        hash = JSON.parse(File.read(details.path_to_save_file))
-        details.branch_last_sha = hash['branch_last_sha']
-        details.branch_last_message = hash['branch_last_message']
-        details.branch_name = hash['branch_name']
-        details.timestamp = hash['timestamp']
-        details.execution_time = hash['execution_time']
-        details.jdk_version = hash['jdk_version']
-        details.language = hash['language']
-        details.pull_request = hash['pull_request']
+        details.parse_from_json
       else
         details.timestamp = Time.now
         details.jdk_version = ''
         details.language = ''
+        details.cpu_info = ''
+        details.physical_memory = ''
+        details.os_info = ''
         logger&.warn "#{details.path_to_save_file} doesn't exist!"
       end
       details
@@ -66,6 +68,9 @@ module PmdTester
                timestamp: @timestamp,
                execution_time: @execution_time,
                jdk_version: @jdk_version,
+               cpu_info: @cpu_info,
+               physical_memory: @physical_memory,
+               os_info: @os_info,
                language: @language,
                pull_request: @pull_request }
 
@@ -91,6 +96,21 @@ module PmdTester
 
     def format_execution_time
       PmdReportDetail.convert_seconds(@execution_time)
+    end
+
+    def parse_from_json
+      hash = JSON.parse(File.read(path_to_save_file))
+      @branch_last_sha = hash['branch_last_sha']
+      @branch_last_message = hash['branch_last_message']
+      @branch_name = hash['branch_name']
+      @timestamp = hash['timestamp']
+      @execution_time = hash['execution_time']
+      @jdk_version = hash['jdk_version']
+      @language = hash['language']
+      @cpu_info = hash['cpu_info']
+      @physical_memory = hash['physical_memory']
+      @os_info = hash['os_info']
+      @pull_request = hash['pull_request']
     end
   end
 end
