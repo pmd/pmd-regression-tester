@@ -253,4 +253,16 @@ EOF
       <max-memory>512m</max-memory>
     </cpd-options>
   </project>
+
+  <project>
+    <name>alsa-firmware</name>
+    <type>git</type>
+    <connection>https://github.com/alsa-project/alsa-firmware</connection>
+    <tag>v1.2.1</tag>
+    <cpd-options>
+      <language>cpp</language>
+      <minimum-tokens>100</minimum-tokens>
+      <max-memory>4g</max-memory>
+    </cpd-options>
+  </project>
 </projectlist>
