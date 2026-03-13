@@ -7,16 +7,20 @@ class TestJfrSummary < Test::Unit::TestCase
   include PmdTester
 
   def test_load
-    PmdTester::Cmd.stubs(:execute_successfully).with('jfr print --json --events jdk.JVMInformation path/recording.jfr')
+    PmdTester::Cmd.stubs(:execute_successfully).with('jfr print --json --events jdk.JVMInformation path/recording.jfr',
+                                                     nil, debug_log_stdout: false)
                   .returns(File.read('test/resources/jfr_summary/jvm_information.json'))
                   .once
-    PmdTester::Cmd.stubs(:execute_successfully).with('jfr print --json --events jdk.Shutdown path/recording.jfr')
+    PmdTester::Cmd.stubs(:execute_successfully).with('jfr print --json --events jdk.Shutdown path/recording.jfr',
+                                                     nil, debug_log_stdout: false)
                   .returns(File.read('test/resources/jfr_summary/shutdown.json'))
                   .once
-    PmdTester::Cmd.stubs(:execute_successfully).with('jfr print --json --events jdk.GCHeapSummary path/recording.jfr')
+    PmdTester::Cmd.stubs(:execute_successfully).with('jfr print --json --events jdk.GCHeapSummary path/recording.jfr',
+                                                     nil, debug_log_stdout: false)
                   .returns(File.read('test/resources/jfr_summary/gc_heap_summary.json'))
                   .once
-    PmdTester::Cmd.stubs(:execute_successfully).with('jfr print --json --events jdk.CPULoad path/recording.jfr')
+    PmdTester::Cmd.stubs(:execute_successfully).with('jfr print --json --events jdk.CPULoad path/recording.jfr',
+                                                     nil, debug_log_stdout: false)
                   .returns(File.read('test/resources/jfr_summary/cpu_load.json'))
                   .once
 
@@ -30,16 +34,20 @@ class TestJfrSummary < Test::Unit::TestCase
   end
 
   def test_load_empty
-    PmdTester::Cmd.stubs(:execute_successfully).with('jfr print --json --events jdk.JVMInformation path/recording.jfr')
+    PmdTester::Cmd.stubs(:execute_successfully).with('jfr print --json --events jdk.JVMInformation path/recording.jfr',
+                                                     nil, debug_log_stdout: false)
                   .returns('{"recording":{"events":[]}}')
                   .once
-    PmdTester::Cmd.stubs(:execute_successfully).with('jfr print --json --events jdk.Shutdown path/recording.jfr')
+    PmdTester::Cmd.stubs(:execute_successfully).with('jfr print --json --events jdk.Shutdown path/recording.jfr',
+                                                     nil, debug_log_stdout: false)
                   .returns('{"recording":{"events":[]}}')
                   .once
-    PmdTester::Cmd.stubs(:execute_successfully).with('jfr print --json --events jdk.GCHeapSummary path/recording.jfr')
+    PmdTester::Cmd.stubs(:execute_successfully).with('jfr print --json --events jdk.GCHeapSummary path/recording.jfr',
+                                                     nil, debug_log_stdout: false)
                   .returns('{"recording":{"events":[]}}')
                   .once
-    PmdTester::Cmd.stubs(:execute_successfully).with('jfr print --json --events jdk.CPULoad path/recording.jfr')
+    PmdTester::Cmd.stubs(:execute_successfully).with('jfr print --json --events jdk.CPULoad path/recording.jfr',
+                                                     nil, debug_log_stdout: false)
                   .returns('{"recording":{"events":[]}}')
                   .once
 
