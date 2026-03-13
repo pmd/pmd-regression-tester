@@ -22,7 +22,13 @@ module PmdTester
         run_single_mode
       end
 
-      summarize_diffs
+      summary = summarize_diffs
+      unless @options.html_flag
+        File.write('target/reports/diff/summary.txt', Runner.create_message(@options.base_branch, summary))
+        File.write('target/reports/diff/conclusion.txt', Runner.determine_conclusion(summary))
+      end
+
+      summary
     end
 
     def clean
@@ -33,16 +39,28 @@ module PmdTester
     def run_local_mode
       logger.info "Mode: #{@options.mode}"
       get_projects(@options.project_list) unless @options.nil?
+
+      rules_changed = true
       if @options.auto_config_flag
-        run_required = RuleSetBuilder.new(@options).build?
-        logger.debug "Run required: #{run_required}"
-        return unless run_required
+        rules_changed = RuleSetBuilder.new(@options).build?
+        logger.debug "Rules have changed: #{rules_changed}"
       end
 
-      base_branch_details = create_pmd_report(config: @options.base_config, branch: @options.base_branch)
-      patch_branch_details = create_pmd_report(config: @options.patch_config, branch: @options.patch_branch)
+      base_branch_details = create_pmd_report(config: @options.base_config, branch: @options.base_branch,
+                                              rules_changed: rules_changed)
+      # copy list of projects file to the base baseline
+      base_branch_dir = File.dirname(base_branch_details.target_branch_project_list_path)
+      FileUtils.mkdir_p(base_branch_dir) unless File.directory?(base_branch_dir)
+      FileUtils.cp(@options.project_list, base_branch_details.target_branch_project_list_path)
 
-      build_html_reports(@projects, base_branch_details, patch_branch_details)
+      patch_branch_details = create_pmd_report(config: @options.patch_config, branch: @options.patch_branch,
+                                               rules_changed: rules_changed)
+      # copy list of projects file to the patch baseline
+      patch_branch_dir = File.dirname(patch_branch_details.target_branch_project_list_path)
+      FileUtils.mkdir_p(patch_branch_dir) unless File.directory?(patch_branch_dir)
+      FileUtils.cp(@options.project_list, patch_branch_details.target_branch_project_list_path)
+
+      build_html_reports(@projects, base_branch_details, patch_branch_details, nil, rules_changed)
     end
 
     def run_online_mode
@@ -53,9 +71,11 @@ module PmdTester
       project_list = determine_project_list_for_online_mode(baseline_path)
       get_projects(project_list)
 
+      rules_changed = true
       if @options.auto_config_flag
         logger.info 'Autogenerating a dynamic ruleset based on source changes'
-        return unless RuleSetBuilder.new(@options).build?
+        rules_changed = RuleSetBuilder.new(@options).build?
+        logger.debug "Rules have changed: #{rules_changed}"
       elsif @options.patch_config == Options::DEFAULT_CONFIG_PATH
         # patch branch build pmd reports with same configuration as base branch
         # if not specified otherwise. This allows to use a different config (e.g. less rules)
@@ -66,10 +86,15 @@ module PmdTester
         RuleSetBuilder.new(@options).calculate_filter_set if @options.filter_with_patch_config
       end
 
-      patch_branch_details = create_pmd_report(config: @options.patch_config, branch: @options.patch_branch)
+      patch_branch_details = create_pmd_report(config: @options.patch_config, branch: @options.patch_branch,
+                                               rules_changed: rules_changed)
+      # copy list of projects file to the patch baseline
+      patch_branch_dir = File.dirname(patch_branch_details.target_branch_project_list_path)
+      FileUtils.mkdir_p(patch_branch_dir) unless File.directory?(patch_branch_dir)
+      FileUtils.cp(project_list, patch_branch_details.target_branch_project_list_path)
 
       base_branch_details = PmdBranchDetail.load(@options.base_branch, logger)
-      build_html_reports(@projects, base_branch_details, patch_branch_details, @options.filter_set)
+      build_html_reports(@projects, base_branch_details, patch_branch_details, @options.filter_set, rules_changed)
     end
 
     def determine_project_list_for_online_mode(baseline_path)
@@ -101,6 +126,8 @@ module PmdTester
         Cmd.execute_successfully(unzip_cmd)
       end
 
+      make_baseline_compatible("#{target_path}/#{branch_filename}")
+
       "#{target_path}/#{branch_filename}"
     end
 
@@ -112,8 +139,11 @@ module PmdTester
       logger.info "Mode: #{@options.mode}"
 
       get_projects(@options.project_list) unless @options.nil?
-      patch_branch_details = create_pmd_report(config: @options.patch_config, branch: @options.patch_branch)
+      patch_branch_details = create_pmd_report(config: @options.patch_config, branch: @options.patch_branch,
+                                               rules_changed: true)
       # copy list of projects file to the patch baseline
+      patch_branch_dir = File.dirname(patch_branch_details.target_branch_project_list_path)
+      FileUtils.mkdir_p(patch_branch_dir) unless File.directory?(patch_branch_dir)
       FileUtils.cp(@options.project_list, patch_branch_details.target_branch_project_list_path)
 
       # for creating a baseline, no html report is needed
@@ -121,7 +151,7 @@ module PmdTester
 
       # in single mode, we don't have a base branch, only a patch branch...
       empty_base_branch_details = PmdBranchDetail.load('single-mode', logger)
-      build_html_reports(@projects, empty_base_branch_details, patch_branch_details)
+      build_html_reports(@projects, empty_base_branch_details, patch_branch_details, nil, true)
     end
 
     def get_projects(file_path)
@@ -129,32 +159,100 @@ module PmdTester
     end
 
     def summarize_diffs
-      error_total = RunningDiffCounters.new(0)
-      violations_total = RunningDiffCounters.new(0)
-      configerrors_total = RunningDiffCounters.new(0)
+      pmd_error_total = RunningDiffCounters.new(0)
+      pmd_violations_total = RunningDiffCounters.new(0)
+      pmd_configerrors_total = RunningDiffCounters.new(0)
+      cpd_error_total = RunningDiffCounters.new(0)
+      cpd_duplications_total = RunningDiffCounters.new(0)
 
       @projects.each do |project|
         diff = project.report_diff
+        cpd_diff = project.cpd_report_diff
 
         # in case we are in single mode, there might be no diffs (only the patch branch is available)
-        next if diff.nil?
-
-        error_total.merge!(diff.error_counts)
-        violations_total.merge!(diff.violation_counts)
-        configerrors_total.merge!(diff.configerror_counts)
+        # or if only pmd or only cpd is has been run
+        sum_pmd_counters(diff, pmd_error_total, pmd_violations_total, pmd_configerrors_total) unless diff.nil?
+        sum_cpd_counters(cpd_diff, cpd_error_total, cpd_duplications_total) unless cpd_diff.nil?
       end
 
       {
-        errors: error_total.to_h,
-        violations: violations_total.to_h,
-        configerrors: configerrors_total.to_h
+        pmd_errors: pmd_error_total.to_h,
+        pmd_violations: pmd_violations_total.to_h,
+        pmd_configerrors: pmd_configerrors_total.to_h,
+        cpd_errors: cpd_error_total.to_h,
+        cpd_duplications: cpd_duplications_total.to_h
       }
+    end
+
+    def self.create_message(base_branch, summary)
+      "Compared to #{base_branch}:\n" \
+        'This changeset ' \
+        "changes #{summary[:pmd_violations][:changed]} violations,\n" \
+        "introduces #{summary[:pmd_violations][:new]} new violations, " \
+        "#{summary[:pmd_errors][:new]} new errors and " \
+        "#{summary[:pmd_configerrors][:new]} new configuration errors,\n" \
+        "removes #{summary[:pmd_violations][:removed]} violations, " \
+        "#{summary[:pmd_errors][:removed]} errors and " \
+        "#{summary[:pmd_configerrors][:removed]} configuration errors.\n" \
+        "There are #{summary[:cpd_duplications][:changed]} changed duplications, " \
+        "#{summary[:cpd_duplications][:new]} new duplications and " \
+        "#{summary[:cpd_duplications][:removed]} removed duplications.\n" \
+        "There are #{summary[:cpd_errors][:changed]} changed CPD errors, " \
+        "#{summary[:cpd_errors][:new]} new CPD errors and " \
+        "#{summary[:cpd_errors][:removed]} removed CPD errors.\n"
+    end
+
+    def self.determine_conclusion(summary)
+      total_changes = summary[:pmd_violations][:changed] \
+        + summary[:pmd_violations][:new] \
+        + summary[:pmd_violations][:removed] \
+        + summary[:pmd_errors][:new] \
+        + summary[:pmd_configerrors][:new] \
+        + summary[:cpd_duplications][:changed] \
+        + summary[:cpd_duplications][:new] \
+        + summary[:cpd_duplications][:removed] \
+        + summary[:cpd_errors][:new]
+      if total_changes.positive?
+        'neutral'
+      else
+        'success'
+      end
     end
 
     private
 
-    def create_pmd_report(config:, branch:)
-      PmdReportBuilder.new(@projects, @options, config, branch).build
+    def sum_pmd_counters(diff, pmd_error_total, pmd_violations_total, pmd_configerrors_total)
+      pmd_error_total.merge!(diff.error_counts)
+      pmd_violations_total.merge!(diff.violation_counts)
+      pmd_configerrors_total.merge!(diff.configerror_counts)
+    end
+
+    def sum_cpd_counters(diff, cpd_error_total, cpd_duplications_total)
+      cpd_error_total.merge!(diff.error_counts)
+      cpd_duplications_total.merge!(diff.duplication_counts)
+    end
+
+    def create_pmd_report(config:, branch:, rules_changed:)
+      PmdReportBuilder.new(@projects, @options, config, branch, rules_changed).build
+    end
+
+    # for compatibility with old baselines, create empty CPD reports if they are missing in the baseline
+    # this allows to run the regression tester with baselines created with an old regression tester version
+    def make_baseline_compatible(branch_path)
+      Dir.each_child(branch_path) do |project_path|
+        next unless File.directory?("#{branch_path}/#{project_path}")
+
+        unless File.exist?("#{branch_path}/#{project_path}/cpd_report_info.json")
+          File.write("#{branch_path}/#{project_path}/cpd_report_info.json", '{}')
+        end
+        unless File.exist?("#{branch_path}/#{project_path}/cpd_report.xml")
+          FileUtils.touch("#{branch_path}/#{project_path}/cpd_report.xml")
+        end
+        unless File.exist?("#{branch_path}/#{project_path}/pmd_report_info.json")
+          FileUtils.cp("#{branch_path}/#{project_path}/report_info.json",
+                       "#{branch_path}/#{project_path}/pmd_report_info.json")
+        end
+      end
     end
   end
 end

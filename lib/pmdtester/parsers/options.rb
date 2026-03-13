@@ -5,6 +5,7 @@ require 'slop'
 module PmdTester
   class MissRequiredOptionError < StandardError; end
   class InvalidModeError < StandardError; end
+  class InvalidOptionError < StandardError; end
 
   # The Options is a class responsible of parsing all the
   # command line options
@@ -36,6 +37,8 @@ module PmdTester
     attr_reader :keep_reports
     attr_reader :error_recovery
     attr_reader :baseline_download_url_prefix
+    attr_reader :run_cpd
+    attr_reader :run_pmd
 
     def initialize(argv)
       options = parse(argv)
@@ -56,6 +59,8 @@ module PmdTester
       @keep_reports = options.keep_reports?
       @error_recovery = options.error_recovery?
       url = options[:baseline_download_url]
+      @run_cpd = !options.no_cpd?
+      @run_pmd = !options.no_pmd?
       @baseline_download_url_prefix = if url[-1] == '/'
                                         url
                                       else
@@ -116,6 +121,10 @@ module PmdTester
         o.string '--baseline-download-url',
                  'download url prefix from where to download the baseline in online mode',
                  default: DEFAULT_BASELINE_URL_PREFIX
+        o.bool '--no-cpd', 'do not execute CPD (Copy Paste Detector) and compare duplications; only execute PMD',
+               default: false
+        o.bool '--no-pmd', 'do not execute PMD and compare rule violations; only execute CPD (Copy Paste Detector)',
+               default: false
         o.on '-v', '--version' do
           puts VERSION
           exit
@@ -129,6 +138,7 @@ module PmdTester
 
     def check_options
       check_common_options
+      check_pmd_cpd_options
       case @mode
       when LOCAL
         check_local_options
@@ -162,6 +172,15 @@ module PmdTester
     def check_common_options
       check_option(ANY, 'local git repository path', @local_git_repo)
       check_option(ANY, 'patch branch name', @patch_branch)
+    end
+
+    def check_pmd_cpd_options
+      return unless !@run_pmd && !@run_cpd
+
+      msg = 'Both "--no-cpd" and "--no-pmd" are given. At least one of PMD and CPD must be executed. ' \
+            'Please check your options.'
+      logger.error msg
+      raise InvalidOptionError, msg
     end
 
     def check_option(mode, option_name, option)

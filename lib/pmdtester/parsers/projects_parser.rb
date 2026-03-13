@@ -17,7 +17,7 @@ module PmdTester
     end
 
     def schema_file_path
-      ResourceLocator.locate('config/projectlist_1_2_0.xsd')
+      ResourceLocator.locate('config/projectlist_1_3_0.xsd')
     end
   end
 
