@@ -35,8 +35,8 @@ module PmdTester
       status
     end
 
-    def self.execute_successfully(cmd, extra_java_home = nil)
-      stdout, stderr, status = internal_execute(cmd, extra_java_home, true)
+    def self.execute_successfully(cmd, extra_java_home = nil, debug_log_stdout: true)
+      stdout, stderr, status = internal_execute(cmd, extra_java_home, debug_log_stdout)
 
       unless status.success?
         logger.error "Command failed: #{cmd}"

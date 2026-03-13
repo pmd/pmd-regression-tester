@@ -69,7 +69,8 @@ module PmdTester
     private
 
     def get_start_time(jfr_recording)
-      stdout = Cmd.execute_successfully("jfr print --json --events jdk.JVMInformation #{jfr_recording}")
+      stdout = Cmd.execute_successfully("jfr print --json --events jdk.JVMInformation #{jfr_recording}",
+                                        nil, debug_log_stdout: false)
       jvm_info = JSON.parse(stdout, symbolize_names: true).dig(:recording, :events, 0, :values, :jvmStartTime)
       return Time.at(0) if jvm_info.nil?
 
@@ -77,7 +78,8 @@ module PmdTester
     end
 
     def get_end_time(jfr_recording)
-      stdout = Cmd.execute_successfully("jfr print --json --events jdk.Shutdown #{jfr_recording}")
+      stdout = Cmd.execute_successfully("jfr print --json --events jdk.Shutdown #{jfr_recording}",
+                                        nil, debug_log_stdout: false)
       shutdown_info = JSON.parse(stdout, symbolize_names: true).dig(:recording, :events, 0, :values, :startTime)
       return Time.at(0) if shutdown_info.nil?
 
@@ -85,7 +87,8 @@ module PmdTester
     end
 
     def get_gc_heap_summary(jfr_recording)
-      stdout = Cmd.execute_successfully("jfr print --json --events jdk.GCHeapSummary #{jfr_recording}")
+      stdout = Cmd.execute_successfully("jfr print --json --events jdk.GCHeapSummary #{jfr_recording}",
+                                        nil, debug_log_stdout: false)
       events = JSON.parse(stdout, symbolize_names: true).dig(:recording, :events)
       return [] if events.nil?
 
@@ -93,7 +96,8 @@ module PmdTester
     end
 
     def get_cpu_load(jfr_recording)
-      stdout = Cmd.execute_successfully("jfr print --json --events jdk.CPULoad #{jfr_recording}")
+      stdout = Cmd.execute_successfully("jfr print --json --events jdk.CPULoad #{jfr_recording}",
+                                        nil, debug_log_stdout: false)
       events = JSON.parse(stdout, symbolize_names: true).dig(:recording, :events)
       return [] if events.nil?
 

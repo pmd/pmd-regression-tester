@@ -185,11 +185,7 @@ module PmdTester
         status, stdout, stderr = Cmd.execute(cpd_cmd, debug_log_stdout: false)
         exit_code = status.exitstatus
       end
-      # NOTE: --report-file is only supported in PMD 7.14.0+. To support 7.0.0, we use stdout.
-      if [0, 4, 5].include?(exit_code)
-        File.write(project.get_cpd_report_path(@pmd_branch_name), stdout)
-        stdout = ''
-      end
+      stdout = filter_cpd_report_from_stdout(project, exit_code, stdout)
       end_time = Time.now
       [cpd_cmd, end_time - start_time, end_time, exit_code, stdout, stderr]
     end
@@ -235,6 +231,29 @@ module PmdTester
         "#{determine_run_path(command: 'cpd')} #{get_directories_option(project)} -f xml " \
         "--language #{project.cpd_options.language} --minimum-tokens #{project.cpd_options.minimum_tokens} " \
         '--skip-lexical-errors'
+    end
+
+    # NOTE: --report-file is only supported in PMD 7.14.0+. To support 7.0.0, we use stdout.
+    def filter_cpd_report_from_stdout(project, exit_code, stdout)
+      if [0, 4, 5].include?(exit_code)
+        # when running with JFR, there are logs from JFR at the beginning
+        # we want to remove those logs from the stdout, because they would break the XML parsing
+        cpd_report_started = false
+        cpd_report = ''
+        stdout_filtered = ''
+        stdout.lines.each do |line|
+          cpd_report_started = true if !cpd_report_started && line.start_with?('<?xml')
+
+          if cpd_report_started
+            cpd_report += line
+          else
+            stdout_filtered += line
+          end
+        end
+        File.write(project.get_cpd_report_path(@pmd_branch_name), cpd_report)
+        return stdout_filtered
+      end
+      stdout
     end
 
     def get_directories_option(project)
