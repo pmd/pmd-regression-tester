@@ -14,7 +14,8 @@ class TestCpdReportDiff < Test::Unit::TestCase
     base_report_path = 'test/resources/cpd_report_diff/cpd_report_base.xml'
     patch_report_path = 'test/resources/cpd_report_diff/cpd_report_patch.xml'
     diffs_report = build_cpd_report_diff(base_report_path, patch_report_path,
-                                         BASE_REPORT_INFO_PATH, PATCH_REPORT_INFO_PATH)
+                                         BASE_REPORT_INFO_PATH, PATCH_REPORT_INFO_PATH,
+                                         impl_changed: true)
 
     assert_counters_empty(diffs_report.error_counts)
     assert_equal(0, diffs_report.error_diffs.size)

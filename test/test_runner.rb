@@ -57,6 +57,7 @@ class TestRunner < Test::Unit::TestCase
                     end
                     .returns(report_builder_mock)
                     .once
+    report_builder_mock.stubs(:with_changes).with(true, true).returns(report_builder_mock)
     report_builder_mock.stubs(:build).returns(PmdBranchDetail.new('test_branch')).once
     FileUtils.expects(:cp).with(anything, anything).once
     Project.any_instance.stubs(:compute_report_diff).twice
@@ -89,6 +90,7 @@ class TestRunner < Test::Unit::TestCase
                     end
                     .returns(report_builder_mock)
                     .twice
+    report_builder_mock.stubs(:with_changes).with(true, true).returns(report_builder_mock)
     report_builder_mock.stubs(:build).returns(PmdBranchDetail.new('some_branch')).twice
     Project.any_instance.stubs(:compute_report_diff).twice
     SummaryReportBuilder.any_instance.stubs(:write_all_projects).once
@@ -101,20 +103,13 @@ class TestRunner < Test::Unit::TestCase
   end
 
   def test_online_mode
+    expect_download_baseline
+    expect_determine_impl_changed
+    expect_report_diff_files
     File.stubs(:directory?).with(anything).returns(true).at_least_once
-    FileUtils.stubs(:mkdir_p).with('target/reports').at_most_once
-    FileUtils.stubs(:mkdir_p).with('target/reports/diff').at_least_once
-    FileUtils.stubs(:copy_entry).with(anything, 'target/reports/diff/css')
-    FileUtils.stubs(:copy_entry).with(anything, 'target/reports/diff/js')
-    File.stubs(:new).with('target/reports/diff/index.html', anything).returns
     expect_summary_conclusion_is_written
 
-    Dir.stubs(:chdir).with('target/reports').yields
-    Cmd.stubs(:execute_successfully).with('wget --no-verbose --timestamping https://sourceforge.net/projects/pmd/files/pmd-regression-tester/main-baseline.zip')
-    Cmd.stubs(:execute_successfully).with('unzip -qo main-baseline.zip')
-    ProjectsParser.any_instance.stubs(:parse)
-                  .with('target/reports/main/project-list.xml')
-                  .returns([])
+    expect_parse_project_list
     Dir.stubs(:each_child).with('target/reports/main')
     FileUtils.stubs(:cp).with('target/reports/main/project-list.xml',
                               'target/reports/test_branch/project-list.xml')
@@ -126,17 +121,14 @@ class TestRunner < Test::Unit::TestCase
   end
 
   def test_online_mode_multithreading
+    expect_download_baseline
+    expect_determine_impl_changed
     File.stubs(:directory?).with(anything).returns(true).at_least_once
     Dir.stubs(:each_child).with('target/reports/main')
     FileUtils.stubs(:cp).with('target/reports/main/project-list.xml',
                               'target/reports/some_branch/project-list.xml')
-    FileUtils.stubs(:mkdir_p).with('target/reports').at_most_once
     expect_summary_conclusion_is_written
-    Dir.stubs(:chdir).with('target/reports').yields
-    Cmd.stubs(:execute_successfully).twice
-    ProjectsParser.any_instance.stubs(:parse)
-                  .with('target/reports/main/project-list.xml')
-                  .returns([])
+    expect_parse_project_list
 
     report_builder_mock = mock
     PmdReportBuilder.stubs(:new)
@@ -144,6 +136,7 @@ class TestRunner < Test::Unit::TestCase
                       options.threads == 3
                     end
                     .returns(report_builder_mock)
+    report_builder_mock.stubs(:with_changes).with(true, true).returns(report_builder_mock)
     report_builder_mock.stubs(:build).returns(PmdBranchDetail.new('some_branch'))
     SummaryReportBuilder.any_instance.stubs(:write_all_projects)
 
@@ -219,6 +212,32 @@ class TestRunner < Test::Unit::TestCase
   end
 
   private
+
+  def expect_report_diff_files
+    FileUtils.stubs(:mkdir_p).with('target/reports').at_most_once
+    FileUtils.stubs(:mkdir_p).with('target/reports/diff').at_least_once
+    FileUtils.stubs(:copy_entry).with(anything, 'target/reports/diff/css')
+    FileUtils.stubs(:copy_entry).with(anything, 'target/reports/diff/js')
+    File.stubs(:new).with('target/reports/diff/index.html', anything).returns
+  end
+
+  def expect_download_baseline
+    Dir.stubs(:chdir).with('target/reports').yields
+    Cmd.stubs(:execute_successfully).with('wget --no-verbose --timestamping https://sourceforge.net/projects/pmd/files/pmd-regression-tester/main-baseline.zip')
+    Cmd.stubs(:execute_successfully).with('unzip -qo main-baseline.zip')
+  end
+
+  def expect_parse_project_list
+    ProjectsParser.any_instance.stubs(:parse)
+                  .with('target/reports/main/project-list.xml')
+                  .returns([])
+  end
+
+  def expect_determine_impl_changed
+    return_value = 'pmd-core/src/main/SomeClass.java'
+    Dir.stubs(:chdir).with('target/repositories/pmd').yields
+    Cmd.stubs(:execute_successfully).with('git diff --name-only main..pmd_releases/6.7.0').returns(return_value)
+  end
 
   def expect_summary_conclusion_is_written
     File.stubs(:write).with('target/reports/diff/summary.txt', anything)

@@ -77,10 +77,12 @@ class TestProjectDiffReport < Test::Unit::TestCase
 
   def build_report_diffs(project)
     project.report_diff = build_report_diff(BASE_PMD_REPORT_PATH, PATCH_PMD_REPORT_PATH,
-                                            BASE_REPORT_INFO_PATH, PATCH_REPORT_INFO_PATH)
+                                            BASE_REPORT_INFO_PATH, PATCH_REPORT_INFO_PATH,
+                                            rules_changed: true)
 
     project.cpd_report_diff = build_cpd_report_diff(BASE_CPD_REPORT_PATH, PATCH_CPD_REPORT_PATH,
-                                                    BASE_CPD_REPORT_INFO_PATH, PATCH_CPD_REPORT_INFO_PATH)
+                                                    BASE_CPD_REPORT_INFO_PATH, PATCH_CPD_REPORT_INFO_PATH,
+                                                    impl_changed: true)
   end
 
   def assert_pmd_output(actual_report_path)
