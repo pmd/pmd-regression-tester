@@ -238,18 +238,11 @@ module PmdTester
       if [0, 4, 5].include?(exit_code)
         # when running with JFR, there are logs from JFR at the beginning
         # we want to remove those logs from the stdout, because they would break the XML parsing
-        cpd_report_started = false
-        cpd_report = ''
-        stdout_filtered = ''
-        stdout.lines.each do |line|
-          cpd_report_started = true if !cpd_report_started && line.start_with?('<?xml')
+        xml_start = stdout.index('<?xml')
+        return stdout if xml_start.nil?
 
-          if cpd_report_started
-            cpd_report += line
-          else
-            stdout_filtered += line
-          end
-        end
+        stdout_filtered = stdout[0, xml_start]
+        cpd_report = stdout[xml_start, stdout.length - xml_start]
         File.write(project.get_cpd_report_path(@pmd_branch_name), cpd_report)
         return stdout_filtered
       end
