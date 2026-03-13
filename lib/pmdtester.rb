@@ -19,6 +19,7 @@ require_relative 'pmdtester/report_diff'
 require_relative 'pmdtester/resource_locator'
 require_relative 'pmdtester/runner'
 require_relative 'pmdtester/semver'
+require_relative 'pmdtester/system_info'
 require_relative 'pmdtester/word_differ'
 
 require_relative 'pmdtester/builders/cpd_project_hasher'

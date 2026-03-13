@@ -85,6 +85,9 @@ module PmdTester
         'timestamp' => details.timestamp,
         'execution_time' => PmdReportDetail.convert_seconds(details.execution_time),
         'jdk_info' => details.jdk_version,
+        'cpu_info' => details.cpu_info,
+        'physical_memory' => details.physical_memory,
+        'os_info' => details.os_info,
         'locale' => details.language,
         'config_url' => config_name,
         'pr_number' => details.pull_request

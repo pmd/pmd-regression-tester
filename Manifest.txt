@@ -55,6 +55,7 @@ lib/pmdtester/report_diff.rb
 lib/pmdtester/resource_locator.rb
 lib/pmdtester/runner.rb
 lib/pmdtester/semver.rb
+lib/pmdtester/system_info.rb
 lib/pmdtester/word_differ.rb
 pmdtester.gemspec
 resources/_includes/diff_pill_row.html

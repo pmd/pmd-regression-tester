@@ -5,6 +5,9 @@
     "timestamp":"foo2",
     "execution_time":121.123,
     "jdk_version":"test version",
+    "cpu_info":"CPU 1 @ 2GHz (2 cores)",
+    "physical_memory":"4 GB",
+    "os_info":"Linux 1.0",
     "language":"test language",
     "pull_request":42
 }
