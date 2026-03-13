@@ -172,6 +172,7 @@ module PmdTester
         jfr_summary = JfrSummary.new.load("#{project.get_project_target_dir(@pmd_branch_name)}/cpd_recording.jfr")
         PmdReportDetail.create(execution_time: execution_time, timestamp: end_time,
                                cmdline: cpd_cmd, exit_code: exit_code, stdout: stdout, stderr: stderr,
+                               oom: stderr.include?('java.lang.OutOfMemoryError'),
                                report_info_path: project.get_cpd_report_info_path(@pmd_branch_name),
                                jfr_summary: jfr_summary)
         logger.info "#{project.name}'s CPD report was generated successfully (exit code: #{exit_code})"
