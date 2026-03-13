@@ -43,15 +43,13 @@ class ManualIntegrationTests < Test::Unit::TestCase
 
     print "#############################: test_case_1_single_java_rule_changed\n" \
           "#{@summary}\n#############################\n"
-    assert_equal(0, @summary[:violations][:changed], 'found changed violations')
-    assert_equal(0, @summary[:violations][:new], 'found new violations')
     # These are the artificially created false-negatives for AbstractClassWithoutAbstractMethod rule
     # checkstyle: 195 removed violations
     # spring-framework: 280 removed violations
     # openjdk11: 29 removed violations
     # java-regression-tests: 1 removed violation
-    # -> total = 505
-    assert_equal(195 + 280 + 29 + 1, @summary[:violations][:removed], 'found removed violations')
+    # -> total = 505 removed violations
+    assert_pmd_violations(new: 0, changed: 0, removed: 195 + 280 + 29 + 1)
 
     # errors might have been caused in the baseline for other rules (only visible in the stacktrace)
     # hence they might appear as removed
@@ -62,25 +60,37 @@ class ManualIntegrationTests < Test::Unit::TestCase
     # project "openjdk-11" has 0 errors removed or changed
     # project "spring-framework" has 10 errors removed (these are all sql files...) and 0 changed
     # project "java-regression-tests" has 0 errors removed or changed
-    assert_equal(2 + 2 + 1 + 10, @summary[:errors][:removed], 'found removed errors')
     # The stack overflow exception might vary in the beginning/end of the stack frames shown
     # This stack overflow error is from checkstyle's InputIndentationLongConcatenatedString.java
     # instead of assert_equal(0, @summary[:errors][:changed], 'found changed errors')
     # allow 0 or 1 changed errors
-    assert @summary[:errors][:changed] <= 1
-    assert_equal(0, @summary[:errors][:new], 'found new errors')
-    assert_equal(0, @summary[:configerrors][:changed], 'found changed configerrors')
-    assert_equal(0, @summary[:configerrors][:new], 'found new configerrors')
-    # each project has 1 config error removed (LoosePackageCoupling dysfunctional): in total 8 config errors removed
-    assert_equal(8, @summary[:configerrors][:removed], 'found removed configerrors')
+    assert_pmd_errors(new: 0, removed: 2 + 2 + 1 + 10, max_changed: 1)
 
-    assert_equal("This changeset changes 0 violations,\n" \
-                 "introduces 0 new violations, 0 new errors and 0 new configuration errors,\n" \
-                 'removes 505 violations, 15 errors and 8 configuration errors.',
-                 create_summary_message)
+    # each project has 1 config error removed (LoosePackageCoupling dysfunctional): in total 8 config errors removed
+    assert_pmd_config_errors(new: 0, removed: 8, changed: 0)
+
+    # CPD. Currently, the baseline has no cpd results, so all CPD duplications and errors are new.
+    # There are no removed or changed duplications or errors.
+    # Also, the baseline doesn't have specific cpd options, so only java projects are considered
+    # project "checkstyle": 1412 new duplications
+    # project "spring-framework": 532 new duplications
+    assert_cpd_duplications(new: 1412 + 532, removed: 0, changed: 0)
+    # project "checkstyle": 4 new CPD errors
+    assert_cpd_errors(new: 4, removed: 0, changed: 0)
+
+    expected_summary_message = "Compared to main:\nThis changeset changes 0 violations,\n" \
+                               "introduces 0 new violations, 0 new errors and 0 new configuration errors,\n" \
+                               "removes 505 violations, 15 errors and 8 configuration errors.\n" \
+                               "There are 0 changed duplications, 1944 new duplications and 0 removed duplications.\n" \
+                               "There are 0 changed CPD errors, 4 new CPD errors and 0 removed CPD errors.\n"
+    expected_conclusion = 'neutral'
+    assert_equal(expected_summary_message, create_summary_message)
+    assert_equal(expected_conclusion, determine_conclusion)
 
     assert_file_equals("#{PATCHES_PATH}/expected_patch_config_1.xml", 'target/reports/diff/patch_config.xml')
     assert_file_equals("#{PATCHES_PATH}/expected_patch_config_1.xml", 'target/reports/HEAD/config.xml')
+    assert_file_content_equals(expected_summary_message, 'target/reports/diff/summary.txt')
+    assert_file_content_equals(expected_conclusion, 'target/reports/diff/conclusion.txt')
   end
 
   # Test case 2: A single xpath rule is changed. Now only the rules of the same category should
@@ -93,10 +103,8 @@ class ManualIntegrationTests < Test::Unit::TestCase
 
     print "#############################: test_case_2_single_xpath_rule_changed\n" \
           "#{@summary}\n#############################\n"
-    assert_equal(0, @summary[:violations][:changed], 'found changed violations')
-    assert_equal(0, @summary[:violations][:new], 'found new violations')
     # There are 22 violations, that have been removed for AvoidMessageDigestField (project openjdk-11)
-    assert_equal(22, @summary[:violations][:removed], 'found removed violations')
+    assert_pmd_violations(new: 0, changed: 0, removed: 22)
 
     # errors might have been caused in the baseline for other rules (only visible in the stacktrace)
     # hence they might appear as removed
@@ -107,21 +115,29 @@ class ManualIntegrationTests < Test::Unit::TestCase
     # project "openjdk-11" has 0 errors removed or changed
     # project "spring-framework" has 10 errors removed (sql files) and 0 changed
     # each project has 1 config error removed (LoosePackageCoupling dysfunctional): in total 8 config errors removed
-    assert_equal(2 + 2 + 1 + 10, @summary[:errors][:removed], 'found removed errors')
     # The stack overflow exception might vary in the beginning/end of the stack frames shown
     # This stack overflow error is from checkstyle's InputIndentationLongConcatenatedString.java
     # instead of assert_equal(0, @summary[:errors][:changed], 'found changed errors')
     # allow 0 or 1 changed errors
-    assert @summary[:errors][:changed] <= 1
-    assert_equal(0, @summary[:errors][:new], 'found new errors')
-    assert_equal(0, @summary[:configerrors][:changed], 'found changed configerrors')
-    assert_equal(0, @summary[:configerrors][:new], 'found new configerrors')
-    assert_equal(8, @summary[:configerrors][:removed], 'found removed configerrors')
+    assert_pmd_errors(new: 0, removed: 2 + 2 + 1 + 10, max_changed: 1)
+    assert_pmd_config_errors(new: 0, removed: 8, changed: 0)
 
-    assert_equal("This changeset changes 0 violations,\n" \
+    # CPD. Currently, the baseline has no cpd results, so all CPD duplications and errors are new.
+    # There are no removed or changed duplications or errors.
+    # Also, the baseline doesn't have specific cpd options, so only java projects are considered
+    # project "checkstyle": 1412 new duplications
+    # project "spring-framework": 532 new duplications
+    assert_cpd_duplications(new: 1412 + 532, removed: 0, changed: 0)
+    # project "checkstyle": 4 new CPD errors
+    assert_cpd_errors(new: 4, removed: 0, changed: 0)
+
+    assert_equal("Compared to main:\nThis changeset changes 0 violations,\n" \
                  "introduces 0 new violations, 0 new errors and 0 new configuration errors,\n" \
-                 'removes 22 violations, 15 errors and 8 configuration errors.',
+                 "removes 22 violations, 15 errors and 8 configuration errors.\n" \
+                 "There are 0 changed duplications, 1944 new duplications and 0 removed duplications.\n" \
+                 "There are 0 changed CPD errors, 4 new CPD errors and 0 removed CPD errors.\n",
                  create_summary_message)
+    assert_equal('neutral', determine_conclusion)
 
     assert_file_equals("#{PATCHES_PATH}/expected_patch_config_2.xml", 'target/reports/diff/patch_config.xml')
     assert_file_equals("#{PATCHES_PATH}/expected_patch_config_2.xml", 'target/reports/HEAD/config.xml')
@@ -135,24 +151,30 @@ class ManualIntegrationTests < Test::Unit::TestCase
 
     print "#############################: test_case_3_change_in_core\n" \
           "#{@summary}\n#############################\n"
-    assert_equal(0, @summary[:violations][:changed], 'found changed violations')
-    assert_equal(0, @summary[:violations][:new], 'found new violations')
-    assert_equal(0, @summary[:violations][:removed], 'found removed violations')
-    assert_equal(0, @summary[:errors][:removed], 'found removed errors')
+    assert_pmd_violations(new: 0, changed: 0, removed: 0)
     # The stack overflow exception might vary in the beginning/end of the stack frames shown
     # This stack overflow error is from checkstyle's InputIndentationLongConcatenatedString.java
     # instead of assert_equal(0, @summary[:errors][:changed], 'found changed errors')
     # allow 0 or 1 changed errors
-    assert @summary[:errors][:changed] <= 1
-    assert_equal(0, @summary[:errors][:new], 'found new errors')
-    assert_equal(0, @summary[:configerrors][:changed], 'found changed configerrors')
-    assert_equal(0, @summary[:configerrors][:new], 'found new configerrors')
-    assert_equal(0, @summary[:configerrors][:removed], 'found removed configerrors')
+    assert_pmd_errors(new: 0, removed: 0, max_changed: 1)
+    assert_pmd_config_errors(new: 0, removed: 0, changed: 0)
 
-    assert_equal("This changeset changes 0 violations,\n" \
+    # CPD. Currently, the baseline has no cpd results, so all CPD duplications and errors are new.
+    # There are no removed or changed duplications or errors.
+    # Also, the baseline doesn't have specific cpd options, so only java projects are considered
+    # project "checkstyle": 1412 new duplications
+    # project "spring-framework": 532 new duplications
+    assert_cpd_duplications(new: 1412 + 532, removed: 0, changed: 0)
+    # project "checkstyle": 4 new CPD errors
+    assert_cpd_errors(new: 4, removed: 0, changed: 0)
+
+    assert_equal("Compared to main:\nThis changeset changes 0 violations,\n" \
                  "introduces 0 new violations, 0 new errors and 0 new configuration errors,\n" \
-                 'removes 0 violations, 0 errors and 0 configuration errors.',
+                 "removes 0 violations, 0 errors and 0 configuration errors.\n" \
+                 "There are 0 changed duplications, 1944 new duplications and 0 removed duplications.\n" \
+                 "There are 0 changed CPD errors, 4 new CPD errors and 0 removed CPD errors.\n",
                  create_summary_message)
+    assert_equal('neutral', determine_conclusion)
 
     assert_file_equals("#{PATCHES_PATH}/expected_patch_config_3.xml", 'target/reports/diff/patch_config.xml')
     assert_file_equals("#{PATCHES_PATH}/expected_patch_config_3.xml", 'target/reports/HEAD/config.xml')
@@ -166,18 +188,23 @@ class ManualIntegrationTests < Test::Unit::TestCase
 
     print "#############################: test_case_4_unrelated_change\n" \
           "#{@summary}\n#############################\n"
-    assert_equal(0, @summary[:violations][:changed], 'found changed violations')
-    assert_equal(0, @summary[:violations][:new], 'found new violations')
-    assert_equal(0, @summary[:violations][:removed], 'found removed violations')
-    assert_equal(0, @summary[:errors][:removed], 'found removed errors')
-    assert_equal(0, @summary[:errors][:changed], 'found changed errors')
-    assert_equal(0, @summary[:errors][:new], 'found new errors')
-    assert_equal(0, @summary[:configerrors][:changed], 'found changed configerrors')
-    assert_equal(0, @summary[:configerrors][:new], 'found new configerrors')
-    assert_equal(0, @summary[:configerrors][:removed], 'found removed configerrors')
+    # Since PMD has not been executed at all, there should be no changes
+    assert_pmd_violations(new: 0, changed: 0, removed: 0)
+    assert_pmd_errors(new: 0, removed: 0, max_changed: 0)
+    assert_pmd_config_errors(new: 0, removed: 0, changed: 0)
 
-    assert_path_not_exist('target/reports/diff/patch_config.xml')
+    # CPD is not executed either, as no java files have been changed
+    assert_cpd_duplications(new: 0, removed: 0, changed: 0)
+    assert_cpd_errors(new: 0, removed: 0, changed: 0)
+
+    assert_file_content_equals('No relevant source code has been changed, pmdtester skipped.',
+                               'target/reports/diff/summary.txt')
+    assert_file_content_equals('skipped', 'target/reports/diff/conclusion.txt')
+
+    assert_path_not_exist('target/reports/diff/index.html')
     assert_path_not_exist('target/reports/HEAD/config.xml')
+    assert_path_not_exist('target/reports/HEAD/checkstyle/pmd_report.xml')
+    assert_path_not_exist('target/reports/HEAD/checkstyle/cpd_report.xml')
   end
 
   def test_case_5_create_baseline
@@ -186,7 +213,9 @@ class ManualIntegrationTests < Test::Unit::TestCase
             '--local-git-repo', PMD_REPO_PATH,
             '--patch-branch', 'main',
             '--patch-config', "#{PMD_REPO_PATH}/.ci/files/all-regression-rules.xml",
-            '--list-of-project', "#{PMD_REPO_PATH}/.ci/files/project-list.xml",
+            # need to use a custom project list until it is updated upstream with cpd-options
+            # '--list-of-project', "#{PMD_REPO_PATH}/.ci/files/project-list.xml",
+            '--list-of-project', 'config/project-list-with-cpd.xml',
             '--html-flag',
             '--error-recovery',
             '--threads', Etc.nprocessors.to_s]
@@ -200,6 +229,10 @@ class ManualIntegrationTests < Test::Unit::TestCase
     print "#############################: test_case_5_create_baseline\n"
     assert_path_not_exist('target/reports/diff')
     assert_main_baseline
+
+    # create a zip file to see how big it is
+    `cd target/reports; zip -q -r "main-baseline.zip" "main/"`
+    print "Baseline zip file size is: #{File.size('target/reports/main-baseline.zip') / (1024 * 1024)} MB\n"
   end
 
   private
@@ -226,17 +259,14 @@ class ManualIntegrationTests < Test::Unit::TestCase
 
   #
   # This is the same message as in
-  # https://github.com/pmd/pmd/blob/main/Dangerfile
+  # https://github.com/pmd/pmd/blob/main/.ci/files/pmdtester.rb
   #
-  def create_summary_message
-    'This changeset ' \
-      "changes #{@summary[:violations][:changed]} violations,\n" \
-      "introduces #{@summary[:violations][:new]} new violations, " \
-      "#{@summary[:errors][:new]} new errors and " \
-      "#{@summary[:configerrors][:new]} new configuration errors,\n" \
-      "removes #{@summary[:violations][:removed]} violations, " \
-      "#{@summary[:errors][:removed]} errors and " \
-      "#{@summary[:configerrors][:removed]} configuration errors."
+  def create_summary_message(base_branch_name = 'main')
+    PmdTester::Runner.create_message(base_branch_name, @summary)
+  end
+
+  def determine_conclusion
+    PmdTester::Runner.determine_conclusion(@summary)
   end
 
   def checkout_pmd_branch(branch = 'main')
@@ -276,10 +306,45 @@ class ManualIntegrationTests < Test::Unit::TestCase
     assert_main_baseline_project('OracleDBUtils', 400 * 1024)
   end
 
-  def assert_main_baseline_project(project_name, report_size_in_bytes)
+  def assert_main_baseline_project(project_name, pmd_report_size_in_bytes)
     assert_path_exist("target/reports/main/#{project_name}/config.xml")
-    assert_path_exist("target/reports/main/#{project_name}/report_info.json")
+    assert_path_exist("target/reports/main/#{project_name}/pmd_report_info.json")
     assert_path_exist("target/reports/main/#{project_name}/pmd_report.xml")
-    assert(File.size("target/reports/main/#{project_name}/pmd_report.xml") > report_size_in_bytes)
+    assert(File.size("target/reports/main/#{project_name}/pmd_report.xml") > pmd_report_size_in_bytes)
+    assert_path_exist("target/reports/main/#{project_name}/pmd_recording.jfr")
+    assert_path_exist("target/reports/main/#{project_name}/cpd_report_info.json")
+    assert_path_exist("target/reports/main/#{project_name}/cpd_report.xml")
+    assert(File.size("target/reports/main/#{project_name}/cpd_report.xml") > 10)
+    assert_path_exist("target/reports/main/#{project_name}/cpd_recording.jfr")
+  end
+
+  def assert_pmd_violations(new:, removed:, changed:)
+    assert_equal(changed, @summary[:pmd_violations][:changed], 'found changed violations')
+    assert_equal(new, @summary[:pmd_violations][:new], 'found new violations')
+    assert_equal(removed, @summary[:pmd_violations][:removed], 'found removed violations')
+  end
+
+  def assert_pmd_errors(new:, removed:, max_changed:)
+    assert @summary[:pmd_errors][:changed] <= max_changed, 'found changed errors'
+    assert_equal(new, @summary[:pmd_errors][:new], 'found new errors')
+    assert_equal(removed, @summary[:pmd_errors][:removed], 'found removed errors')
+  end
+
+  def assert_pmd_config_errors(new:, removed:, changed:)
+    assert_equal(changed, @summary[:pmd_configerrors][:changed], 'found changed configerrors')
+    assert_equal(new, @summary[:pmd_configerrors][:new], 'found new configerrors')
+    assert_equal(removed, @summary[:pmd_configerrors][:removed], 'found removed configerrors')
+  end
+
+  def assert_cpd_duplications(new:, removed:, changed:)
+    assert_equal(changed, @summary[:cpd_duplications][:changed], 'found changed duplications')
+    assert_equal(new, @summary[:cpd_duplications][:new], 'found new duplications')
+    assert_equal(removed, @summary[:cpd_duplications][:removed], 'found removed duplications')
+  end
+
+  def assert_cpd_errors(new:, removed:, changed:)
+    assert_equal(changed, @summary[:cpd_errors][:changed], 'found changed CPD errors')
+    assert_equal(new, @summary[:cpd_errors][:new], 'found new CPD errors')
+    assert_equal(removed, @summary[:cpd_errors][:removed], 'found removed CPD errors')
   end
 end

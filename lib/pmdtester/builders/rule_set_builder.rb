@@ -23,6 +23,7 @@ module PmdTester
     # Returns false, when no rules are affected and regression tester can be skipped.
     #
     def build?
+      logger.info 'Autogenerating a dynamic ruleset based on source changes'
       languages = determine_languages
       filenames = diff_filenames(languages)
       all_rules_hash = determine_all_rules
@@ -34,6 +35,7 @@ module PmdTester
       else
         logger.info NO_RULES_CHANGED_MESSAGE
       end
+      logger.debug "Rules have changed: #{run_required}"
       run_required
     end
 

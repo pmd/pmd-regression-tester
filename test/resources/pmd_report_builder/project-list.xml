@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <projectlist xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xsi:noNamespaceSchemaLocation="projectlist_1_2_0.xsd">
+xsi:noNamespaceSchemaLocation="projectlist_1_3_0.xsd">
   <description>Standard Projects</description>
 
   <project>
@@ -13,5 +13,14 @@ xsi:noNamespaceSchemaLocation="projectlist_1_2_0.xsd">
     <exclude-pattern>.*/target/test-classes/com/puppycrawl/tools/checkstyle/.*</exclude-pattern>
     <exclude-pattern>.*/target/generated-sources/.*</exclude-pattern>
     <exclude-pattern>.*/src/test/resources-noncompilable/com/puppycrawl/tools/checkstyle/javaparser/InputJavaParserNoFreezeOnDeeplyNestedLambdas.java</exclude-pattern>
+
+    <cpd-options>
+      <minimum-tokens>50</minimum-tokens>
+      <max-memory>256m</max-memory>
+      <directories>
+        <directory>src/main/java</directory>
+        <directory>src/test/java</directory>
+      </directories>
+    </cpd-options>
   </project>
 </projectlist>

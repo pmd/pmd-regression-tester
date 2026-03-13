@@ -39,6 +39,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
 
     PmdTester::PmdReportBuilder
       .new(projects, options, options.base_config, options.base_branch)
+      .with_changes(true, true)
       .build
   end
 
@@ -68,6 +69,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
 
     PmdTester::PmdReportBuilder
       .new(projects, options, options.base_config, options.base_branch)
+      .with_changes(true, true)
       .build
   end
 
@@ -94,6 +96,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
 
     PmdTester::PmdReportBuilder
       .new(projects, options, options.base_config, options.base_branch)
+      .with_changes(true, true)
       .build
   end
 
@@ -118,6 +121,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
 
     PmdTester::PmdReportBuilder
       .new(projects, options, options.base_config, options.base_branch)
+      .with_changes(true, true)
       .build
   end
 
@@ -142,6 +146,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
 
     PmdTester::PmdReportBuilder
       .new(projects, options, options.base_config, options.base_branch)
+      .with_changes(true, true)
       .build
   end
 
@@ -167,10 +172,56 @@ class TestPmdReportBuilder < Test::Unit::TestCase
 
     PmdTester::PmdReportBuilder
       .new(projects, options, options.base_config, options.base_branch)
+      .with_changes(true, true)
       .build
   end
 
-  def test_build_with_projects
+  def test_build_with_projects_pmd_only
+    project_list = 'test/resources/pmd_report_builder/project-list.xml'
+    projects = PmdTester::ProjectsParser.new.parse(project_list)
+    assert_equal(1, projects.size)
+    argv = %w[-r target/repositories/pmd -b main -p pmd_releases/6.1.0
+              -c config/design.xml --debug --no-cpd -l]
+    argv.push project_list
+    options = PmdTester::Options.new(argv)
+
+    projects[0].auxclasspath = 'extra:dirs'
+    record_expectations(sha1_head: 'sha1abc', sha1_base: 'sha1abc', zip_file_exists: true)
+    record_expectations_after_build
+    record_expectations_projects_clone_and_build
+    record_expectations_project_build(sha1: 'sha1abc')
+
+    PmdTester::PmdReportBuilder
+      .new(projects, options, options.base_config, options.base_branch)
+      .with_changes(true, true)
+      .build
+
+    assert_pmd_rule_config
+  end
+
+  def test_build_with_projects_cpd_only
+    @pmd_version = '7.0.0'
+    sha1 = 'sha1abc'
+    project_list = 'test/resources/pmd_report_builder/project-list.xml'
+    projects = PmdTester::ProjectsParser.new.parse(project_list)
+    assert_equal(1, projects.size)
+    argv = %w[-r target/repositories/pmd -b main -p pmd_releases/6.1.0
+              -c config/design.xml --debug --no-pmd -l]
+    argv.push project_list
+    options = PmdTester::Options.new(argv)
+
+    projects[0].auxclasspath = 'extra:dirs'
+    record_expectations(sha1_head: sha1, sha1_base: sha1, zip_file_exists: true)
+    record_expectations_after_build_cpd
+    record_expectations_projects_clone_and_build
+    record_expectations_project_build_cpd(sha1: sha1, max_memory: '256m', minimum_tokens: 50)
+
+    run_report_builder(projects: projects, options: options, sha1: sha1)
+  end
+
+  def test_build_with_projects_pmd_and_cpd
+    @pmd_version = '7.0.0'
+    sha1 = 'sha1abc'
     project_list = 'test/resources/pmd_report_builder/project-list.xml'
     projects = PmdTester::ProjectsParser.new.parse(project_list)
     assert_equal(1, projects.size)
@@ -180,17 +231,39 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     options = PmdTester::Options.new(argv)
 
     projects[0].auxclasspath = 'extra:dirs'
-    record_expectations(sha1_head: 'sha1abc', sha1_base: 'sha1abc', zip_file_exists: true)
+    record_expectations(sha1_head: sha1, sha1_base: sha1, zip_file_exists: true)
     record_expectations_after_build
-    record_expectations_project_build(sha1: 'sha1abc')
+    record_expectations_projects_clone_and_build
+    record_expectations_project_build(sha1: sha1, no_progress_bar: true, pmd7: true)
+    record_expectations_project_build_cpd(sha1: sha1, max_memory: '256m', minimum_tokens: 50)
 
-    PmdTester::PmdReportBuilder
-      .new(projects, options, options.base_config, options.base_branch)
-      .build
+    run_report_builder(projects: projects, options: options, sha1: sha1)
 
-    expected = File.read('test/resources/pmd_report_builder/expected-config.xml')
-    actual = File.read('target/reports/main/checkstyle/config.xml')
-    assert_equal(expected, actual)
+    assert_pmd_rule_config
+  end
+
+  def test_build_with_projects_pmd_and_cpd_apex
+    @pmd_version = '7.0.0'
+    sha1 = 'sha1abc'
+    project_list = 'test/resources/pmd_report_builder/project-list-apex.xml'
+    projects = PmdTester::ProjectsParser.new.parse(project_list)
+    assert_equal(1, projects.size)
+    argv = %w[-r target/repositories/pmd -b main -p pmd_releases/6.1.0
+              -c config/design.xml --debug -l]
+    argv.push project_list
+    options = PmdTester::Options.new(argv)
+
+    projects[0].auxclasspath = 'extra:dirs'
+    record_expectations(sha1_head: sha1, sha1_base: sha1, zip_file_exists: true)
+    record_expectations_after_build
+    record_expectations_projects_clone_and_build
+    record_expectations_project_build(sha1: sha1, no_progress_bar: true, pmd7: true,
+                                      project_name: 'Schedul-o-matic-9000')
+    record_expectations_project_build_cpd(sha1: sha1, cpd_language: 'apex', project_name: 'Schedul-o-matic-9000')
+
+    run_report_builder(projects: projects, options: options, sha1: sha1)
+
+    assert_pmd_rule_config
   end
 
   def test_build_error_recovery
@@ -198,17 +271,19 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     projects = PmdTester::ProjectsParser.new.parse(project_list)
     assert_equal(1, projects.size)
     argv = %w[-r target/repositories/pmd -b main -p pmd_releases/6.1.0
-              -c config/design.xml --debug --error-recovery -l]
+              -c config/design.xml --debug --error-recovery --no-cpd -l]
     argv.push project_list
     options = PmdTester::Options.new(argv)
 
     projects[0].auxclasspath = 'extra:dirs'
     record_expectations(sha1_head: 'sha1abc', sha1_base: 'sha1abc', zip_file_exists: true)
     record_expectations_after_build
+    record_expectations_projects_clone_and_build
     record_expectations_project_build(sha1: 'sha1abc', error: true)
 
     PmdTester::PmdReportBuilder
       .new(projects, options, options.base_config, options.base_branch)
+      .with_changes(true, true)
       .build
   end
 
@@ -218,17 +293,19 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     projects = PmdTester::ProjectsParser.new.parse(project_list)
     assert_equal(1, projects.size)
     argv = %w[-r target/repositories/pmd -b main -p pmd_releases/6.1.0
-              -c config/design.xml --debug --error-recovery -l]
+              -c config/design.xml --debug --error-recovery --no-cpd -l]
     argv.push project_list
     options = PmdTester::Options.new(argv)
 
     projects[0].auxclasspath = 'extra:dirs'
     record_expectations(sha1_head: 'sha1abc', sha1_base: 'sha1abc', zip_file_exists: true)
     record_expectations_after_build
+    record_expectations_projects_clone_and_build
     record_expectations_project_build(sha1: 'sha1abc', error: true, long_cli_options: true)
 
     PmdTester::PmdReportBuilder
       .new(projects, options, options.base_config, options.base_branch)
+      .with_changes(true, true)
       .build
   end
 
@@ -239,24 +316,18 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     projects = PmdTester::ProjectsParser.new.parse(project_list)
     assert_equal(1, projects.size)
     argv = %w[-r target/repositories/pmd -b main -p pmd_releases/6.1.0
-              -c config/design.xml --debug --error-recovery -l]
+              -c config/design.xml --debug --error-recovery --no-cpd -l]
     argv.push project_list
     options = PmdTester::Options.new(argv)
 
     projects[0].auxclasspath = 'extra:dirs'
     record_expectations(sha1_head: sha1, sha1_base: sha1, zip_file_exists: true)
     record_expectations_after_build
+    record_expectations_projects_clone_and_build
     record_expectations_project_build(sha1: sha1, error: true, long_cli_options: true,
                                       no_progress_bar: true, pmd7: true)
 
-    pmd_cli_cmd = prepare_pmd_dist_dir(version: @pmd_version, sha1: sha1)
-    begin
-      PmdTester::PmdReportBuilder
-        .new(projects, options, options.base_config, options.base_branch)
-        .build
-    ensure
-      cleanup_pmd_dist_dir(base_dir: pmd_cli_cmd)
-    end
+    run_report_builder(projects: projects, options: options, sha1: sha1)
   end
 
   #
@@ -268,21 +339,35 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     projects = PmdTester::ProjectsParser.new.parse(project_list)
     assert_equal(1, projects.size)
     argv = %w[-r target/repositories/pmd -b main -p pmd_releases/6.1.0
-              -c config/design.xml --debug --error-recovery -l]
+              -c config/design.xml --debug --error-recovery --no-cpd -l]
     argv.push project_list
     options = PmdTester::Options.new(argv)
 
     projects[0].auxclasspath = 'extra:dirs'
     record_expectations(sha1_head: 'sha1abc', sha1_base: 'sha1abc', zip_file_exists: true)
     record_expectations_after_build
+    record_expectations_projects_clone_and_build
     record_expectations_project_build(sha1: 'sha1abc', error: true, exit_status: 1)
 
     PmdTester::PmdReportBuilder
       .new(projects, options, options.base_config, options.base_branch)
+      .with_changes(true, true)
       .build
   end
 
   private
+
+  def run_report_builder(projects:, options:, sha1:)
+    pmd_cli_cmd = prepare_pmd_dist_dir(version: @pmd_version, sha1: sha1)
+    begin
+      PmdTester::PmdReportBuilder
+        .new(projects, options, options.base_config, options.base_branch)
+        .with_changes(true, true)
+        .build
+    ensure
+      cleanup_pmd_dist_dir(base_dir: pmd_cli_cmd)
+    end
+  end
 
   def determine_cli_cmd_and_options(pmd7:, long_cli_options:)
     if pmd7
@@ -297,30 +382,63 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     [base_cmd, fail_on_violation, auxclasspath_option]
   end
 
-  def record_expectations_project_build(sha1:, error: false, long_cli_options: false,
-                                        no_progress_bar: false, exit_status: 0, pmd7: false)
-    base_cmd, fail_on_violation, auxclasspath_option = determine_cli_cmd_and_options(pmd7: pmd7,
-                                                                                     long_cli_options: long_cli_options)
+  def record_expectations_projects_clone_and_build
     PmdTester::ProjectBuilder.any_instance.stubs(:clone_projects).once
     PmdTester::ProjectBuilder.any_instance.stubs(:build_projects).once
+  end
+
+  def record_expectations_project_build(sha1:, error: false, long_cli_options: false,
+                                        no_progress_bar: false, exit_status: 0, pmd7: false,
+                                        project_name: 'checkstyle')
+    base_cmd, fail_on_violation, auxclasspath_option = determine_cli_cmd_and_options(pmd7: pmd7,
+                                                                                     long_cli_options: long_cli_options)
     PmdTester::SimpleProgressLogger.any_instance.stubs(:start).once
     PmdTester::SimpleProgressLogger.any_instance.stubs(:stop).once
-    error_prefix = error ? 'PMD_JAVA_OPTS="-Dpmd.error_recovery -ea" ' : ''
+    java_opts = "PMD_JAVA_OPTS=\"-XX:StartFlightRecording:filename=target/reports/main/#{project_name}/" \
+                "pmd_recording.jfr,settings=config/custom.jfc,dumponexit=true#{' -Dpmd.error_recovery -ea' if error}\""
     distro_path = "#{Dir.getwd}/target/pmd-bin-#{@pmd_version}-main-#{sha1}"
     process_status = mock
     process_status.expects(:exitstatus).returns(exit_status).once
-    PmdTester::Cmd.stubs(:execute)
-                  .with("#{error_prefix}" \
-                        "#{distro_path}/bin/#{base_cmd} " \
-                        '-d target/repositories/checkstyle -f xml ' \
-                        '-R target/reports/main/checkstyle/config.xml ' \
-                        '-r target/reports/main/checkstyle/pmd_report.xml ' \
-                        "#{fail_on_violation} -t 1 #{auxclasspath_option}" \
-                        "#{' --no-progress' if no_progress_bar}",
-                        'target/reports/main/checkstyle').once
-                  .returns(process_status)
-                  .once
-    PmdTester::PmdReportDetail.stubs(:create).once.with { |params| params[:exit_code] == exit_status }
+    cmd_line = "#{java_opts} #{distro_path}/bin/#{base_cmd} " \
+               "-d target/repositories/#{project_name} -f xml " \
+               "-R target/reports/main/#{project_name}/config.xml " \
+               "-r target/reports/main/#{project_name}/pmd_report.xml " \
+               "#{fail_on_violation} -t 1 #{auxclasspath_option}" \
+               "#{' --no-progress' if no_progress_bar}"
+    PmdTester::Cmd.stubs(:execute).with(cmd_line)
+                  .returns([process_status, 'stdout output', 'stderr output'])
+    PmdTester::JfrSummary.any_instance.stubs(:load).with("target/reports/main/#{project_name}/pmd_recording.jfr")
+    PmdTester::PmdReportDetail.stubs(:create).once.with do |params|
+      params[:cmdline] == cmd_line && params[:exit_code] == exit_status \
+      && params[:stdout] == 'stdout output' && params[:stderr] == 'stderr output'
+    end
+  end
+
+  def record_expectations_project_build_cpd(sha1:, error: false, exit_status: 0,
+                                            cpd_language: 'java', project_name: 'checkstyle',
+                                            max_memory: '5g', minimum_tokens: 150)
+    PmdTester::SimpleProgressLogger.any_instance.stubs(:start).once
+    PmdTester::SimpleProgressLogger.any_instance.stubs(:stop).once
+    java_opts = "PMD_JAVA_OPTS=\"-Xmx#{max_memory} -XX:StartFlightRecording:filename=" \
+                "target/reports/main/#{project_name}/cpd_recording.jfr,settings=config/custom.jfc," \
+                "dumponexit=true#{' -Dpmd.error_recovery -ea' if error}\""
+    distro_path = "#{Dir.getwd}/target/pmd-bin-#{@pmd_version}-main-#{sha1}"
+    process_status = mock
+    process_status.expects(:exitstatus).returns(exit_status).once
+    cmd_line = "#{java_opts} #{distro_path}/bin/pmd cpd " \
+               "-d target/repositories/#{project_name}/src/main/java " \
+               "-d target/repositories/#{project_name}/src/test/java " \
+               "-f xml --language #{cpd_language} " \
+               "--minimum-tokens #{minimum_tokens} " \
+               '--skip-lexical-errors'
+    PmdTester::Cmd.stubs(:execute).with(cmd_line, debug_log_stdout: false)
+                  .returns([process_status, "stdout output\n<?xml...", 'stderr output'])
+    File.stubs(:write).with("target/reports/main/#{project_name}/cpd_report.xml", '<?xml...').once
+    PmdTester::JfrSummary.any_instance.stubs(:load).with("target/reports/main/#{project_name}/cpd_recording.jfr")
+    PmdTester::PmdReportDetail.stubs(:create).once.with do |params|
+      params[:cmdline] == cmd_line && params[:exit_code] == exit_status \
+      && params[:stdout] == "stdout output\n" && params[:stderr] == 'stderr output' \
+    end
   end
 
   def record_expectations(sha1_head:, sha1_base:, zip_file_exists:)
@@ -350,6 +468,11 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     PmdTester::Cmd.stubs(:execute_successfully).with('git log -1 --pretty=%B').returns('the commit message').once
     PmdTester::PmdBranchDetail.any_instance.stubs(:save).once
     FileUtils.stubs(:cp).with('config/design.xml', 'target/reports/main/config.xml').once
+  end
+
+  def record_expectations_after_build_cpd
+    PmdTester::Cmd.stubs(:execute_successfully).with('git log -1 --pretty=%B').returns('the commit message').once
+    PmdTester::PmdBranchDetail.any_instance.stubs(:save).once
   end
 
   # Creates a fake pmd script file as .../bin/pmd.
@@ -398,5 +521,11 @@ class TestPmdReportBuilder < Test::Unit::TestCase
         false
       end
     end.once
+  end
+
+  def assert_pmd_rule_config
+    expected = File.read('test/resources/pmd_report_builder/expected-config.xml')
+    actual = File.read('target/reports/main/checkstyle/config.xml')
+    assert_equal(expected, actual)
   end
 end

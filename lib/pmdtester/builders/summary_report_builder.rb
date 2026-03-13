@@ -6,6 +6,7 @@ module PmdTester
     include PmdTester
     include LiquidRenderer
     include ProjectHasher
+    include CpdProjectHasher
 
     REPORT_DIR = 'target/reports/diff'
     BASE_CONFIG_NAME = 'base_config.xml'
@@ -52,7 +53,8 @@ module PmdTester
           'name' => p.name,
           'tag' => p.tag,
           'report_url' => "./#{p.name}/index.html",
-          **report_diff_to_h(p.report_diff)
+          'pmd_report' => report_diff_to_h(p.report_diff),
+          'cpd_report' => cpd_report_diff_to_h(p.cpd_report_diff)
         }
       end
 
@@ -83,6 +85,9 @@ module PmdTester
         'timestamp' => details.timestamp,
         'execution_time' => PmdReportDetail.convert_seconds(details.execution_time),
         'jdk_info' => details.jdk_version,
+        'cpu_info' => details.cpu_info,
+        'physical_memory' => details.physical_memory,
+        'os_info' => details.os_info,
         'locale' => details.language,
         'config_url' => config_name,
         'pr_number' => details.pull_request

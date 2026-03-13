@@ -14,7 +14,7 @@
     <script src="../js/datatables.min.js"></script>
     <script src="../js/code-snippets.js"></script>
     <!-- This is generated -->
-    <script src="./patch_data.js"></script>
+    <script src="./patch_pmd_data.js"></script>
 
 </head>
 <body>
@@ -55,11 +55,26 @@
             </tr>
             <tr>
                 <td class="item">Exit Code</td>
-                <td class="patch">1 <a href="patch_stdout.txt">stdout</a> | <a href="patch_stderr.txt">stderr</a></td>
+                <td class="patch">1 <a href="patch_pmd_stdout.txt">stdout</a> | <a href="patch_pmd_stderr.txt">stderr</a></td>
             </tr>
             <tr>
                 <td class="item">Full Report</td>
                 <td class="patch"><a href="patch_pmd_report.xml">patch_pmd_report.xml</a></td>
+            </tr>
+            <tr>
+                <td class="item">JFR Recording</td>
+                <td class="patch"><a href="patch_pmd_recording.jfr">patch_pmd_recording.jfr</a></td>
+            </tr>
+            <tr>
+                <td class="item">JFR Details</td>
+                <td class="patch">
+                    <details><summary>Details</summary>
+                    Execution Time: 00:02:01<br>
+                    Max Heap Memory: 512 MB<br>
+                    Max CPU Load: 85%<br>
+                    Avg CPU Load: 70%<br>
+                    </details>
+                </td>
             </tr>
             </tbody>
         </table>
@@ -234,6 +249,7 @@ Was expecting one of:
                     <td>LoosePackageCoupling</td>
                     <td>No packages or classes specified</td>
                 </tr>
+                
                 <tr class="configerror-row">
                     <td>NewRule</td>
                     <td>Property method_name not defined</td>
