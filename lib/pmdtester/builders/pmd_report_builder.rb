@@ -9,7 +9,7 @@ module PmdTester
   class PmdReportBuilder
     include PmdTester
 
-    def initialize(projects, options, branch_config, branch_name, rules_changed)
+    def initialize(projects, options, branch_config, branch_name)
       @projects = projects
       @local_git_repo = options.local_git_repo
       @threads = options.threads
@@ -20,8 +20,14 @@ module PmdTester
 
       @pmd_branch_details = PmdBranchDetail.new(@pmd_branch_name)
       @project_builder = ProjectBuilder.new(@projects)
-      @run_pmd = options.run_pmd && rules_changed
+      @run_pmd = options.run_pmd
       @run_cpd = options.run_cpd
+    end
+
+    def with_changes(rules_changed, impl_changed)
+      @run_pmd &&= rules_changed
+      @run_cpd &&= impl_changed
+      self
     end
 
     def create_pmd_package

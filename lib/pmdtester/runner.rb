@@ -41,26 +41,25 @@ module PmdTester
       get_projects(@options.project_list) unless @options.nil?
 
       rules_changed = true
-      if @options.auto_config_flag
-        rules_changed = RuleSetBuilder.new(@options).build?
-        logger.debug "Rules have changed: #{rules_changed}"
-      end
+      rules_changed = RuleSetBuilder.new(@options).build? if @options.auto_config_flag
+      impl_changed = determine_impl_changed?
 
       base_branch_details = create_pmd_report(config: @options.base_config, branch: @options.base_branch,
-                                              rules_changed: rules_changed)
+                                              rules_changed: rules_changed, impl_changed: impl_changed)
       # copy list of projects file to the base baseline
       base_branch_dir = File.dirname(base_branch_details.target_branch_project_list_path)
       FileUtils.mkdir_p(base_branch_dir) unless File.directory?(base_branch_dir)
       FileUtils.cp(@options.project_list, base_branch_details.target_branch_project_list_path)
 
       patch_branch_details = create_pmd_report(config: @options.patch_config, branch: @options.patch_branch,
-                                               rules_changed: rules_changed)
+                                               rules_changed: rules_changed, impl_changed: impl_changed)
       # copy list of projects file to the patch baseline
       patch_branch_dir = File.dirname(patch_branch_details.target_branch_project_list_path)
       FileUtils.mkdir_p(patch_branch_dir) unless File.directory?(patch_branch_dir)
       FileUtils.cp(@options.project_list, patch_branch_details.target_branch_project_list_path)
 
-      build_html_reports(@projects, base_branch_details, patch_branch_details, nil, rules_changed)
+      build_html_reports(@projects, base_branch_details, patch_branch_details, nil,
+                         rules_changed: rules_changed, impl_changed: impl_changed)
     end
 
     def run_online_mode
@@ -73,9 +72,7 @@ module PmdTester
 
       rules_changed = true
       if @options.auto_config_flag
-        logger.info 'Autogenerating a dynamic ruleset based on source changes'
         rules_changed = RuleSetBuilder.new(@options).build?
-        logger.debug "Rules have changed: #{rules_changed}"
       elsif @options.patch_config == Options::DEFAULT_CONFIG_PATH
         # patch branch build pmd reports with same configuration as base branch
         # if not specified otherwise. This allows to use a different config (e.g. less rules)
@@ -85,16 +82,18 @@ module PmdTester
         logger.info "Using config #{@options.patch_config} which might differ from baseline"
         RuleSetBuilder.new(@options).calculate_filter_set if @options.filter_with_patch_config
       end
+      impl_changed = determine_impl_changed?
 
       patch_branch_details = create_pmd_report(config: @options.patch_config, branch: @options.patch_branch,
-                                               rules_changed: rules_changed)
+                                               rules_changed: rules_changed, impl_changed: impl_changed)
       # copy list of projects file to the patch baseline
       patch_branch_dir = File.dirname(patch_branch_details.target_branch_project_list_path)
       FileUtils.mkdir_p(patch_branch_dir) unless File.directory?(patch_branch_dir)
       FileUtils.cp(project_list, patch_branch_details.target_branch_project_list_path)
 
       base_branch_details = PmdBranchDetail.load(@options.base_branch, logger)
-      build_html_reports(@projects, base_branch_details, patch_branch_details, @options.filter_set, rules_changed)
+      build_html_reports(@projects, base_branch_details, patch_branch_details, @options.filter_set,
+                         rules_changed: rules_changed, impl_changed: impl_changed)
     end
 
     def determine_project_list_for_online_mode(baseline_path)
@@ -140,7 +139,7 @@ module PmdTester
 
       get_projects(@options.project_list) unless @options.nil?
       patch_branch_details = create_pmd_report(config: @options.patch_config, branch: @options.patch_branch,
-                                               rules_changed: true)
+                                               rules_changed: true, impl_changed: true)
       # copy list of projects file to the patch baseline
       patch_branch_dir = File.dirname(patch_branch_details.target_branch_project_list_path)
       FileUtils.mkdir_p(patch_branch_dir) unless File.directory?(patch_branch_dir)
@@ -151,7 +150,8 @@ module PmdTester
 
       # in single mode, we don't have a base branch, only a patch branch...
       empty_base_branch_details = PmdBranchDetail.load('single-mode', logger)
-      build_html_reports(@projects, empty_base_branch_details, patch_branch_details, nil, true)
+      build_html_reports(@projects, empty_base_branch_details, patch_branch_details, nil,
+                         rules_changed: true, impl_changed: true)
     end
 
     def get_projects(file_path)
@@ -232,8 +232,10 @@ module PmdTester
       cpd_duplications_total.merge!(diff.duplication_counts)
     end
 
-    def create_pmd_report(config:, branch:, rules_changed:)
-      PmdReportBuilder.new(@projects, @options, config, branch, rules_changed).build
+    def create_pmd_report(config:, branch:, rules_changed:, impl_changed:)
+      PmdReportBuilder.new(@projects, @options, config, branch)
+                      .with_changes(rules_changed, impl_changed)
+                      .build
     end
 
     # for compatibility with old baselines, create empty CPD reports if they are missing in the baseline
@@ -267,6 +269,21 @@ module PmdTester
       report_info = JSON.parse(File.read("#{path}/#{prefix}_report_info.json"))
       report_info['jfr_summary'] = { 'recording_path' => recording_path }
       File.write("#{path}/#{prefix}_report_info.json", JSON.pretty_generate(report_info))
+    end
+
+    def determine_impl_changed?
+      filenames = nil
+      Dir.chdir(@options.local_git_repo) do
+        base = @options.base_branch
+        patch = @options.patch_branch
+
+        # We only need to support git here, since PMD's repo is using git.
+        diff_cmd = "git diff --name-only #{base}..#{patch}"
+        filenames = Cmd.execute_successfully(diff_cmd)
+      end
+      result = filenames.split("\n").any? { |filename| filename.include?('/src/main/') }
+      logger.debug "PMD impl changed: #{result}"
+      result
     end
   end
 end

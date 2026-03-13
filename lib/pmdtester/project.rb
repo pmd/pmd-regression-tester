@@ -138,7 +138,7 @@ module PmdTester
       dir
     end
 
-    def compute_report_diff(base_branch, patch_branch, filter_set, rules_changed)
+    def compute_report_diff(base_branch, patch_branch, filter_set, rules_changed:, impl_changed:)
       self.report_diff = build_report_diff(get_pmd_report_path(base_branch),
                                            get_pmd_report_path(patch_branch),
                                            get_report_info_path(base_branch),
@@ -151,7 +151,8 @@ module PmdTester
       self.cpd_report_diff = build_cpd_report_diff(get_cpd_report_path(base_branch),
                                                    get_cpd_report_path(patch_branch),
                                                    get_cpd_report_info_path(base_branch),
-                                                   get_cpd_report_info_path(patch_branch))
+                                                   get_cpd_report_info_path(patch_branch),
+                                                   impl_changed: impl_changed)
     end
 
     # Containts Cpd specific options from project-list.xml

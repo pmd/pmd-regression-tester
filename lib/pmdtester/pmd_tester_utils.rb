@@ -38,12 +38,16 @@ module PmdTester
 
     # Parse the base and the patch CPD report, compute their diff
     # Returns a +CpdReportDiff+
-    def build_cpd_report_diff(base_report_file, patch_report_file, base_info, patch_info)
+    def build_cpd_report_diff(base_report_file, patch_report_file, base_info, patch_info, impl_changed:)
       base_details = PmdReportDetail.load(base_info)
-      patch_details = PmdReportDetail.load(patch_info)
-
       base_report = parse_cpd_report(base_report_file, BASE, base_details)
-      patch_report = parse_cpd_report(patch_report_file, PATCH, patch_details)
+
+      if impl_changed
+        patch_details = PmdReportDetail.load(patch_info)
+        patch_report = parse_cpd_report(patch_report_file, PATCH, patch_details)
+      else
+        patch_report = base_report
+      end
 
       logger.info 'Calculating CPD diffs'
       CpdReportDiff.new(base_report: base_report, patch_report: patch_report)
@@ -60,18 +64,20 @@ module PmdTester
     end
 
     # Fill the report_diff field of every project
-    def compute_project_diffs(projects, base_branch, patch_branch, filter_set, rules_changed)
+    def compute_project_diffs(projects, base_branch, patch_branch, filter_set, rules_changed:, impl_changed:)
       projects.each do |project|
         logger.info "Preparing report for #{project.name}"
         logger.info "  with filter #{filter_set}" unless filter_set.nil?
-        project.compute_report_diff(base_branch, patch_branch, filter_set, rules_changed)
+        project.compute_report_diff(base_branch, patch_branch, filter_set,
+                                    rules_changed: rules_changed, impl_changed: impl_changed)
       end
     end
 
     # Build the diff reports and write them all
-    def build_html_reports(projects, base_branch_details, patch_branch_details, filter_set, rules_changed)
+    def build_html_reports(projects, base_branch_details, patch_branch_details, filter_set,
+                           rules_changed:, impl_changed:)
       compute_project_diffs(projects, base_branch_details.branch_name, patch_branch_details.branch_name,
-                            filter_set, rules_changed)
+                            filter_set, rules_changed: rules_changed, impl_changed: impl_changed)
 
       SummaryReportBuilder.new.write_all_projects(projects,
                                                   base_branch_details,

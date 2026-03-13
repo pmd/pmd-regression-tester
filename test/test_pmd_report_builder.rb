@@ -38,7 +38,8 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     record_expectations_after_build
 
     PmdTester::PmdReportBuilder
-      .new(projects, options, options.base_config, options.base_branch, true)
+      .new(projects, options, options.base_config, options.base_branch)
+      .with_changes(true, true)
       .build
   end
 
@@ -67,7 +68,8 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     record_expectations_after_build
 
     PmdTester::PmdReportBuilder
-      .new(projects, options, options.base_config, options.base_branch, true)
+      .new(projects, options, options.base_config, options.base_branch)
+      .with_changes(true, true)
       .build
   end
 
@@ -93,7 +95,8 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     record_expectations_after_build
 
     PmdTester::PmdReportBuilder
-      .new(projects, options, options.base_config, options.base_branch, true)
+      .new(projects, options, options.base_config, options.base_branch)
+      .with_changes(true, true)
       .build
   end
 
@@ -117,7 +120,8 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     record_expectations_after_build
 
     PmdTester::PmdReportBuilder
-      .new(projects, options, options.base_config, options.base_branch, true)
+      .new(projects, options, options.base_config, options.base_branch)
+      .with_changes(true, true)
       .build
   end
 
@@ -141,7 +145,8 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     record_expectations_after_build
 
     PmdTester::PmdReportBuilder
-      .new(projects, options, options.base_config, options.base_branch, true)
+      .new(projects, options, options.base_config, options.base_branch)
+      .with_changes(true, true)
       .build
   end
 
@@ -166,7 +171,8 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     record_expectations_after_build
 
     PmdTester::PmdReportBuilder
-      .new(projects, options, options.base_config, options.base_branch, true)
+      .new(projects, options, options.base_config, options.base_branch)
+      .with_changes(true, true)
       .build
   end
 
@@ -186,7 +192,8 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     record_expectations_project_build(sha1: 'sha1abc')
 
     PmdTester::PmdReportBuilder
-      .new(projects, options, options.base_config, options.base_branch, true)
+      .new(projects, options, options.base_config, options.base_branch)
+      .with_changes(true, true)
       .build
 
     assert_pmd_rule_config
@@ -275,7 +282,8 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     record_expectations_project_build(sha1: 'sha1abc', error: true)
 
     PmdTester::PmdReportBuilder
-      .new(projects, options, options.base_config, options.base_branch, true)
+      .new(projects, options, options.base_config, options.base_branch)
+      .with_changes(true, true)
       .build
   end
 
@@ -296,7 +304,8 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     record_expectations_project_build(sha1: 'sha1abc', error: true, long_cli_options: true)
 
     PmdTester::PmdReportBuilder
-      .new(projects, options, options.base_config, options.base_branch, true)
+      .new(projects, options, options.base_config, options.base_branch)
+      .with_changes(true, true)
       .build
   end
 
@@ -341,7 +350,8 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     record_expectations_project_build(sha1: 'sha1abc', error: true, exit_status: 1)
 
     PmdTester::PmdReportBuilder
-      .new(projects, options, options.base_config, options.base_branch, true)
+      .new(projects, options, options.base_config, options.base_branch)
+      .with_changes(true, true)
       .build
   end
 
@@ -351,7 +361,8 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     pmd_cli_cmd = prepare_pmd_dist_dir(version: @pmd_version, sha1: sha1)
     begin
       PmdTester::PmdReportBuilder
-        .new(projects, options, options.base_config, options.base_branch, true)
+        .new(projects, options, options.base_config, options.base_branch)
+        .with_changes(true, true)
         .build
     ensure
       cleanup_pmd_dist_dir(base_dir: pmd_cli_cmd)
