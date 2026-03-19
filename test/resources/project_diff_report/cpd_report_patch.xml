@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd-cpd xmlns="https://pmd-code.org/schema/cpd-report"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         pmdVersion="7.3.0"
+         timestamp="2024-06-23T09:00:00+02:00"
+         version="1.0.0"
+         xsi:schemaLocation="https://pmd-code.org/schema/cpd-report https://pmd.github.io/schema/cpd-report_1_0_0.xsd">
+   <file path="SHOULD_BE_REPLACED/pmd-core/src/test/java/net/sourceforge/pmd/RuleReferenceTest.java" totalNumberOfTokens="523"/>
+   <file path="SHOULD_BE_REPLACED/pmd-core/src/test/java/net/sourceforge/pmd/lang/rule/xpath/JaxenXPathRuleQueryTest.java" totalNumberOfTokens="120"/>
+   <!-- Unchanged duplication - same in base and patch -->
+   <duplication lines="10" tokens="100">
+      <file column="1" endcolumn="10" endline="10" line="1" begintoken="1" endtoken="100"
+            path="SHOULD_BE_REPLACED/UnchangedDuplicationFirstOccurrence.java"/>
+      <file column="1" endcolumn="10" endline="10" line="1" begintoken="1" endtoken="100"
+            path="SHOULD_BE_REPLACED/UnchangedDuplicationSecondOccurrence.java"/>
+      <codefragment><![CDATA[public class UnchangedDuplication {]]></codefragment>
+   </duplication>
+   <!-- Changed duplication - same files, but different lines/tokens -->
+   <duplication lines="30" tokens="230">
+      <file column="29" endcolumn="75" endline="61" line="32" begintoken="2356" endtoken="2594"
+            path="SHOULD_BE_REPLACED/pmd-core/src/test/java/net/sourceforge/pmd/RuleReferenceTest.java"/>
+      <file column="37" endcolumn="75" endline="97" line="68" begintoken="5700" endtoken="5938"
+            path="SHOULD_BE_REPLACED/pmd-core/src/test/java/net/sourceforge/pmd/RuleReferenceTest.java"/>
+      <codefragment><![CDATA[changed duplication]]></codefragment>
+   </duplication>
+   <!-- New duplication - this exists only in patch and not in base -->
+   <duplication lines="16" tokens="110">
+      <file column="9" endcolumn="28" endline="81" line="66" begintoken="3000" endtoken="3109"
+            path="SHOULD_BE_REPLACED/pmd-core/src/test/java/net/sourceforge/pmd/lang/rule/xpath/JaxenXPathRuleQueryTest2.java"/>
+      <file column="9" endcolumn="28" endline="103" line="88" begintoken="3200" endtoken="3309"
+            path="SHOULD_BE_REPLACED/pmd-core/src/test/java/net/sourceforge/pmd/lang/rule/xpath/JaxenXPathRuleQueryTest2.java"/>
+      <codefragment><![CDATA[new duplication]]></codefragment>
+   </duplication>
+   <!-- Different to base: stacktrace changed JavaParserImplTokenManager.java: (JavaParserImplTokenManager.java:2698) -> (JavaParserImplTokenManager.java:2699) -->
+   <error filename="SHOULD_BE_REPLACED/pmd-cli/src/test/resources/net/sourceforge/pmd/cli/cpd/badandgood/BadFile.java"
+          msg="LexException: Lexical error in file 'SHOULD_BE_REPLACED/pmd-cli/src/test/resources/net/sourceforge/pmd/cli/cpd/badandgood/BadFile.java' at line 4, column 14: &#34;\ufffd&#34; (65533), after : &#34;&#34; (in lexical state DEFAULT)">net.sourceforge.pmd.lang.ast.LexException: Lexical error in file 'SHOULD_BE_REPLACED/pmd-cli/src/test/resources/net/sourceforge/pmd/cli/cpd/badandgood/BadFile.java' at line 4, column 14: "\ufffd" (65533), after : "" (in lexical state DEFAULT)
+        at net.sourceforge.pmd.lang.ast.InternalApiBridge.newLexException(InternalApiBridge.java:25)
+        at net.sourceforge.pmd.lang.java.ast.JavaParserImplTokenManager.getNextToken(JavaParserImplTokenManager.java:2699)
+        at net.sourceforge.pmd.lang.java.ast.JavaParserImplTokenManager.getNextToken(JavaParserImplTokenManager.java:18)
+        at net.sourceforge.pmd.cpd.impl.BaseTokenFilter.getNextToken(BaseTokenFilter.java:44)
+        at net.sourceforge.pmd.cpd.impl.CpdLexerBase.tokenize(CpdLexerBase.java:40)
+        at net.sourceforge.pmd.cpd.CpdLexer.tokenize(CpdLexer.java:29)
+        at net.sourceforge.pmd.cpd.CpdAnalysis.doTokenize(CpdAnalysis.java:146)
+        at net.sourceforge.pmd.cpd.CpdAnalysis.performAnalysis(CpdAnalysis.java:173)
+        at net.sourceforge.pmd.cli.commands.internal.CpdCommand.doExecute(CpdCommand.java:134)
+        at net.sourceforge.pmd.cli.commands.internal.CpdCommand.doExecute(CpdCommand.java:29)
+        at net.sourceforge.pmd.cli.internal.PmdRootLogger.executeInLoggingContext(PmdRootLogger.java:55)
+        at net.sourceforge.pmd.cli.commands.internal.AbstractAnalysisPmdSubcommand.execute(AbstractAnalysisPmdSubcommand.java:111)
+        at net.sourceforge.pmd.cli.commands.internal.AbstractPmdSubcommand.call(AbstractPmdSubcommand.java:30)
+        at net.sourceforge.pmd.cli.commands.internal.AbstractPmdSubcommand.call(AbstractPmdSubcommand.java:16)
+        at picocli.CommandLine.executeUserObject(CommandLine.java:2041)
+        at picocli.CommandLine.access$1500(CommandLine.java:148)
+        at picocli.CommandLine$RunLast.executeUserObjectOfLastSubcommandWithSameParent(CommandLine.java:2461)
+        at picocli.CommandLine$RunLast.handle(CommandLine.java:2453)
+        at picocli.CommandLine$RunLast.handle(CommandLine.java:2415)
+        at picocli.CommandLine$AbstractParseResultHandler.execute(CommandLine.java:2273)
+        at picocli.CommandLine$RunLast.execute(CommandLine.java:2417)
+        at picocli.CommandLine.execute(CommandLine.java:2170)
+        at net.sourceforge.pmd.cli.PmdCli.main(PmdCli.java:24)
+   </error>
+</pmd-cpd>

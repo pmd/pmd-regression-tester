@@ -10,9 +10,8 @@ xsi:noNamespaceSchemaLocation="projectlist_1_2_0.xsd">
     <connection>https://github.com/checkstyle/checkstyle</connection>
     <tag>checkstyle-9.1</tag>
 
-    <exclude-pattern>.*/target/test-classes/com/puppycrawl/tools/checkstyle/.*</exclude-pattern>
-    <exclude-pattern>.*/target/generated-sources/.*</exclude-pattern>
-    <exclude-pattern>.*/src/test/resources-noncompilable/com/puppycrawl/tools/checkstyle/javaparser/InputJavaParserNoFreezeOnDeeplyNestedLambdas.java</exclude-pattern>
+    <!-- this avoids analyzing src/test/resources-noncompilable ... -->
+    <src-subpath>src/main/java</src-subpath>
 
     <build-command><![CDATA[#!/usr/bin/env bash
 if test -e classpath.txt; then
@@ -36,6 +35,9 @@ mvn dependency:build-classpath -DincludeScope=test -Dmdep.outputFile=classpath.t
     <name>pmd</name>
     <type>git</type>
     <connection>https://github.com/pmd/pmd</connection>
-    <tag>pmd_releases/6.41.0</tag> <!-- this is already the correct checkout to speed up repeated integration tests -->
+    <tag>pmd_releases/7.0.0</tag> <!-- this is already the correct checkout to speed up repeated integration tests -->
+
+    <!-- just take a subset of pmd, to make the test faster -->
+    <src-subpath>pmd-core/src/main/java</src-subpath>
   </project>
 </projectlist>

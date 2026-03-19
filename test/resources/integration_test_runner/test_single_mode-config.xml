@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+
+<ruleset name="Not all Java Rules" 
+    xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 https://pmd.sourceforge.io/ruleset_2_0_0.xsd">
+    <description>Not every Java Rule in PMD, so that the test is a bit faster</description>
+
+    <rule ref="category/java/bestpractices.xml/AbstractClassWithoutAbstractMethod" />
+    <rule ref="category/java/errorprone.xml/AssignmentInOperand" />
+
+</ruleset>

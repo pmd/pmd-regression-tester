@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+
+<projectlist xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:noNamespaceSchemaLocation="projectlist_1_3_0.xsd">
+  <description>Standard Projects</description>
+
+  <project>
+    <name>Schedul-o-matic-9000</name>
+    <type>git</type>
+    <connection>https://github.com/SalesforceLabs/Schedul-o-matic-9000</connection>
+    <tag>6b1229ba43b38931fbbab5924bc9b9611d19a786</tag>
+
+    <cpd-options>
+      <language>apex</language>
+      <directories>
+        <directory>src/main/java</directory>
+        <directory>src/test/java</directory>
+      </directories>
+    </cpd-options>
+  </project>
+</projectlist>
