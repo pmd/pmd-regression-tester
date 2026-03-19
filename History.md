@@ -34,6 +34,7 @@ With this version, Ruby 4 or higher is required.
 * [#167](https://github.com/pmd/pmd-regression-tester/pull/167): Bump actions/create-github-app-token from 2.0.6 to 2.2.1
 * [#173](https://github.com/pmd/pmd-regression-tester/pull/173): Bump actions/create-github-app-token from 2.2.1 to 3.0.0
 * [#174](https://github.com/pmd/pmd-regression-tester/pull/174): Bump actions/cache from 5.0.3 to 5.0.4
+* [#175](https://github.com/pmd/pmd-regression-tester/pull/175): Bump ruby/setup-ruby from 1.292.0 to 1.295.0
 
 # 1.6.2 / 2025-10-24
 ## Fixed Issues
