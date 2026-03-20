@@ -387,6 +387,11 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     PmdTester::ProjectBuilder.any_instance.stubs(:build_projects).once
   end
 
+  def jfr_parameters(project_name:, prefix:)
+    "-XX:StartFlightRecording:filename=target/reports/main/#{project_name}/#{prefix}_recording.jfr," \
+      "settings=#{PmdTester::ResourceLocator.locate('config/custom.jfc')},dumponexit=true"
+  end
+
   def record_expectations_project_build(sha1:, error: false, long_cli_options: false,
                                         no_progress_bar: false, exit_status: 0, pmd7: false,
                                         project_name: 'checkstyle')
@@ -394,8 +399,8 @@ class TestPmdReportBuilder < Test::Unit::TestCase
                                                                                      long_cli_options: long_cli_options)
     PmdTester::SimpleProgressLogger.any_instance.stubs(:start).once
     PmdTester::SimpleProgressLogger.any_instance.stubs(:stop).once
-    java_opts = "PMD_JAVA_OPTS=\"-XX:StartFlightRecording:filename=target/reports/main/#{project_name}/" \
-                "pmd_recording.jfr,settings=config/custom.jfc,dumponexit=true#{' -Dpmd.error_recovery -ea' if error}\""
+    java_opts = "PMD_JAVA_OPTS=\"#{jfr_parameters(project_name: project_name, prefix: 'pmd')}" \
+                "#{' -Dpmd.error_recovery -ea' if error}\""
     distro_path = "#{Dir.getwd}/target/pmd-bin-#{@pmd_version}-main-#{sha1}"
     process_status = mock
     process_status.expects(:exitstatus).returns(exit_status).once
@@ -419,9 +424,8 @@ class TestPmdReportBuilder < Test::Unit::TestCase
                                             max_memory: '5g', minimum_tokens: 150)
     PmdTester::SimpleProgressLogger.any_instance.stubs(:start).once
     PmdTester::SimpleProgressLogger.any_instance.stubs(:stop).once
-    java_opts = "PMD_JAVA_OPTS=\"-Xmx#{max_memory} -XX:StartFlightRecording:filename=" \
-                "target/reports/main/#{project_name}/cpd_recording.jfr,settings=config/custom.jfc," \
-                "dumponexit=true#{' -Dpmd.error_recovery -ea' if error}\""
+    java_opts = "PMD_JAVA_OPTS=\"-Xmx#{max_memory} #{jfr_parameters(project_name: project_name, prefix: 'cpd')}" \
+                "#{' -Dpmd.error_recovery -ea' if error}\""
     distro_path = "#{Dir.getwd}/target/pmd-bin-#{@pmd_version}-main-#{sha1}"
     process_status = mock
     process_status.expects(:exitstatus).returns(exit_status).once

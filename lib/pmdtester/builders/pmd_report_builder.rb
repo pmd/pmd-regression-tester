@@ -215,7 +215,7 @@ module PmdTester
       error_recovery_options = @error_recovery ? ' -Dpmd.error_recovery -ea' : ''
       java_opts = 'PMD_JAVA_OPTS="-XX:StartFlightRecording:' \
                   "filename=#{project.get_project_target_dir(@pmd_branch_name)}/pmd_recording.jfr," \
-                  'settings=config/custom.jfc,dumponexit=true' \
+                  "settings=#{ResourceLocator.locate('config/custom.jfc')},dumponexit=true" \
                   "#{error_recovery_options}\" "
       fail_on_violation = create_failonviolation_option
       auxclasspath_option = create_auxclasspath_option(project)
@@ -232,7 +232,7 @@ module PmdTester
       error_recovery_options = @error_recovery ? ' -Dpmd.error_recovery -ea' : ''
       java_opts = "PMD_JAVA_OPTS=\"-Xmx#{project.cpd_options.max_memory} -XX:StartFlightRecording:" \
                   "filename=#{project.get_project_target_dir(@pmd_branch_name)}/cpd_recording.jfr," \
-                  'settings=config/custom.jfc,dumponexit=true' \
+                  "settings=#{ResourceLocator.locate('config/custom.jfc')},dumponexit=true" \
                   "#{error_recovery_options}\" "
       "#{java_opts}" \
         "#{determine_run_path(command: 'cpd')} #{get_directories_option(project)} -f xml " \
