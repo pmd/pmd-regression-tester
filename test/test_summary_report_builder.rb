@@ -21,7 +21,7 @@ class TestSummaryReportBuilder < Test::Unit::TestCase
     FileUtils.cp("#{test_resources_path}/empty_config.xml", "#{base_path}/config.xml")
 
     branch = PmdTester::PmdBranchDetail.load('base_branch', nil)
-    build_html_reports(projects, branch, branch, nil, true)
+    build_html_reports(projects, branch, branch, nil, rules_changed: true, impl_changed: true)
 
     assert_file_equals('test/resources/summary_report_builder/expected_index.html',
                        'target/reports/diff/index.html')
@@ -46,7 +46,8 @@ class TestSummaryReportBuilder < Test::Unit::TestCase
 
     branch = PmdTester::PmdBranchDetail.load('base_branch', nil)
     patch = PmdTester::PmdBranchDetail.load('patch_branch', nil)
-    build_html_reports(projects, branch, patch, Set['java/bestpractices.xml/AbstractClassWithoutAbstractMethod'], true)
+    build_html_reports(projects, branch, patch, Set['java/bestpractices.xml/AbstractClassWithoutAbstractMethod'],
+                       rules_changed: true, impl_changed: true)
 
     assert_file_equals('test/resources/summary_report_builder/expected_filtered_index.html',
                        'target/reports/diff/index.html')
@@ -60,21 +61,14 @@ class TestSummaryReportBuilder < Test::Unit::TestCase
     projects = PmdTester::ProjectsParser.new.parse("#{test_resources_path}/project-list.xml")
 
     base_path = 'target/reports/base_branch'
-    FileUtils.mkdir_p(base_path)
-    FileUtils.cp("#{test_resources_path}/base_branch_info.json", "#{base_path}/branch_info.json")
-    FileUtils.cp("#{test_resources_path}/empty_config.xml", "#{base_path}/config.xml")
-    FileUtils.mkdir_p("#{base_path}/sample_project")
-    FileUtils.cp("#{test_resources_path}/base_pmd_report.xml", "#{base_path}/sample_project/pmd_report.xml")
+    expect_report_files_base(test_resources_path, base_path)
 
     patch_path = 'target/reports/patch_branch'
-    FileUtils.mkdir_p(patch_path)
-    FileUtils.cp("#{test_resources_path}/patch_branch_info.json", "#{patch_path}/branch_info.json")
-    FileUtils.cp("#{test_resources_path}/empty_config.xml", "#{patch_path}/config.xml")
-    FileUtils.mkdir_p("#{patch_path}/sample_project")
-    FileUtils.cp("#{test_resources_path}/patch_pmd_report.xml", "#{patch_path}/sample_project/pmd_report.xml")
+    expect_report_files_patch(test_resources_path, patch_path)
 
     build_html_reports(projects, PmdTester::PmdBranchDetail.load('base_branch', nil),
-                       PmdTester::PmdBranchDetail.load('patch_branch', nil), nil, true)
+                       PmdTester::PmdBranchDetail.load('patch_branch', nil), nil,
+                       rules_changed: true, impl_changed: true)
 
     assert_file_equals("#{test_resources_path}/expected_base_pmd_data.js",
                        'target/reports/diff/sample_project/base_pmd_data.js')
@@ -82,5 +76,23 @@ class TestSummaryReportBuilder < Test::Unit::TestCase
                        'target/reports/diff/sample_project/patch_pmd_data.js')
     assert_file_equals("#{test_resources_path}/expected_diff_pmd_data.js",
                        'target/reports/diff/sample_project/diff_pmd_data.js')
+  end
+
+  private
+
+  def expect_report_files_base(test_resources_path, base_path)
+    FileUtils.mkdir_p(base_path)
+    FileUtils.cp("#{test_resources_path}/base_branch_info.json", "#{base_path}/branch_info.json")
+    FileUtils.cp("#{test_resources_path}/empty_config.xml", "#{base_path}/config.xml")
+    FileUtils.mkdir_p("#{base_path}/sample_project")
+    FileUtils.cp("#{test_resources_path}/base_pmd_report.xml", "#{base_path}/sample_project/pmd_report.xml")
+  end
+
+  def expect_report_files_patch(test_resources_path, patch_path)
+    FileUtils.mkdir_p(patch_path)
+    FileUtils.cp("#{test_resources_path}/patch_branch_info.json", "#{patch_path}/branch_info.json")
+    FileUtils.cp("#{test_resources_path}/empty_config.xml", "#{patch_path}/config.xml")
+    FileUtils.mkdir_p("#{patch_path}/sample_project")
+    FileUtils.cp("#{test_resources_path}/patch_pmd_report.xml", "#{patch_path}/sample_project/pmd_report.xml")
   end
 end

@@ -36,14 +36,17 @@ class IntegrationTestPmdReportBuilder < Test::Unit::TestCase
     options = PmdTester::Options.new(argv)
     projects = ProjectsParser.new.parse(options.project_list)
 
-    builder = PmdReportBuilder.new(projects, options, options.config, options.patch_branch, true)
+    builder = PmdReportBuilder.new(projects, options, options.config, options.patch_branch)
+    builder.with_changes(true, true)
     builder.build
 
     assert_equal(0, $CHILD_STATUS.exitstatus)
     assert_path_exist('target/reports/main/checkstyle/pmd_report.xml')
     assert_path_exist('target/reports/main/checkstyle/pmd_report_info.json')
+    assert_path_exist('target/reports/main/checkstyle/pmd_recording.jfr')
     assert_path_exist('target/reports/main/checkstyle/cpd_report.xml')
     assert_path_exist('target/reports/main/checkstyle/cpd_report_info.json')
+    assert_path_exist('target/reports/main/checkstyle/cpd_recording.jfr')
   end
 
   private

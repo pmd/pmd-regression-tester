@@ -1,0 +1,17 @@
+{
+  "recording": {
+    "events": [{
+      "type": "jdk.JVMInformation", 
+      "values": {
+        "startTime": "2026-03-06T12:17:07.949858429+01:00", 
+        "jvmName": "OpenJDK 64-Bit Server VM", 
+        "jvmVersion": "OpenJDK 64-Bit Server VM (21.0.9+10-LTS) for linux-amd64 JRE (21.0.9+10-LTS), built on 2025-10-21T00:00:00Z by \"admin\" with gcc 11.3.0", 
+        "jvmArguments": "-Xmx4g -XX:StartFlightRecording:filename=target\/reports\/main\/checkstyle\/cpd_recording.jfr,settings=config\/custom.jfc,dumponexit=true -Dpmd.error_recovery -ea", 
+        "jvmFlags": null, 
+        "javaArguments": "net.sourceforge.pmd.cli.PmdCli cpd -d target\/repositories\/checkstyle\/src\/main\/java -d target\/repositories\/checkstyle\/src\/test\/java -f xml --language java --minimum-tokens 50 --skip-lexical-errors", 
+        "jvmStartTime": "2026-03-06T12:17:07.158+01:00", 
+        "pid": 895387
+      }
+    }]
+  }
+}

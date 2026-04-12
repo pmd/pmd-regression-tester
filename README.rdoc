@@ -20,6 +20,9 @@ on a list of standard projects (e.g. Spring Framework, Checkstyle, OpenJDK, etc.
 
 Rule violations and code duplications are compared to report, which are new, removed or changed.
 
+While executing PMD, JDK Flight Recorder (jfr) is enabled and a recording is created. This allows to investigate
+performance and memory issues afterwards.
+
 == SYNOPSIS:
 
 === Options:

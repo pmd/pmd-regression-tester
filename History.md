@@ -6,6 +6,7 @@ With this version, Ruby 4 or higher is required.
 
 ## Enhancements
 * [#145](https://github.com/pmd/pmd-regression-tester/issues/145): Add support for CPD regression testing
+* [#146](https://github.com/pmd/pmd-regression-tester/issues/146): Add support for measuring CPU and Memory usage
 * [#148](https://github.com/pmd/pmd-regression-tester/issues/148): Add support for comparing entire rule violation location
 * [#168](https://github.com/pmd/pmd-regression-tester/pull/168): Update to ruby 4
 ## Fixed Issues
@@ -19,6 +20,7 @@ With this version, Ruby 4 or higher is required.
 * [#162](https://github.com/pmd/pmd-regression-tester/pull/162): chore: Add debugging information - [Andreas Dangel](https://github.com/adangel) (@adangel)
 * [#169](https://github.com/pmd/pmd-regression-tester/pull/169): Add support for CPD regression testing - [Andreas Dangel](https://github.com/adangel) (@adangel)
 * [#170](https://github.com/pmd/pmd-regression-tester/pull/170): chore: Fix rubocop Style/FileOpen issues - [Andreas Dangel](https://github.com/adangel) (@adangel)
+* [#171](https://github.com/pmd/pmd-regression-tester/pull/171): Add support for measuring CPU and Memory usage - [Andreas Dangel](https://github.com/adangel) (@adangel)
 ## Dependency Updates
 * [#153](https://github.com/pmd/pmd-regression-tester/pull/153): chore: Bump nokogiri from 1.18 to 1.19
 * [#154](https://github.com/pmd/pmd-regression-tester/pull/154): chore: Bump logger-colors from 1.0 to 1.1

@@ -11,18 +11,9 @@ module PmdTester
         'error_counts' => rdiff.error_counts.to_h.transform_keys(&:to_s),
         'configerror_counts' => rdiff.configerror_counts.to_h.transform_keys(&:to_s),
 
-        'base_details' => {
-          'timestamp' => rdiff.base_report.report_details.timestamp,
-          'exit_code' => rdiff.base_report.report_details.exit_code,
-          'cmdline' => rdiff.base_report.report_details.cmdline,
-          'execution_time' => rdiff.base_report.report_details.execution_time_formatted
-        },
-        'patch_details' => {
-          'timestamp' => rdiff.patch_report.report_details.timestamp,
-          'exit_code' => rdiff.patch_report.report_details.exit_code,
-          'cmdline' => rdiff.patch_report.report_details.cmdline,
-          'execution_time' => rdiff.patch_report.report_details.execution_time_formatted
-        },
+        'base_details' => rdiff.base_report.report_details.to_h,
+        'patch_details' => rdiff.patch_report.report_details.to_h,
+
         'diff_execution_time' => PmdReportDetail.convert_seconds(rdiff.patch_report.report_details.execution_time -
                                                                    rdiff.base_report.report_details.execution_time),
 

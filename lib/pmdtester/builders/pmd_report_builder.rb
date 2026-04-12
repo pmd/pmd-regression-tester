@@ -9,7 +9,7 @@ module PmdTester
   class PmdReportBuilder
     include PmdTester
 
-    def initialize(projects, options, branch_config, branch_name, rules_changed)
+    def initialize(projects, options, branch_config, branch_name)
       @projects = projects
       @local_git_repo = options.local_git_repo
       @threads = options.threads
@@ -20,8 +20,14 @@ module PmdTester
 
       @pmd_branch_details = PmdBranchDetail.new(@pmd_branch_name)
       @project_builder = ProjectBuilder.new(@projects)
-      @run_pmd = options.run_pmd && rules_changed
+      @run_pmd = options.run_pmd
       @run_cpd = options.run_cpd
+    end
+
+    def with_changes(rules_changed, impl_changed)
+      @run_pmd &&= rules_changed
+      @run_cpd &&= impl_changed
+      self
     end
 
     def create_pmd_package
@@ -95,22 +101,15 @@ module PmdTester
     end
 
     def generate_pmd_report(project)
-      error_recovery_options = @error_recovery ? 'PMD_JAVA_OPTS="-Dpmd.error_recovery -ea" ' : ''
-      fail_on_violation = create_failonviolation_option
-      auxclasspath_option = create_auxclasspath_option(project)
-      pmd_cmd = "#{error_recovery_options}" \
-                "#{determine_run_path} -d #{project.local_source_path} -f xml " \
-                "-R #{project.get_config_path(@pmd_branch_name)} " \
-                "-r #{project.get_pmd_report_path(@pmd_branch_name)} " \
-                "#{fail_on_violation} -t #{@threads} " \
-                "#{auxclasspath_option}" \
-                "#{' --no-progress' if pmd7?}"
       start_time = Time.now
       exit_code = nil
+      stdout = ''
+      stderr = ''
       if File.exist?(project.get_pmd_report_path(@pmd_branch_name))
         logger.warn "#{@pmd_branch_name}: Skipping PMD run - report " \
                     "#{project.get_pmd_report_path(@pmd_branch_name)} already exists"
       else
+        pmd_cmd = create_pmd_command(project)
         status, stdout, stderr = Cmd.execute(pmd_cmd)
         exit_code = status.exitstatus
       end
@@ -146,9 +145,12 @@ module PmdTester
         progress_logger.stop
         sum_time += execution_time
 
+        jfr_summary = JfrSummary.new.load("#{project.get_project_target_dir(@pmd_branch_name)}/pmd_recording.jfr")
         PmdReportDetail.create(execution_time: execution_time, timestamp: end_time,
                                cmdline: cmd_line, exit_code: exit_code, stdout: stdout, stderr: stderr,
-                               report_info_path: project.get_report_info_path(@pmd_branch_name))
+                               oom: stderr.include?('java.lang.OutOfMemoryError'),
+                               report_info_path: project.get_report_info_path(@pmd_branch_name),
+                               jfr_summary: jfr_summary)
         logger.info "#{project.name}'s PMD report was generated successfully (exit code: #{exit_code})"
       end
 
@@ -167,9 +169,12 @@ module PmdTester
         progress_logger.stop
         sum_time += execution_time
 
+        jfr_summary = JfrSummary.new.load("#{project.get_project_target_dir(@pmd_branch_name)}/cpd_recording.jfr")
         PmdReportDetail.create(execution_time: execution_time, timestamp: end_time,
                                cmdline: cpd_cmd, exit_code: exit_code, stdout: stdout, stderr: stderr,
-                               report_info_path: project.get_cpd_report_info_path(@pmd_branch_name))
+                               oom: stderr.include?('java.lang.OutOfMemoryError'),
+                               report_info_path: project.get_cpd_report_info_path(@pmd_branch_name),
+                               jfr_summary: jfr_summary)
         logger.info "#{project.name}'s CPD report was generated successfully (exit code: #{exit_code})"
       end
 
@@ -177,26 +182,17 @@ module PmdTester
     end
 
     def generate_cpd_report(project)
-      error_recovery_options = @error_recovery ? ' -Dpmd.error_recovery -ea' : ''
-      pmd_java_options = "PMD_JAVA_OPTS=\"-Xmx#{project.cpd_options.max_memory}#{error_recovery_options}\" "
-      cpd_cmd = "#{pmd_java_options}" \
-                "#{determine_run_path(command: 'cpd')} #{get_directories_option(project)} -f xml " \
-                "--language #{project.cpd_options.language} --minimum-tokens #{project.cpd_options.minimum_tokens} " \
-                '--skip-lexical-errors'
       start_time = Time.now
       exit_code = nil
       if File.exist?(project.get_cpd_report_path(@pmd_branch_name))
         logger.warn "#{@pmd_branch_name}: Skipping CPD run - report " \
                     "#{project.get_cpd_report_path(@pmd_branch_name)} already exists"
       else
+        cpd_cmd = create_cpd_command(project)
         status, stdout, stderr = Cmd.execute(cpd_cmd, debug_log_stdout: false)
         exit_code = status.exitstatus
       end
-      # NOTE: --report-file is only supported in PMD 7.14.0+. To support 7.0.0, we use stdout.
-      if [0, 4, 5].include?(exit_code)
-        File.write(project.get_cpd_report_path(@pmd_branch_name), stdout)
-        stdout = ''
-      end
+      stdout = filter_cpd_report_from_stdout(project, exit_code, stdout)
       end_time = Time.now
       [cpd_cmd, end_time - start_time, end_time, exit_code, stdout, stderr]
     end
@@ -214,6 +210,51 @@ module PmdTester
     end
 
     private
+
+    def create_pmd_command(project)
+      error_recovery_options = @error_recovery ? ' -Dpmd.error_recovery -ea' : ''
+      java_opts = 'PMD_JAVA_OPTS="-XX:StartFlightRecording:' \
+                  "filename=#{project.get_project_target_dir(@pmd_branch_name)}/pmd_recording.jfr," \
+                  "settings=#{ResourceLocator.locate('config/custom.jfc')},dumponexit=true" \
+                  "#{error_recovery_options}\" "
+      fail_on_violation = create_failonviolation_option
+      auxclasspath_option = create_auxclasspath_option(project)
+      "#{java_opts}" \
+        "#{determine_run_path} -d #{project.local_source_path} -f xml " \
+        "-R #{project.get_config_path(@pmd_branch_name)} " \
+        "-r #{project.get_pmd_report_path(@pmd_branch_name)} " \
+        "#{fail_on_violation} -t #{@threads} " \
+        "#{auxclasspath_option}" \
+        "#{' --no-progress' if pmd7?}"
+    end
+
+    def create_cpd_command(project)
+      error_recovery_options = @error_recovery ? ' -Dpmd.error_recovery -ea' : ''
+      java_opts = "PMD_JAVA_OPTS=\"-Xmx#{project.cpd_options.max_memory} -XX:StartFlightRecording:" \
+                  "filename=#{project.get_project_target_dir(@pmd_branch_name)}/cpd_recording.jfr," \
+                  "settings=#{ResourceLocator.locate('config/custom.jfc')},dumponexit=true" \
+                  "#{error_recovery_options}\" "
+      "#{java_opts}" \
+        "#{determine_run_path(command: 'cpd')} #{get_directories_option(project)} -f xml " \
+        "--language #{project.cpd_options.language} --minimum-tokens #{project.cpd_options.minimum_tokens} " \
+        '--skip-lexical-errors'
+    end
+
+    # NOTE: --report-file is only supported in PMD 7.14.0+. To support 7.0.0, we use stdout.
+    def filter_cpd_report_from_stdout(project, exit_code, stdout)
+      if [0, 4, 5].include?(exit_code)
+        # when running with JFR, there are logs from JFR at the beginning
+        # we want to remove those logs from the stdout, because they would break the XML parsing
+        xml_start = stdout.index('<?xml')
+        return stdout if xml_start.nil?
+
+        stdout_filtered = stdout[0, xml_start]
+        cpd_report = stdout[xml_start, stdout.length - xml_start]
+        File.write(project.get_cpd_report_path(@pmd_branch_name), cpd_report)
+        return stdout_filtered
+      end
+      stdout
+    end
 
     def get_directories_option(project)
       project.cpd_options.directories.map do |dir|

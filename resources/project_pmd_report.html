@@ -61,6 +61,21 @@
                 <td class="item">Full Report</td>
                 <td class="{{branch}}"><a href="{{branch}}_pmd_report.xml">{{branch}}_pmd_report.xml</a></td>
             </tr>
+            <tr>
+                <td class="item">JFR Recording</td>
+                <td class="{{branch}}"><a href="{{branch}}_pmd_recording.jfr">{{branch}}_pmd_recording.jfr</a></td>
+            </tr>
+            <tr>
+                <td class="item">JFR Details</td>
+                <td class="{{branch}}">
+                    <details><summary>Details</summary>
+                    Execution Time: {{report.jfr_summary.execution_time}}<br>
+                    Max Heap Memory: {{report.jfr_summary.max_heap_memory}}<br>
+                    Max CPU Load: {{report.jfr_summary.max_cpu_load}}<br>
+                    Avg CPU Load: {{report.jfr_summary.avg_cpu_load}}<br>
+                    </details>
+                </td>
+            </tr>
             </tbody>
         </table>
     </div>

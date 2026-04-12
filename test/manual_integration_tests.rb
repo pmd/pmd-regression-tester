@@ -193,20 +193,18 @@ class ManualIntegrationTests < Test::Unit::TestCase
     assert_pmd_errors(new: 0, removed: 0, max_changed: 0)
     assert_pmd_config_errors(new: 0, removed: 0, changed: 0)
 
-    # CPD. Currently, the baseline has no cpd results, so all CPD duplications and errors are new.
-    # There are no removed or changed duplications or errors.
-    # Also, the baseline doesn't have specific cpd options, so only java projects are considered
-    # project "checkstyle": 1412 new duplications
-    # project "spring-framework": 532 new duplications
-    assert_cpd_duplications(new: 1412 + 532, removed: 0, changed: 0)
-    # project "checkstyle": 4 new CPD errors
-    assert_cpd_errors(new: 4, removed: 0, changed: 0)
-    # will be success, once there are no cpd changes with an new baseline
-    assert_equal('neutral', determine_conclusion)
+    # CPD is not executed either, as no java files have been changed
+    assert_cpd_duplications(new: 0, removed: 0, changed: 0)
+    assert_cpd_errors(new: 0, removed: 0, changed: 0)
 
-    assert_path_not_exist('target/reports/diff/patch_config.xml')
+    assert_file_content_equals('No relevant source code has been changed, pmdtester skipped.',
+                               'target/reports/diff/summary.txt')
+    assert_file_content_equals('skipped', 'target/reports/diff/conclusion.txt')
+
+    assert_path_not_exist('target/reports/diff/index.html')
     assert_path_not_exist('target/reports/HEAD/config.xml')
-    assert_path_not_exist('target/reports/diff/checkstyle/pmd_report.xml')
+    assert_path_not_exist('target/reports/HEAD/checkstyle/pmd_report.xml')
+    assert_path_not_exist('target/reports/HEAD/checkstyle/cpd_report.xml')
   end
 
   def test_case_5_create_baseline
@@ -313,9 +311,11 @@ class ManualIntegrationTests < Test::Unit::TestCase
     assert_path_exist("target/reports/main/#{project_name}/pmd_report_info.json")
     assert_path_exist("target/reports/main/#{project_name}/pmd_report.xml")
     assert(File.size("target/reports/main/#{project_name}/pmd_report.xml") > pmd_report_size_in_bytes)
+    assert_path_exist("target/reports/main/#{project_name}/pmd_recording.jfr")
     assert_path_exist("target/reports/main/#{project_name}/cpd_report_info.json")
     assert_path_exist("target/reports/main/#{project_name}/cpd_report.xml")
     assert(File.size("target/reports/main/#{project_name}/cpd_report.xml") > 10)
+    assert_path_exist("target/reports/main/#{project_name}/cpd_recording.jfr")
   end
 
   def assert_pmd_violations(new:, removed:, changed:)

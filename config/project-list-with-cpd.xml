@@ -31,8 +31,13 @@ mvn dependency:build-classpath -DincludeScope=test -Dmdep.outputFile=classpath.t
     <auxclasspath-command>echo -n "${HOME}/openjdk11/lib/jrt-fs.jar:$(pwd)/target/classes:$(pwd)/target/test-classes:"; cat classpath.txt</auxclasspath-command>
     <cpd-options>
       <language>java</language>
-      <minimum-tokens>150</minimum-tokens>
+      <minimum-tokens>50</minimum-tokens>
       <max-memory>4g</max-memory>
+      <directories>
+        <!-- this avoids analyzing src/test/resources-noncompilable ... -->
+        <directory>src/main/java</directory>
+        <directory>src/test/java</directory>
+      </directories>
     </cpd-options>
   </project>
 
@@ -246,6 +251,18 @@ EOF
       <language>plsql</language>
       <minimum-tokens>100</minimum-tokens>
       <max-memory>512m</max-memory>
+    </cpd-options>
+  </project>
+
+  <project>
+    <name>alsa-firmware</name>
+    <type>git</type>
+    <connection>https://github.com/alsa-project/alsa-firmware</connection>
+    <tag>v1.2.1</tag>
+    <cpd-options>
+      <language>cpp</language>
+      <minimum-tokens>100</minimum-tokens>
+      <max-memory>4g</max-memory>
     </cpd-options>
   </project>
 </projectlist>

@@ -18,6 +18,7 @@ README.rdoc
 Rakefile
 bin/pmdtester
 config/all-java.xml
+config/custom.jfc
 config/design.xml
 config/project-list-with-cpd.xml
 config/project-list.xml
@@ -37,6 +38,7 @@ lib/pmdtester/builders/summary_report_builder.rb
 lib/pmdtester/cmd.rb
 lib/pmdtester/collection_by_file.rb
 lib/pmdtester/cpd_report_diff.rb
+lib/pmdtester/jfr_summary.rb
 lib/pmdtester/location.rb
 lib/pmdtester/parsers/cpd_report_document.rb
 lib/pmdtester/parsers/options.rb
@@ -53,6 +55,7 @@ lib/pmdtester/report_diff.rb
 lib/pmdtester/resource_locator.rb
 lib/pmdtester/runner.rb
 lib/pmdtester/semver.rb
+lib/pmdtester/system_info.rb
 lib/pmdtester/word_differ.rb
 pmdtester.gemspec
 resources/_includes/diff_pill_row.html

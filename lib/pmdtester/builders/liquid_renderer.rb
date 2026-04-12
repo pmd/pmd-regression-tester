@@ -73,6 +73,10 @@ module PmdTester
       copy_file("#{root}/base_pmd_report.xml", project.report_diff.base_report.file)
       copy_file("#{root}/patch_pmd_report.xml", project.report_diff.patch_report.file)
       write_pmd_stdout_stderr(root, project.report_diff)
+      copy_file("#{root}/base_pmd_recording.jfr",
+                project.report_diff.base_report.report_details.jfr_summary.recording_path)
+      copy_file("#{root}/patch_pmd_recording.jfr",
+                project.report_diff.patch_report.report_details.jfr_summary.recording_path)
     end
 
     def write_pmd_full_report(project, root)
@@ -92,6 +96,10 @@ module PmdTester
       copy_file("#{root}/base_cpd_report.xml", project.cpd_report_diff.base_report.file)
       copy_file("#{root}/patch_cpd_report.xml", project.cpd_report_diff.patch_report.file)
       write_cpd_stdout_stderr(root, project.cpd_report_diff)
+      copy_file("#{root}/base_cpd_recording.jfr",
+                project.cpd_report_diff.base_report.report_details.jfr_summary.recording_path)
+      copy_file("#{root}/patch_cpd_recording.jfr",
+                project.cpd_report_diff.patch_report.report_details.jfr_summary.recording_path)
     end
 
     def write_cpd_full_report(project, root)
@@ -159,7 +167,7 @@ module PmdTester
         FileUtils.cp(source_file, target_file)
         logger&.info "Written #{target_file}"
       else
-        logger&.warn "File #{source_file} not found"
+        logger&.warn "Cannot write #{target_file}. Source file #{source_file} not found"
       end
     end
 
@@ -198,6 +206,7 @@ module PmdTester
         'execution_time' => report.report_details.execution_time_formatted,
         'timestamp' => report.report_details.timestamp,
         'exit_code' => report.report_details.exit_code,
+        'jfr_summary' => report.report_details.jfr_summary.to_h_for_liquid,
 
         'rules' => report.rule_summaries,
         'errors' => report.errors_by_file.all_values.map { |e| error_to_hash(e, project) },
@@ -213,6 +222,7 @@ module PmdTester
         'execution_time' => cpd_report.report_details.execution_time_formatted,
         'timestamp' => cpd_report.report_details.timestamp,
         'exit_code' => cpd_report.report_details.exit_code,
+        'jfr_summary' => cpd_report.report_details.jfr_summary.to_h_for_liquid,
 
         'errors' => cpd_report.errors.map { |e| error_to_hash(e, project) }
       }

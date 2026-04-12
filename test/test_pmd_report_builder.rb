@@ -38,7 +38,8 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     record_expectations_after_build
 
     PmdTester::PmdReportBuilder
-      .new(projects, options, options.base_config, options.base_branch, true)
+      .new(projects, options, options.base_config, options.base_branch)
+      .with_changes(true, true)
       .build
   end
 
@@ -67,7 +68,8 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     record_expectations_after_build
 
     PmdTester::PmdReportBuilder
-      .new(projects, options, options.base_config, options.base_branch, true)
+      .new(projects, options, options.base_config, options.base_branch)
+      .with_changes(true, true)
       .build
   end
 
@@ -93,7 +95,8 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     record_expectations_after_build
 
     PmdTester::PmdReportBuilder
-      .new(projects, options, options.base_config, options.base_branch, true)
+      .new(projects, options, options.base_config, options.base_branch)
+      .with_changes(true, true)
       .build
   end
 
@@ -117,7 +120,8 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     record_expectations_after_build
 
     PmdTester::PmdReportBuilder
-      .new(projects, options, options.base_config, options.base_branch, true)
+      .new(projects, options, options.base_config, options.base_branch)
+      .with_changes(true, true)
       .build
   end
 
@@ -141,7 +145,8 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     record_expectations_after_build
 
     PmdTester::PmdReportBuilder
-      .new(projects, options, options.base_config, options.base_branch, true)
+      .new(projects, options, options.base_config, options.base_branch)
+      .with_changes(true, true)
       .build
   end
 
@@ -166,7 +171,8 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     record_expectations_after_build
 
     PmdTester::PmdReportBuilder
-      .new(projects, options, options.base_config, options.base_branch, true)
+      .new(projects, options, options.base_config, options.base_branch)
+      .with_changes(true, true)
       .build
   end
 
@@ -186,7 +192,8 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     record_expectations_project_build(sha1: 'sha1abc')
 
     PmdTester::PmdReportBuilder
-      .new(projects, options, options.base_config, options.base_branch, true)
+      .new(projects, options, options.base_config, options.base_branch)
+      .with_changes(true, true)
       .build
 
     assert_pmd_rule_config
@@ -275,7 +282,8 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     record_expectations_project_build(sha1: 'sha1abc', error: true)
 
     PmdTester::PmdReportBuilder
-      .new(projects, options, options.base_config, options.base_branch, true)
+      .new(projects, options, options.base_config, options.base_branch)
+      .with_changes(true, true)
       .build
   end
 
@@ -296,7 +304,8 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     record_expectations_project_build(sha1: 'sha1abc', error: true, long_cli_options: true)
 
     PmdTester::PmdReportBuilder
-      .new(projects, options, options.base_config, options.base_branch, true)
+      .new(projects, options, options.base_config, options.base_branch)
+      .with_changes(true, true)
       .build
   end
 
@@ -341,7 +350,8 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     record_expectations_project_build(sha1: 'sha1abc', error: true, exit_status: 1)
 
     PmdTester::PmdReportBuilder
-      .new(projects, options, options.base_config, options.base_branch, true)
+      .new(projects, options, options.base_config, options.base_branch)
+      .with_changes(true, true)
       .build
   end
 
@@ -351,7 +361,8 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     pmd_cli_cmd = prepare_pmd_dist_dir(version: @pmd_version, sha1: sha1)
     begin
       PmdTester::PmdReportBuilder
-        .new(projects, options, options.base_config, options.base_branch, true)
+        .new(projects, options, options.base_config, options.base_branch)
+        .with_changes(true, true)
         .build
     ensure
       cleanup_pmd_dist_dir(base_dir: pmd_cli_cmd)
@@ -376,6 +387,11 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     PmdTester::ProjectBuilder.any_instance.stubs(:build_projects).once
   end
 
+  def jfr_parameters(project_name:, prefix:)
+    "-XX:StartFlightRecording:filename=target/reports/main/#{project_name}/#{prefix}_recording.jfr," \
+      "settings=#{PmdTester::ResourceLocator.locate('config/custom.jfc')},dumponexit=true"
+  end
+
   def record_expectations_project_build(sha1:, error: false, long_cli_options: false,
                                         no_progress_bar: false, exit_status: 0, pmd7: false,
                                         project_name: 'checkstyle')
@@ -383,12 +399,12 @@ class TestPmdReportBuilder < Test::Unit::TestCase
                                                                                      long_cli_options: long_cli_options)
     PmdTester::SimpleProgressLogger.any_instance.stubs(:start).once
     PmdTester::SimpleProgressLogger.any_instance.stubs(:stop).once
-    error_prefix = error ? 'PMD_JAVA_OPTS="-Dpmd.error_recovery -ea" ' : ''
+    java_opts = "PMD_JAVA_OPTS=\"#{jfr_parameters(project_name: project_name, prefix: 'pmd')}" \
+                "#{' -Dpmd.error_recovery -ea' if error}\""
     distro_path = "#{Dir.getwd}/target/pmd-bin-#{@pmd_version}-main-#{sha1}"
     process_status = mock
     process_status.expects(:exitstatus).returns(exit_status).once
-    cmd_line = "#{error_prefix}" \
-               "#{distro_path}/bin/#{base_cmd} " \
+    cmd_line = "#{java_opts} #{distro_path}/bin/#{base_cmd} " \
                "-d target/repositories/#{project_name} -f xml " \
                "-R target/reports/main/#{project_name}/config.xml " \
                "-r target/reports/main/#{project_name}/pmd_report.xml " \
@@ -396,7 +412,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
                "#{' --no-progress' if no_progress_bar}"
     PmdTester::Cmd.stubs(:execute).with(cmd_line)
                   .returns([process_status, 'stdout output', 'stderr output'])
-                  .once
+    PmdTester::JfrSummary.any_instance.stubs(:load).with("target/reports/main/#{project_name}/pmd_recording.jfr")
     PmdTester::PmdReportDetail.stubs(:create).once.with do |params|
       params[:cmdline] == cmd_line && params[:exit_code] == exit_status \
       && params[:stdout] == 'stdout output' && params[:stderr] == 'stderr output'
@@ -408,25 +424,24 @@ class TestPmdReportBuilder < Test::Unit::TestCase
                                             max_memory: '5g', minimum_tokens: 150)
     PmdTester::SimpleProgressLogger.any_instance.stubs(:start).once
     PmdTester::SimpleProgressLogger.any_instance.stubs(:stop).once
-    error_opts = error ? '-Dpmd.error_recovery -ea ' : ''
-    java_opts = "PMD_JAVA_OPTS=\"#{error_opts}-Xmx#{max_memory}\""
+    java_opts = "PMD_JAVA_OPTS=\"-Xmx#{max_memory} #{jfr_parameters(project_name: project_name, prefix: 'cpd')}" \
+                "#{' -Dpmd.error_recovery -ea' if error}\""
     distro_path = "#{Dir.getwd}/target/pmd-bin-#{@pmd_version}-main-#{sha1}"
     process_status = mock
     process_status.expects(:exitstatus).returns(exit_status).once
     cmd_line = "#{java_opts} #{distro_path}/bin/pmd cpd " \
                "-d target/repositories/#{project_name}/src/main/java " \
                "-d target/repositories/#{project_name}/src/test/java " \
-               '-f xml ' \
-               "--language #{cpd_language} " \
+               "-f xml --language #{cpd_language} " \
                "--minimum-tokens #{minimum_tokens} " \
                '--skip-lexical-errors'
     PmdTester::Cmd.stubs(:execute).with(cmd_line, debug_log_stdout: false)
-                  .returns([process_status, 'stdout output', 'stderr output'])
-                  .once
-    File.stubs(:write).with("target/reports/main/#{project_name}/cpd_report.xml", 'stdout output').once
+                  .returns([process_status, "stdout output\n<?xml...", 'stderr output'])
+    File.stubs(:write).with("target/reports/main/#{project_name}/cpd_report.xml", '<?xml...').once
+    PmdTester::JfrSummary.any_instance.stubs(:load).with("target/reports/main/#{project_name}/cpd_recording.jfr")
     PmdTester::PmdReportDetail.stubs(:create).once.with do |params|
       params[:cmdline] == cmd_line && params[:exit_code] == exit_status \
-      && params[:stdout] == '' && params[:stderr] == 'stderr output' \
+      && params[:stdout] == "stdout output\n" && params[:stderr] == 'stderr output' \
     end
   end
 
