@@ -1,3 +1,10 @@
+# 1.7.1 / ????-??-??
+## New and Noteworthy
+## Enhancements
+## Fixed Issues
+## Merged pull requests
+## Dependency Updates
+
 # 1.7.0 / 2026-04-16
 ## New and Noteworthy
 ### Required Ruby version
