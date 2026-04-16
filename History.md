@@ -1,4 +1,4 @@
-# 1.7.0 / ????-??-??
+# 1.7.0 / 2026-04-16
 ## New and Noteworthy
 ### Required Ruby version
 
@@ -36,9 +36,14 @@ With this version, Ruby 4 or higher is required.
 * [#165](https://github.com/pmd/pmd-regression-tester/pull/165): Bump actions/checkout from 4 to 6
 * [#166](https://github.com/pmd/pmd-regression-tester/pull/166): Bump ruby/setup-ruby from 1.254.0 to 1.288.0
 * [#167](https://github.com/pmd/pmd-regression-tester/pull/167): Bump actions/create-github-app-token from 2.0.6 to 2.2.1
+* [#172](https://github.com/pmd/pmd-regression-tester/pull/172): Bump ruby/setup-ruby from 1.288.0 to 1.292.0
 * [#173](https://github.com/pmd/pmd-regression-tester/pull/173): Bump actions/create-github-app-token from 2.2.1 to 3.0.0
 * [#174](https://github.com/pmd/pmd-regression-tester/pull/174): Bump actions/cache from 5.0.3 to 5.0.4
 * [#175](https://github.com/pmd/pmd-regression-tester/pull/175): Bump ruby/setup-ruby from 1.292.0 to 1.295.0
+* [#177](https://github.com/pmd/pmd-regression-tester/pull/177): Bump ruby/setup-ruby from 1.295.0 to 1.300.0
+* [#178](https://github.com/pmd/pmd-regression-tester/pull/178): Bump actions/create-github-app-token from 3.0.0 to 3.1.1
+* [#179](https://github.com/pmd/pmd-regression-tester/pull/179): Bump ruby/setup-ruby from 1.300.0 to 1.301.0
+* [#180](https://github.com/pmd/pmd-regression-tester/pull/180): Bump actions/cache from 5.0.4 to 5.0.5
 
 # 1.6.2 / 2025-10-24
 ## Fixed Issues
