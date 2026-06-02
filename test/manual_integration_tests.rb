@@ -66,23 +66,17 @@ class ManualIntegrationTests < Test::Unit::TestCase
     # allow 0 or 1 changed errors
     assert_pmd_errors(new: 0, removed: 2 + 2 + 1 + 10, max_changed: 1)
 
-    # each project has 1 config error removed (LoosePackageCoupling dysfunctional): in total 8 config errors removed
-    assert_pmd_config_errors(new: 0, removed: 8, changed: 0)
+    # each project has 1 config error removed (LoosePackageCoupling dysfunctional): in total 9 config errors removed
+    assert_pmd_config_errors(new: 0, removed: 9, changed: 0)
 
-    # CPD. Currently, the baseline has no cpd results, so all CPD duplications and errors are new.
-    # There are no removed or changed duplications or errors.
-    # Also, the baseline doesn't have specific cpd options, so only java projects are considered
-    # project "checkstyle": 1412 new duplications
-    # project "spring-framework": 532 new duplications
-    assert_cpd_duplications(new: 1412 + 532, removed: 0, changed: 0)
-    # project "checkstyle": 4 new CPD errors
-    assert_cpd_errors(new: 4, removed: 0, changed: 0)
+    assert_cpd_duplications(new: 0, removed: 0, changed: 0)
+    assert_cpd_errors(new: 0, removed: 0, changed: 0)
 
     expected_summary_message = "Compared to main:\nThis changeset changes 0 violations,\n" \
                                "introduces 0 new violations, 0 new errors and 0 new configuration errors,\n" \
-                               "removes 505 violations, 15 errors and 8 configuration errors.\n" \
-                               "There are 0 changed duplications, 1944 new duplications and 0 removed duplications.\n" \
-                               "There are 0 changed CPD errors, 4 new CPD errors and 0 removed CPD errors.\n"
+                               "removes 505 violations, 15 errors and 9 configuration errors.\n" \
+                               "There are 0 changed duplications, 0 new duplications and 0 removed duplications.\n" \
+                               "There are 0 changed CPD errors, 0 new CPD errors and 0 removed CPD errors.\n"
     expected_conclusion = 'neutral'
     assert_equal(expected_summary_message, create_summary_message)
     assert_equal(expected_conclusion, determine_conclusion)
@@ -114,28 +108,22 @@ class ManualIntegrationTests < Test::Unit::TestCase
     # project "checkstyle" has 1 error removed (that's an sql file...) and 1 error changed
     # project "openjdk-11" has 0 errors removed or changed
     # project "spring-framework" has 10 errors removed (sql files) and 0 changed
-    # each project has 1 config error removed (LoosePackageCoupling dysfunctional): in total 8 config errors removed
+    # each project has 1 config error removed (LoosePackageCoupling dysfunctional): in total 9 config errors removed
     # The stack overflow exception might vary in the beginning/end of the stack frames shown
     # This stack overflow error is from checkstyle's InputIndentationLongConcatenatedString.java
     # instead of assert_equal(0, @summary[:errors][:changed], 'found changed errors')
     # allow 0 or 1 changed errors
     assert_pmd_errors(new: 0, removed: 2 + 2 + 1 + 10, max_changed: 1)
-    assert_pmd_config_errors(new: 0, removed: 8, changed: 0)
+    assert_pmd_config_errors(new: 0, removed: 9, changed: 0)
 
-    # CPD. Currently, the baseline has no cpd results, so all CPD duplications and errors are new.
-    # There are no removed or changed duplications or errors.
-    # Also, the baseline doesn't have specific cpd options, so only java projects are considered
-    # project "checkstyle": 1412 new duplications
-    # project "spring-framework": 532 new duplications
-    assert_cpd_duplications(new: 1412 + 532, removed: 0, changed: 0)
-    # project "checkstyle": 4 new CPD errors
-    assert_cpd_errors(new: 4, removed: 0, changed: 0)
+    assert_cpd_duplications(new: 0, removed: 0, changed: 0)
+    assert_cpd_errors(new: 0, removed: 0, changed: 0)
 
     assert_equal("Compared to main:\nThis changeset changes 0 violations,\n" \
                  "introduces 0 new violations, 0 new errors and 0 new configuration errors,\n" \
-                 "removes 22 violations, 15 errors and 8 configuration errors.\n" \
-                 "There are 0 changed duplications, 1944 new duplications and 0 removed duplications.\n" \
-                 "There are 0 changed CPD errors, 4 new CPD errors and 0 removed CPD errors.\n",
+                 "removes 22 violations, 15 errors and 9 configuration errors.\n" \
+                 "There are 0 changed duplications, 0 new duplications and 0 removed duplications.\n" \
+                 "There are 0 changed CPD errors, 0 new CPD errors and 0 removed CPD errors.\n",
                  create_summary_message)
     assert_equal('neutral', determine_conclusion)
 
@@ -159,22 +147,16 @@ class ManualIntegrationTests < Test::Unit::TestCase
     assert_pmd_errors(new: 0, removed: 0, max_changed: 1)
     assert_pmd_config_errors(new: 0, removed: 0, changed: 0)
 
-    # CPD. Currently, the baseline has no cpd results, so all CPD duplications and errors are new.
-    # There are no removed or changed duplications or errors.
-    # Also, the baseline doesn't have specific cpd options, so only java projects are considered
-    # project "checkstyle": 1412 new duplications
-    # project "spring-framework": 532 new duplications
-    assert_cpd_duplications(new: 1412 + 532, removed: 0, changed: 0)
-    # project "checkstyle": 4 new CPD errors
-    assert_cpd_errors(new: 4, removed: 0, changed: 0)
+    assert_cpd_duplications(new: 0, removed: 0, changed: 0)
+    assert_cpd_errors(new: 0, removed: 0, changed: 0)
 
     assert_equal("Compared to main:\nThis changeset changes 0 violations,\n" \
                  "introduces 0 new violations, 0 new errors and 0 new configuration errors,\n" \
                  "removes 0 violations, 0 errors and 0 configuration errors.\n" \
-                 "There are 0 changed duplications, 1944 new duplications and 0 removed duplications.\n" \
-                 "There are 0 changed CPD errors, 4 new CPD errors and 0 removed CPD errors.\n",
+                 "There are 0 changed duplications, 0 new duplications and 0 removed duplications.\n" \
+                 "There are 0 changed CPD errors, 0 new CPD errors and 0 removed CPD errors.\n",
                  create_summary_message)
-    assert_equal('neutral', determine_conclusion)
+    assert_equal('success', determine_conclusion)
 
     assert_file_equals("#{PATCHES_PATH}/expected_patch_config_3.xml", 'target/reports/diff/patch_config.xml')
     assert_file_equals("#{PATCHES_PATH}/expected_patch_config_3.xml", 'target/reports/HEAD/config.xml')
