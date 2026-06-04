@@ -3,6 +3,7 @@
 ## Enhancements
 ## Fixed Issues
 ## Merged pull requests
+* [#186](https://github.com/pmd/pmd-regression-tester/pull/186): chore: fix manual integration tests - [Andreas Dangel](https://github.com/adangel) (@adangel)
 ## Dependency Updates
 
 # 1.7.0 / 2026-04-16
