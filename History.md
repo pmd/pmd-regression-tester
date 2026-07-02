@@ -7,6 +7,7 @@
 * [#197](https://github.com/pmd/pmd-regression-tester/pull/197): chore: Use client-id for create-github-app-token - [Andreas Dangel](https://github.com/adangel) (@adangel)
 ## Dependency Updates
 * [#198](https://github.com/pmd/pmd-regression-tester/pull/198): chore: Add cgi 0.5
+* [#199](https://github.com/pmd/pmd-regression-tester/pull/199): chore: Bump liquid from 5.11 to 5.13
 
 # 1.7.0 / 2026-04-16
 ## New and Noteworthy
