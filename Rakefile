@@ -26,7 +26,7 @@ hoe = Hoe.spec 'pmdtester' do
     ['logger-colors',   '~> 1.1'],
     ['liquid',          '~> 5.13'],
     ['base64',          '~> 0.3'],
-    ['bigdecimal',      '~> 4.0'],
+    ['bigdecimal',      '~> 4.1'],
     ['logger',          '~> 1.7'],
     ['cgi',             '~> 0.5'] # required by liquid
   ]
