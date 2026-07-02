@@ -39,7 +39,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency(%q<hoe-git>.freeze, ["~> 1.6".freeze])
   s.add_development_dependency(%q<minitest>.freeze, ["~> 6.0".freeze])
   s.add_development_dependency(%q<mocha>.freeze, ["~> 3.1".freeze])
-  s.add_development_dependency(%q<rubocop>.freeze, ["~> 1.84".freeze])
+  s.add_development_dependency(%q<rubocop>.freeze, ["~> 1.88".freeze])
   s.add_development_dependency(%q<test-unit>.freeze, ["~> 3.7".freeze])
   s.add_development_dependency(%q<rdoc>.freeze, ["~> 7.2".freeze])
   s.add_development_dependency(%q<rake>.freeze, ["~> 13.3".freeze])
