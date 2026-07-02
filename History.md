@@ -6,6 +6,7 @@
 * [#186](https://github.com/pmd/pmd-regression-tester/pull/186): chore: fix manual integration tests - [Andreas Dangel](https://github.com/adangel) (@adangel)
 * [#197](https://github.com/pmd/pmd-regression-tester/pull/197): chore: Use client-id for create-github-app-token - [Andreas Dangel](https://github.com/adangel) (@adangel)
 ## Dependency Updates
+* [#203](https://github.com/pmd/pmd-regression-tester/pull/203): chore: Bump rdoc from 7.2 to 8.0
 
 # 1.7.0 / 2026-04-16
 ## New and Noteworthy
