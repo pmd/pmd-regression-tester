@@ -38,7 +38,7 @@ hoe = Hoe.spec 'pmdtester' do
     ['rubocop',       '~> 1.88'],
     ['test-unit',     '~> 3.7'],
     ['rdoc',          '~> 7.2'],
-    ['rake',          '~> 13.3'],
+    ['rake',          '~> 13.4'],
     ['hoe',           '~> 4.6'],
     ['debug',         '~> 1.11']
   ]
