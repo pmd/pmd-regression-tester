@@ -2,6 +2,7 @@
 
 require 'logger'
 require 'logger/colors'
+require 'cgi/escape'
 
 require_relative 'pmdtester/cmd'
 require_relative 'pmdtester/collection_by_file'

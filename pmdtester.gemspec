@@ -34,6 +34,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency(%q<base64>.freeze, ["~> 0.3".freeze])
   s.add_runtime_dependency(%q<bigdecimal>.freeze, ["~> 4.0".freeze])
   s.add_runtime_dependency(%q<logger>.freeze, ["~> 1.7".freeze])
+  s.add_runtime_dependency(%q<cgi>.freeze, ["~> 0.5".freeze])
   s.add_development_dependency(%q<hoe-bundler>.freeze, ["~> 1.5".freeze])
   s.add_development_dependency(%q<hoe-git>.freeze, ["~> 1.6".freeze])
   s.add_development_dependency(%q<minitest>.freeze, ["~> 6.0".freeze])

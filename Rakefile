@@ -27,7 +27,8 @@ hoe = Hoe.spec 'pmdtester' do
     ['liquid',          '~> 5.11'],
     ['base64',          '~> 0.3'],
     ['bigdecimal',      '~> 4.0'],
-    ['logger',          '~> 1.7']
+    ['logger',          '~> 1.7'],
+    ['cgi',             '~> 0.5'] # required by liquid
   ]
   self.extra_dev_deps += [
     ['hoe-bundler',   '~> 1.5'],
