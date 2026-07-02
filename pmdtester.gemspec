@@ -43,7 +43,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency(%q<test-unit>.freeze, ["~> 3.7".freeze])
   s.add_development_dependency(%q<rdoc>.freeze, ["~> 7.2".freeze])
   s.add_development_dependency(%q<rake>.freeze, ["~> 13.4".freeze])
-  s.add_development_dependency(%q<hoe>.freeze, ["~> 4.6".freeze])
+  s.add_development_dependency(%q<hoe>.freeze, ["~> 4.7".freeze])
   s.add_development_dependency(%q<debug>.freeze, ["~> 1.11".freeze])
 end
 
