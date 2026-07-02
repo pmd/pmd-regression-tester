@@ -9,6 +9,7 @@
 * [#198](https://github.com/pmd/pmd-regression-tester/pull/198): chore: Add cgi 0.5
 * [#199](https://github.com/pmd/pmd-regression-tester/pull/199): chore: Bump liquid from 5.11 to 5.13
 * [#200](https://github.com/pmd/pmd-regression-tester/pull/200): chore: Bump bigdecimal from 4.0 to 4.1
+* [#201](https://github.com/pmd/pmd-regression-tester/pull/201): chore: Bump mocha from 3.0 to 3.1
 
 # 1.7.0 / 2026-04-16
 ## New and Noteworthy
