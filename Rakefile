@@ -24,7 +24,7 @@ hoe = Hoe.spec 'pmdtester' do
     ['slop',            '~> 4.10'],
     ['rufus-scheduler', '~> 3.9'],
     ['logger-colors',   '~> 1.1'],
-    ['liquid',          '~> 5.11'],
+    ['liquid',          '~> 5.13'],
     ['base64',          '~> 0.3'],
     ['bigdecimal',      '~> 4.0'],
     ['logger',          '~> 1.7'],
