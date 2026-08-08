@@ -92,7 +92,7 @@ class IntegrationTestRunner < Test::Unit::TestCase
     assert_path_exist("target/reports/#{base_branch_path}-baseline.zip")
 
     project_names = %w[apex-link checkstyle fflib-apex-common java-regression-tests openjdk-11 OracleDBUtils
-                       Schedul-o-matic-9000 spring-framework]
+                       declarative-lookup-rollup-summaries spring-framework]
     assert_reports_exist(base_branch_path, project_names)
     assert_reports_exist(patch_branch_path, project_names)
     assert_diff_reports_exist(project_names)
@@ -118,7 +118,7 @@ class IntegrationTestRunner < Test::Unit::TestCase
     assert_equal(0, $CHILD_STATUS.exitstatus)
 
     project_names = %w[apex-link checkstyle fflib-apex-common java-regression-tests openjdk-11 OracleDBUtils
-                       Schedul-o-matic-9000 spring-framework]
+                       declarative-lookup-rollup-summaries spring-framework]
     assert_path_exist('target/reports/pmd_releases_7.14.0-baseline.zip')
     assert_project_reports_exist('pmd_releases_7.14.0', project_names)
     # only checkstyle is included in the patch branch.
@@ -148,12 +148,12 @@ class IntegrationTestRunner < Test::Unit::TestCase
     assert_equal(0, $CHILD_STATUS.exitstatus)
 
     project_names = %w[apex-link checkstyle fflib-apex-common java-regression-tests openjdk-11 OracleDBUtils
-                       Schedul-o-matic-9000 spring-framework]
+                       declarative-lookup-rollup-summaries spring-framework]
     assert_path_exist('target/reports/pmd_releases_7.14.0-baseline.zip')
     assert_project_reports_exist('pmd_releases_7.14.0', project_names)
-    # only checkstyle and Schedul-o-matic-9000 are included in the patch branch.
-    assert_project_reports_exist('pmd_releases_7.15.0', ['checkstyle', 'Schedul-o-matic-9000'])
-    assert_diff_reports_exist(['checkstyle', 'Schedul-o-matic-9000'])
+    # only checkstyle and declarative-lookup-rollup-summaries are included in the patch branch.
+    assert_project_reports_exist('pmd_releases_7.15.0', %w[checkstyle declarative-lookup-rollup-summaries])
+    assert_diff_reports_exist(%w[checkstyle declarative-lookup-rollup-summaries])
     # but not the other projects, e.g. spring-framework
     assert_path_not_exist('target/reports/pmd_releases_7.15.0/spring-framework/pmd_report.xml')
     assert_path_not_exist('target/reports/pmd_releases_7.15.0/spring-framework/config.xml')
