@@ -441,7 +441,7 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     PmdTester::JfrSummary.any_instance.stubs(:load).with("target/reports/main/#{project_name}/cpd_recording.jfr")
     PmdTester::PmdReportDetail.stubs(:create).once.with do |params|
       params[:cmdline] == cmd_line && params[:exit_code] == exit_status \
-      && params[:stdout] == "stdout output\n" && params[:stderr] == 'stderr output' \
+      && params[:stdout] == "stdout output\n" && params[:stderr] == 'stderr output'
     end
   end
 
