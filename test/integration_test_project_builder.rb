@@ -13,8 +13,7 @@ class IntegrationTestProjectBuilder < Test::Unit::TestCase
   end
 
   def test_clone_with_commit_sha1
-    projects = PmdTester::ProjectsParser.new.parse('test/resources/integration_test_project_builder/' \
-                                                   'project-list_commit_sha1.xml')
+    projects = PmdTester::ProjectsParser.new.parse('test/resources/project_builder/project-list_commit_sha1.xml')
     project_builder = PmdTester::ProjectBuilder.new(projects)
     project_builder.clone_projects
 

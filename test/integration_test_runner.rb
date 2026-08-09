@@ -4,6 +4,11 @@ require 'test_helper'
 require 'etc'
 
 class IntegrationTestRunner < Test::Unit::TestCase
+  # The projects contained in the published pmd_releases_7.14.0-baseline.zip.
+  # Needs to be updated along with the baseline.zip.
+  BASELINE_PROJECTS = %w[apex-link checkstyle fflib-apex-common java-regression-tests openjdk-11 OracleDBUtils
+                         Schedul-o-matic-9000 spring-framework].freeze
+
   def setup
     `rake clean`
   end
@@ -76,6 +81,9 @@ class IntegrationTestRunner < Test::Unit::TestCase
   def test_online_mode
     # This test depends on the file pmd_releases_7.14.0-baseline.zip being available at:
     # https://pmd-code.org/pmd-regression-tester/pmd_releases_7.14.0-baseline.zip
+    # TODO: Reenable once a suitable baseline is available.
+    omit('Needs a baseline that no longer refers to the removed Schedul-o-matic-9000 repository')
+
     base_branch = 'pmd_releases/7.14.0'
     patch_branch = 'pmd_releases/7.15.0'
     argv = "-r target/repositories/pmd -m online -b #{base_branch} -p #{patch_branch} " \
@@ -91,11 +99,9 @@ class IntegrationTestRunner < Test::Unit::TestCase
 
     assert_path_exist("target/reports/#{base_branch_path}-baseline.zip")
 
-    project_names = %w[apex-link checkstyle fflib-apex-common java-regression-tests openjdk-11 OracleDBUtils
-                       declarative-lookup-rollup-summaries spring-framework]
-    assert_reports_exist(base_branch_path, project_names)
-    assert_reports_exist(patch_branch_path, project_names)
-    assert_diff_reports_exist(project_names)
+    assert_reports_exist(base_branch_path, BASELINE_PROJECTS)
+    assert_reports_exist(patch_branch_path, BASELINE_PROJECTS)
+    assert_diff_reports_exist(BASELINE_PROJECTS)
     assert_path_exist('target/reports/diff/summary.txt')
     assert_path_exist('target/reports/diff/conclusion.txt')
   end
@@ -117,10 +123,8 @@ class IntegrationTestRunner < Test::Unit::TestCase
     system("bundle exec bin/pmdtester #{argv}")
     assert_equal(0, $CHILD_STATUS.exitstatus)
 
-    project_names = %w[apex-link checkstyle fflib-apex-common java-regression-tests openjdk-11 OracleDBUtils
-                       declarative-lookup-rollup-summaries spring-framework]
     assert_path_exist('target/reports/pmd_releases_7.14.0-baseline.zip')
-    assert_project_reports_exist('pmd_releases_7.14.0', project_names)
+    assert_project_reports_exist('pmd_releases_7.14.0', BASELINE_PROJECTS)
     # only checkstyle is included in the patch branch.
     assert_project_reports_exist('pmd_releases_7.15.0', ['checkstyle'])
     assert_diff_reports_exist(['checkstyle'])
@@ -147,13 +151,14 @@ class IntegrationTestRunner < Test::Unit::TestCase
     system("bundle exec bin/pmdtester #{argv}")
     assert_equal(0, $CHILD_STATUS.exitstatus)
 
-    project_names = %w[apex-link checkstyle fflib-apex-common java-regression-tests openjdk-11 OracleDBUtils
-                       declarative-lookup-rollup-summaries spring-framework]
     assert_path_exist('target/reports/pmd_releases_7.14.0-baseline.zip')
-    assert_project_reports_exist('pmd_releases_7.14.0', project_names)
+    assert_project_reports_exist('pmd_releases_7.14.0', BASELINE_PROJECTS)
     # only checkstyle and declarative-lookup-rollup-summaries are included in the patch branch.
     assert_project_reports_exist('pmd_releases_7.15.0', %w[checkstyle declarative-lookup-rollup-summaries])
-    assert_diff_reports_exist(%w[checkstyle declarative-lookup-rollup-summaries])
+    assert_diff_reports_exist(%w[checkstyle])
+    # declarative-lookup-rollup-summaries is not in the baseline, so all violations are new
+    assert_path_exist('target/reports/diff/declarative-lookup-rollup-summaries/index.html')
+    assert_diff_reports_exist_for_project('patch', 'declarative-lookup-rollup-summaries')
     # but not the other projects, e.g. spring-framework
     assert_path_not_exist('target/reports/pmd_releases_7.15.0/spring-framework/pmd_report.xml')
     assert_path_not_exist('target/reports/pmd_releases_7.15.0/spring-framework/config.xml')
