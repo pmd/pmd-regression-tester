@@ -4,10 +4,9 @@ require 'test_helper'
 require 'etc'
 
 class IntegrationTestRunner < Test::Unit::TestCase
-  # The projects contained in the published pmd_releases_7.14.0-baseline.zip.
-  # Needs to be updated along with the baseline.zip.
-  BASELINE_PROJECTS = %w[apex-link checkstyle fflib-apex-common java-regression-tests openjdk-11 OracleDBUtils
-                         Schedul-o-matic-9000 spring-framework].freeze
+  # The projects of the published pmd_releases_7.14.0-baseline.zip that can still be analyzed (without schedulomatic)
+  BASELINE_PROJECTS = %w[apex-link checkstyle fflib-apex-common java-regression-tests openjdk-11
+                         OracleDBUtils spring-framework].freeze
 
   def setup
     `rake clean`
@@ -81,12 +80,13 @@ class IntegrationTestRunner < Test::Unit::TestCase
   def test_online_mode
     # This test depends on the file pmd_releases_7.14.0-baseline.zip being available at:
     # https://pmd-code.org/pmd-regression-tester/pmd_releases_7.14.0-baseline.zip
-    # TODO: Reenable once a suitable baseline is available.
-    omit('Needs a baseline that no longer refers to the removed Schedul-o-matic-9000 repository')
-
+    # 
+    # --list-of-project can be removed once a suitable baseline 7.27 or newer is released.
     base_branch = 'pmd_releases/7.14.0'
     patch_branch = 'pmd_releases/7.15.0'
     argv = "-r target/repositories/pmd -m online -b #{base_branch} -p #{patch_branch} " \
+           '--list-of-project ' \
+           'test/resources/integration_test_runner/project-list-from-7.14.0-without-scheduleomatic.xml ' \
            '--baseline-download-url https://pmd-code.org/pmd-regression-tester/ ' \
            '--error-recovery ' \
            '--threads ' + Etc.nprocessors.to_s
