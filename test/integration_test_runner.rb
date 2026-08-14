@@ -80,7 +80,7 @@ class IntegrationTestRunner < Test::Unit::TestCase
   def test_online_mode
     # This test depends on the file pmd_releases_7.14.0-baseline.zip being available at:
     # https://pmd-code.org/pmd-regression-tester/pmd_releases_7.14.0-baseline.zip
-    # 
+    #
     # --list-of-project can be removed once a suitable baseline 7.27 or newer is released.
     base_branch = 'pmd_releases/7.14.0'
     patch_branch = 'pmd_releases/7.15.0'
