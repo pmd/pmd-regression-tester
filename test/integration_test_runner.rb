@@ -4,6 +4,8 @@ require 'test_helper'
 require 'etc'
 
 class IntegrationTestRunner < Test::Unit::TestCase
+  include TestUtils
+
   def setup
     `rake clean`
   end
@@ -74,15 +76,10 @@ class IntegrationTestRunner < Test::Unit::TestCase
   end
 
   def test_online_mode
-    # This test depends on the file pmd_releases_7.14.0-baseline.zip being available at:
-    # https://pmd-code.org/pmd-regression-tester/pmd_releases_7.14.0-baseline.zip
-    #
-    # --list-of-project can be removed once a suitable baseline 7.27 or newer is released.
-    base_branch = 'pmd_releases/7.14.0'
-    patch_branch = 'pmd_releases/7.15.0'
+    clone_and_update_pmd_main
+    base_branch = latest_pmd_release
+    patch_branch = 'main'
     argv = "-r target/repositories/pmd -m online -b #{base_branch} -p #{patch_branch} " \
-           '--list-of-project ' \
-           'test/resources/integration_test_runner/project-list-from-7.14.0-without-scheduleomatic.xml ' \
            '--baseline-download-url https://pmd-code.org/pmd-regression-tester/ ' \
            '--error-recovery ' \
            '--threads ' + Etc.nprocessors.to_s
@@ -95,10 +92,8 @@ class IntegrationTestRunner < Test::Unit::TestCase
 
     assert_path_exist("target/reports/#{base_branch_path}-baseline.zip")
 
-    # The projects of the published pmd_releases_7.14.0-baseline.zip that can still be analyzed
-    # (without Schedul-o-matic-9000)
-    baseline_projects = %w[apex-link checkstyle fflib-apex-common java-regression-tests openjdk-11
-                           OracleDBUtils spring-framework].freeze
+    baseline_projects = %w[apex-link checkstyle declarative-lookup-rollup-summaries fflib-apex-common
+                           java-regression-tests openjdk-11 OracleDBUtils spring-framework].freeze
 
     assert_reports_exist(base_branch_path, baseline_projects)
     assert_reports_exist(patch_branch_path, baseline_projects)

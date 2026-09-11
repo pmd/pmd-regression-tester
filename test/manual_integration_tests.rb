@@ -26,7 +26,6 @@ require 'etc'
 class ManualIntegrationTests < Test::Unit::TestCase
   include TestUtils
 
-  PMD_REPO_PATH = 'target/repositories/pmd'
   PATCHES_PATH = 'test/resources/manual_integration_tests'
 
   def setup
