@@ -14,6 +14,7 @@
 * [#202](https://github.com/pmd/pmd-regression-tester/pull/202): chore: Bump rubocop from 1.84 to 1.88
 * [#204](https://github.com/pmd/pmd-regression-tester/pull/204): chore: Bump rake from 13.3 to 13.4
 * [#205](https://github.com/pmd/pmd-regression-tester/pull/205): chore: Bump hoe from 4.6 to 4.7
+* [#217](https://github.com/pmd/pmd-regression-tester/pull/217): chore: Bump rubocop from 1.88 to 1.91
 
 # 1.7.0 / 2026-04-16
 ## New and Noteworthy
