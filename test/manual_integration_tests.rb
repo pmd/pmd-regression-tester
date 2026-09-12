@@ -5,6 +5,7 @@ require 'pmdtester'
 require 'time'
 require 'logger'
 require 'etc'
+require 'open3'
 
 #
 # Test cases that execeute pmd regression tester like we use it in the Danger integration
@@ -31,6 +32,7 @@ class ManualIntegrationTests < Test::Unit::TestCase
 
   def setup
     `rake clean`
+    verify_java_version 21
   end
 
   # Test case 1: A single rule (java class) is changed. Only this rule should be executed
@@ -57,6 +59,7 @@ class ManualIntegrationTests < Test::Unit::TestCase
     # project "OracleDBUtils" has 2 errors removed, since we only executed java rules
     # project "apex-link" has 2 errors removed, since we only executed java rules
     # project "checkstyle" has 1 errors removed (that's an sql file...) and 1 changed
+    # project "declarative-lookup-rollup-summaries" has 1 error removed (an sql file...)
     # project "openjdk-11" has 0 errors removed or changed
     # project "spring-framework" has 10 errors removed (these are all sql files...) and 0 changed
     # project "java-regression-tests" has 0 errors removed or changed
@@ -64,7 +67,7 @@ class ManualIntegrationTests < Test::Unit::TestCase
     # This stack overflow error is from checkstyle's InputIndentationLongConcatenatedString.java
     # instead of assert_equal(0, @summary[:errors][:changed], 'found changed errors')
     # allow 0 or 1 changed errors
-    assert_pmd_errors(new: 0, removed: 2 + 2 + 1 + 10, max_changed: 1)
+    assert_pmd_errors(new: 0, removed: 2 + 2 + 1 + 1 + 10, max_changed: 1)
 
     # each project has 1 config error removed (LoosePackageCoupling dysfunctional): in total 9 config errors removed
     assert_pmd_config_errors(new: 0, removed: 9, changed: 0)
@@ -74,7 +77,7 @@ class ManualIntegrationTests < Test::Unit::TestCase
 
     expected_summary_message = "Compared to main:\nThis changeset changes 0 violations,\n" \
                                "introduces 0 new violations, 0 new errors and 0 new configuration errors,\n" \
-                               "removes 505 violations, 15 errors and 9 configuration errors.\n" \
+                               "removes 505 violations, 16 errors and 9 configuration errors.\n" \
                                "There are 0 changed duplications, 0 new duplications and 0 removed duplications.\n" \
                                "There are 0 changed CPD errors, 0 new CPD errors and 0 removed CPD errors.\n"
     expected_conclusion = 'neutral'
@@ -265,15 +268,19 @@ class ManualIntegrationTests < Test::Unit::TestCase
     end
   end
 
+  #
+  # Info: To prepare a patch file
+  # use e.g.: `git format-patch --stdout main..test-case-1 > test-case-1.patch`
+  #
   def prepare_patch_branch(patch_file, local_branch, base_branch = 'main')
     absolute_patch_file = File.absolute_path("#{PATCHES_PATH}/#{patch_file}")
     assert_path_exist(absolute_patch_file)
 
     Dir.chdir(PMD_REPO_PATH) do
-      system("git branch -D #{local_branch}")
-      system("git branch #{local_branch} #{base_branch}")
-      system("git checkout #{local_branch}")
-      system("git am --committer-date-is-author-date --no-gpg-sign #{absolute_patch_file}")
+      system("git branch -D #{local_branch}") # branch doesn't always exist
+      assert system("git branch #{local_branch} #{base_branch}"), "Failed to create local branch #{local_branch} from #{base_branch}"
+      assert system("git checkout #{local_branch}"), "Failed to checkout local branch #{local_branch}"
+      assert system("git am --committer-date-is-author-date --no-gpg-sign #{absolute_patch_file}"), "Failed to apply patch #{absolute_patch_file}"
     end
   end
 
@@ -328,5 +335,16 @@ class ManualIntegrationTests < Test::Unit::TestCase
     assert_equal(changed, @summary[:cpd_errors][:changed], 'found changed CPD errors')
     assert_equal(new, @summary[:cpd_errors][:new], 'found new CPD errors')
     assert_equal(removed, @summary[:cpd_errors][:removed], 'found removed CPD errors')
+  end
+
+  def verify_java_version(expected_major)
+    out, _status = Open3.capture2e('java', '-XshowSettings:properties', '-version')
+    major = out[/java\.specification\.version\s*=\s*(\S+)/, 1]
+    if major == expected_major.to_s
+      puts "Java #{expected_major}"
+    else
+      puts "not #{expected_major} (#{major.inspect})"
+      raise "Java version is not #{expected_major}: #{major.inspect}"
+    end
   end
 end

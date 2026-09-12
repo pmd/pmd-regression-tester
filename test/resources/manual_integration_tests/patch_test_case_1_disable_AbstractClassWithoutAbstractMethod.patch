@@ -1,4 +1,4 @@
-From c4b5364d69ea11a139a4fe9bb11f49124afb22af Mon Sep 17 00:00:00 2001
+From 7440a69f95ddb0f6de27ed58f26a841e77d5ae36 Mon Sep 17 00:00:00 2001
 From: Andreas Dangel <andreas.dangel@pmd-code.org>
 Date: Thu, 5 Sep 2024 14:50:24 +0200
 Subject: [PATCH] test case 1 - single java rule changed
@@ -11,39 +11,35 @@ The rule "AbstractClassWithoutAbstractMethod" doesn't report
 any violations anymore, so false-negatives should appear for
 exactly this rule.
 ---
- .../bestpractices/AbstractClassWithoutAbstractMethodRule.java  | 2 +-
- .../java/rule/design/AbstractClassWithoutAnyMethodTest.java    | 3 +++
- 2 files changed, 4 insertions(+), 1 deletion(-)
+ .../bestpractices/AbstractClassWithoutAbstractMethodRule.java   | 2 +-
+ .../bestpractices/AbstractClassWithoutAbstractMethodTest.java   | 1 +
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/pmd-java/src/main/java/net/sourceforge/pmd/lang/java/rule/bestpractices/AbstractClassWithoutAbstractMethodRule.java b/pmd-java/src/main/java/net/sourceforge/pmd/lang/java/rule/bestpractices/AbstractClassWithoutAbstractMethodRule.java
-index 835acebd14..5129fa0f15 100644
+index c7b89980369..109c7e327fa 100644
 --- a/pmd-java/src/main/java/net/sourceforge/pmd/lang/java/rule/bestpractices/AbstractClassWithoutAbstractMethodRule.java
 +++ b/pmd-java/src/main/java/net/sourceforge/pmd/lang/java/rule/bestpractices/AbstractClassWithoutAbstractMethodRule.java
-@@ -22,7 +22,7 @@ public class AbstractClassWithoutAbstractMethodRule extends AbstractJavaRulechai
+@@ -25,7 +25,7 @@ public class AbstractClassWithoutAbstractMethodRule extends AbstractJavaRulechai
          }
  
          if (node.getDeclarations(ASTMethodDeclaration.class).none(ASTMethodDeclaration::isAbstract)) {
--            asCtx(data).addViolation(node);
-+            //asCtx(data).addViolation(node);
+-            ctx.addViolation(node);
++            //ctx.addViolation(node);
          }
-         return data;
+         return null;
      }
-diff --git a/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/rule/design/AbstractClassWithoutAnyMethodTest.java b/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/rule/design/AbstractClassWithoutAnyMethodTest.java
-index a5d9253ee2..2df451e9b8 100644
---- a/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/rule/design/AbstractClassWithoutAnyMethodTest.java
-+++ b/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/rule/design/AbstractClassWithoutAnyMethodTest.java
-@@ -4,8 +4,11 @@
+diff --git a/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/rule/bestpractices/AbstractClassWithoutAbstractMethodTest.java b/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/rule/bestpractices/AbstractClassWithoutAbstractMethodTest.java
+index eaacb5984b2..95359168ea5 100644
+--- a/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/rule/bestpractices/AbstractClassWithoutAbstractMethodTest.java
++++ b/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/rule/bestpractices/AbstractClassWithoutAbstractMethodTest.java
+@@ -6,6 +6,7 @@ package net.sourceforge.pmd.lang.java.rule.bestpractices;
  
- package net.sourceforge.pmd.lang.java.rule.design;
- 
-+import org.junit.jupiter.api.Disabled;
-+
  import net.sourceforge.pmd.test.PmdRuleTst;
  
-+@Disabled
- class AbstractClassWithoutAnyMethodTest extends PmdRuleTst {
++@org.junit.jupiter.api.Disabled
+ class AbstractClassWithoutAbstractMethodTest extends PmdRuleTst {
      // no additional unit tests
  }
 -- 
-2.45.2
+2.53.0
 
