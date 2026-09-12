@@ -5,6 +5,7 @@
 ## Merged pull requests
 * [#186](https://github.com/pmd/pmd-regression-tester/pull/186): chore: fix manual integration tests - [Andreas Dangel](https://github.com/adangel) (@adangel)
 * [#197](https://github.com/pmd/pmd-regression-tester/pull/197): chore: Use client-id for create-github-app-token - [Andreas Dangel](https://github.com/adangel) (@adangel)
+* [#215](https://github.com/pmd/pmd-regression-tester/pull/215): chore: Replace missing Schedul-o-matic-9000 repo in tests - [Lukas Gräf](https://github.com/lukasgraef) (@lukasgraef)
 ## Dependency Updates
 * [#198](https://github.com/pmd/pmd-regression-tester/pull/198): chore: Add cgi 0.5
 * [#199](https://github.com/pmd/pmd-regression-tester/pull/199): chore: Bump liquid from 5.11 to 5.13

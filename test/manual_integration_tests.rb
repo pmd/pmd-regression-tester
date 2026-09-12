@@ -26,7 +26,6 @@ require 'etc'
 class ManualIntegrationTests < Test::Unit::TestCase
   include TestUtils
 
-  PMD_REPO_PATH = 'target/repositories/pmd'
   PATCHES_PATH = 'test/resources/manual_integration_tests'
 
   def setup
@@ -284,7 +283,7 @@ class ManualIntegrationTests < Test::Unit::TestCase
     assert_main_baseline_project('java-regression-tests', 100 * 1024)
     assert_main_baseline_project('apex-link', 10 * 1024)
     assert_main_baseline_project('fflib-apex-common', 400 * 1024)
-    assert_main_baseline_project('Schedul-o-matic-9000', 20 * 1024)
+    assert_main_baseline_project('declarative-lookup-rollup-summaries', 20 * 1024)
     assert_main_baseline_project('OracleDBUtils', 400 * 1024)
   end
 
