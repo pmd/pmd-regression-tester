@@ -279,9 +279,11 @@ class ManualIntegrationTests < Test::Unit::TestCase
 
     Dir.chdir(PMD_REPO_PATH) do
       system("git branch -D #{local_branch}") # branch doesn't always exist
-      assert system("git branch #{local_branch} #{base_branch}"), "Failed to create local branch #{local_branch} from #{base_branch}"
+      assert system("git branch #{local_branch} #{base_branch}"),
+             "Failed to create local branch #{local_branch} from #{base_branch}"
       assert system("git checkout #{local_branch}"), "Failed to checkout local branch #{local_branch}"
-      assert system("git am --committer-date-is-author-date --no-gpg-sign #{absolute_patch_file}"), "Failed to apply patch #{absolute_patch_file}"
+      assert system("git am --committer-date-is-author-date --no-gpg-sign #{absolute_patch_file}"),
+             "Failed to apply patch #{absolute_patch_file}"
     end
   end
 
