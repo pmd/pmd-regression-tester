@@ -2,6 +2,8 @@
 ## New and Noteworthy
 ## Enhancements
 ## Fixed Issues
+* CPD duplications are no longer reported as changed when only the `begintoken`/`endtoken`
+  attributes differ. These are internal token indexes that may change whenever CPD internals change. 
 ## Merged pull requests
 * [#186](https://github.com/pmd/pmd-regression-tester/pull/186): chore: fix manual integration tests - [Andreas Dangel](https://github.com/adangel) (@adangel)
 * [#197](https://github.com/pmd/pmd-regression-tester/pull/197): chore: Use client-id for create-github-app-token - [Andreas Dangel](https://github.com/adangel) (@adangel)
