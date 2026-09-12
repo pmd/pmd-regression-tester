@@ -7,6 +7,7 @@
 * [#197](https://github.com/pmd/pmd-regression-tester/pull/197): chore: Use client-id for create-github-app-token - [Andreas Dangel](https://github.com/adangel) (@adangel)
 * [#215](https://github.com/pmd/pmd-regression-tester/pull/215): chore: Replace missing Schedul-o-matic-9000 repo in tests - [Lukas Gräf](https://github.com/lukasgraef) (@lukasgraef)
 * [#218](https://github.com/pmd/pmd-regression-tester/pull/218): chore: Fix manual integration tests - [Andreas Dangel](https://github.com/adangel) (@adangel)
+* [#219](https://github.com/pmd/pmd-regression-tester/pull/219): chore: Fix TestUtils#latest_pmd_release "git fetch" call - [Andreas Dangel](https://github.com/adangel) (@adangel)
 ## Dependency Updates
 * [#198](https://github.com/pmd/pmd-regression-tester/pull/198): chore: Add cgi 0.5
 * [#199](https://github.com/pmd/pmd-regression-tester/pull/199): chore: Bump liquid from 5.11 to 5.13

@@ -50,7 +50,7 @@ module TestUtils
     logger.level = Logger::INFO
     Dir.chdir(PMD_REPO_PATH) do
       # fetch the latest (release) tags
-      Cmd.execute_successfully('git fetch --depth=1 --tags origin')
+      Cmd.execute_successfully('git fetch --depth=1 --tags --force origin')
       latest_tag = Cmd.execute_successfully("git tag -l 'pmd_releases/*' " \
                                             '--sort=-v:refname | grep -v SNAPSHOT | head -1').strip
       logger.info "Latest PMD release is: #{latest_tag}"
