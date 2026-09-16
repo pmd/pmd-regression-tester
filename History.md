@@ -7,6 +7,9 @@
 ## Merged pull requests
 * [#186](https://github.com/pmd/pmd-regression-tester/pull/186): chore: fix manual integration tests - [Andreas Dangel](https://github.com/adangel) (@adangel)
 * [#197](https://github.com/pmd/pmd-regression-tester/pull/197): chore: Use client-id for create-github-app-token - [Andreas Dangel](https://github.com/adangel) (@adangel)
+* [#215](https://github.com/pmd/pmd-regression-tester/pull/215): chore: Replace missing Schedul-o-matic-9000 repo in tests - [Lukas Gräf](https://github.com/lukasgraef) (@lukasgraef)
+* [#218](https://github.com/pmd/pmd-regression-tester/pull/218): chore: Fix manual integration tests - [Andreas Dangel](https://github.com/adangel) (@adangel)
+* [#219](https://github.com/pmd/pmd-regression-tester/pull/219): chore: Fix TestUtils#latest_pmd_release "git fetch" call - [Andreas Dangel](https://github.com/adangel) (@adangel)
 ## Dependency Updates
 * [#198](https://github.com/pmd/pmd-regression-tester/pull/198): chore: Add cgi 0.5
 * [#199](https://github.com/pmd/pmd-regression-tester/pull/199): chore: Bump liquid from 5.11 to 5.13
@@ -15,6 +18,7 @@
 * [#202](https://github.com/pmd/pmd-regression-tester/pull/202): chore: Bump rubocop from 1.84 to 1.88
 * [#204](https://github.com/pmd/pmd-regression-tester/pull/204): chore: Bump rake from 13.3 to 13.4
 * [#205](https://github.com/pmd/pmd-regression-tester/pull/205): chore: Bump hoe from 4.6 to 4.7
+* [#217](https://github.com/pmd/pmd-regression-tester/pull/217): chore: Bump rubocop from 1.88 to 1.91
 
 # 1.7.0 / 2026-04-16
 ## New and Noteworthy

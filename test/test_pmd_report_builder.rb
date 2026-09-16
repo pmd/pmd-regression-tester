@@ -258,8 +258,9 @@ class TestPmdReportBuilder < Test::Unit::TestCase
     record_expectations_after_build
     record_expectations_projects_clone_and_build
     record_expectations_project_build(sha1: sha1, no_progress_bar: true, pmd7: true,
-                                      project_name: 'Schedul-o-matic-9000')
-    record_expectations_project_build_cpd(sha1: sha1, cpd_language: 'apex', project_name: 'Schedul-o-matic-9000')
+                                      project_name: 'declarative-lookup-rollup-summaries')
+    record_expectations_project_build_cpd(sha1: sha1, cpd_language: 'apex',
+                                          project_name: 'declarative-lookup-rollup-summaries')
 
     run_report_builder(projects: projects, options: options, sha1: sha1)
 

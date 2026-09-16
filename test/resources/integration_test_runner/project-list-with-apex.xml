@@ -42,13 +42,13 @@ mvn dependency:build-classpath -DincludeScope=test -Dmdep.outputFile=classpath.t
   </project>
 -->
 
-<!-- The base pmd_releases_7.14.0-baseline.zip does not contain Schedul-o-matic-9000.
+<!-- The base pmd_releases_7.14.0-baseline.zip does not contain declarative-lookup-rollup-summaries.
      All the found violation will appear as new. -->
   <project>
-    <name>Schedul-o-matic-9000</name>
+    <name>declarative-lookup-rollup-summaries</name>
     <type>git</type>
-    <connection>https://github.com/SalesforceLabs/Schedul-o-matic-9000</connection>
-    <tag>6b1229ba43b38931fbbab5924bc9b9611d19a786</tag>
+    <connection>https://github.com/SFDO-Community/declarative-lookup-rollup-summaries</connection>
+    <tag>5dbd186bb057bc8aea13d24dcf94d561830376c1</tag>
   </project>
 
 </projectlist>

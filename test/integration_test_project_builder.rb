@@ -18,12 +18,12 @@ class IntegrationTestProjectBuilder < Test::Unit::TestCase
     project_builder = PmdTester::ProjectBuilder.new(projects)
     project_builder.clone_projects
 
-    assert_path_exist('target/repositories/Schedul-o-matic-9000/.git/HEAD')
-    assert_file_content_equals("ref: refs/heads/fetched/6b1229ba43b38931fbbab5924bc9b9611d19a786\n",
-                               'target/repositories/Schedul-o-matic-9000/.git/HEAD')
-    assert_file_content_equals("6b1229ba43b38931fbbab5924bc9b9611d19a786\n",
-                               'target/repositories/Schedul-o-matic-9000/.git/refs/heads/fetched/' \
-                               '6b1229ba43b38931fbbab5924bc9b9611d19a786')
+    assert_path_exist('target/repositories/declarative-lookup-rollup-summaries/.git/HEAD')
+    assert_file_content_equals("ref: refs/heads/fetched/5dbd186bb057bc8aea13d24dcf94d561830376c1\n",
+                               'target/repositories/declarative-lookup-rollup-summaries/.git/HEAD')
+    assert_file_content_equals("5dbd186bb057bc8aea13d24dcf94d561830376c1\n",
+                               'target/repositories/declarative-lookup-rollup-summaries/.git/refs/heads/fetched/' \
+                               '5dbd186bb057bc8aea13d24dcf94d561830376c1')
 
     assert_path_exist('target/repositories/fflib-apex-common/.git/HEAD')
     assert_file_content_equals("ref: refs/heads/fetched/7e0891efb86d23de62811af56d87d0959082a322\n",

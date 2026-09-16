@@ -19,8 +19,8 @@ class TestProjectBuilder < Test::Unit::TestCase
   end
 
   def test_clone_with_commit_sha1
-    expect_git_clone('Schedul-o-matic-9000', 'https://github.com/SalesforceLabs/Schedul-o-matic-9000',
-                     '6b1229ba43b38931fbbab5924bc9b9611d19a786')
+    expect_git_clone('declarative-lookup-rollup-summaries', 'https://github.com/SFDO-Community/declarative-lookup-rollup-summaries',
+                     '5dbd186bb057bc8aea13d24dcf94d561830376c1')
     expect_git_clone('fflib-apex-common', 'https://github.com/apex-enterprise-patterns/fflib-apex-common',
                      '7e0891efb86d23de62811af56d87d0959082a322')
 
