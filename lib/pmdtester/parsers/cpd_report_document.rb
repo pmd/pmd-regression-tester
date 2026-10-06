@@ -104,9 +104,7 @@ module PmdTester
           endline: attrs['endline'].to_i,
           begincolumn: attrs['column'].to_i,
           endcolumn: attrs['endcolumn'].to_i
-        ),
-        begintoken: attrs['begintoken'].to_i,
-        endtoken: attrs['endtoken'].to_i
+        )
       )
       @current_duplication[:files] << file_info
     end
@@ -215,27 +213,25 @@ module PmdTester
   end
 
   # Represents a single file location of a duplication in a CPD report
+  #
+  # Note: the begintoken/endtoken attributes of the report are deliberately ignored
+  # as these may change whenever CPD internals change.
   class DuplicationFileInfo
-    attr_reader :path, :location, :begintoken, :endtoken
+    attr_reader :path, :location
 
-    def initialize(path:, location:, begintoken:, endtoken:)
+    def initialize(path:, location:)
       @path = path
       @location = location
-      @begintoken = begintoken
-      @endtoken = endtoken
     end
 
     def eql?(other)
       return false unless other.is_a?(DuplicationFileInfo)
 
-      path == other.path &&
-        location.eql?(other.location) &&
-        begintoken == other.begintoken &&
-        endtoken == other.endtoken
+      path == other.path && location.eql?(other.location)
     end
 
     def hash
-      [path, location, begintoken, endtoken].hash
+      [path, location].hash
     end
   end
 end
