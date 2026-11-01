@@ -18,9 +18,9 @@ class TestCpdReportDocument < Test::Unit::TestCase
     assert_duplication(duplication: first_duplication, lines: 33, tokens: 239, files: 2,
                        codefragment_start: '    public void testOverride() {')
     assert_file(file_info: first_duplication.files[0], path: FILE_PATH,
-                line: 32, column: 29, endline: 64, endcolumn: 75, begintoken: 2356, endtoken: 2594)
+                line: 32, column: 29, endline: 64, endcolumn: 75)
     assert_file(file_info: first_duplication.files[1], path: FILE_PATH,
-                line: 68, column: 37, endline: 100, endcolumn: 75, begintoken: 5700, endtoken: 5938)
+                line: 68, column: 37, endline: 100, endcolumn: 75)
 
     second_duplication = doc.duplications[1]
     assert_duplication(duplication: second_duplication, lines: 16, tokens: 110, files: 3,
@@ -36,11 +36,9 @@ class TestCpdReportDocument < Test::Unit::TestCase
 
   def test_equality
     file1 = DuplicationFileInfo.new(path: 'file1', location: Location.new(beginline: 1, endline: 10, begincolumn: 1,
-                                                                          endcolumn: 80),
-                                    begintoken: 1, endtoken: 100)
+                                                                          endcolumn: 80))
     file2 = DuplicationFileInfo.new(path: 'file1', location: Location.new(beginline: 1, endline: 10, begincolumn: 1,
-                                                                          endcolumn: 80),
-                                    begintoken: 1, endtoken: 100)
+                                                                          endcolumn: 80))
     assert_true(file1.eql?(file2))
     assert_equal(file1.hash, file2.hash)
 
@@ -60,14 +58,12 @@ class TestCpdReportDocument < Test::Unit::TestCase
     assert_equal(BRANCH, duplication.branch)
   end
 
-  def assert_file(file_info:, path:, line:, column:, endline:, endcolumn:, begintoken:, endtoken:)
+  def assert_file(file_info:, path:, line:, column:, endline:, endcolumn:)
     assert_equal(path, file_info.path)
     assert_equal(line, file_info.location.beginline)
     assert_equal(column, file_info.location.begincolumn)
     assert_equal(endline, file_info.location.endline)
     assert_equal(endcolumn, file_info.location.endcolumn)
-    assert_equal(begintoken, file_info.begintoken)
-    assert_equal(endtoken, file_info.endtoken)
   end
 
   def assert_error(error_info:, filename:, msg_start:)
