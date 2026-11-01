@@ -89,7 +89,7 @@ module PmdTester
 
     def finish_text!
       remove_work_dir!(@cur_text)
-      res = @cur_text.strip!.dup.freeze
+      res = @cur_text.strip.freeze
       @cur_text.clear
       res
     end
