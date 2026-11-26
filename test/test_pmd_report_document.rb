@@ -54,6 +54,19 @@ class TestPmdReportDocument < Test::Unit::TestCase
     assert_equal('InputXpathQueryGeneratorTabWidth.java', filenames[0])
   end
 
+  def test_compact_report
+    doc = PmdReportDocument.new('base', '/home/runner/work/pmd')
+    parser = Nokogiri::XML::SAX::Parser.new(doc)
+    parser.parse(File.read('test/resources/pmd_report_document/compact_report.xml'))
+    assert_equal(2, doc.violations.total_size, 'wrong number of violations')
+    assert_equal('All classes, interfaces, enums and annotations must belong to a named package',
+                 doc.violations[FIRST_FILE][0].message)
+    assert_equal('Avoid short class names like Null', doc.violations[FIRST_FILE][1].message)
+    assert_equal(1, doc.errors.total_size, 'wrong number of errors')
+    assert_equal('NullPointerException: null', doc.errors['InputXpathQueryGeneratorTabWidth.java'][0].short_message)
+    assert_not_nil(doc.errors['InputXpathQueryGeneratorTabWidth.java'][0].stack_trace)
+  end
+
   def test_relativized_filenames
     doc = PmdReportDocument.new('base', '/home/runner/work/pmd')
     parser = Nokogiri::XML::SAX::Parser.new(doc)
